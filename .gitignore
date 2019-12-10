@@ -1,0 +1,9 @@
+.idea/
+*.log
+*.txt
+*.xml
+
+/bitrix/
+/landing_template/
+/upload/
+/.htaccess
