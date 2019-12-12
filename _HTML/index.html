@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Home page desc">
+    <meta name="author" content="">
+    <title>Home Page</title>
+    <link rel="shortcut icon" href="img/favicons/favicon.ico" type="image/x-icon">
+    <link rel="icon" sizes="16x16" href="img/favicons/favicon-16x16.png" type="image/png">
+    <link rel="icon" sizes="32x32" href="img/favicons/favicon-32x32.png" type="image/png">
+    <link rel="apple-touch-icon-precomposed" href="img/favicons/apple-touch-icon-precomposed.png">
+    <link rel="apple-touch-icon" href="img/favicons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="img/favicons/apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="1024x1024" href="img/favicons/apple-touch-icon-1024x1024.png">
+    <!-- Core CSS-->
+    <link href="css/system.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
+  </head>
+  <body class="layout">
+    <div class="layout__wrapper">
+      <div class="home">
+        <style type="text/css">
+          .home {
+          	background-image: url("img/home-mobile.jpg");
+          }
+          @media (min-width: 768px) {
+          	.home {
+          		background-image: url("img/home.jpg");
+          	}
+          }
+          
+        </style>
+        <header class="header">
+          <div class="container px-lg-1">
+            <nav class="navbar layout__navbar navbar-dark">
+              <button class="nav-trigger__btn" type="button" aria-label="Toggle navigation"><span class="nav-trigger__icon"></span></button><a class="navbar-brand" href="/">LEVEL44</a>
+              <ul class="nav menu ml-auto">
+                <li class="nav-item m-search js-m-search">
+                  <form>
+                    <div class="input-group m-search__group">
+                      <input class="form-control m-search__control js-m-search__control" type="text" placeholder="Найти на сайте" autocomplete="off">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary m-search__btn" type="button">
+                          <svg class="icon icon-search menu__icon">
+                            <use xlink:href="#search"></use>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </li>
+                <li class="nav-item dropdown m-basket"><a class="menu__link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg class="icon icon-basket menu__icon">
+                      <use xlink:href="#basket"></use>
+                    </svg>
+                    <div class="menu__basket-count">1</div></a>
+                  <div class="dropdown-menu dropdown-menu-right m-basket__dropdown js-m-basket__dropdown">
+                    <div class="m-basket__title">Корзина</div>
+                    <div class="m-basket__items">
+                      <div class="m-basket__item"><a class="m-basket__image" href="#"><img class="img-fluid" src="img/m-basket__item.jpg" alt=""></a>
+                        <div class="m-basket__body"><a href="#">
+                            <div>Платье с v-образным вырезом</div>
+                            <div>14 800 руб.</div>
+                            <div>Размер: S</div></a></div><a class="m-basket__remove" href="#">
+                          <svg class="icon icon-close ">
+                            <use xlink:href="#close"></use>
+                          </svg></a>
+                      </div>
+                      <div class="m-basket__item"><a class="m-basket__image" href="#"><img class="img-fluid" src="img/m-basket__item.jpg" alt=""></a>
+                        <div class="m-basket__body"><a href="#">
+                            <div>Платье с v-образным вырезом</div>
+                            <div>14 800 руб.</div>
+                            <div>Размер: S</div></a></div><a class="m-basket__remove" href="#">
+                          <svg class="icon icon-close ">
+                            <use xlink:href="#close"></use>
+                          </svg></a>
+                      </div>
+                    </div><a class="btn btn-dark btn-block" href="#">Перейти к оформлению заказа</a>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+        <div class="nav-trigger__body">
+          <div class="nav-trigger__header">
+            <button class="nav-trigger__btn nav-trigger_body" type="button" aria-label="Toggle navigation"><span class="nav-trigger__icon"></span></button>
+          </div>
+          <div class="nav-trigger__scroll">
+            <h4 class="px-3">Каталог</h4>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#">New</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Платья</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Топы и блузы</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Футболки</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Юбки</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Брюки и шорты</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Рубашки</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Жакеты</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Боди</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Изделия из кожи</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Комплекты</a></li>
+            </ul>
+          </div>
+        </div><a class="btn btn-outline-light btn__fix-width" href="catalog.html">Перейти в каталог</a>
+      </div>
+      <div class="container home__container">
+        <div class="row catalog__items">
+          <div class="col-6 col-lg-3 catalog__item"><a class="catalog__item-image" href="#"><img class="img-fluid" src="img/catalog/image1.jpg" alt=""></a>
+            <div class="catalog__item-footer"><a class="catalog__item-title" href="#">Пальто-халат</a>
+              <div class="catalog__item-price">14 800 руб.</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3 catalog__item"><a class="catalog__item-image" href="#"><img class="img-fluid" src="img/catalog/image2.jpg" alt=""></a>
+            <div class="catalog__item-footer"><a class="catalog__item-title" href="#">Платье с v-образным вырезом</a>
+              <div class="catalog__item-price">14 800 руб.</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3 catalog__item"><a class="catalog__item-image" href="#"><img class="img-fluid" src="img/catalog/image3.jpg" alt=""></a>
+            <div class="catalog__item-footer"><a class="catalog__item-title" href="#">Платье с v-образным вырезом</a>
+              <div class="catalog__item-price">14 800 руб.</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3 catalog__item"><a class="catalog__item-image" href="#"><img class="img-fluid" src="img/catalog/image4.jpg" alt=""></a>
+            <div class="catalog__item-footer"><a class="catalog__item-title" href="#">Пальто-халат</a>
+              <div class="catalog__item-price">14 800 руб.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-6 col-lg-3 order-3 order-lg-1 footer__divider">
+              <div class="mb-2">© 2019 Level 44</div>
+              <div><a class="footer__link" href="tel:#+7(495)2680557">+7 (495) 268 0557</a></div>
+              <div>
+                Сделано в
+                <a class="footer__link" href="#">Genue</a>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3 order-2">
+              <div class="footer__title">Покупателям</div>
+              <ul class="nav flex-column">
+                <li class="nav-item"><a class="footer__link" href="#">Оформление заказа</a></li>
+                <li class="nav-item"><a class="footer__link active" href="#">Самовывоз и доставка</a></li>
+                <li class="nav-item"><a class="footer__link" href="#">Оплата</a></li>
+                <li class="nav-item"><a class="footer__link" href="#">Возврат товара</a></li>
+                <li class="nav-item"><a class="footer__link" href="#">Публичная оферта</a></li>
+                <li class="nav-item"><a class="footer__link" href="#">Контакты</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-lg-3 order-2">
+              <div class="footer__title footer__title_level">LEVEL44</div>
+              <ul class="nav flex-column">
+                <li class="nav-item"><a class="footer__link" href="#">Showroom</a></li>
+                <li class="nav-item"><a class="footer__link" href="#">Instagram</a></li>
+                <li class="nav-item"><a class="footer__link" href="#">WhatsApp</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-lg-2 order-4 order-lg-4 footer__divider"><img class="img-fluid mr-3" src="img/visa.svg" alt=""><img class="img-fluid" src="img/master-card.svg" alt="">
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+    <div class="d-none"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><symbol viewBox="0 0 14 14" id="arrow-left" xmlns="http://www.w3.org/2000/svg"><path d="M1 7h13m-7 6L1 7l6-6" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 13 16" id="basket" xmlns="http://www.w3.org/2000/svg"><path d="M1.726 5.68a.5.5 0 01.497-.447h8.501a.5.5 0 01.497.447l.997 9.267a.5.5 0 01-.498.553H1.227a.5.5 0 01-.498-.553l.997-9.267zm2.067-2.5a2.68 2.68 0 115.36 0v2.014h-5.36V3.18z" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 10 9" id="close" xmlns="http://www.w3.org/2000/svg"><path d="M1.146 8.646l8-8m.208 8l-8-8" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 14 14" id="instagram" xmlns="http://www.w3.org/2000/svg"><g opacity=".2" fill="none"><path d="M4.157 13.496c1.893.006 3.788.005 5.681-.002l-5.681.002zm0 0c-1.773-.005-3.18-1.128-3.57-2.842m3.57 2.842l-3.57-2.843m0 0a3.32 3.32 0 01-.081-.713 992.216 992.216 0 01-.003-5.876m.084 6.59l-.084-6.59m0 0C.506 2.3 1.846.774 3.598.539a4.36 4.36 0 01.57-.035h.001M.503 4.064L4.169.504m0 0C6.058.5 7.946.498 9.834.503M4.169.504L9.834.503m0 0c1.782.004 3.194 1.13 3.581 2.85M9.834.503l3.581 2.85m0 0c.052.231.076.482.078.738m-.078-.738l.078.738m0 0c.008.701.007 1.4.005 2.104V7.98m-.005-3.889l.004 3.89m0 0v1.906m0-1.907v1.907m0 0a3.588 3.588 0 01-2.873 3.534m2.873-3.534l-2.873 3.534m0 0c-.247.05-.513.071-.785.073l.784-.073zm-1.3-6.427A2.306 2.306 0 017 9.324a2.307 2.307 0 01-2.327-2.328 2.308 2.308 0 012.315-2.321 2.308 2.308 0 012.336 2.319z" data-stroke="true" fill="none"/><circle cx="10.5" cy="3.5" r=".875" data-fill="true"/></g></symbol><symbol viewBox="0 0 16 16" id="search" xmlns="http://www.w3.org/2000/svg"><circle cx="6.645" cy="6.645" r="6.145" data-stroke="true" fill="none"/><path d="M10.857 11.037l4.609 4.609" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#fclip0)" opacity=".2" fill="none"><path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z" data-stroke="true" fill="none"/><path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z" data-fill="true"/></g><defs fill="none"><clipPath id="fclip0" fill="none"/></defs></symbol></svg></div>
+  </body>
+</html>
