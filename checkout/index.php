@@ -3,7 +3,7 @@ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Оформление заказа");
 ?><?$APPLICATION->IncludeComponent(
 	"bitrix:sale.order.ajax",
-	"",
+	"main",
     Array(
         "ADDITIONAL_PICT_PROP_8" => "-",
         "ALLOW_AUTO_REGISTER" => "N",
