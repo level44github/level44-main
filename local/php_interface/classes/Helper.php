@@ -4,6 +4,8 @@ use \Bitrix\Main\Page\Asset;
 
 class Helper
 {
+    const DELIVERY_COURIER = 2;
+
     public static function getAssetsPath()
     {
         return getLocalPath('templates/.default/assets', BX_PERSONAL_ROOT);

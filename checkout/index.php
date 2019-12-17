@@ -1,12 +1,28 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+
+\Bitrix\Main\Loader::includeModule("sale");
+\Bitrix\Main\Loader::includeModule("catalog");
+
+$basket = \Bitrix\Sale\Basket::loadItemsForFUser(
+    \Bitrix\Sale\Fuser::getId(),
+    \Bitrix\Main\Context::getCurrent()->getSite()
+);
+
+if ($basket->count() <= 0) {
+    $result = \Bitrix\Catalog\Product\Basket::addProduct([
+        "PRODUCT_ID" => 162,
+        "QUANTITY" => 1,
+    ]);
+}
+
 $APPLICATION->SetTitle("Оформление заказа");
 ?><?$APPLICATION->IncludeComponent(
 	"bitrix:sale.order.ajax",
 	"main",
     Array(
         "ADDITIONAL_PICT_PROP_8" => "-",
-        "ALLOW_AUTO_REGISTER" => "N",
+        "ALLOW_AUTO_REGISTER" => "Y",
         "ALLOW_NEW_PROFILE" => "Y",
         "ALLOW_USER_PROFILES" => "Y",
         "BASKET_IMAGES_SCALING" => "standard",
@@ -29,7 +45,7 @@ $APPLICATION->SetTitle("Оформление заказа");
 автоматически. Если все заполнено верно, нажмите кнопку \"#ORDER_BUTTON#\".",
         "ONLY_FULL_PAY_FROM_ACCOUNT" => "N",
         "PATH_TO_AUTH" => "/auth/",
-        "PATH_TO_BASKET" => "basket.php",
+        "PATH_TO_BASKET" => "/cart/",
         "PATH_TO_PAYMENT" => "payment.php",
         "PATH_TO_PERSONAL" => "index.php",
         "PAY_FROM_ACCOUNT" => "Y",
