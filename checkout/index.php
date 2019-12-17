@@ -74,7 +74,7 @@ $APPLICATION->SetTitle("Оформление заказа");
         "SHOW_TOTAL_ORDER_BUTTON" => "Y",
         "SHOW_VAT_PRICE" => "Y",
         "SKIP_USELESS_BLOCK" => "Y",
-        "TEMPLATE_LOCATION" => "popup",
+        "TEMPLATE_LOCATION" => "search",
         "TEMPLATE_THEME" => "site",
         "USE_CUSTOM_ADDITIONAL_MESSAGES" => "N",
         "USE_CUSTOM_ERROR_MESSAGES" => "Y",

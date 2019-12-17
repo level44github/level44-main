@@ -263,7 +263,7 @@ if (!function_exists("PrintPropsForm")) {
 
                         "DISABLE_KEYBOARD_INPUT" => 'Y'
                     ),
-                    ".default",
+                    $locationTemplate,
                     true,
                     'location-block-wrapper'
                 ) ?>
