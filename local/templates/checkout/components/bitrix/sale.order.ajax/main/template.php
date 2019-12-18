@@ -178,29 +178,41 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/delivery.php");
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/paysystem.php");
         ?>
+        <div class="d-none d-lg-block">
+            <div class="form-group">
+                <button class="btn btn-dark btn__fix-width"
+                        onclick="submitForm('Y'); return false;"
+                        type="submit">Оформить заказ
+                </button>
+            </div>
+            <p class="text-muted">
+                Нажимая кнопку «Оформить заказ», вы соглашаетесь с
+                <a href="#">публичной офертой</a>
+            </p>
+        </div>
     </div>
     <div class="col-lg-4 js-basket_block">
         <?
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/summary.php");
         ?>
+        <div class="d-lg-none">
+            <div class="form-group">
+                <button class="btn btn-dark btn-block"
+                        onclick="submitForm('Y'); return false;"
+                        type="submit">Перейти к оформлению заказа
+                </button>
+            </div>
+            <p class="text-muted">
+                Нажимая кнопку «Оформить заказ», вы соглашаетесь с
+                <a href="#">публичной офертой</a>
+            </p>
+        </div>
     </div>
         <? if ($_POST["is_ajax_post"] !== "Y"): ?>
     <input type="hidden" name="confirmorder" id="confirmorder" value="Y">
     <input type="hidden" name="profile_change" id="profile_change" value="N">
     <input type="hidden" name="is_ajax_post" id="is_ajax_post" value="Y">
     <input type="hidden" name="json" value="Y">
-    <div class="d-lg-none">
-        <div class="form-group">
-            <button class="btn btn-dark btn-block"
-                    onclick="submitForm('Y'); return false;"
-                    type="submit">Перейти к оформлению заказа</button>
-        </div>
-        <p class="text-muted">
-            Нажимая кнопку «Оформить заказ», вы соглашаетесь с
-            <a href="#">публичной офертой</a>
-        </p>
-    </div>
-
     </form>
     <? else:?>
     <script type="text/javascript">

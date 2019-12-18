@@ -481,4 +481,15 @@ $(function () {
             $(document).find(".js-delivery-input").prop("checked", false)
         }
     })
+
+    $(document).on("click", ".js-pay_system-link", function (event) {
+        var labelId = $(this).data("target-label");
+        if (labelId) {
+            $(document).find("#" + labelId).click()
+        }
+
+        if ($(document).find(".js-pay_system-link").not(".collapsed").length <= 0) {
+            $(document).find(".js-pay_system-input").prop("checked", false)
+        }
+    })
 });

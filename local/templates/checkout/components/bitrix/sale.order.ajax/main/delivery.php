@@ -63,9 +63,7 @@
                       placeholder="Особые требования к упаковке или доставке..."
                       name="ORDER_DESCRIPTION"
                       rows="3"
-            >
-            <?= $arResult["USER_VALS"]["ORDER_DESCRIPTION"] ?>
-            </textarea>
+            ><?= $arResult["USER_VALS"]["ORDER_DESCRIPTION"] ?></textarea>
         </div>
     </fieldset>
 <? endif; ?>
