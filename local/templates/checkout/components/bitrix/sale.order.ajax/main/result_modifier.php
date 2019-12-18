@@ -7,6 +7,10 @@ $columns = [];
 $fulls = [];
 
 foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"] as &$prop) {
+    if (empty($prop["DESCRIPTION"])) {
+        $prop["DESCRIPTION"] = "Введите " . strtolower($prop["NAME"]);
+    }
+
     if ($prop["CODE"] === "ADDRESS") {
         $arResult["ORDER_PROP_ADDRESS"] = $prop;
         continue;

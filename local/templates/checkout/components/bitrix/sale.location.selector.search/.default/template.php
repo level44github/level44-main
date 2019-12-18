@@ -51,7 +51,7 @@ if ($arParams["UI_FILTER"])
                    style="display: none"
                    class="dropdown-field"
                    data-prop="LOCATION"
-                   placeholder="<?=Loc::getMessage('SALE_SLS_INPUT_SOME')?> ..."
+                   placeholder="<?= $arParams["PLACEHOLDER_TEXT"] ?>"
             />
 
 			<div class="dropdown-fade2white"></div>

@@ -113,7 +113,7 @@ if (!function_exists("PrintPropsForm")) {
                        id="form-email <?= $arProperty["FIELD_NAME"] ?>"
                        name="<?= $arProperty["FIELD_NAME"] ?>"
                        value="<?= $arProperty["VALUE"] ?>"
-                       placeholder="Введите эл. почту">
+                       placeholder="<?= $arProperty["DESCRIPTION"] ?>">
                 <div class="invalid-feedback">Недопустимые символы в поле</div>
             </div>
         <? elseif ($arProperty["TYPE"] == "SELECT" && false): ?>
@@ -261,7 +261,8 @@ if (!function_exists("PrintPropsForm")) {
                         // it may be replaced with global component dispatch mechanism coming soon
                         "JS_CONTROL_GLOBAL_ID" => intval($arProperty["ID"]),
 
-                        "DISABLE_KEYBOARD_INPUT" => 'Y'
+                        "DISABLE_KEYBOARD_INPUT" => 'Y',
+                        "PLACEHOLDER_TEXT" => $arProperty["DESCRIPTION"]
                     ),
                     $locationTemplate,
                     true,
