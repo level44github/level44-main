@@ -92,6 +92,7 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
 		});
 		
 		this.handleInitStack(nf, BX.Sale.component.location.selector.search, opts);
+        $(".bx-ui-sls-input-block.form-control input.bx-ui-sls-fake").show();
 	}
 	BX.extend(BX.Sale.component.location.selector.search, BX.ui.autoComplete);
 	BX.merge(BX.Sale.component.location.selector.search.prototype, {
@@ -154,8 +155,6 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
 
 			sc.inputBlock = this.getControl('input-block');
 			sc.loader = this.getControl('loader');
-            $(".bx-ui-sls-input-block.form-control input.bx-ui-sls-fake").show()
-
         },
 
 		bindEvents: function(){
