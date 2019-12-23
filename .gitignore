@@ -4,6 +4,7 @@
 *.xml
 
 /bitrix/
+/include/
 /landing_template/
 /upload/
 /.htaccess

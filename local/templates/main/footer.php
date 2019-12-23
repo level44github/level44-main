@@ -1,6 +1,120 @@
 <?
-if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
-	die();
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
+}
+
+if (empty(\Helper::$typePage)) {
+    \Helper::$typePage = "layout";
+}
+
+$APPLICATION->AddViewContent("type-page", \Helper::$typePage);
 ?>
-	</body>
+</div>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-lg-3 order-3 order-lg-1 footer__divider">
+                <div class="mb-2">© <?= date("Y") ?> Level 44</div>
+                <div>
+                    <? $APPLICATION->IncludeComponent(
+                        "bitrix:main.include",
+                        "",
+                        array(
+                            "AREA_FILE_SHOW" => "file",
+                            "PATH" => SITE_DIR . "include/footer_phone.php",
+                        ),
+                        false
+                    ); ?>
+                </div>
+                <div>
+                    Сделано в <a class="footer__link" href="#">Genue</a>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 order-2">
+                <div class="footer__title">Покупателям</div>
+                <? $APPLICATION->IncludeComponent(
+                    "bitrix:menu",
+                    "footer_links",
+                    Array(
+                        "ROOT_MENU_TYPE" => "to_customers",
+                        "MAX_LEVEL" => "1",
+                        "CHILD_MENU_TYPE" => "top",
+                        "USE_EXT" => "N",
+                        "DELAY" => "N",
+                        "ALLOW_MULTI_SELECT" => "Y",
+                        "MENU_CACHE_TYPE" => "N",
+                        "MENU_CACHE_TIME" => "3600",
+                        "MENU_CACHE_USE_GROUPS" => "Y",
+                        "MENU_CACHE_GET_VARS" => ""
+                    )
+                ); ?>
+            </div>
+            <div class="col-6 col-lg-3 order-2">
+                <div class="footer__title footer__title_level">LEVEL44</div>
+                <ul class="nav flex-column">
+                    <? $APPLICATION->IncludeComponent(
+                        "bitrix:menu",
+                        "footer_links",
+                        Array(
+                            "ROOT_MENU_TYPE" => "links",
+                            "MAX_LEVEL" => "1",
+                            "CHILD_MENU_TYPE" => "top",
+                            "USE_EXT" => "N",
+                            "DELAY" => "N",
+                            "ALLOW_MULTI_SELECT" => "Y",
+                            "MENU_CACHE_TYPE" => "N",
+                            "MENU_CACHE_TIME" => "3600",
+                            "MENU_CACHE_USE_GROUPS" => "Y",
+                            "MENU_CACHE_GET_VARS" => ""
+                        )
+                    ); ?>
+            </div>
+            <div class="col-6 col-lg-2 order-4 order-lg-4 footer__divider">
+                <img class="img-fluid mr-3" src="<?= Helper::getAssetsPath() ?>/img/visa.svg" alt="">
+                <img class="img-fluid" src="<?= Helper::getAssetsPath() ?>/img/master-card.svg" alt="">
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+<?
+Helper::loadScripts();
+?>
+<div class="d-none">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <symbol viewBox="0 0 14 14" id="arrow-left" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7h13m-7 6L1 7l6-6" data-stroke="true" fill="none"/>
+        </symbol>
+        <symbol viewBox="0 0 13 16" id="basket" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.726 5.68a.5.5 0 01.497-.447h8.501a.5.5 0 01.497.447l.997 9.267a.5.5 0 01-.498.553H1.227a.5.5 0 01-.498-.553l.997-9.267zm2.067-2.5a2.68 2.68 0 115.36 0v2.014h-5.36V3.18z"
+                  data-stroke="true" fill="none"/>
+        </symbol>
+        <symbol viewBox="0 0 10 9" id="close" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.146 8.646l8-8m.208 8l-8-8" data-stroke="true" fill="none"/>
+        </symbol>
+        <symbol viewBox="0 0 14 14" id="instagram" xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".2" fill="none">
+                <path d="M4.157 13.496c1.893.006 3.788.005 5.681-.002l-5.681.002zm0 0c-1.773-.005-3.18-1.128-3.57-2.842m3.57 2.842l-3.57-2.843m0 0a3.32 3.32 0 01-.081-.713 992.216 992.216 0 01-.003-5.876m.084 6.59l-.084-6.59m0 0C.506 2.3 1.846.774 3.598.539a4.36 4.36 0 01.57-.035h.001M.503 4.064L4.169.504m0 0C6.058.5 7.946.498 9.834.503M4.169.504L9.834.503m0 0c1.782.004 3.194 1.13 3.581 2.85M9.834.503l3.581 2.85m0 0c.052.231.076.482.078.738m-.078-.738l.078.738m0 0c.008.701.007 1.4.005 2.104V7.98m-.005-3.889l.004 3.89m0 0v1.906m0-1.907v1.907m0 0a3.588 3.588 0 01-2.873 3.534m2.873-3.534l-2.873 3.534m0 0c-.247.05-.513.071-.785.073l.784-.073zm-1.3-6.427A2.306 2.306 0 017 9.324a2.307 2.307 0 01-2.327-2.328 2.308 2.308 0 012.315-2.321 2.308 2.308 0 012.336 2.319z"
+                      data-stroke="true" fill="none"/>
+                <circle cx="10.5" cy="3.5" r=".875" data-fill="true"/>
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 16 16" id="search" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="6.645" cy="6.645" r="6.145" data-stroke="true" fill="none"/>
+            <path d="M10.857 11.037l4.609 4.609" data-stroke="true" fill="none"/>
+        </symbol>
+        <symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#fclip0)" opacity=".2" fill="none">
+                <path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z"
+                      data-stroke="true" fill="none"/>
+                <path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z"
+                      data-fill="true"/>
+            </g>
+            <defs fill="none">
+                <clipPath id="fclip0" fill="none"/>
+            </defs>
+        </symbol>
+    </svg>
+</div>
+</body>
 </html>
