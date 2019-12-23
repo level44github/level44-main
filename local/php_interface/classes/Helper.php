@@ -5,6 +5,7 @@ use \Bitrix\Main\Page\Asset;
 class Helper
 {
     const DELIVERY_COURIER = 2;
+    public static $typePage = "";
 
     public static function getAssetsPath()
     {
