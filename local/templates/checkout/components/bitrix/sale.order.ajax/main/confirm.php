@@ -34,29 +34,28 @@ if (!empty($arResult["ORDER"]))
 				<tr>
 					<td>
 						<?
-						if ($arResult["PAY_SYSTEM"]["NEW_WINDOW"] == "Y")
-						{
-							?>
-							<script language="JavaScript">
-								window.open('<?=$arParams["PATH_TO_PAYMENT"]?>?ORDER_ID=<?=urlencode(urlencode($arResult["ORDER"]["ACCOUNT_NUMBER"]))?>');
-							</script>
-							<?= GetMessage("SOA_TEMPL_PAY_LINK", Array("#LINK#" => $arParams["PATH_TO_PAYMENT"]."?ORDER_ID=".urlencode(urlencode($arResult["ORDER"]["ACCOUNT_NUMBER"]))))?>
-							<?
-							if (CSalePdf::isPdfAvailable() && CSalePaySystemsHelper::isPSActionAffordPdf($arResult['PAY_SYSTEM']['ACTION_FILE']))
-							{
-								?><br />
-								<?= GetMessage("SOA_TEMPL_PAY_PDF", Array("#LINK#" => $arParams["PATH_TO_PAYMENT"]."?ORDER_ID=".urlencode(urlencode($arResult["ORDER"]["ACCOUNT_NUMBER"]))."&pdf=1&DOWNLOAD=Y")) ?>
-								<?
-							}
-						}
-						else
-						{
-							if (strlen($arResult["PAY_SYSTEM"]["PATH_TO_ACTION"])>0)
-							{
-								include($arResult["PAY_SYSTEM"]["PATH_TO_ACTION"]);
-							}
-						}
-						?>
+                        if ($arResult["PAY_SYSTEM"]["NEW_WINDOW"] == "Y") {
+                            ?>
+                            <script language="JavaScript">
+                                window.open('<?=$arParams["PATH_TO_PAYMENT"]?>?ORDER_ID=<?=urlencode(urlencode($arResult["ORDER"]["ACCOUNT_NUMBER"]))?>');
+                            </script>
+                        <?= GetMessage("SOA_TEMPL_PAY_LINK",
+                            Array("#LINK#" => $arParams["PATH_TO_PAYMENT"] . "?ORDER_ID=" . urlencode(urlencode($arResult["ORDER"]["ACCOUNT_NUMBER"])))) ?>
+                            <?
+                            if (CSalePdf::isPdfAvailable() && CSalePaySystemsHelper::isPSActionAffordPdf($arResult['PAY_SYSTEM']['ACTION_FILE'])) {
+                                ?><br/>
+                                <?= GetMessage("SOA_TEMPL_PAY_PDF",
+                                    Array("#LINK#" => $arParams["PATH_TO_PAYMENT"] . "?ORDER_ID=" . urlencode(urlencode($arResult["ORDER"]["ACCOUNT_NUMBER"])) . "&pdf=1&DOWNLOAD=Y")) ?>
+                                <?
+                            }
+                        } else {
+                            if (strlen($arResult["PAY_SYSTEM"]["PATH_TO_ACTION"]) > 0) {
+                                include($arResult["PAY_SYSTEM"]["PATH_TO_ACTION"]);
+                            } elseif ($arResult["PAY_SYSTEM"]["BUFFERED_OUTPUT"]) {
+                                echo $arResult["PAY_SYSTEM"]["BUFFERED_OUTPUT"];
+                            }
+                        }
+                        ?>
 					</td>
 				</tr>
 				<?
