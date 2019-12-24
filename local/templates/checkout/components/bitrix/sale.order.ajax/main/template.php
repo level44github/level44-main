@@ -73,6 +73,9 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                 return true;
 
             BXFormPosting = true;
+
+            $(".checkout-loading-overlay").show();
+
             if (val !== 'Y') {
                 BX('confirmorder').value = 'N';
             }
@@ -131,6 +134,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             }
 
             BX.closeWait();
+            $(".checkout-loading-overlay").hide();
             BX.onCustomEvent(orderForm, 'onAjaxSuccess');
         }
 
@@ -154,6 +158,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         $APPLICATION->RestartBuffer();
     }?>
     <div class="col-lg-8 js-form_block">
+        <div class="checkout-loading-overlay"></div>
         <?
 
         if($_REQUEST['PERMANENT_MODE_STEPS'] == 1)
