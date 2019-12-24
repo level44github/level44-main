@@ -46,7 +46,7 @@
                                            name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
                                            value="<?= $arResult["ORDER_PROP_ADDRESS"]["VALUE"] ?>"
                                            data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
-                                           placeholder="Введите адрес"
+                                           placeholder="<?= $arResult["ORDER_PROP_ADDRESS"]["DESCRIPTION"] ?>"
                                     >
 
                                 </div>
