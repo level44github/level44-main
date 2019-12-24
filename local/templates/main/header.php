@@ -64,46 +64,32 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
                             </form>
                         </li>
                         <li class="nav-item dropdown m-basket">
-                            <a class="menu__link" href="#" role="button"
-                               data-toggle="dropdown" aria-haspopup="true"
-                               aria-expanded="false">
-                                <svg class="icon icon-basket menu__icon">
-                                    <use xlink:href="#basket"></use>
-                                </svg>
-                                <div class="menu__basket-count">1</div>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right m-basket__dropdown js-m-basket__dropdown">
-                                <div class="m-basket__title">Корзина</div>
-                                <div class="m-basket__items">
-                                    <div class="m-basket__item"><a class="m-basket__image" href="#"><img
-                                                    class="img-fluid" src="img/m-basket__item.jpg" alt=""></a>
-                                        <div class="m-basket__body"><a href="#">
-                                                <div>Платье с v-образным вырезом</div>
-                                                <div>14 800 руб.</div>
-                                                <div>Размер: S</div>
-                                            </a></div>
-                                        <a class="m-basket__remove" href="#">
-                                            <svg class="icon icon-close ">
-                                                <use xlink:href="#close"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                    <div class="m-basket__item"><a class="m-basket__image" href="#"><img
-                                                    class="img-fluid" src="img/m-basket__item.jpg" alt=""></a>
-                                        <div class="m-basket__body"><a href="#">
-                                                <div>Платье с v-образным вырезом</div>
-                                                <div>14 800 руб.</div>
-                                                <div>Размер: S</div>
-                                            </a></div>
-                                        <a class="m-basket__remove" href="#">
-                                            <svg class="icon icon-close ">
-                                                <use xlink:href="#close"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                                <a class="btn btn-dark btn-block" href="#">Перейти к оформлению заказа</a>
-                            </div>
+                            <? $APPLICATION->IncludeComponent(
+                                "bitrix:sale.basket.basket.line",
+                                "top_basket",
+                                Array(
+                                    "HIDE_ON_BASKET_PAGES" => "Y",
+                                    "PATH_TO_BASKET" => SITE_DIR . "cart/",
+                                    "PATH_TO_ORDER" => SITE_DIR . "checkout/",
+                                    "PATH_TO_PERSONAL" => SITE_DIR . "personal/",
+                                    "PATH_TO_PROFILE" => SITE_DIR . "personal/",
+                                    "PATH_TO_REGISTER" => SITE_DIR . "login/",
+                                    "POSITION_FIXED" => "Y",
+                                    "POSITION_HORIZONTAL" => "right",
+                                    "POSITION_VERTICAL" => "top",
+                                    "SHOW_AUTHOR" => "Y",
+                                    "SHOW_DELAY" => "N",
+                                    "SHOW_EMPTY_VALUES" => "Y",
+                                    "SHOW_IMAGE" => "Y",
+                                    "SHOW_NOTAVAIL" => "N",
+                                    "SHOW_NUM_PRODUCTS" => "Y",
+                                    "SHOW_PERSONAL_LINK" => "N",
+                                    "SHOW_PRICE" => "Y",
+                                    "SHOW_PRODUCTS" => "Y",
+                                    "SHOW_SUMMARY" => "Y",
+                                    "SHOW_TOTAL_PRICE" => "Y"
+                                )
+                            ); ?>
                         </li>
                     </ul>
                 </nav>
@@ -139,4 +125,3 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
     </div>
 <? endif; ?>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
-						
