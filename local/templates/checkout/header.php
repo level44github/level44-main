@@ -2,6 +2,9 @@
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
+
+$request = \Bitrix\Main\Context::getCurrent()->getRequest();
+$showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty($request->getQuery("ORDER_ID"));
 ?>
 
 <!DOCTYPE html>
@@ -23,12 +26,17 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     <header class="header header_divider">
         <div class="container">
             <nav class="navbar navbar-light bg-light layout__navbar">
-                <div class="position-relative"><a class="header__basket-link" href="#">
-                        <svg class="icon icon-arrow-left mr-2">
-                            <use xlink:href="#arrow-left"></use>
-                        </svg>
-                        <span class="header__basket-text">В корзину</span></a></div>
-                <a class="navbar-brand mx-auto" href="#">LEVEL44</a>
+                <div class="position-relative">
+                    <? if ($showBasketCart): ?>
+                        <a class="header__basket-link" href="#">
+                            <svg class="icon icon-arrow-left mr-2">
+                                <use xlink:href="#arrow-left"></use>
+                            </svg>
+                            <span class="header__basket-text">В корзину</span>
+                        </a>
+                    <? endif; ?>
+                </div>
+                <a class="navbar-brand mx-auto" href="<?= SITE_DIR ?>">LEVEL44</a>
             </nav>
         </div>
     </header>

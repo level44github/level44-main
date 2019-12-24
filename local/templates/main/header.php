@@ -139,4 +139,3 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
     </div>
 <? endif; ?>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
-						
