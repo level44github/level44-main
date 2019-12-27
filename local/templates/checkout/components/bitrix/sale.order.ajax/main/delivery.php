@@ -8,7 +8,7 @@
 <? if (!empty($arResult["DELIVERY"])): ?>
     <fieldset class="fieldset">
         <legend>2. Доставка</legend>
-        <div class="accordion" id="delivery">
+        <div class="checkout__radio" id="delivery">
             <? foreach ($arResult["DELIVERY"] as $key => $delivery): ?>
                 <div class="card option">
                     <a class="option__header

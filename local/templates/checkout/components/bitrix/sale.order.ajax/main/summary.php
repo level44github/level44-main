@@ -35,9 +35,6 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     <span class="basket-aside__pieces"><?= $arResult["BASKET_ITEMS_QUANTITY"] ?> шт</span>
                     <div class="ml-auto"><?= $arResult["ORDER_PRICE_FORMATED"] ?></div>
                 </div>
-                <div class="d-flex">Доставка
-                    <div class="ml-auto"><?= $arResult["DELIVERY_PRICE_FORMATED"] ?></div>
-                </div>
             </div>
             <div class="d-flex align-items-center">
                 <div>Итого без доставки</div>

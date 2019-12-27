@@ -31,8 +31,7 @@ class Helper
         $asset->addString('<link rel="apple-touch-icon" sizes="167x167" href="' . self::getAssetsPath() . '/img/favicons/apple-touch-icon-167x167.png">');
         $asset->addString('<link rel="apple-touch-icon" sizes="180x180" href="' . self::getAssetsPath() . '/img/favicons/apple-touch-icon-180x180.png">');
         $asset->addString('<link rel="apple-touch-icon" sizes="1024x1024" href="' . self::getAssetsPath() . '/img/favicons/apple-touch-icon-1024x1024.png">');
-        $asset->addCss(self::getAssetsPath() . "/css/system.css");
-        $asset->addCss(self::getAssetsPath() . "/css/theme.css");
+        $asset->addCss(self::getAssetsPath() . "/css/app.css");
     }
 
     public static function loadScripts()
@@ -40,5 +39,8 @@ class Helper
         $asset = Asset::getInstance();
         $asset->addJs(self::getAssetsPath() . "/js/jquery.min.js");
         $asset->addJs(self::getAssetsPath() . "/js/app.js");
+        if (SITE_TEMPLATE_ID === "checkout") {
+            $asset->addJs(self::getAssetsPath() . "/js/form.js");
+        }
     }
 }

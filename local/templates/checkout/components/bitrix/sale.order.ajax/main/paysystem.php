@@ -5,7 +5,7 @@
 <? if (!empty($arResult["PAY_SYSTEM"])): ?>
     <fieldset class="fieldset">
         <legend>3. Оплата</legend>
-        <div class="accordion" id="payment">
+        <div class="checkout__radio" id="payment">
             <? foreach ($arResult["PAY_SYSTEM"] as $paySystem): ?>
                 <div class="card option">
                     <a class="option__header
