@@ -202,7 +202,7 @@ $containerName = 'container-' . $navParams['NavNum'];
         );
     }
     ?>
-    <div class="catalog__show-more" data-use="show-more-<?= $navParams['NavNum'] ?>">
+    <div class="catalog__show-more" data-use="show-more-<?= $navParams['NavNum'] ?>" style="display:none;">
         <button class="btn btn-link">
             <span class="spinner-border text-secondary" role="status">
                 <span class="sr-only">Loading...</span>
