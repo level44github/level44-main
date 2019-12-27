@@ -1876,7 +1876,11 @@
                                 .css("background-color", "transparent")
                         );
                     this.animatePriceByQuantity(itemData, quantity);
-                    this.actionPool.changeQuantity(itemData.ID, quantity, currentQuantity);
+                    try {
+                        this.actionPool.changeQuantity(itemData.ID, quantity, currentQuantity);
+                    }catch (e) {
+                        $(BX(this.ids.item + itemData.ID)).find(".basket-items-list-item-overlay").remove()
+                    }
 				}
 			}
 		},
