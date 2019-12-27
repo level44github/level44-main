@@ -76,7 +76,7 @@ if (empty($arResult['ERROR_MESSAGE'])):?>
         var basketJSParams = BX.Sale.BasketComponent.params
     </script>
 <? elseif ($arResult['EMPTY_BASKET']): ?>
-    <? include(Main\Application::getDocumentRoot() . $templateFolder . '/empty.php'); ?>
+    <? LocalRedirect(SITE_DIR) ?>
 <? else: ?>
     <? ShowError($arResult['ERROR_MESSAGE']); ?>
 <? endif; ?>

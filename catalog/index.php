@@ -28,8 +28,8 @@ $APPLICATION->SetTitle("Каталог");
         "COMMON_SHOW_CLOSE_POPUP" => "N",
         "COMPATIBLE_MODE" => "Y",
         "CONVERT_CURRENCY" => "N",
-        "DETAIL_ADD_DETAIL_TO_SLIDER" => "N",
-        "DETAIL_ADD_TO_BASKET_ACTION" => array("BUY"),
+        "DETAIL_ADD_DETAIL_TO_SLIDER" => "Y",
+        "DETAIL_ADD_TO_BASKET_ACTION" => array("BUY","ADD"),
         "DETAIL_BACKGROUND_IMAGE" => "-",
         "DETAIL_BRAND_USE" => "N",
         "DETAIL_BROWSER_TITLE" => "-",
@@ -171,6 +171,11 @@ $APPLICATION->SetTitle("Каталог");
         "USE_PRODUCT_QUANTITY" => "N",
         "USE_REVIEW" => "N",
         "USE_SALE_BESTSELLERS" => "Y",
+        "ADD_PICT_PROP" => "MORE_PHOTO",
+        "DETAIL_OFFERS_PROPERTY_CODE" => [
+            "SIZE_REF",
+            "COLOR_REF",
+        ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(
             "sections" => "",
