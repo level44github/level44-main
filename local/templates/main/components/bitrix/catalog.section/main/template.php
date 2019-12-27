@@ -143,7 +143,7 @@ $obName = 'ob' . preg_replace('/[^a-zA-Z0-9_]/', 'x', $this->GetEditAreaId($navP
 $containerName = 'container-' . $navParams['NavNum'];
 ?>
 
-<div class="row catalog__items" data-entity="<?= $containerName ?>">
+<div data-entity="<?= $containerName ?>">
     <?
     if (!empty($arResult['ITEMS']) && !empty($arResult['ITEM_ROWS'])) {
         $areaIds = array();
@@ -160,7 +160,7 @@ $containerName = 'container-' . $navParams['NavNum'];
         foreach ($arResult['ITEM_ROWS'] as $rowData) {
             $rowItems = array_splice($arResult['ITEMS'], 0, $rowData['COUNT']);
             ?>
-            <div data-entity="items-row">
+            <div class="row catalog__items" data-entity="items-row">
                 <?
                 foreach ($rowItems as $item) {
                     $APPLICATION->IncludeComponent(
@@ -202,7 +202,7 @@ $containerName = 'container-' . $navParams['NavNum'];
         );
     }
     ?>
-    <div class="catalog__show-more" data-use="show-more-<?= $navParams['NavNum'] ?>" style="display: none">
+    <div class="catalog__show-more" data-use="show-more-<?= $navParams['NavNum'] ?>">
         <button class="btn btn-link">
             <span class="spinner-border text-secondary" role="status">
                 <span class="sr-only">Loading...</span>
