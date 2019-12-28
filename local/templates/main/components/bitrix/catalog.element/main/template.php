@@ -209,10 +209,122 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                        type="radio" name="options">
                                                 <?= $value['NAME'] ?>
                                             </label>
-                                        <?endforeach; ?>
+                                        <? endforeach; ?>
+                                    </div>
+                                    <!-- Button modal-->
+                                    <button class="btn dimension__table-btn" type="button" data-toggle="modal"
+                                            data-target="#dimension__table-modal">Таблица размеров
+                                    </button>
+                                    <!-- Modal-->
+                                    <div class="modal fade" id="dimension__table-modal" tabindex="-1" role="dialog"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Таблица размеров</h5>
+                                                    <button class="close" type="button" data-dismiss="modal"
+                                                            aria-label="Закрыть">
+                                                        <svg class="icon icon-close ">
+                                                            <use xlink:href="#close"></use>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body px-0">
+                                                    <div class="d-none d-lg-block">
+                                                        <table class="table table-hover table-borderless">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Размер</th>
+                                                                <th>Обхват груди (см)</th>
+                                                                <th>Обхват талии</th>
+                                                                <th>Обхват бедер</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>XXS</td>
+                                                                <td>XS</td>
+                                                                <td>S</td>
+                                                                <td>M</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>80</td>
+                                                                <td>84</td>
+                                                                <td>88</td>
+                                                                <td>92</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>60</td>
+                                                                <td>64</td>
+                                                                <td>68</td>
+                                                                <td>72</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>88</td>
+                                                                <td>92</td>
+                                                                <td>96</td>
+                                                                <td>100</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="d-lg-none">
+                                                        <table class="table table-borderless">
+                                                            <thead>
+                                                            <tr>
+                                                                <td>XXS</td>
+                                                                <td>XS</td>
+                                                                <td>S</td>
+                                                                <td>M</td>
+                                                            </tr>
+                                                            </thead>
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="4">Обхват груди (см)</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>80</td>
+                                                                <td>84</td>
+                                                                <td>88</td>
+                                                                <td>92</td>
+                                                            </tr>
+                                                            </tbody>
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="4">Обхват талии</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>60</td>
+                                                                <td>64</td>
+                                                                <td>68</td>
+                                                                <td>72</td>
+                                                            </tr>
+                                                            </tbody>
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="4">Обхват бедер</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>88</td>
+                                                                <td>92</td>
+                                                                <td>96</td>
+                                                                <td>100</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            <?endif; ?>
+                            <? endif; ?>
                             <?
                             if ($skuProperty['CODE'] === "COLOR_REF"): ?>
                                 <div class="color" data-entity="sku-line-block">
@@ -231,14 +343,15 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                       style="background-image: url('<?= $value['PICT']['SRC'] ?>');"
                                                 ></span>
                                             </label>
-                                        <?endforeach; ?>
+                                        <? endforeach; ?>
                                     </div>
                                 </div>
-                            <?endif; ?>
-                        <?endforeach; ?>
+                            <? endif; ?>
+                        <? endforeach; ?>
                     </div>
-                <?endif; ?>
-                <div id="<?= $itemIds['BASKET_ACTIONS_ID'] ?>">
+                <? endif; ?>
+                <div id="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
+                     style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
                     <button class="btn btn-dark btn-block mb-4" type="button" id="<?= $itemIds['ADD_BASKET_LINK'] ?>">
                         <svg class="icon icon-basket product__basket-icon">
                             <use xlink:href="#basket"></use>
@@ -247,6 +360,13 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         Добавить в корзину
                     </button>
                 </div>
+                <button class="btn btn-dark btn-block mb-4"
+                        type="button"
+                        onclick="return false;"
+                        style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
+                >
+                    Нет в наличии
+                </button>
                 <?
                 if (!empty($arResult["DETAIL_TEXT"])): ?>
                     <div class="product__desc">
