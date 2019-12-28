@@ -45,7 +45,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <img class="img-fluid" src="{{IMAGE_URL}}" alt="">
         </a>
         <div class="cart__body">
-            <div class="font-weight-bold d-lg-none">{{PRICE_FORMATED}}</div>
+            <div class="font-weight-bold d-lg-none">{{{PRICE_FORMATED}}}</div>
             <a class="cart__link" href="{{DETAIL_PAGE_URL}}">{{NAME}}</a>
             <ul class="cart__list">
                 <li>Цвет: Шоколад</li>
@@ -73,6 +73,6 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             </div>
             <a class="cart__remove d-lg-none" href="#" data-entity="basket-item-delete">Удалить</a>
         </div>
-        <div class="d-none d-lg-block cart__price">{{PRICE_FORMATED}}</div>
+        <div class="d-none d-lg-block cart__price">{{{PRICE_FORMATED}}}</div>
     </div>
 </script>
