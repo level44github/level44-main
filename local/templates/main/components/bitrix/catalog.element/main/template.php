@@ -200,13 +200,16 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <div class="dimension" data-entity="sku-line-block">
                                     <div class="dimension__group btn-group-toggle" data-toggle="buttons">
                                         <? foreach ($skuProperty['VALUES'] as $value): ?>
-                                            <label class="btn dimension__btn active"
+                                            <label class="btn dimension__btn"
                                                    data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
                                                    data-onevalue="<?= $value['ID'] ?>"
                                                    style="box-shadow: none"
                                             >
                                                 <input id="dimension<?= $skuProperty['ID'] ?><?= $value['ID'] ?>"
-                                                       type="radio" name="options">
+                                                       type="radio"
+                                                       name="dimension"
+                                                       autocomplete="off"
+                                                >
                                                 <?= $value['NAME'] ?>
                                             </label>
                                         <? endforeach; ?>
@@ -330,7 +333,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <div class="color" data-entity="sku-line-block">
                                     <div class="color__group btn-group-toggle" data-toggle="buttons">
                                         <? foreach ($skuProperty['VALUES'] as $value): ?>
-                                            <label class="btn color__btn js-color__btn active"
+                                            <label class="btn color__btn js-color__btn"
                                                    title="<?= $value['NAME'] ?>"
                                                    data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
                                                    data-onevalue="<?= $value['ID'] ?>"
@@ -338,7 +341,10 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                             >
 
                                                 <input id="color<?= $skuProperty['ID'] ?><?= $value['ID'] ?>"
-                                                       type="radio" name="options">
+                                                       type="radio"
+                                                       name="color"
+                                                       autocomplete="off"
+                                                >
                                                 <span class="color__value"
                                                       style="background-image: url('<?= $value['PICT']['SRC'] ?>');"
                                                 ></span>

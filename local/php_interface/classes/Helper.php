@@ -43,4 +43,14 @@ class Helper
             $asset->addJs(self::getAssetsPath() . "/js/form.js");
         }
     }
+
+    public static function isCheckoutPage()
+    {
+        global $APPLICATION;
+        $orderId = \Bitrix\Main\Context::getCurrent()
+            ->getRequest()
+            ->getQuery("ORDER_ID");
+        $curPage = $APPLICATION->GetCurPage();
+        return $curPage === SITE_DIR . "checkout/" && !isset($orderId);
+    }
 }
