@@ -36,11 +36,11 @@ foreach ($jsTemplates->getChildren() as $jsTemplate) {
 if (empty($arResult['ERROR_MESSAGE'])):?>
     <div id="basket-root" class="row bx-basket">
         <div class="col-lg-8 mb-4">
-            <h1 class="page__title cart__page-title">Корзина</h1>
+            <h1 class="page__title cart__page-title"><?= Loc::getMessage("BASKET") ?></h1>
             <div class="cart__items" id="basket-item-table"></div>
         </div>
         <div class="col-lg-4">
-            <h3 class="aside__title">Итого</h3>
+            <h3 class="aside__title"><?= Loc::getMessage("TOTAL") ?></h3>
             <div class="card">
                 <div class="card-body" data-entity="basket-total-block"></div>
             </div>

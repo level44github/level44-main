@@ -35,4 +35,16 @@ $MESS["CT_BCE_CATALOG_RANGE_MORE"] = "и более";
 $MESS["CT_BCE_CATALOG_RATIO_PRICE"] = "цена за #RATIO#";
 $MESS["CT_BCE_CATALOG_GIFT_BLOCK_TITLE_DEFAULT"] = "Выберите один из подарков к этому товару";
 $MESS["CT_BCE_CATALOG_GIFTS_MAIN_BLOCK_TITLE_DEFAULT"] = "Выберите один из товаров, чтобы получить подарок";
+$MESS["ADD_TO_BASKET"] = "Добавить в корзину";
+$MESS["EXIST_QUESTIONS"] = "Есть вопросы?";
+$MESS["SIZE_TABLE"] = "Таблица размеров";
+$MESS["CLOSE_MODAL"] = "Закрыть";
+$MESS["SIZE"] = "Размер";
+$MESS["CHEST_CIRCUMFERENCE"] = "Обхват груди (см)";
+$MESS["HOIST_GIRTH"] = "Обхват талии";
+$MESS["HIP_GIRTH"] = "Обхват бедер";
+$MESS["ADD_TO_BASKET"] = "Добавить в корзину";
+$MESS["NOT_AVAILABLE"] = "Нет в наличии";
+$MESS["EXIST_QUESTIONS"] = "Есть вопросы?";
+
 ?>
