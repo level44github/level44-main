@@ -70,3 +70,9 @@ foreach ($arResult["DELIVERY"] as $key => &$delivery) {
 }
 unset($delivery);
 
+if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
+    $arResult["IS_CASH"] = !empty($arResult["ORDER"]) && !empty($arResult["PAY_SYSTEM"])
+        && $arResult["PAY_SYSTEM"]["IS_CASH"] === "Y"
+        && strripos($arResult["PAY_SYSTEM"]["ACTION_FILE"], "cash") !== false
+        && !empty($arResult["PAY_SYSTEM"]["ACTION_FILE"]);
+}

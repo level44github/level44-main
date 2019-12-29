@@ -1,5 +1,5 @@
 <?php
-if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) 
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 	die();
 
 use Bitrix\Main\Localization\Loc;
@@ -20,7 +20,6 @@ if ($params["PAYED"] != "Y")
 				<?
 					$itemName = "Invoice ".$params["PAYMENT_ID"]." (".$params["PAYMENT_DATE_INSERT"].")";
 				?>
-                <p>Сейчас вы будете перенаправлены на платёжную систему</p>
 				<form action="<?=$params['URL']?>" method="post" class="js-pay_form">
 					<input type="hidden" name="cmd" value="_xclick">
 					<input type="hidden" name="buttonsource" value="Bitrix_Cart">
