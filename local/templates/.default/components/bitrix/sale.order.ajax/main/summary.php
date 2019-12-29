@@ -19,12 +19,13 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <div class="font-weight-bold"><?= $basketItem["SUM"] ?></div>
                             <div><?= $basketItem["NAME"] ?></div>
                             <div>Количество: <?= $basketItem["QUANTITY"] ?></div>
-                       <?/*
-                            <ul class="basket-aside__list">
-                                <li>Цвет: Шоколад</li>
-                                <li>Размер: S</li>
-                            </ul>
-                        */?>
+                            <? if (!empty($basketItem["PROPS"])): ?>
+                                <ul class="basket-aside__list">
+                                    <? foreach ($basketItem["PROPS"] as $prop): ?>
+                                        <li><?= $prop["NAME"] ?>: <?= $prop["VALUE"] ?></li>
+                                    <? endforeach; ?>
+                                </ul>
+                            <? endif; ?>
                         </div>
                     </div>
                 <? endforeach; ?>

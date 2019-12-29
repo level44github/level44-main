@@ -2,7 +2,13 @@
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 $APPLICATION->SetTitle('Главная');
 ?>
-<?$APPLICATION->IncludeComponent(
+<?
+global $arrFilter;
+$arrFilter = [
+    "PROPERTY_SHOW_ON_MAIN_VALUE" => "Y",
+];
+
+$APPLICATION->IncludeComponent(
     "bitrix:catalog.section",
     "products_on_main",
     Array(
@@ -118,7 +124,7 @@ $APPLICATION->SetTitle('Главная');
         "SLIDER_PROGRESS" => "N",
         "TEMPLATE_THEME" => "blue",
         "USE_ENHANCED_ECOMMERCE" => "Y",
-        "USE_MAIN_ELEMENT_SECTION" => "N",
+        "USE_MAIN_ELEMENT_SECTION" => "Y",
         "USE_PRICE_COUNT" => "N",
         "USE_PRODUCT_QUANTITY" => "N"
     )

@@ -9,6 +9,7 @@ $cartId = $arParams['cartId'];
 require(realpath(dirname(__FILE__)) . '/top_template.php');
 
 use Bitrix\Main\Localization\Loc;
+
 ?>
 <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
     <div id="<?= $cartId ?>products"
@@ -31,7 +32,9 @@ use Bitrix\Main\Localization\Loc;
                             <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
                                 <div><?= $item["NAME"] ?></div>
                                 <div><?= $item["PRICE_FMT"] ?></div>
-                                <div>Размер: S</div>
+                                <? if (!empty($item["SIZE"])): ?>
+                                    <div>Размер: <?= $item["SIZE"] ?></div>
+                                <? endif; ?>
                             </a>
                         </div>
                         <a class="m-basket__remove"
@@ -46,7 +49,8 @@ use Bitrix\Main\Localization\Loc;
                 <? endforeach; ?>
             <? endforeach; ?>
         </div>
-        <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
+        <a class="btn btn-dark btn-block"
+           href="<?= $arParams["PATH_TO_BASKET"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
     </div>
 
     <script>
