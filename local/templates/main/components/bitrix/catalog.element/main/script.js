@@ -2136,10 +2136,12 @@
 					for (i = 0; i < rowItems.length; i++)
 					{
 						BX.removeClass(rowItems[i], 'active');
+						$(rowItems[i]).find("input").prop("checked",false)
 					}
 				}
 
-				BX.addClass(target, 'active');
+                BX.addClass(target, 'active');
+                $(target).find("input").prop("checked", true)
 
 				if (this.smallCardNodes.panel)
 				{
@@ -2262,10 +2264,12 @@
 					if (isCurrent)
 					{
 						BX.addClass(rowItems[i], 'active');
-					}
+                        $(rowItems[i]).find("input").prop("checked", true)
+                    }
 					else
 					{
 						BX.removeClass(rowItems[i], 'active');
+                        $(rowItems[i]).find("input").prop("checked", false)
 					}
 
 					if (BX.util.in_array(value, canBuyId))
