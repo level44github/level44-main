@@ -39,4 +39,6 @@ $MESS["SBB_GOODS"] = "products";
 $MESS["SBB_DELETE"] = "Delete";
 $MESS["SBB_IN_BASKET"] = "In shopping cart";
 $MESS["SBB_GIFTS_BLOCK_TITLE"] = "Select a gift";
+$MESS["BASKET"] = "Basket";
+$MESS["TOTAL"] = "Total";
 ?>

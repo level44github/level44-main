@@ -1,8 +1,10 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
-} ?>
+}
+use Bitrix\Main\Localization\Loc;
+?>
 <? if (!empty($arResult)): ?>
-    <h4 class="px-3">Каталог</h4>
+    <h4 class="px-3"><?= Loc::getMessage("CATALOG") ?></h4>
     <ul class="nav flex-column">
         <? foreach ($arResult as $item): ?>
             <li class="nav-item">

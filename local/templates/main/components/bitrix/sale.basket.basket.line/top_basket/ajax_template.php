@@ -7,12 +7,14 @@ $this->IncludeLangFile('template.php');
 $cartId = $arParams['cartId'];
 
 require(realpath(dirname(__FILE__)) . '/top_template.php');
+
+use Bitrix\Main\Localization\Loc;
 ?>
 <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
     <div id="<?= $cartId ?>products"
          class="dropdown-menu dropdown-menu-right m-basket__dropdown js-m-basket__dropdown"
     >
-        <div class="m-basket__title">Корзина</div>
+        <div class="m-basket__title"><?= Loc::getMessage("BASKET") ?></div>
         <div class="m-basket__items">
             <? foreach ($arResult["CATEGORIES"] as $category => $items): ?>
                 <? if (empty($items)):
@@ -44,7 +46,7 @@ require(realpath(dirname(__FILE__)) . '/top_template.php');
                 <? endforeach; ?>
             <? endforeach; ?>
         </div>
-        <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>">Перейти к оформлению заказа</a>
+        <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
     </div>
 
     <script>

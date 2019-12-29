@@ -216,18 +216,16 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                     </div>
                                     <!-- Button modal-->
                                     <button class="btn dimension__table-btn" type="button" data-toggle="modal"
-                                            data-target="#dimension__table-modal">Таблица размеров
-                                    </button>
+                                            data-target="#dimension__table-modal"><?= Loc::getMessage("SIZE_TABLE") ?></button>
                                     <!-- Modal-->
                                     <div class="modal fade" id="dimension__table-modal" tabindex="-1" role="dialog"
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Таблица размеров</h5>
+                                                    <h5 class="modal-title"><?= Loc::getMessage("SIZE_TABLE") ?></h5>
                                                     <button class="close" type="button" data-dismiss="modal"
-                                                            aria-label="Закрыть">
-                                                        <svg class="icon icon-close ">
+                                                            aria-label="<?= Loc::getMessage("CLOSE_MODAL") ?>"><svg class="icon icon-close ">
                                                             <use xlink:href="#close"></use>
                                                         </svg>
                                                     </button>
@@ -237,10 +235,10 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                         <table class="table table-hover table-borderless">
                                                             <thead>
                                                             <tr>
-                                                                <th>Размер</th>
-                                                                <th>Обхват груди (см)</th>
-                                                                <th>Обхват талии</th>
-                                                                <th>Обхват бедер</th>
+                                                                <th><?= Loc::getMessage("SIZE") ?></th>
+                                                                <th><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
+                                                                <th><?= Loc::getMessage("HOIST_GIRTH") ?></th>
+                                                                <th><?= Loc::getMessage("HIP_GIRTH") ?></th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -283,7 +281,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                             </thead>
                                                             <thead>
                                                             <tr>
-                                                                <th colspan="4">Обхват груди (см)</th>
+                                                                <th colspan="4"><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -296,7 +294,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                             </tbody>
                                                             <thead>
                                                             <tr>
-                                                                <th colspan="4">Обхват талии</th>
+                                                                <th colspan="4"><?= Loc::getMessage("HOIST_GIRTH") ?></th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -309,7 +307,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                             </tbody>
                                                             <thead>
                                                             <tr>
-                                                                <th colspan="4">Обхват бедер</th>
+                                                                <th colspan="4"><?= Loc::getMessage("HIP_GIRTH") ?></th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -361,18 +359,13 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     <button class="btn btn-dark btn-block mb-4" type="button" id="<?= $itemIds['ADD_BASKET_LINK'] ?>">
                         <svg class="icon icon-basket product__basket-icon">
                             <use xlink:href="#basket"></use>
-                        </svg>
-
-                        Добавить в корзину
-                    </button>
+                        </svg><?= Loc::getMessage("ADD_TO_BASKET") ?></button>
                 </div>
                 <button class="btn btn-dark btn-block mb-4"
                         type="button"
                         onclick="return false;"
                         style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
-                >
-                    Нет в наличии
-                </button>
+                ><?= Loc::getMessage("NOT_AVAILABLE") ?></button>
                 <?
                 if (!empty($arResult["DETAIL_TEXT"])): ?>
                     <div class="product__desc">
@@ -384,7 +377,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     </div>
                 <? endif; ?>
                 <div class="product__question">
-                    <div class="product__question-title mb-2">Есть вопросы?</div>
+                    <div class="product__question-title mb-2"><?= Loc::getMessage("EXIST_QUESTIONS") ?></div>
                     <div><a class="btn btn-outline-secondary product__question-btn" href="#">
                             <svg class="icon icon-whatsapp ">
                                 <use xlink:href="#whatsapp"></use>
