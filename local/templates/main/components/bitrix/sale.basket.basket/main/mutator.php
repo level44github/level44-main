@@ -181,7 +181,24 @@ foreach ($this->basketItems as $row)
 		}
 	}
 
-	if ($row['NOT_AVAILABLE'])
+    $rowData["SELECT_PROP"] = [];
+
+    foreach ($rowData['SKU_BLOCK_LIST'] as $prop) {
+        $propValue = reset(array_filter($prop["SKU_VALUES_LIST"],
+            function ($item) {
+                return $item["SELECTED"] === true;
+            }));
+
+        $propValue["PROP_NAME"] = $prop["NAME"];
+        if (in_array($prop["CODE"], ["COLOR_REF", "SIZE_REF"])) {
+            $rowData["SELECT_PROP"][] = [
+                "NAME" => $propValue["PROP_NAME"],
+                "VALUE" => $propValue["NAME"],
+            ];
+        }
+    }
+
+	if ($row['NOT_AVAILABLE'] && false)
 	{
 		foreach ($rowData['SKU_BLOCK_LIST'] as $blockKey => $skuBlock)
 		{

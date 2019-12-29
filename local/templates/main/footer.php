@@ -3,6 +3,8 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Main\Localization\Loc;
+
 if (empty(\Helper::$typePage)) {
     \Helper::$typePage = "layout";
 }
@@ -26,12 +28,11 @@ $APPLICATION->AddViewContent("type-page", \Helper::$typePage);
                         false
                     ); ?>
                 </div>
-                <div>
-                    Сделано в <a class="footer__link" href="#">Genue</a>
+                <div><?= Loc::getMessage("CREATE_IN") ?><a class="footer__link" href="#">Genue</a>
                 </div>
             </div>
             <div class="col-6 col-lg-3 order-2">
-                <div class="footer__title">Покупателям</div>
+                <div class="footer__title"><?= Loc::getMessage("FOOTER_BUYERS") ?></div>
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:menu",
                     "footer_links",

@@ -3,6 +3,8 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Main\Localization\Loc;
+
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
 \Helper::$typePage = $isMain ? "home" : "";
 ?>
@@ -49,7 +51,7 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
                                 <div class="input-group m-search__group">
                                     <input class="form-control m-search__control js-m-search__control"
                                            type="text"
-                                           placeholder="Найти на сайте"
+                                           placeholder="<?=Loc::getMessage("HEADER_SEARCH_ON_SITE")?>"
                                            name="q"
                                            autocomplete="off"
                                     >
@@ -121,7 +123,7 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
             </div>
         </div>
         <? if ($isMain): ?>
-        <a class="btn btn-outline-light btn__fix-width" href="<?= SITE_DIR ?>catalog/">Перейти в каталог</a>
+        <a class="btn btn-outline-light btn__fix-width" href="<?= SITE_DIR ?>catalog/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
     </div>
 <? endif; ?>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">

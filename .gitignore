@@ -5,6 +5,7 @@
 
 /bitrix/
 /include/
+/en/include/
 /landing_template/
 /upload/
 /.htaccess

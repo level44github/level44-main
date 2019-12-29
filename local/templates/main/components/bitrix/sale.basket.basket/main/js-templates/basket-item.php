@@ -48,10 +48,11 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <div class="font-weight-bold d-lg-none">{{{PRICE_FORMATED}}}</div>
             <a class="cart__link" href="{{DETAIL_PAGE_URL}}">{{NAME}}</a>
             <ul class="cart__list">
-                <li>Цвет: Шоколад</li>
-                <li>Размер: S</li>
+                {{#SELECT_PROP}}
+                <li>{{NAME}}: {{VALUE}}</li>
+                {{/SELECT_PROP}}
             </ul>
-            <a class="cart__remove mt-3 d-none d-lg-block" href="#" data-entity="basket-item-delete">Удалить</a>
+            <a class="cart__remove mt-3 d-none d-lg-block" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>
         <div class="cart__actions">
             <div class="stepper js-stepper" data-entity="basket-item-quantity-block">
@@ -71,7 +72,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         data-entity="basket-item-quantity-plus"
                 ></button>
             </div>
-            <a class="cart__remove d-lg-none" href="#" data-entity="basket-item-delete">Удалить</a>
+            <a class="cart__remove d-lg-none" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>
         <div class="d-none d-lg-block cart__price">{{{PRICE_FORMATED}}}</div>
     </div>

@@ -11,6 +11,16 @@ foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"] as &$prop) {
         $prop["DESCRIPTION"] = "Введите " . strtolower($prop["NAME"]);
     }
 
+    $prop["VALIDATION_CLASS"] = "";
+
+    if ($prop["CODE"] === "EMAIL") {
+        $prop["VALIDATION_CLASS"] = "js-form__email";
+    }
+
+    if ($prop["CODE"] === "PHONE") {
+        $prop["VALIDATION_CLASS"] = "js-form__phone";
+    }
+
     if ($prop["CODE"] === "ADDRESS") {
         $arResult["ORDER_PROP_ADDRESS"] = $prop;
         continue;
@@ -36,6 +46,12 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
     } else {
         $basketItem["PICTURE"] = "";
     }
+
+    $basketItem["PROPS"] = array_filter($basketItem["PROPS"],
+        function ($item) {
+            return in_array($item["CODE"], ["COLOR_REF", "SIZE_REF"]);
+        }
+    );
 }
 unset($basketItem);
 

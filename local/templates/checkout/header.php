@@ -2,6 +2,7 @@
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
+use Bitrix\Main\Localization\Loc;
 
 $request = \Bitrix\Main\Context::getCurrent()->getRequest();
 $showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty($request->getQuery("ORDER_ID"));
@@ -32,7 +33,7 @@ $showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty
                             <svg class="icon icon-arrow-left mr-2">
                                 <use xlink:href="#arrow-left"></use>
                             </svg>
-                            <span class="header__basket-text">В корзину</span>
+                            <span class="header__basket-text"><?= Loc::getMessage("TO_BASKET") ?></span>
                         </a>
                     <? endif; ?>
                 </div>

@@ -109,7 +109,7 @@ if (!function_exists("PrintPropsForm")) {
                 <input type="text"
                        maxlength="250"
                        size="<?= $arProperty["SIZE1"] ?>"
-                       class="form-control js-form__control js-form__email"
+                       class="form-control js-form__control <?=$arProperty["VALIDATION_CLASS"]?>"
                        id="form-email <?= $arProperty["FIELD_NAME"] ?>"
                        name="<?= $arProperty["FIELD_NAME"] ?>"
                        value="<?= $arProperty["VALUE"] ?>"

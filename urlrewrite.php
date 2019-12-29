@@ -1,6 +1,8 @@
 <?php
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
 $arUrlRewrite=array (
-  0 => 
+  0 =>
   array (
     'CONDITION' => '#^\\/?\\/mobileapp/jn\\/(.*)\\/.*#',
     'RULE' => 'componentName=$1',
@@ -8,7 +10,7 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/mobileapp/jn.php',
     'SORT' => 100,
   ),
-  2 => 
+  2 =>
   array (
     'CONDITION' => '#^/bitrix/services/ymarket/#',
     'RULE' => '',
@@ -16,7 +18,7 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/ymarket/index.php',
     'SORT' => 100,
   ),
-  1 => 
+  1 =>
   array (
     'CONDITION' => '#^/rest/#',
     'RULE' => '',
@@ -26,10 +28,10 @@ $arUrlRewrite=array (
   ),
   3 =>
   array (
-      'CONDITION' => '#^/catalog/#',
+      'CONDITION' => '#^' . SITE_DIR . 'catalog/#',
       'RULE' => '',
       'ID' => 'bitrix:catalog',
-      'PATH' => '/catalog/index.php',
+      'PATH' => SITE_DIR . 'catalog/index.php',
       'SORT' => 100,
   ),
 );

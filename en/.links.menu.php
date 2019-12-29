@@ -1,0 +1,25 @@
+<?
+$aMenuLinks = Array(
+    Array(
+        "Showroom",
+        "/",
+        Array(),
+        Array(),
+        ""
+    ),
+    Array(
+        "Instagram",
+        "/",
+        Array(),
+        Array(),
+        ""
+    ),
+    Array(
+        "WhatsApp",
+        "/",
+        Array(),
+        Array(),
+        ""
+    ),
+);
+?>

@@ -7,12 +7,15 @@ $this->IncludeLangFile('template.php');
 $cartId = $arParams['cartId'];
 
 require(realpath(dirname(__FILE__)) . '/top_template.php');
+
+use Bitrix\Main\Localization\Loc;
+
 ?>
 <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
     <div id="<?= $cartId ?>products"
          class="dropdown-menu dropdown-menu-right m-basket__dropdown js-m-basket__dropdown"
     >
-        <div class="m-basket__title">Корзина</div>
+        <div class="m-basket__title"><?= Loc::getMessage("BASKET") ?></div>
         <div class="m-basket__items">
             <? foreach ($arResult["CATEGORIES"] as $category => $items): ?>
                 <? if (empty($items)):
@@ -29,7 +32,9 @@ require(realpath(dirname(__FILE__)) . '/top_template.php');
                             <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
                                 <div><?= $item["NAME"] ?></div>
                                 <div><?= $item["PRICE_FMT"] ?></div>
-                                <div>Размер: S</div>
+                                <? if (!empty($item["SIZE"])): ?>
+                                    <div>Размер: <?= $item["SIZE"] ?></div>
+                                <? endif; ?>
                             </a>
                         </div>
                         <a class="m-basket__remove"
@@ -44,7 +49,8 @@ require(realpath(dirname(__FILE__)) . '/top_template.php');
                 <? endforeach; ?>
             <? endforeach; ?>
         </div>
-        <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>">Перейти к оформлению заказа</a>
+        <a class="btn btn-dark btn-block"
+           href="<?= $arParams["PATH_TO_BASKET"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
     </div>
 
     <script>
