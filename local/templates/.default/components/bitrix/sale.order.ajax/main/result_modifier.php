@@ -3,12 +3,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Main\Localization\Loc;
+
 $columns = [];
 $fulls = [];
 
 foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"] as &$prop) {
     if (empty($prop["DESCRIPTION"])) {
-        $prop["DESCRIPTION"] = "Введите " . strtolower($prop["NAME"]);
+        $prop["DESCRIPTION"] = Loc::getMessage("INPUT") . strtolower($prop["NAME"]);
     }
 
     $prop["VALIDATION_CLASS"] = "";
@@ -73,14 +75,14 @@ $arResult["ORDER_PROP"]["USER_PROPS_Y"] = $resultProps;
 foreach ($arResult["DELIVERY"] as $key => &$delivery) {
     $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
     if ((int)$delivery["ID"] === \Helper::DELIVERY_COURIER) {
-        $delivery["PERIOD_TEXT"] = "1 день";
+        $delivery["PERIOD_TEXT"] = Loc::getMessage("DAY");
     }
 
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PERIOD_TEXT"];
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PRICE_PERIOD_TEXT"] .
         (!empty($delivery["PRICE_PERIOD_TEXT"]) ? ", " : "");
     if (empty($delivery["PRICE_FORMATED"]) || (int)$delivery["PRICE"] <= 0) {
-        $delivery["PRICE_FORMATED"] = "бесплатно";
+        $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");
     }
     $delivery["PRICE_PERIOD_TEXT"] .= $delivery["PRICE_FORMATED"];
 }

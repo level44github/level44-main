@@ -33,7 +33,7 @@ use Bitrix\Main\Localization\Loc;
                                 <div><?= $item["NAME"] ?></div>
                                 <div><?= $item["PRICE_FMT"] ?></div>
                                 <? if (!empty($item["SIZE"])): ?>
-                                    <div>Размер: <?= $item["SIZE"] ?></div>
+                                    <div><?= Loc::getMessage("SIZE") ?><?= $item["SIZE"] ?></div>
                                 <? endif; ?>
                             </a>
                         </div>

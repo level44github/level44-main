@@ -74,4 +74,10 @@ $MESS["SOA_OTHER_LOCATION"] = "Other location";
 $MESS["SOA_LOCATION_NOT_FOUND"] = "Location was not found";
 $MESS["SOA_LOCATION_NOT_FOUND_PROMPT"] = "Click #ANCHOR#add location#ANCHOR_END# so we know where you want to have your order shipped to";
 $MESS["SOA_NOT_SELECTED_ALT"] = "Make location more specific if required";
+$MESS["CHECKOUT"] = "Checkout";
+$MESS["OFERTA_MESS1"] = "By clicking the \"Checkout\" button, you agree to";
+$MESS["OFERTA"] = "public offer";
+$MESS["TO_CHECKOUT"] = "Proceed to Checkout";
+$MESS["OFERTA_MESS2"] = "By clicking the \"Checkout\" button, you agree to";
+$MESS["OFERTA2"] = "public offer";
 ?>
