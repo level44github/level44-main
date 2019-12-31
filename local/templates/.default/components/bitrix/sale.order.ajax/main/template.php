@@ -18,6 +18,8 @@ if($USER->IsAuthorized() || $arParams["ALLOW_AUTO_REGISTER"] == "Y")
 	}
 }
 
+use Bitrix\Main\Localization\Loc;
+
 CJSCore::Init(array('fx', 'popup', 'window', 'ajax'));
 ?>
 
@@ -187,12 +189,9 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             <div class="form-group">
                 <button class="btn btn-dark btn__fix-width"
                         onclick="submitForm('Y'); return false;"
-                        type="submit">Оформить заказ
-                </button>
+                        type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
             </div>
-            <p class="text-muted">
-                Нажимая кнопку «Оформить заказ», вы соглашаетесь с
-                <a href="#">публичной офертой</a>
+            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS1") ?><a href="#"><?= Loc::getMessage("OFERTA") ?></a>
             </p>
         </div>
     </div>
@@ -204,12 +203,9 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             <div class="form-group">
                 <button class="btn btn-dark btn-block"
                         onclick="submitForm('Y'); return false;"
-                        type="submit">Перейти к оформлению заказа
-                </button>
+                        type="submit"><?= Loc::getMessage("TO_CHECKOUT") ?></button>
             </div>
-            <p class="text-muted">
-                Нажимая кнопку «Оформить заказ», вы соглашаетесь с
-                <a href="#">публичной офертой</a>
+            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS2") ?><a href="#"><?= Loc::getMessage("OFERTA2") ?></a>
             </p>
         </div>
     </div>

@@ -1,6 +1,8 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
-} ?>
+}
+use Bitrix\Main\Localization\Loc;
+?>
 <?
 if (!function_exists("showFilePropertyField")) {
     function showFilePropertyField($name, $property_fields, $values, $max_file_size_show = 50000)
@@ -114,7 +116,7 @@ if (!function_exists("PrintPropsForm")) {
                        name="<?= $arProperty["FIELD_NAME"] ?>"
                        value="<?= $arProperty["VALUE"] ?>"
                        placeholder="<?= $arProperty["DESCRIPTION"] ?>">
-                <div class="invalid-feedback">Недопустимые символы в поле</div>
+                <div class="invalid-feedback"><?= Loc::getMessage("INCORRECT") ?></div>
             </div>
         <? elseif ($arProperty["TYPE"] == "SELECT" && false): ?>
             <br/>

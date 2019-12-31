@@ -1,13 +1,15 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
+use Bitrix\Main\Localization\Loc;
+
 ?>
 
 <input type="hidden" name="BUYER_STORE" id="BUYER_STORE" value="<?= $arResult["BUYER_STORE"] ?>"/>
 
 <? if (!empty($arResult["DELIVERY"])): ?>
     <fieldset class="fieldset">
-        <legend>2. Доставка</legend>
+        <legend><?= Loc::getMessage("DELIVERY") ?></legend>
         <div class="checkout__radio" id="delivery">
             <? foreach ($arResult["DELIVERY"] as $key => $delivery): ?>
                 <div class="card option">
@@ -57,10 +59,10 @@
             <? endforeach; ?>
         </div>
         <div class="form-group">
-            <label for="form-comment">Комментарий</label>
+            <label for="form-comment"><?= Loc::getMessage("COMMENT") ?></label>
             <textarea class="form-control"
                       id="form-comment"
-                      placeholder="Особые требования к упаковке или доставке..."
+                      placeholder="<?= Loc::getMessage("COMMENT_MESS") ?>"
                       name="ORDER_DESCRIPTION"
                       rows="3"
             ><?= $arResult["USER_VALS"]["ORDER_DESCRIPTION"] ?></textarea>

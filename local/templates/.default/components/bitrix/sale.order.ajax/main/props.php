@@ -2,11 +2,12 @@
     die();
 }
 include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/props_format.php");
+use Bitrix\Main\Localization\Loc;
 ?>
 
 <? if (!empty($arResult["ORDER_PROP"]["USER_PROPS_Y"])): ?>
     <fieldset class="fieldset">
-        <legend>1. Контактные данные</legend>
+        <legend><?= Loc::getMessage("CONTACT") ?></legend>
         <? if (!empty($arResult["ORDER_PROP"]["USER_PROPS_Y"]["COLUMNS"])): ?>
             <? foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"]["COLUMNS"] as $row): ?>
                 <div class="row">

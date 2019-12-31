@@ -21,3 +21,4 @@ $MESS ['TSB1_DELETE'] = "Удалить";
 $MESS ['TSB1_2ORDER'] = "Оформить заказ";
 $MESS["BASKET"] = "Корзина";
 $MESS["PROCEED_TO_CHECKOUT"] = "Перейти к оформлению заказа";
+$MESS["SIZE"] = "Размер: ";

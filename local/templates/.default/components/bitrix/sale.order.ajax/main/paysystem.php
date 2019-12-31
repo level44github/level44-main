@@ -1,10 +1,11 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
+use Bitrix\Main\Localization\Loc;
 ?>
 <? if (!empty($arResult["PAY_SYSTEM"])): ?>
     <fieldset class="fieldset">
-        <legend>3. Оплата</legend>
+        <legend><?= Loc::getMessage("PAYMENT") ?></legend>
         <div class="checkout__radio" id="payment">
             <? foreach ($arResult["PAY_SYSTEM"] as $paySystem): ?>
                 <div class="card option">
