@@ -3345,7 +3345,7 @@
 
 		basketResult: function(arResult)
 		{
-            BX.onCustomEvent('OnBasketChange');
+			BX.onCustomEvent('OnBasketChange',[{showAfterAdd: true}]);
 			return; //Не выводим попап при добавлении в корзину
 			var popupContent, popupButtons, productPict;
 
