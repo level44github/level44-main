@@ -46,25 +46,31 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
                     </button>
                     <a class="navbar-brand" href="<?= SITE_DIR ?>">LEVEL44</a>
                     <ul class="nav menu ml-auto">
-                        <li class="nav-item m-search js-m-search">
-                            <form action="<?= SITE_DIR ?>search">
-                                <div class="input-group m-search__group">
-                                    <input class="form-control m-search__control js-m-search__control"
-                                           type="text"
-                                           placeholder="<?=Loc::getMessage("HEADER_SEARCH_ON_SITE")?>"
-                                           name="q"
-                                           autocomplete="off"
-                                    >
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary m-search__btn" type="submit">
-                                            <svg class="icon icon-search menu__icon">
-                                                <use xlink:href="#search"></use>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </li>
+	                    <? $APPLICATION->IncludeComponent(
+		                    "bitrix:main.site.selector",
+		                    "main",
+		                    [
+			                    "SITE_LIST"  => ["*all*"],
+			                    "CACHE_TYPE" => "A",
+			                    "CACHE_TIME" => "3600",
+		                    ]
+	                    ); ?>
+	                    <li class="nav-item m-search js-m-search">
+		                    <div class="m-search__container">
+			                    <form>
+				                    <div class="input-group m-search__group">
+					                    <input class="form-control m-search__control js-m-search__control" type="text" placeholder="Найти на сайте" autocomplete="off">
+					                    <div class="input-group-append">
+						                    <button class="btn btn-outline-secondary m-search__btn" type="button">
+							                    <svg class="icon icon-search menu__icon">
+								                    <use xlink:href="#search"></use>
+							                    </svg>
+						                    </button>
+					                    </div>
+				                    </div>
+			                    </form>
+		                    </div>
+	                    </li>
                         <li class="nav-item dropdown m-basket">
                             <? $APPLICATION->IncludeComponent(
                                 "bitrix:sale.basket.basket.line",
