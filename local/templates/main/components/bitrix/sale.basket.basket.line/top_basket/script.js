@@ -32,8 +32,7 @@ BitrixSmallCart.prototype = {
 				resizeTimer = setTimeout(fixCartClosure, 200);
 			});
 		}
-		this.setCartBodyClosure = this.closure('setCartBody');
-		BX.addCustomEvent(window, 'OnBasketChange', this.closure('refreshCart', {}));
+		BX.addCustomEvent(window, 'OnBasketChange', this.closure('refreshCart', null));
 	},
 
 	fixAfterRender: function ()
@@ -186,21 +185,30 @@ BitrixSmallCart.prototype = {
 		data.siteId = this.siteId;
 		data.templateName = this.templateName;
 		data.arParams = this.arParams;
+		var that = this;
 		BX.ajax({
 			url: this.ajaxPath,
 			method: 'POST',
 			dataType: 'html',
 			data: data,
-			onsuccess: this.setCartBodyClosure
+			onsuccess: function(result) {
+				that.setCartBody(result, data)
+			}
 		});
 	},
 
-	setCartBody: function (result)
+	setCartBody: function (result,addParam)
 	{
 		if (this.cartElement)
 			this.cartElement.innerHTML = result.replace(/#CURRENT_URL#/g, this.currentUrl);
 		if (this.fixedPosition)
 			setTimeout(this.fixAfterRenderClosure, 100);
+		if (addParam.showAfterAdd) {
+			$(document).find(".js-m-basket__dropdown").show();
+			setTimeout(function() {
+				$(document).find(".js-m-basket__dropdown").hide();
+			}, 1500)
+		}
 	},
 
 	removeItemFromCart: function (id)
