@@ -6,6 +6,7 @@ class Helper
 {
     const DELIVERY_COURIER = 2;
     const OFFERS_IBLOCK_ID = 3;
+		const CATALOG_IBLOCK_ID = 2;
 
     public static $typePage = "";
 

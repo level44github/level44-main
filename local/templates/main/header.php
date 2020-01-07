@@ -7,6 +7,9 @@ use Bitrix\Main\Localization\Loc;
 
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
 \Helper::$typePage = $isMain ? "home" : "";
+$searchQuery = (string) \Bitrix\Main\Context::getCurrent()
+	->getRequest()
+	->getQuery("q");
 ?>
 <!DOCTYPE html>
 <html lang="ru-RU">
@@ -57,11 +60,17 @@ $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
 	                    ); ?>
 	                    <li class="nav-item m-search js-m-search">
 		                    <div class="m-search__container">
-			                    <form>
+			                    <form action="<?= SITE_DIR ?>search">
 				                    <div class="input-group m-search__group">
-					                    <input class="form-control m-search__control js-m-search__control" type="text" placeholder="Найти на сайте" autocomplete="off">
+					                    <input class="form-control m-search__control js-m-search__control"
+					                           type="text"
+					                           placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
+					                           name="q"
+					                           value="<?= $searchQuery ?>"
+					                           autocomplete="off"
+					                    >
 					                    <div class="input-group-append">
-						                    <button class="btn btn-outline-secondary m-search__btn" type="button">
+						                    <button class="btn btn-outline-secondary m-search__btn" type="submit">
 							                    <svg class="icon icon-search menu__icon">
 								                    <use xlink:href="#search"></use>
 							                    </svg>

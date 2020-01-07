@@ -20,8 +20,8 @@ $arResult["CURRENT"] = reset(
 
 $arResult["CURRENT_DIR"] = "";
 
-if (stripos($APPLICATION->GetCurPage(), $arResult["CURRENT"]["DIR"]) === 0) {
-	$arResult["CURRENT_DIR"] = str_replace_once($arResult["CURRENT"]["DIR"], "", $APPLICATION->GetCurPage());
+if (stripos($APPLICATION->GetCurPageParam(), $arResult["CURRENT"]["DIR"]) === 0) {
+	$arResult["CURRENT_DIR"] = str_replace_once($arResult["CURRENT"]["DIR"], "", $APPLICATION->GetCurPageParam());
 }
 
 $arResult["SITES"] = array_filter(
