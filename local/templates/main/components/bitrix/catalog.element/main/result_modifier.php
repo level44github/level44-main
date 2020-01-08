@@ -18,3 +18,16 @@ foreach ($arResult['SKU_PROPS'] as &$skuProp) {
     unset($value);
 }
 unset($skuProp);
+
+$productProperties = [];
+
+foreach ($arResult["PROPERTIES"] as $pid => $arProperty) {
+	if (strripos($arProperty["CODE"], "PRODUCT_") === 0) {
+		$productProp = \CIBlockFormatProperties::GetDisplayValue($arResult, $arProperty, "");
+		if (!empty($productProp["DISPLAY_VALUE"]) && $productProp["PROPERTY_TYPE"] === "S") {
+			$productProperties[] = $productProp;
+		}
+	}
+};
+
+$arResult["PRODUCT_PROPERTIES"] = $productProperties;

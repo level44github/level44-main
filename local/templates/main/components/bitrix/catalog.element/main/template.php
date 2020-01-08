@@ -367,14 +367,22 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
                 ><?= Loc::getMessage("NOT_AVAILABLE") ?></button>
                 <?
-                if (!empty($arResult["DETAIL_TEXT"])): ?>
-                    <div class="product__desc">
-                        <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
-                            <?= $arResult['DETAIL_TEXT'] ?>
-                        <? else: ?>
-                            <p><?= $arResult['DETAIL_TEXT'] ?></p>
-                        <? endif; ?>
-                    </div>
+                if (!empty($arResult["DETAIL_TEXT"]) || !empty($arResult["PRODUCT_PROPERTIES"])): ?>
+	                <div class="product__desc">
+		                <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
+			                <?= $arResult['DETAIL_TEXT'] ?>
+		                <? else: ?>
+			                <p><?= $arResult['DETAIL_TEXT'] ?></p>
+		                <? endif; ?>
+
+		                <? if (!empty($arResult["PRODUCT_PROPERTIES"])): ?>
+			                <ul class="list__disc">
+				                <? foreach ($arResult["PRODUCT_PROPERTIES"] as $property): ?>
+					                <li><?= $property["NAME"] ?>: <?= $property["DISPLAY_VALUE"] ?></li>
+				                <? endforeach; ?>
+			                </ul>
+		                <? endif; ?>
+	                </div>
                 <? endif; ?>
                 <div class="product__question">
                     <div class="product__question-title mb-2"><?= Loc::getMessage("EXIST_QUESTIONS") ?></div>
