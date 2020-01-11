@@ -176,6 +176,7 @@ BitrixSmallCart.prototype = {
 
 	refreshCart: function (data)
 	{
+		data = data ? data : {};
 		if (this.itemRemoved)
 		{
 			this.itemRemoved = false;
@@ -204,9 +205,9 @@ BitrixSmallCart.prototype = {
 		if (this.fixedPosition)
 			setTimeout(this.fixAfterRenderClosure, 100);
 		if (addParam.showAfterAdd) {
-			$(document).find(".js-m-basket__dropdown").show();
+			$(document).find(".js-m-basket__dropdown").addClass("show");
 			setTimeout(function() {
-				$(document).find(".js-m-basket__dropdown").hide();
+				$(document).find(".js-m-basket__dropdown").removeClass("show");
 			}, 1500)
 		}
 	},
