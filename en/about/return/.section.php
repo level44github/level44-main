@@ -1,0 +1,6 @@
+<?
+$sSectionName = "Purchase returns";
+$arDirProperties = [
+
+];
+?>

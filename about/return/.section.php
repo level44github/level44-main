@@ -1,0 +1,6 @@
+<?
+$sSectionName = "Возврат товара";
+$arDirProperties = [
+
+];
+?>

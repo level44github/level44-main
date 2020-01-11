@@ -1,0 +1,6 @@
+<?
+$sSectionName = "Public offer";
+$arDirProperties = [
+
+];
+?>
