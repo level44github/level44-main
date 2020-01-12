@@ -25,7 +25,15 @@ $APPLICATION->SetTitle("Public offer");
 		</div>
 		<div class="col-lg-9">
 			<h1 class="article__title"><?=$APPLICATION->GetTitle()?></h1>
-
+			<? $APPLICATION->IncludeComponent(
+				"bitrix:main.include",
+				"",
+				array(
+					"AREA_FILE_SHOW" => "file",
+					"PATH" => SITE_DIR . "include/static/offer.php",
+				),
+				false
+			); ?>
 		</div>
 	</div>
 <? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
