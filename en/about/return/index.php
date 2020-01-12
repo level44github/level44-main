@@ -14,7 +14,7 @@ $APPLICATION->SetTitle("Purchase returns");
 						"CHILD_MENU_TYPE" => "top",
 						"USE_EXT" => "N",
 						"DELAY" => "N",
-						"ALLOW_MULTI_SELECT" => "Y",
+						"ALLOW_MULTI_SELECT" => "N",
 						"MENU_CACHE_TYPE" => "N",
 						"MENU_CACHE_TIME" => "3600",
 						"MENU_CACHE_USE_GROUPS" => "Y",

@@ -15,7 +15,7 @@ $APPLICATION->SetTitle("Контакты");
 						"CHILD_MENU_TYPE" => "top",
 						"USE_EXT" => "N",
 						"DELAY" => "N",
-						"ALLOW_MULTI_SELECT" => "Y",
+						"ALLOW_MULTI_SELECT" => "N",
 						"MENU_CACHE_TYPE" => "N",
 						"MENU_CACHE_TIME" => "3600",
 						"MENU_CACHE_USE_GROUPS" => "Y",
@@ -26,7 +26,15 @@ $APPLICATION->SetTitle("Контакты");
 		</div>
 		<div class="col-lg-9">
 			<h1 class="article__title"><?=$APPLICATION->GetTitle()?></h1>
-
+			<? $APPLICATION->IncludeComponent(
+				"bitrix:main.include",
+				"",
+				array(
+					"AREA_FILE_SHOW" => "file",
+					"PATH" => SITE_DIR . "include/static/contacts.php",
+				),
+				false
+			); ?>
 		</div>
 	</div>
 

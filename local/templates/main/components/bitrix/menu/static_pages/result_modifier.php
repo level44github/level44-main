@@ -7,7 +7,7 @@ global $APPLICATION;
 foreach ($arResult as &$arItem) {
 	if ($arItem["SELECTED"]) {
 		if ($arItem["LINK"] !== $APPLICATION->GetCurDir()) {
-			$arItem["SELECTED"] = false;
+//			$arItem["SELECTED"] = false;
 		}
 	}
 }
