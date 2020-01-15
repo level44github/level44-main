@@ -2,6 +2,10 @@
 
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Sale\PriceMaths;
+use Bitrix\Highloadblock as HL;
+
+\Bitrix\Main\Loader::includeModule("highloadblock");
+
 
 /**
  *
@@ -19,6 +23,34 @@ $mobileColumns = array_fill_keys($mobileColumns, true);
 $result['BASKET_ITEM_RENDER_DATA'] = array();
 
 $totalQuantity = 0;
+
+$colorsRef = [];
+
+$hlblock = HL\HighloadBlockTable::getList([
+    'filter' => [
+        '=TABLE_NAME' => "eshop_color_reference"
+    ]
+])->fetch();
+
+if ($hlblock) {
+    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
+    $entityClass = $entity->getDataClass();
+
+    $res = $entityClass::getList(
+        [
+            "select" => [
+                "ID",
+                "UF_NAME_EN",
+            ]
+        ]
+    );
+
+    while ($color = $res->fetch()) {
+        $colorsRef[$color["ID"]] = $color;
+    }
+}
+
+unset($item);
 
 foreach ($this->basketItems as $row)
 {
@@ -188,6 +220,11 @@ foreach ($this->basketItems as $row)
             function ($item) {
                 return $item["SELECTED"] === true;
             }));
+
+        if ($prop["CODE"] === "COLOR_REF") {
+            $propValue["NAME"] = \Helper::isEnLang() && !empty($colorsRef[$propValue["ID"]]["UF_NAME_EN"])
+                ? $colorsRef[$propValue["ID"]]["UF_NAME_EN"] : $propValue["NAME"];
+        }
 
         $propValue["PROP_NAME"] = $prop["NAME"];
         if (in_array($prop["CODE"], ["COLOR_REF", "SIZE_REF"])) {

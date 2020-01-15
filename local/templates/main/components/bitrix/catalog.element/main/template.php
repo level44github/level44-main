@@ -102,6 +102,13 @@ if ($haveOffers) {
 }
 
 $skuProps = array();
+
+if (!empty($actualItem["MORE_PHOTO"]) && is_array($actualItem["MORE_PHOTO"])) {
+    $actualItem["MORE_PHOTO"] = array_filter($actualItem["MORE_PHOTO"], function ($item) {
+        return (bool)$item && is_array($item);
+    });
+}
+
 $price = $actualItem['ITEM_PRICES'][$actualItem['ITEM_PRICE_SELECTED']];
 $measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];
 $showDiscount = $price['PERCENT'] > 0;
@@ -329,12 +336,17 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                             <?
                             if ($skuProperty['CODE'] === "COLOR_REF"): ?>
                                 <div class="color" data-entity="sku-line-block">
+                                    <div class="color__title" style="display: none">
+                                        <?= Loc::getMessage("CURRENT_COLOR") ?>:
+                                        <span class="js-color__text"></span>
+                                    </div>
                                     <div class="color__group btn-group-toggle" data-toggle="buttons">
                                         <? foreach ($skuProperty['VALUES'] as $value): ?>
                                             <label class="btn color__btn js-color__btn"
                                                    title="<?= $value['NAME'] ?>"
                                                    data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
                                                    data-onevalue="<?= $value['ID'] ?>"
+                                                   data-property-code="<?= $skuProperty['CODE'] ?>"
                                                    style="box-shadow: none"
                                             >
 

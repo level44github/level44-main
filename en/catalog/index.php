@@ -176,6 +176,13 @@ $APPLICATION->SetTitle("Catalog");
             "SIZE_REF",
             "COLOR_REF",
         ],
+        "LIST_PROPERTY_CODE" => [
+            "NAME_EN",
+        ],
+        "DETAIL_PROPERTY_CODE" => [
+            "NAME_EN",
+            "DETAIL_TEXT_EN",
+        ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(
             "sections" => "",

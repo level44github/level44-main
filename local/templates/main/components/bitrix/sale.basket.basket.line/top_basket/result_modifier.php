@@ -26,7 +26,8 @@ if (!empty($productIds)) {
         [
             "ID",
             "IBLOCK_ID",
-            "PROPERTY_SIZE_REF"
+            "PROPERTY_SIZE_REF",
+            "PROPERTY_NAME_EN"
         ]
     );
 
@@ -37,6 +38,8 @@ if (!empty($productIds)) {
     foreach ($arResult["CATEGORIES"] as &$category) {
         foreach ($category as &$item) {
             $item["SIZE"] = $properties[$item["PRODUCT_ID"]]["PROPERTY_SIZE_REF_VALUE"];
+            $item["NAME"] = \Helper::isEnLang() && !empty($properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"])
+                ? $properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"] : $item["NAME"];
         }
         unset($item);
     }

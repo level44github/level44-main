@@ -22,7 +22,7 @@ if (CModule::IncludeModule('iblock')) {
     if ($arIBlock = $dbIBlock->GetNext()) {
         if ($arIBlock["ACTIVE"] == "Y") {
             $aMenuLinksExt = $APPLICATION->IncludeComponent(
-                "bitrix:menu.sections",
+                "level44:menu.sections",
                 "",
                 array(
                     "IS_SEF" => "Y",
