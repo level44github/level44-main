@@ -45,5 +45,6 @@ $MESS["HOIST_GIRTH"] = "Waist circumference";
 $MESS["HIP_GIRTH"] = "Hip girth";
 $MESS["ADD_TO_BASKET"] = "Add to Basket";
 $MESS["NOT_AVAILABLE"] = "Not available";
+$MESS["CURRENT_COLOR"] = "Color";
 $MESS["EXIST_QUESTIONS"] = "Have questions?";
 ?>

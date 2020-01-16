@@ -2141,7 +2141,15 @@
 				}
 
                 BX.addClass(target, 'active');
-                $(target).find("input").prop("checked", true)
+                $(target).find("input").prop("checked", true);
+                if ($(target).data("property-code") === "COLOR_REF") {
+                    if ($(target).attr("title")) {
+                        $(".js-color__text").text($(target)
+                            .attr("title")).closest(".color__title").show();
+                    } else {
+                        $(".js-color__text").closest(".color__title").hide();
+                    }
+                }
 
 				if (this.smallCardNodes.panel)
 				{
@@ -2261,10 +2269,17 @@
 					value = rowItems[i].getAttribute('data-onevalue');
 					isCurrent = value === activeId;
 
-					if (isCurrent)
-					{
-						BX.addClass(rowItems[i], 'active');
-                        $(rowItems[i]).find("input").prop("checked", true)
+                    if (isCurrent) {
+                        BX.addClass(rowItems[i], 'active');
+                        $(rowItems[i]).find("input").prop("checked", true);
+                        if ($(rowItems[i]).data("property-code") === "COLOR_REF") {
+                            if ($(rowItems[i]).attr("title")) {
+                                $(".js-color__text").text($(rowItems[i])
+									.attr("title")).closest(".color__title").show();
+                            } else {
+                                $(".js-color__text").closest(".color__title").hide();
+                            }
+                        }
                     }
 					else
 					{

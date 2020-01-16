@@ -56,4 +56,9 @@ class Helper
         $curPage = $APPLICATION->GetCurPage();
         return $curPage === SITE_DIR . "checkout/" && !isset($orderId);
     }
+
+    public static function isEnLang()
+    {
+        return SITE_ID === "en" && LANGUAGE_ID === "en";
+    }
 }
