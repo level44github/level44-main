@@ -50,7 +50,7 @@ use Bitrix\Main\Localization\Loc;
             <? endforeach; ?>
         </div>
         <a class="btn btn-dark btn-block"
-           href="<?= $arParams["PATH_TO_BASKET"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
+           href="<?= $arParams["PATH_TO_BASKET"] ?>"><?= Loc::getMessage("GO_TO_BASKET") ?></a>
     </div>
 
     <script>

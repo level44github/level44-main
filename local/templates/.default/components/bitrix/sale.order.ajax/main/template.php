@@ -191,7 +191,9 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                         onclick="submitForm('Y'); return false;"
                         type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
             </div>
-            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS1") ?><a href="#"><?= Loc::getMessage("OFERTA") ?></a>
+            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS1") ?><a href="<?= SITE_DIR ?>about/offer/">
+                <?= Loc::getMessage("OFERTA") ?>
+                </a>
             </p>
         </div>
     </div>
@@ -205,7 +207,9 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                         onclick="submitForm('Y'); return false;"
                         type="submit"><?= Loc::getMessage("TO_CHECKOUT") ?></button>
             </div>
-            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS2") ?><a href="#"><?= Loc::getMessage("OFERTA2") ?></a>
+            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS2") ?><a href="<?= SITE_DIR ?>about/offer/">
+                <?= Loc::getMessage("OFERTA2") ?>
+                </a>
             </p>
         </div>
     </div>

@@ -4,7 +4,7 @@ use \Bitrix\Main\Page\Asset;
 
 class Helper
 {
-    const DELIVERY_COURIER = 2;
+    const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
 		const CATALOG_IBLOCK_ID = 2;
 

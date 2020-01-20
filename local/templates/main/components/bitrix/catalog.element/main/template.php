@@ -85,6 +85,28 @@ $alt = !empty($arResult['IPROPERTY_VALUES']['ELEMENT_DETAIL_PICTURE_FILE_ALT'])
 
 $haveOffers = !empty($arResult['OFFERS']);
 if ($haveOffers) {
+    foreach ($arResult["OFFERS"] as &$offer) {
+        $offer["MORE_PHOTO"] = array_filter($offer["MORE_PHOTO"], function ($item) {
+            return (bool)$item && is_array($item);
+        });
+
+        $offer["MORE_PHOTO"] = is_array($offer["MORE_PHOTO"]) ? $offer["MORE_PHOTO"] : [];
+        $offer["MORE_PHOTO_COUNT"] = count($offer["MORE_PHOTO"]);
+    }
+    unset($offer);
+
+    foreach ($arResult['JS_OFFERS'] as &$offer) {
+        $offer["SLIDER"] = array_filter($offer["SLIDER"], function ($item) {
+            return (bool)$item && is_array($item);
+        });
+
+        $offer["SLIDER"] = is_array($offer["SLIDER"]) ? $offer["SLIDER"] : [];
+        $offer["SLIDER_COUNT"] = count($offer["SLIDER"]);
+    }
+
+    unset($offer);
+
+
     $actualItem = isset($arResult['OFFERS'][$arResult['OFFERS_SELECTED']])
         ? $arResult['OFFERS'][$arResult['OFFERS_SELECTED']]
         : reset($arResult['OFFERS']);
@@ -103,11 +125,7 @@ if ($haveOffers) {
 
 $skuProps = array();
 
-if (!empty($actualItem["MORE_PHOTO"]) && is_array($actualItem["MORE_PHOTO"])) {
-    $actualItem["MORE_PHOTO"] = array_filter($actualItem["MORE_PHOTO"], function ($item) {
-        return (bool)$item && is_array($item);
-    });
-}
+$arResult["MORE_PHOTO_COUNT"] = count($actualItem["MORE_PHOTO"]);
 
 $price = $actualItem['ITEM_PRICES'][$actualItem['ITEM_PRICE_SELECTED']];
 $measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];

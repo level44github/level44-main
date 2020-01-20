@@ -28,6 +28,11 @@ foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"] as &$prop) {
         continue;
     }
 
+    if ($prop["CODE"] === "LOCATION" && empty($prop["VALUE"])) {
+        $arResult["DELIVERY"] = [];
+        $arResult["PAY_SYSTEM"] = [];
+    }
+
     if (in_array($prop["CODE"], ["EMAIL", "PHONE"])) {
         $columns[] = $prop;
     } else {
@@ -51,9 +56,18 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 
     $basketItem["PROPS"] = array_filter($basketItem["PROPS"],
         function ($item) {
-            return in_array($item["CODE"], ["COLOR_REF", "SIZE_REF"]);
+            return in_array($item["CODE"], ["COLOR_REF", "SIZE_REF", "NAME_EN"]);
         }
     );
+
+    $nameEn = reset(array_filter($basketItem["PROPS"], function ($item) {
+        return $item["CODE"] === "NAME_EN";
+    }));
+
+    $nameEn = is_array($nameEn) ? $nameEn : [];
+
+    $basketItem["NAME"] = \Helper::isEnLang() && !empty($nameEn["VALUE"])
+        ? $nameEn["VALUE"] : $basketItem["NAME"];
 }
 unset($basketItem);
 
@@ -74,7 +88,7 @@ $arResult["ORDER_PROP"]["USER_PROPS_Y"] = $resultProps;
 
 foreach ($arResult["DELIVERY"] as $key => &$delivery) {
     $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
-    if ((int)$delivery["ID"] === \Helper::DELIVERY_COURIER) {
+    if (in_array((int)$delivery["ID"], \Helper::DELIVERY_COURIER)) {
         $delivery["PERIOD_TEXT"] = Loc::getMessage("DAY");
     }
 

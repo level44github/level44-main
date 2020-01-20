@@ -175,6 +175,7 @@ $APPLICATION->SetTitle("Каталог");
         "DETAIL_OFFERS_PROPERTY_CODE" => [
             "SIZE_REF",
             "COLOR_REF",
+            "NAME_EN",
         ],
         "LIST_PROPERTY_CODE" => [
             "NAME_EN",

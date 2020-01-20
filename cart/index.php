@@ -21,7 +21,7 @@ $APPLICATION->SetTitle("Корзина");
         "AJAX_OPTION_JUMP" => "N",
         "AJAX_OPTION_STYLE" => "Y",
         "AJAX_OPTION_HISTORY" => "N",
-        "PATH_TO_ORDER" => "/checkout/",
+        "PATH_TO_ORDER" => SITE_DIR . "checkout/",
         "HIDE_COUPON" => "N",
         "QUANTITY_FLOAT" => "N",
         "PRICE_VAT_SHOW_VALUE" => "Y",
@@ -33,6 +33,7 @@ $APPLICATION->SetTitle("Корзина");
             0 => "SIZES_SHOES",
             1 => "SIZES_CLOTHES",
             2 => "COLOR_REF",
+            3 => "NAME_EN",
         ),
     ),
     false

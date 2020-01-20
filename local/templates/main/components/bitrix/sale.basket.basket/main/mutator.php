@@ -97,6 +97,17 @@ foreach ($this->basketItems as $row)
 			: '',
 	);
 
+
+    $nameEn = reset(array_filter($rowData["PROPS"], function ($item) {
+        return $item["CODE"] === "NAME_EN";
+    }));
+
+    $nameEn = is_array($nameEn) ? $nameEn : [];
+
+    $rowData["NAME"] = \Helper::isEnLang() && !empty($nameEn["VALUE"])
+        ? $nameEn["VALUE"] : $rowData["NAME"];
+
+
 	// show price including ratio
 	if ($rowData['MEASURE_RATIO'] != 1)
 	{
@@ -228,7 +239,7 @@ foreach ($this->basketItems as $row)
 
         $propValue["PROP_NAME"] = $prop["NAME"];
         if (in_array($prop["CODE"], ["COLOR_REF", "SIZE_REF"])) {
-            $rowData["SELECT_PROP"][] = [
+            $rowData["SELECT_PROP"][$prop["CODE"]] = [
                 "NAME" => $propValue["PROP_NAME"],
                 "VALUE" => $propValue["NAME"],
             ];
