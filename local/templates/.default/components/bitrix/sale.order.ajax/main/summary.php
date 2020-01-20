@@ -26,7 +26,12 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <? if (!empty($basketItem["PROPS"])): ?>
                                 <ul class="basket-aside__list">
                                     <? foreach ($basketItem["PROPS"] as $prop): ?>
-                                        <li><?= $prop["NAME"] ?>: <?= $prop["VALUE"] ?></li>
+                                        <? if ($prop["CODE"] === "COLOR_REF"): ?>
+                                            <li><?= Loc::getMessage("PROP_COLOR") ?>: <?= $prop["VALUE"] ?></li>
+                                        <? endif; ?>
+                                        <? if ($prop["CODE"] === "SIZE_REF"): ?>
+                                            <li><?= Loc::getMessage("PROP_SIZE") ?>: <?= $prop["VALUE"] ?></li>
+                                        <? endif; ?>
                                     <? endforeach; ?>
                                 </ul>
                             <? endif; ?>

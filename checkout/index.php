@@ -1,21 +1,6 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 
-\Bitrix\Main\Loader::includeModule("sale");
-\Bitrix\Main\Loader::includeModule("catalog");
-
-$basket = \Bitrix\Sale\Basket::loadItemsForFUser(
-    \Bitrix\Sale\Fuser::getId(),
-    \Bitrix\Main\Context::getCurrent()->getSite()
-);
-
-if ($basket->count() <= 0) {
-    $result = \Bitrix\Catalog\Product\Basket::addProduct([
-        "PRODUCT_ID" => 162,
-        "QUANTITY" => 1,
-    ]);
-}
-
 $APPLICATION->SetTitle("Оформление заказа");
 ?><?$APPLICATION->IncludeComponent(
 	"bitrix:sale.order.ajax",

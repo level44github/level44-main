@@ -335,10 +335,10 @@
 			this.node.sliderControlLeft = this.getEntity(this.obBigSlider, 'slider-control-left');
 			this.node.sliderControlRight = this.getEntity(this.obBigSlider, 'slider-control-right');
 
-			if (!this.obBigSlider || !this.node.imageContainer || !this.node.imageContainer)
-			{
-				this.errorCode = -2;
-			}
+			// if (!this.obBigSlider || !this.node.imageContainer || !this.node.imageContainer)
+			// {
+			// 	this.errorCode = -2;
+			// }
 
 			if (this.config.showPrice)
 			{

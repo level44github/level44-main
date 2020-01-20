@@ -48,9 +48,12 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <div class="font-weight-bold d-lg-none">{{{PRICE_FORMATED}}}</div>
             <a class="cart__link" href="{{DETAIL_PAGE_URL}}">{{NAME}}</a>
             <ul class="cart__list">
-                {{#SELECT_PROP}}
-                <li>{{NAME}}: {{VALUE}}</li>
-                {{/SELECT_PROP}}
+                {{#SELECT_PROP.COLOR_REF}}
+                <li><?= Loc::getMessage("PROP_COLOR") ?>: {{SELECT_PROP.COLOR_REF.VALUE}}</li>
+                {{/SELECT_PROP.COLOR_REF}}
+                {{#SELECT_PROP.SIZE_REF}}
+                <li><?= Loc::getMessage("PROP_SIZE") ?>: {{SELECT_PROP.SIZE_REF.VALUE}}</li>
+                {{/SELECT_PROP.SIZE_REF}}
             </ul>
             <a class="cart__remove mt-3 d-none d-lg-block" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>

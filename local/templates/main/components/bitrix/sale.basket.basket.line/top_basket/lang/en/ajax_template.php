@@ -1,4 +1,4 @@
 <?
 $MESS["BASKET"] = "Basket";
-$MESS["PROCEED_TO_CHECKOUT"] = "To checkout";
+$MESS["GO_TO_BASKET"] = "Go to basket";
 $MESS["SIZE"] = "Size: ";
