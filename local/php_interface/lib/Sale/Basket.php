@@ -54,8 +54,10 @@ class Basket extends Sale\Basket
         /** @var BasketItem $basketItem */
         foreach ($this->collection as $basketItem) {
             $productId = $basketItem->getField("PRODUCT_ID");
-            $basketItemData = \Level44\Base::isEnLang() && !empty($arProductsLoc[$productId]["NAME_EN"])
-                ? $arProductsLoc[$productId]["NAME_EN"] : $basketItem->getField("NAME");
+            $basketItemData = \Level44\Base::getMultiLang(
+                $basketItem->getField("NAME"),
+                $arProductsLoc[$productId]["NAME_EN"]
+            );
 
             $measure = (strval($basketItem->getField("MEASURE_NAME")) != '') ? $basketItem->getField("MEASURE_NAME") : Loc::getMessage("SOA_SHT");
             $list[$basketItem->getBasketCode()] = $basketItemData . " - " . $basketItemClassName::formatQuantity($basketItem->getQuantity()) . " " . $measure . " x " . SaleFormatCurrency($basketItem->getPrice(),

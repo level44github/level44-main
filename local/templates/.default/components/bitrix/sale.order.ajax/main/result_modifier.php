@@ -80,8 +80,10 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $basketItem["PICTURE"] = "";
     }
 
-    $basketItem["NAME"] = \Level44\Base::isEnLang() && !empty($arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"])
-        ? $arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"] : $basketItem["NAME"];
+    $basketItem["NAME"] = \Level44\Base::getMultiLang(
+        $basketItem["NAME"],
+        $arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"]
+    );
 }
 unset($basketItem);
 

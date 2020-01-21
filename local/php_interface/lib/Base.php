@@ -67,6 +67,12 @@ class Base
         return SITE_ID === "en" && LANGUAGE_ID === "en";
     }
 
+    public static function getMultiLang($ruContent, $enContent)
+    {
+        return self::isEnLang() && !empty($enContent)
+            ? $enContent : $ruContent;
+    }
+
     public static function customRegistry()
     {
         try {

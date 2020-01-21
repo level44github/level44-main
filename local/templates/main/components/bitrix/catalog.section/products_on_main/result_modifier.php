@@ -20,6 +20,10 @@ foreach ($arResult["ITEMS"] as &$item) {
     }
 
     $item["ACTUAL_ITEM"]["PRICE"] = $item["ACTUAL_ITEM"]['ITEM_PRICES'][$item["ACTUAL_ITEM"]['ITEM_PRICE_SELECTED']];
+    $item["NAME"] = \Level44\Base::getMultiLang(
+        $item["NAME"],
+        $item["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"]
+    );
 }
 
 unset($item);

@@ -126,9 +126,10 @@ foreach ($this->basketItems as $row)
 	);
 
 
-    $rowData["NAME"] = \Level44\Base::isEnLang() && !empty($arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"])
-        ? $arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"] : $rowData["NAME"];
-
+    $rowData["NAME"] = \Level44\Base::getMultiLang(
+        $rowData["NAME"],
+        $arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"]
+    );
 
 	// show price including ratio
 	if ($rowData['MEASURE_RATIO'] != 1)
@@ -255,8 +256,10 @@ foreach ($this->basketItems as $row)
             }));
 
         if ($prop["CODE"] === "COLOR_REF") {
-            $propValue["NAME"] = \Level44\Base::isEnLang() && !empty($colorsRef[$propValue["ID"]]["UF_NAME_EN"])
-                ? $colorsRef[$propValue["ID"]]["UF_NAME_EN"] : $propValue["NAME"];
+            $propValue["NAME"] = \Level44\Base::getMultiLang(
+                $propValue["NAME"],
+                $colorsRef[$propValue["ID"]]["UF_NAME_EN"]
+            );
         }
 
         $propValue["PROP_NAME"] = $prop["NAME"];

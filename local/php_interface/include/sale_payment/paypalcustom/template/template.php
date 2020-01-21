@@ -47,9 +47,7 @@ if ($params["PAYED"] != "Y")
 						<input type="hidden" name="return" value="<?=htmlspecialcharsbx($params["PAYPAL_RETURN"])?>">
 					<?endif;?>
 
-					<?if ($params["PAYPAL_LC"] != ''):?>
-						<input type="hidden" name="lc" value="<?=htmlspecialcharsbx($params["PAYPAL_LC"])?>">
-					<?endif;?>
+                    <input type="hidden" name="lc" value="<?= \Level44\Base::getMultiLang("RU", "US") ?>">
                 </form>
 			</td>
 		</tr>

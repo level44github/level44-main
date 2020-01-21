@@ -38,8 +38,10 @@ if (!empty($productIds)) {
     foreach ($arResult["CATEGORIES"] as &$category) {
         foreach ($category as &$item) {
             $item["SIZE"] = $properties[$item["PRODUCT_ID"]]["PROPERTY_SIZE_REF_VALUE"];
-            $item["NAME"] = \Level44\Base::isEnLang() && !empty($properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"])
-                ? $properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"] : $item["NAME"];
+            $item["NAME"] = \Level44\Base::getMultiLang(
+                $item["NAME"],
+                $properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"]
+            );
         }
         unset($item);
     }
