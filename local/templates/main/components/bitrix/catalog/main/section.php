@@ -18,7 +18,7 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\ModuleManager;
 
 $this->setFrameMode(true);
-\Helper::$typePage = "catalog";
+\Level44\Base::$typePage = "catalog";
 
 if (!isset($arParams['FILTER_VIEW_MODE']) || (string)$arParams['FILTER_VIEW_MODE'] == '') {
     $arParams['FILTER_VIEW_MODE'] = 'VERTICAL';

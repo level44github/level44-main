@@ -52,6 +52,34 @@ if ($hlblock) {
 
 unset($item);
 
+$basketProductIds = [];
+
+foreach ($this->basketItems as $item) {
+    $basketProductIds[] = (int)$item["PRODUCT_ID"];
+}
+
+$arProductsLoc = [];
+
+if (!empty($basketProductIds)) {
+    $resProduct = \CIBlockElement::GetList(
+        [],
+        [
+            "=ID" => $basketProductIds
+        ],
+        false,
+        false,
+        [
+            "ID",
+            "PROPERTY_NAME_EN"
+        ]
+    );
+
+
+    while ($product = $resProduct->GetNext()) {
+        $arProductsLoc[$product["ID"]]["NAME_EN"] = $product["PROPERTY_NAME_EN_VALUE"];
+    }
+}
+
 foreach ($this->basketItems as $row)
 {
 	$rowData = array(
@@ -98,14 +126,8 @@ foreach ($this->basketItems as $row)
 	);
 
 
-    $nameEn = reset(array_filter($rowData["PROPS"], function ($item) {
-        return $item["CODE"] === "NAME_EN";
-    }));
-
-    $nameEn = is_array($nameEn) ? $nameEn : [];
-
-    $rowData["NAME"] = \Helper::isEnLang() && !empty($nameEn["VALUE"])
-        ? $nameEn["VALUE"] : $rowData["NAME"];
+    $rowData["NAME"] = \Level44\Base::isEnLang() && !empty($arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"])
+        ? $arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"] : $rowData["NAME"];
 
 
 	// show price including ratio
@@ -233,7 +255,7 @@ foreach ($this->basketItems as $row)
             }));
 
         if ($prop["CODE"] === "COLOR_REF") {
-            $propValue["NAME"] = \Helper::isEnLang() && !empty($colorsRef[$propValue["ID"]]["UF_NAME_EN"])
+            $propValue["NAME"] = \Level44\Base::isEnLang() && !empty($colorsRef[$propValue["ID"]]["UF_NAME_EN"])
                 ? $colorsRef[$propValue["ID"]]["UF_NAME_EN"] : $propValue["NAME"];
         }
 

@@ -1,7 +1,7 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Search");
-\Helper::$typePage = "search";
+\Level44\Base::$typePage = "search";
 ?>
 
 <?$APPLICATION->IncludeComponent (
@@ -10,7 +10,7 @@ $APPLICATION->SetTitle("Search");
 	Array(
 		"AJAX_MODE" => "N",
 		"IBLOCK_TYPE" => "catalog",
-		"IBLOCK_ID" => Helper::CATALOG_IBLOCK_ID,
+		"IBLOCK_ID" => \Level44\Base::CATALOG_IBLOCK_ID,
 		"ELEMENT_SORT_FIELD" => "sort",
 		"ELEMENT_SORT_ORDER" => "asc",
 		"ELEMENT_SORT_FIELD2" => "id",

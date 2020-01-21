@@ -6,7 +6,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 </div>
 </div>
 <?
-Helper::loadScripts();
+\Level44\Base::loadScripts();
 ?>
 <div class="d-none">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

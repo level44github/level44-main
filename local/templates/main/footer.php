@@ -5,11 +5,11 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 
 use Bitrix\Main\Localization\Loc;
 
-if (empty(\Helper::$typePage)) {
-    \Helper::$typePage = "layout";
+if (empty(\Level44\Base::$typePage)) {
+    \Level44\Base::$typePage = "layout";
 }
 
-$APPLICATION->AddViewContent("type-page", \Helper::$typePage);
+$APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
 ?>
 </div>
 <footer class="footer">
@@ -71,15 +71,15 @@ $APPLICATION->AddViewContent("type-page", \Helper::$typePage);
                     ); ?>
             </div>
             <div class="col-6 col-lg-2 order-4 order-lg-4 footer__divider">
-                <img class="img-fluid mr-3" src="<?= Helper::getAssetsPath() ?>/img/visa.svg" alt="">
-                <img class="img-fluid" src="<?= Helper::getAssetsPath() ?>/img/master-card.svg" alt="">
+                <img class="img-fluid mr-3" src="<?= \Level44\Base::getAssetsPath() ?>/img/visa.svg" alt="">
+                <img class="img-fluid" src="<?= \Level44\Base::getAssetsPath() ?>/img/master-card.svg" alt="">
             </div>
         </div>
     </div>
 </footer>
 </div>
 <?
-Helper::loadScripts();
+\Level44\Base::loadScripts();
 ?>
 <div class="d-none">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

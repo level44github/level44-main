@@ -11,7 +11,7 @@ $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
 
 foreach ($arResult["ITEMS"] as &$item) {
-    $item["NAME"] = \Helper::isEnLang() && !empty($item["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"])
+    $item["NAME"] = \Level44\Base::isEnLang() && !empty($item["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"])
         ? $item["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"] : $item["NAME"];
 }
 

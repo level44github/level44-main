@@ -18,7 +18,7 @@ $showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty
     <title><? $APPLICATION->ShowTitle() ?></title>
     <?
     $APPLICATION->ShowHead();
-    Helper::loadAssets();
+    \Level44\Base::loadAssets();
     ?>
 </head>
 <body class="layout">
