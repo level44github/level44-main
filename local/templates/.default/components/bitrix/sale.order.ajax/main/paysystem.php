@@ -20,7 +20,7 @@ use Bitrix\Main\Localization\Loc;
                     >
                         <div class="option__title"><?= $paySystem["NAME"] ?></div>
                     </a>
-                    <label for="pay_system<?= $paySystem["ID"] ?>input"
+                    <label style="display: none;" for="pay_system<?= $paySystem["ID"] ?>input"
                            id="pay_system<?= $paySystem["ID"] ?>label"></label>
                     <input id="pay_system<?= $paySystem["ID"] ?>input"
                            name="PAY_SYSTEM_ID"
@@ -31,11 +31,6 @@ use Bitrix\Main\Localization\Loc;
                         <?= ($paySystem["CHECKED"]) ? " checked" : "" ?>
                            onclick="submitForm();"
                     >
-                    <div class="collapse <?= $paySystem["CHECKED"] ? "show" : "" ?>"
-                         id="payment<?= $paySystem["ID"] ?>"
-                         data-parent="#payment"
-                    >
-                    </div>
                 </div>
             <? endforeach; ?>
         </div>
