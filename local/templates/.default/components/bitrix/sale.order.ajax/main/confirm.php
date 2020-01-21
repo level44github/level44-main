@@ -3,7 +3,7 @@
 } ?>
 <?
 use Bitrix\Main\Localization\Loc;
-\Helper::$typePage = "thank-order";
+\Level44\Base::$typePage = "thank-order";
 if (!empty($arResult["ORDER"])):?>
     <? if (!empty($arResult["PAY_SYSTEM"])): ?>
         <? if ($arResult["IS_CASH"]): ?>

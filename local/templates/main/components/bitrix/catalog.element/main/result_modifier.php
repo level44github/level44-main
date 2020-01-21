@@ -14,10 +14,10 @@ use Bitrix\Highloadblock as HL;
 $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
 
-$arResult["NAME"] = \Helper::isEnLang() && !empty($arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"])
+$arResult["NAME"] = \Level44\Base::isEnLang() && !empty($arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"])
     ? $arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"] : $arResult["NAME"];
 
-$arResult["DETAIL_TEXT"] = \Helper::isEnLang() && !empty($arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"])
+$arResult["DETAIL_TEXT"] = \Level44\Base::isEnLang() && !empty($arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"])
     ? $arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"] : $arResult["DETAIL_TEXT"];
 
 foreach ($arResult['SKU_PROPS'] as &$skuProp) {
@@ -32,7 +32,7 @@ unset($skuProp);
 $productProperties = [];
 
 foreach ($arResult["PROPERTIES"] as $pid => $arProperty) {
-    if (strripos($arProperty["CODE"], \Helper::isEnLang() ? "EN_PRODUCT_" : "PRODUCT_") === 0) {
+    if (strripos($arProperty["CODE"], \Level44\Base::isEnLang() ? "EN_PRODUCT_" : "PRODUCT_") === 0) {
         $productProp = \CIBlockFormatProperties::GetDisplayValue($arResult, $arProperty, "");
         if (!empty($productProp["DISPLAY_VALUE"]) && $productProp["PROPERTY_TYPE"] === "S") {
             $productProperties[] = $productProp;
@@ -74,7 +74,7 @@ if (!empty($colorRefTableName)) {
 
 foreach ($arResult['SKU_PROPS']["COLOR_REF"]["VALUES"] as &$colorValue) {
 
-    $colorValue["NAME"] = \Helper::isEnLang() && !empty($colorsRef[$colorValue["ID"]]["UF_NAME_EN"])
+    $colorValue["NAME"] = \Level44\Base::isEnLang() && !empty($colorsRef[$colorValue["ID"]]["UF_NAME_EN"])
         ? $colorsRef[$colorValue["ID"]]["UF_NAME_EN"] : $colorValue["NAME"];
 }
 

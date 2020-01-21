@@ -6,7 +6,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 use Bitrix\Main\Localization\Loc;
 
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
-\Helper::$typePage = $isMain ? "home" : "";
+\Level44\Base::$typePage = $isMain ? "home" : "";
 $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 	->getRequest()
 	->getQuery("q");
@@ -21,7 +21,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <title><? $APPLICATION->ShowTitle() ?></title>
     <?
     $APPLICATION->ShowHead();
-    Helper::loadAssets();
+    \Level44\Base::loadAssets();
     ?>
 </head>
 <body class="layout">
@@ -31,12 +31,12 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <div class="home">
         <style type="text/css">
             .home {
-                background-image: url("<?=Helper::getAssetsPath()?>/img/home-mobile.jpg");
+                background-image: url("<?=\Level44\Base::getAssetsPath()?>/img/home-mobile.jpg");
             }
 
             @media (min-width: 768px) {
                 .home {
-                    background-image: url("<?=Helper::getAssetsPath()?>/img/home.jpg");
+                    background-image: url("<?=\Level44\Base::getAssetsPath()?>/img/home.jpg");
                 }
             }
         </style>

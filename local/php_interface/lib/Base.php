@@ -1,12 +1,17 @@
 <?php
 
-use \Bitrix\Main\Page\Asset;
+namespace Level44;
 
-class Helper
+use \Bitrix\Main\Page\Asset;
+use Bitrix\Main\Loader;
+use Bitrix\Sale\Registry;
+use Level44\Sale\Basket;
+
+class Base
 {
     const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
-		const CATALOG_IBLOCK_ID = 2;
+    const CATALOG_IBLOCK_ID = 2;
 
     public static $typePage = "";
 
@@ -60,5 +65,24 @@ class Helper
     public static function isEnLang()
     {
         return SITE_ID === "en" && LANGUAGE_ID === "en";
+    }
+
+    public static function customRegistry()
+    {
+        try {
+            \Bitrix\Main\Loader::registerAutoLoadClasses(
+                null,
+                [
+                    "\Level44\Sale\Basket" => "/local/php_interface/lib/Sale/Basket.php",
+                    "\Level44\EventHandlers" => "/local/php_interface/lib/EventHandlers.php",
+                ]
+            );
+
+            if (Loader::includeModule('sale')) {
+                Registry::getInstance(Registry::REGISTRY_TYPE_ORDER)
+                    ->set(Registry::ENTITY_BASKET, Basket::class);
+            }
+        } catch (\Exception $e) {
+        }
     }
 }

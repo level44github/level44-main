@@ -126,7 +126,7 @@ foreach ($this->basketItems as $row)
 	);
 
 
-    $rowData["NAME"] = \Helper::isEnLang() && !empty($arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"])
+    $rowData["NAME"] = \Level44\Base::isEnLang() && !empty($arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"])
         ? $arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"] : $rowData["NAME"];
 
 
@@ -255,7 +255,7 @@ foreach ($this->basketItems as $row)
             }));
 
         if ($prop["CODE"] === "COLOR_REF") {
-            $propValue["NAME"] = \Helper::isEnLang() && !empty($colorsRef[$propValue["ID"]]["UF_NAME_EN"])
+            $propValue["NAME"] = \Level44\Base::isEnLang() && !empty($colorsRef[$propValue["ID"]]["UF_NAME_EN"])
                 ? $colorsRef[$propValue["ID"]]["UF_NAME_EN"] : $propValue["NAME"];
         }
 

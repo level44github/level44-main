@@ -1,6 +1,6 @@
 <?php
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-\Helper::$typePage = "thank-order";
+\Level44\Base::$typePage = "thank-order";
 $request = \Bitrix\Main\Context::getCurrent()->getRequest();
 $status = (string)$request->getQuery("st");
 $cm = (string)$request->getQuery("cm");

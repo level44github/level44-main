@@ -80,7 +80,7 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $basketItem["PICTURE"] = "";
     }
 
-    $basketItem["NAME"] = \Helper::isEnLang() && !empty($arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"])
+    $basketItem["NAME"] = \Level44\Base::isEnLang() && !empty($arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"])
         ? $arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"] : $basketItem["NAME"];
 }
 unset($basketItem);
@@ -102,7 +102,7 @@ $arResult["ORDER_PROP"]["USER_PROPS_Y"] = $resultProps;
 
 foreach ($arResult["DELIVERY"] as $key => &$delivery) {
     $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
-    if (in_array((int)$delivery["ID"], \Helper::DELIVERY_COURIER)) {
+    if (in_array((int)$delivery["ID"], \Level44\Base::DELIVERY_COURIER)) {
         $delivery["PERIOD_TEXT"] = Loc::getMessage("DAY");
     }
 

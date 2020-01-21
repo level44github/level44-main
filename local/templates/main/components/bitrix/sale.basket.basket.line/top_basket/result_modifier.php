@@ -18,7 +18,7 @@ if (!empty($productIds)) {
     $rsProperties = \CIBlockElement::GetList(
         [],
         [
-            "IBLOCK_ID" => \Helper::OFFERS_IBLOCK_ID,
+            "IBLOCK_ID" => \Level44\Base::OFFERS_IBLOCK_ID,
             "ID" => $productIds,
         ],
         false,
@@ -38,7 +38,7 @@ if (!empty($productIds)) {
     foreach ($arResult["CATEGORIES"] as &$category) {
         foreach ($category as &$item) {
             $item["SIZE"] = $properties[$item["PRODUCT_ID"]]["PROPERTY_SIZE_REF_VALUE"];
-            $item["NAME"] = \Helper::isEnLang() && !empty($properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"])
+            $item["NAME"] = \Level44\Base::isEnLang() && !empty($properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"])
                 ? $properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"] : $item["NAME"];
         }
         unset($item);
