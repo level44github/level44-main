@@ -44,6 +44,32 @@ unset($prop);
 
 $basketItemsQuantity = 0;
 
+foreach ($arResult["BASKET_ITEMS"] as $item) {
+    $basketProductIds[] = (int)$item["PRODUCT_ID"];
+}
+
+$arProductsLoc = [];
+
+if (!empty($basketProductIds)) {
+    $resProduct = \CIBlockElement::GetList(
+        [],
+        [
+            "=ID" => $basketProductIds
+        ],
+        false,
+        false,
+        [
+            "ID",
+            "PROPERTY_NAME_EN"
+        ]
+    );
+
+
+    while ($product = $resProduct->GetNext()) {
+        $arProductsLoc[$product["ID"]]["NAME_EN"] = $product["PROPERTY_NAME_EN_VALUE"];
+    }
+}
+
 foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
     $basketItemsQuantity += $basketItem["QUANTITY"];
     if (!empty($basketItem["PREVIEW_PICTURE_SRC"])) {
@@ -54,20 +80,8 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $basketItem["PICTURE"] = "";
     }
 
-    $basketItem["PROPS"] = array_filter($basketItem["PROPS"],
-        function ($item) {
-            return in_array($item["CODE"], ["COLOR_REF", "SIZE_REF", "NAME_EN"]);
-        }
-    );
-
-    $nameEn = reset(array_filter($basketItem["PROPS"], function ($item) {
-        return $item["CODE"] === "NAME_EN";
-    }));
-
-    $nameEn = is_array($nameEn) ? $nameEn : [];
-
-    $basketItem["NAME"] = \Helper::isEnLang() && !empty($nameEn["VALUE"])
-        ? $nameEn["VALUE"] : $basketItem["NAME"];
+    $basketItem["NAME"] = \Helper::isEnLang() && !empty($arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"])
+        ? $arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"] : $basketItem["NAME"];
 }
 unset($basketItem);
 
