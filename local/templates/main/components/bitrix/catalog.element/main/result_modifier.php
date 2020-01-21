@@ -14,11 +14,15 @@ use Bitrix\Highloadblock as HL;
 $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
 
-$arResult["NAME"] = \Level44\Base::isEnLang() && !empty($arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"])
-    ? $arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"] : $arResult["NAME"];
+$arResult["NAME"] = \Level44\Base::getMultiLang(
+    $arResult["NAME"],
+    $arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"]
+);
 
-$arResult["DETAIL_TEXT"] = \Level44\Base::isEnLang() && !empty($arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"])
-    ? $arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"] : $arResult["DETAIL_TEXT"];
+$arResult["DETAIL_TEXT"] = \Level44\Base::getMultiLang(
+    $arResult["DETAIL_TEXT"],
+    $arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"]
+);
 
 foreach ($arResult['SKU_PROPS'] as &$skuProp) {
     foreach ($skuProp['VALUES'] as &$value) {
@@ -74,8 +78,10 @@ if (!empty($colorRefTableName)) {
 
 foreach ($arResult['SKU_PROPS']["COLOR_REF"]["VALUES"] as &$colorValue) {
 
-    $colorValue["NAME"] = \Level44\Base::isEnLang() && !empty($colorsRef[$colorValue["ID"]]["UF_NAME_EN"])
-        ? $colorsRef[$colorValue["ID"]]["UF_NAME_EN"] : $colorValue["NAME"];
+    $colorValue["NAME"] = \Level44\Base::getMultiLang(
+        $colorValue["NAME"],
+        $colorsRef[$colorValue["ID"]]["UF_NAME_EN"]
+    );
 }
 
 unset($colorValue);

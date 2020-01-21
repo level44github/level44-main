@@ -127,8 +127,7 @@ foreach($arResult["SECTIONS"] as $arSection)
 	$previousDepthLevel = $arSection["DEPTH_LEVEL"];
 
 	$arResult["ELEMENT_LINKS"][$arSection["ID"]][] = urldecode($arSection["~SECTION_PAGE_URL"]);
-    $sectionName = \Level44\Base::isEnLang() && !empty($arSection["~NAME_EN"]) ?
-        $arSection["~NAME_EN"] : $arSection["~NAME"];
+    $sectionName = \Level44\Base::getMultiLang($arSection["~NAME"], $arSection["~NAME_EN"]);
 	$aMenuLinksNew[$menuIndex++] = array(
 		htmlspecialcharsbx($sectionName),
 		$arSection["~SECTION_PAGE_URL"],
