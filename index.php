@@ -23,7 +23,7 @@ $APPLICATION->IncludeComponent(
         "AJAX_OPTION_JUMP" => "N",
         "AJAX_OPTION_STYLE" => "Y",
         "BACKGROUND_IMAGE" => "UF_BACKGROUND_IMAGE",
-        "BASKET_URL" => "/personal/basket.php",
+		"BASKET_URL" => SITE_DIR."personal/basket.php",
         "BRAND_PROPERTY" => "BRAND_REF",
         "BROWSER_TITLE" => "-",
         "CACHE_FILTER" => "N",

@@ -3,7 +3,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+\Bitrix\Main\Loader::includeModule("highloadblock");
+
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Highloadblock as HL;
 
 $columns = [];
 $fulls = [];
@@ -44,11 +47,39 @@ unset($prop);
 
 $basketItemsQuantity = 0;
 
+$colorsRef = [];
+
+$hlblock = HL\HighloadBlockTable::getList([
+    'filter' => [
+        '=TABLE_NAME' => "eshop_color_reference"
+    ]
+])->fetch();
+
+if ($hlblock) {
+    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
+    $entityClass = $entity->getDataClass();
+
+    $res = $entityClass::getList(
+        [
+            "select" => [
+                "ID",
+                "UF_XML_ID",
+                "UF_NAME_EN",
+            ]
+        ]
+    );
+
+    while ($color = $res->fetch()) {
+        $colorsRef[$color["UF_XML_ID"]] = $color;
+    }
+}
+
+
 foreach ($arResult["BASKET_ITEMS"] as $item) {
     $basketProductIds[] = (int)$item["PRODUCT_ID"];
 }
 
-$arProductsLoc = [];
+$arProductsAdd = [];
 
 if (!empty($basketProductIds)) {
     $resProduct = \CIBlockElement::GetList(
@@ -60,14 +91,19 @@ if (!empty($basketProductIds)) {
         false,
         [
             "ID",
-            "PROPERTY_NAME_EN"
+            "PROPERTY_NAME_EN",
+            "PROPERTY_COLOR_REF",
         ]
     );
 
 
     while ($product = $resProduct->GetNext()) {
-        $arProductsLoc[$product["ID"]]["NAME_EN"] = $product["PROPERTY_NAME_EN_VALUE"];
+        $arProductsAdd[$product["ID"]] = [
+            "NAME_EN" => $product["PROPERTY_NAME_EN_VALUE"],
+            "COLOR_XML_ID" => $product["PROPERTY_COLOR_REF_VALUE"],
+        ];
     }
+
 }
 
 foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
@@ -82,8 +118,18 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 
     $basketItem["NAME"] = \Level44\Base::getMultiLang(
         $basketItem["NAME"],
-        $arProductsLoc[$basketItem["PRODUCT_ID"]]["NAME_EN"]
+        $arProductsAdd[$basketItem["PRODUCT_ID"]]["NAME_EN"]
     );
+
+    foreach ($basketItem["PROPS"] as &$prop) {
+        if ($prop["CODE"] === "COLOR_REF") {
+            $prop["VALUE"] = \Level44\Base::getMultiLang(
+                $prop["VALUE"],
+                $colorsRef[$arProductsAdd[$basketItem["PRODUCT_ID"]]["COLOR_XML_ID"]]["UF_NAME_EN"]
+            );
+        }
+    }
+    unset($prop);
 }
 unset($basketItem);
 

@@ -40,7 +40,11 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                 <? endforeach; ?>
             </div>
             <div class="basket-aside__footer">
-                <div class="d-flex"><?= Loc::getMessage("GOODS") ?><span class="basket-aside__pieces"><?= Loc::getMessage("PCS") ?></span>
+                <div class="d-flex"><?= Loc::getMessage("GOODS") ?>
+                    <span class="basket-aside__pieces">
+                        <?= $arResult["BASKET_ITEMS_QUANTITY"] ?>
+                        <?= Loc::getMessage("PCS") ?>
+                    </span>
                     <div class="ml-auto"><?= $arResult["ORDER_PRICE_FORMATED"] ?></div>
                 </div>
             </div>
