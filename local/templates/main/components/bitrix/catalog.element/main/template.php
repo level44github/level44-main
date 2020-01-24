@@ -178,7 +178,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
         <?
         if (!empty($actualItem['MORE_PHOTO'])): ?>
             <div class="col-lg-7 mb-lg-5 gallery" id="<?= $itemIds['BIG_SLIDER_ID'] ?>">
-                <div class="gallery__thumb js-gallery__thumb" id="<?= $itemIds['SLIDER_CONT_OF_ID'] . $offer['ID'] ?>">
+                <div class="gallery__thumb js-gallery__thumb">
                     <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
                         <div class="gallery__thumb-item" data-entity="image" data-id="<?= $photo['ID'] ?>">
                             <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>">
@@ -393,9 +393,24 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 </div>
                 <button class="btn btn-dark btn-block mb-4"
                         type="button"
+                        id="<?=$itemIds['NOT_AVAILABLE_MESS']?>"
                         onclick="return false;"
                         style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
                 ><?= Loc::getMessage("NOT_AVAILABLE") ?></button>
+                <?
+                $APPLICATION->IncludeComponent(
+                    "bitrix:catalog.product.subscribe",
+                    "main",
+                    Array(
+                        "BUTTON_CLASS" => "btn btn-dark btn-block mb-4",
+                        "BUTTON_ID" => $itemIds["SUBSCRIBE_LINK"],
+                        "CACHE_TIME" => "3600",
+                        "CACHE_TYPE" => "A",
+                        "PRODUCT_ID" => $actualItem["ID"],
+                        'DEFAULT_DISPLAY' => !$actualItem['CAN_BUY'],
+                    )
+                );
+                ?>
                 <?
                 if (!empty($arResult["DETAIL_TEXT"]) || !empty($arResult["PRODUCT_PROPERTIES"])): ?>
 	                <div class="product__desc">
