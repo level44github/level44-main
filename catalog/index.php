@@ -166,7 +166,7 @@ $APPLICATION->SetTitle("Каталог");
         "USE_GIFTS_DETAIL" => "Y",
         "USE_GIFTS_MAIN_PR_SECTION_LIST" => "Y",
         "USE_GIFTS_SECTION" => "Y",
-        "USE_MAIN_ELEMENT_SECTION" => "N",
+        "USE_MAIN_ELEMENT_SECTION" => "Y",
         "USE_PRICE_COUNT" => "N",
         "USE_PRODUCT_QUANTITY" => "N",
         "USE_REVIEW" => "N",

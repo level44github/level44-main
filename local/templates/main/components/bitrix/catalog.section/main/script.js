@@ -31,7 +31,7 @@
 			BX.cookie_prefix = this.bigData.js.cookiePrefix || '';
 			BX.cookie_domain = this.bigData.js.cookieDomain || '';
 			BX.current_server_time = this.bigData.js.serverTime;
-
+			$(".catalog__show-more").show();
 			BX.ready(BX.delegate(this.bigDataLoad, this));
 		}
 
@@ -227,7 +227,7 @@
 				return;
 
 			var position = bigData ? this.bigData.rows : {};
-
+			$(".catalog__show-more").hide();
 			this.processItems(result.items, BX.util.array_keys(position));
 		},
 
@@ -266,30 +266,13 @@
 					}
 				}
 
-				new BX.easing({
-					duration: 2000,
-					start: {opacity: 0},
-					finish: {opacity: 100},
-					transition: BX.easing.makeEaseOut(BX.easing.transitions.quad),
-					step: function(state){
-						for (var k in items)
-						{
-							if (items.hasOwnProperty(k))
-							{
-								items[k].style.opacity = state.opacity / 100;
-							}
-						}
-					},
-					complete: function(){
-						for (var k in items)
-						{
-							if (items.hasOwnProperty(k))
-							{
-								items[k].removeAttribute('style');
-							}
-						}
+				for (var idx in items)
+				{
+					if (items.hasOwnProperty(idx))
+					{
+						items[idx].removeAttribute('style');
 					}
-				}).animate();
+				}
 			}
 
 			BX.ajax.processScripts(processed.SCRIPT);
