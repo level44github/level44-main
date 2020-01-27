@@ -202,7 +202,7 @@ $GLOBALS['CATALOG_CURRENT_ELEMENT_ID'] = $elementId;
 ?>
 <? $APPLICATION->IncludeComponent(
 								"bitrix:catalog.section",
-								"main",
+								"products_on_detail",
 								array(
 									"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
 									"IBLOCK_ID" => $arParams["IBLOCK_ID"],
@@ -250,7 +250,6 @@ $GLOBALS['CATALOG_CURRENT_ELEMENT_ID'] = $elementId;
 									"OFFERS_SORT_ORDER2" => $arParams["OFFERS_SORT_ORDER2"],
 									"OFFERS_LIMIT" => (isset($arParams["LIST_OFFERS_LIMIT"]) ? $arParams["LIST_OFFERS_LIMIT"] : 0),
 
-									"SECTION_ID" => $intSectionID,
 									"SECTION_CODE" => "",
 									"SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
 									"DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["element"],
