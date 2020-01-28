@@ -18,3 +18,12 @@ foreach ($arResult["ITEMS"] as &$item) {
 }
 
 unset($item);
+
+$arResult["NAME"] = \Level44\Base::getMultiLang(
+    $arResult["NAME"],
+    $arResult["UF_NAME_EN"]
+);
+
+if (\Level44\Base::isEnLang()){
+    $APPLICATION->SetTitle($arResult["NAME"]);
+}
