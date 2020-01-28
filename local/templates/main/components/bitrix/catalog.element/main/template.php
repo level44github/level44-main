@@ -431,15 +431,22 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <? endif; ?>
                 <div class="product__question">
                     <div class="product__question-title mb-2"><?= Loc::getMessage("EXIST_QUESTIONS") ?></div>
-                    <div><a class="btn btn-outline-secondary product__question-btn" href="#">
+                    <div>
+                        <a class="btn btn-outline-secondary product__question-btn"
+                           target="_blank"
+                           href="https://wa.me/79153921144">
                             <svg class="icon icon-whatsapp ">
                                 <use xlink:href="#whatsapp"></use>
                             </svg>
-                            WhatsApp</a><a class="btn btn-outline-secondary product__question-btn" href="#">
+                            WhatsApp</a>
+                        <a class="btn btn-outline-secondary product__question-btn"
+                           target="_blank"
+                           href="https://instagram.com/le4v4el?igshid=688ic3aif5yp">
                             <svg class="icon icon-instagram ">
                                 <use xlink:href="#instagram"></use>
                             </svg>
-                            Instagram</a></div>
+                            Instagram</a>
+                    </div>
                 </div>
             </form>
         </div>
