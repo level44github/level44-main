@@ -85,3 +85,5 @@ foreach ($arResult['SKU_PROPS']["COLOR_REF"]["VALUES"] as &$colorValue) {
 }
 
 unset($colorValue);
+
+    $APPLICATION->SetTitle($arResult["NAME"]);
