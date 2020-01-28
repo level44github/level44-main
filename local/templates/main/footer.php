@@ -66,7 +66,8 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
                             "MENU_CACHE_TYPE" => "N",
                             "MENU_CACHE_TIME" => "3600",
                             "MENU_CACHE_USE_GROUPS" => "Y",
-                            "MENU_CACHE_GET_VARS" => ""
+                            "MENU_CACHE_GET_VARS" => "",
+                            "EXT_LINKS" => "Y",
                         )
                     ); ?>
             </div>

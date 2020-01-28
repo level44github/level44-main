@@ -6,6 +6,9 @@
         <? foreach ($arResult as $item): ?>
             <li class="nav-item">
                 <a class="footer__link <?= $item["SELECTED"] ? "active" : "" ?>"
+                    <? if ($arResult["EXT_LINKS"]): ?>
+                        target="_blank"
+                    <? endif; ?>
                    href="<?= $item["LINK"] ?>">
                     <?= $item["TEXT"] ?>
                 </a>
