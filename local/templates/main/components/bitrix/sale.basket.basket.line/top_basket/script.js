@@ -33,6 +33,30 @@ BitrixSmallCart.prototype = {
 			});
 		}
 		BX.addCustomEvent(window, 'OnBasketChange', this.closure('refreshCart', null));
+
+        $(document).on("mouseenter", ".js-top-basket", function (e) {
+            setTimeout(function () {
+                $(document).find(".js-m-basket__dropdown").addClass("show");
+            }, 500)
+        })
+
+        $(document).on("mouseleave", ".js-top-basket", function (e) {
+            setTimeout(function () {
+            	if (!$(document).find(".js-m-basket__dropdown").hasClass("inner")) {
+                    $(document).find(".js-m-basket__dropdown").removeClass("show");
+                }
+            }, 1000)
+        })
+
+        $(document).on("mouseenter", ".js-m-basket__dropdown", function (e) {
+            $(document).find(".js-m-basket__dropdown").addClass("show").addClass("inner");
+        })
+
+        $(document).on("mouseleave", ".js-top-basket", function (e) {
+        	if ($(document).find(".js-m-basket__dropdown").hasClass("inner")) {
+                $(document).find(".js-m-basket__dropdown").removeClass("show").removeClass("inner");
+            }
+        })
 	},
 
 	fixAfterRender: function ()

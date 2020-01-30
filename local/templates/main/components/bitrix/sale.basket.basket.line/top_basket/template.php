@@ -4,7 +4,7 @@
  * @global string $templateName
  * @var CBitrixComponentTemplate $this
  */
-$cartStyle = 'bx-basket';
+$cartStyle = 'js-top-basket bx-basket';
 $cartId = "bx_basket".$this->randString();
 $arParams['cartId'] = $cartId;
 

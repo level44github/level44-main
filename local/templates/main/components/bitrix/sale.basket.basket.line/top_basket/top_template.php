@@ -8,8 +8,8 @@
  * @global string $cartId
  */
 ?>
-<a class="menu__link" href="#" role="button"
-   data-toggle="dropdown" aria-haspopup="true"
+<a class="menu__link" href="<?= $arParams["PATH_TO_BASKET"] ?>" role="button"
+   aria-haspopup="true"
    aria-expanded="false">
     <div class="menu__basket">
         <svg class="icon icon-basket menu__icon">
