@@ -389,7 +389,11 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     <button class="btn btn-dark btn-block mb-4" type="button" id="<?= $itemIds['ADD_BASKET_LINK'] ?>">
                         <svg class="icon icon-basket product__basket-icon">
                             <use xlink:href="#basket"></use>
-                        </svg><?= Loc::getMessage("ADD_TO_BASKET") ?></button>
+                        </svg>
+                        <span class="js-text-content" data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>">
+                            <?= Loc::getMessage("ADD_TO_BASKET") ?>
+                        </span>
+                    </button>
                 </div>
                 <button class="btn btn-dark btn-block mb-4"
                         type="button"

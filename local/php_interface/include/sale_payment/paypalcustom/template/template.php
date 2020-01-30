@@ -43,10 +43,10 @@ if ($params["PAYED"] != "Y")
 						<input type="hidden" name="notify_url" value="<?=htmlspecialcharsbx($params["PAYPAL_NOTIFY_URL"])?>">
 					<?endif;?>
 
-					<?if ($params["PAYPAL_RETURN"] != ''):?>
-						<input type="hidden" name="return" value="<?=htmlspecialcharsbx($params["PAYPAL_RETURN"])?>">
-					<?endif;?>
-
+                    <input type="hidden"
+                           name="return"
+                           value="https://dev:kuWxuH2t@level44.net<?= SITE_DIR ?>checkout/success/"
+                    >
                     <input type="hidden" name="lc" value="<?= \Level44\Base::getMultiLang("RU", "US") ?>">
                 </form>
 			</td>

@@ -12,7 +12,7 @@ if ($orderId <= 0) {
 ?>
 <? if ($status === "Completed1"): ?>
     <h1 class="thank-order__title">Ваш заказ успешно оплачен</h1>
-    <div class="thank-order__desc">Наш менеджер свяжется с вами в течении часа, чтобы подтвердить заказ.</div>
+    <div class="thank-order__desc">Наш менеджер свяжется с вами в течение дня, чтобы подтвердить заказ.</div>
     <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>">Перейти на главную</a>
 <? else: ?>
     <h1 class="thank-order__title">Произошла ошибка оплаты</h1>

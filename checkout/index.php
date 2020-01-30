@@ -30,7 +30,7 @@ $APPLICATION->SetTitle("Оформление заказа");
 автоматически. Если все заполнено верно, нажмите кнопку \"#ORDER_BUTTON#\".",
         "ONLY_FULL_PAY_FROM_ACCOUNT" => "N",
         "PATH_TO_AUTH" => "/auth/",
-        "PATH_TO_BASKET" => "/cart/",
+        "PATH_TO_BASKET" => SITE_DIR."cart/",
         "PATH_TO_PAYMENT" => "payment.php",
         "PATH_TO_PERSONAL" => "index.php",
         "PAY_FROM_ACCOUNT" => "Y",

@@ -36,6 +36,7 @@ $MESS["CT_BCE_CATALOG_RATIO_PRICE"] = "price for #RATIO#";
 $MESS["CT_BCE_CATALOG_GIFT_BLOCK_TITLE_DEFAULT"] = "Select a gift for this product";
 $MESS["CT_BCE_CATALOG_GIFTS_MAIN_BLOCK_TITLE_DEFAULT"] = "Select a product and receive a gift";
 $MESS["ADD_TO_BASKET"] = "Add to Basket";
+$MESS["ADDED_TO_BASKET"] = "Added to basket";
 $MESS["EXIST_QUESTIONS"] = "Have questions?";
 $MESS["SIZE_TABLE"] = "Size table";
 $MESS["CLOSE_MODAL"] = "Close";
