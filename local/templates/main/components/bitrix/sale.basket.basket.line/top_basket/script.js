@@ -53,8 +53,10 @@ BitrixSmallCart.prototype = {
         })
 
         $(document).on("mouseleave", ".js-top-basket", function (e) {
-        	if ($(document).find(".js-m-basket__dropdown").hasClass("inner")) {
-                $(document).find(".js-m-basket__dropdown").removeClass("show").removeClass("inner");
+        	var $basketDropDown = $(document).find(".js-m-basket__dropdown");
+
+        	if ($basketDropDown.hasClass("inner") && !$basketDropDown.hasClass("added")) {
+                $basketDropDown.removeClass("show").removeClass("inner");
             }
         })
 	},
@@ -229,9 +231,9 @@ BitrixSmallCart.prototype = {
 		if (this.fixedPosition)
 			setTimeout(this.fixAfterRenderClosure, 100);
 		if (addParam.showAfterAdd) {
-			$(document).find(".js-m-basket__dropdown").addClass("show");
+			$(document).find(".js-m-basket__dropdown").addClass("show").addClass("added");
 			setTimeout(function() {
-				$(document).find(".js-m-basket__dropdown").removeClass("show");
+				$(document).find(".js-m-basket__dropdown").removeClass("show").removeClass("added");
 			}, 1500)
 		}
 	},
