@@ -44,6 +44,7 @@ $MESS["CHEST_CIRCUMFERENCE"] = "Обхват груди (см)";
 $MESS["HOIST_GIRTH"] = "Обхват талии";
 $MESS["HIP_GIRTH"] = "Обхват бедер";
 $MESS["ADD_TO_BASKET"] = "Добавить в корзину";
+$MESS["ADDED_TO_BASKET"] = "Добавлено в корзину";
 $MESS["NOT_AVAILABLE"] = "Нет в наличии";
 $MESS["CURRENT_COLOR"] = "Цвет";
 $MESS["EXIST_QUESTIONS"] = "Есть вопросы?";

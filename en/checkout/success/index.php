@@ -7,16 +7,16 @@ $cm = (string)$request->getQuery("cm");
 $cm = explode(":", $cm);
 $orderId = (int)$cm[1];
 if ($orderId <= 0) {
-	LocalRedirect(SITE_DIR);
+    LocalRedirect(SITE_DIR);
 }
 ?>
 <? if ($status === "Completed1"): ?>
-	<h1 class="thank-order__title">Ваш заказ успешно оплачен</h1>
-	<div class="thank-order__desc">Наш менеджер свяжется с вами в течении часа, чтобы подтвердить заказ.</div>
-	<a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>">Перейти на главную</a>
+    <h1 class="thank-order__title">Your order has been paid successfully</h1>
+    <div class="thank-order__desc">Our manager will contact you during the day to confirm the order.</div>
+    <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>">Go to Main page</a>
 <? else: ?>
-	<h1 class="thank-order__title">Произошла ошибка оплаты</h1>
-	<div class="thank-order__desc">Пожалуйста обратитесь к администрации интернет-магазина. (Номер заказа: <?=$orderId?>)</div>
-	<a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>">Перейти на главную</a>
+    <h1 class="thank-order__title">Payment error occurred</h1>
+    <div class="thank-order__desc">Please contact the administration of the online store. (Order number: <?=$orderId?>)</div>
+    <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>">Go to Main page</a>
 <? endif; ?>
 <? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>

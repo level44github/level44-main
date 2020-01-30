@@ -3361,6 +3361,8 @@
 		basketResult: function(arResult)
 		{
 			BX.onCustomEvent('OnBasketChange',[{showAfterAdd: true}]);
+			var $textContent = $(this.obAddToBasketBtn).find(".js-text-content");
+            $textContent.text($textContent.data("added-text"));
 			return; //Не выводим попап при добавлении в корзину
 			var popupContent, popupButtons, productPict;
 

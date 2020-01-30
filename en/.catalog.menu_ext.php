@@ -10,6 +10,15 @@ if (empty($aMenuLinks)) {
     $aMenuLinks = [];
 }
 
+$aMenuLinks[] = [
+    "All items",
+    SITE_DIR . "catalog/",
+    Array(),
+    Array(),
+    ""
+];
+
+
 if (CModule::IncludeModule('iblock')) {
     $arFilter = array(
         "TYPE" => "catalog",

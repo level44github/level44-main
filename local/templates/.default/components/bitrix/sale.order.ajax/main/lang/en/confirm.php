@@ -1,6 +1,6 @@
 <?
 $MESS["THANK_ORGER"] = "Thanks for your order";
-$MESS["SUC_MESS1"] = "Our manager will contact you within an hour to confirm the order.";
+$MESS["SUC_MESS1"] = "Our manager will contact you during the day to confirm the order.";
 $MESS["TO_MAIN"] = "Go to Main page";
 $MESS["ORDER_COMPLETE"] = "Order is processed";
 $MESS["WAIT_PAYMENT"] = "Expect redirect to payment page ...";
