@@ -1,13 +1,6 @@
 <?
 $aMenuLinks = Array(
     Array(
-        "Showroom",
-        "/",
-        Array(),
-        Array(),
-        ""
-    ),
-    Array(
         "Instagram",
         "https://instagram.com/le4v4el?igshid=688ic3aif5yp",
         Array(),

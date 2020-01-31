@@ -273,13 +273,38 @@
                   </label>
                 </div>
               </div>
-              <button class="btn btn-dark btn-block mb-4" type="submit">
-                <svg class="icon icon-basket product__basket-icon">
-                  <use xlink:href="#basket"></use>
+              <button class="btn btn-dark btn-block mb-3" type="button" disabled>
+                <svg class="icon icon-stop product__basket-icon">
+                  <use xlink:href="#stop"></use>
                 </svg>
 
-                 Добавить в корзину
+                 Нет в наличии
               </button>
+              <button class="btn btn-block mb-4 btn-outline-dark" type="button" data-toggle="modal" data-target="#subscribe-modal"> Узнать о появлении</button>
+              <div class="modal fade" id="subscribe-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered product-subscribe__dialog" role="document">
+                  <div class="modal-content">
+                    <button class="close product-subscribe__close" type="button" data-dismiss="modal" aria-label="Закрыть">
+                      <svg class="icon icon-close ">
+                        <use xlink:href="#close"></use>
+                      </svg>
+                    </button>
+                    <div class="product-subscribe__header">
+                      <h5 class="product-subscribe__title">Подписаться на товар</h5>
+                    </div>
+                    <div class="modal-body product-subscribe__body">
+                      <div class="text-center px-lg-1 mb-3">Оставьте адрес электронной почты, и мы напишем вам, когда товар появится в наличии.</div>
+                      <form>
+                        <div class="form-group">
+                          <label class="sr-only" for="subscribe-email">E-mail</label>
+                          <input class="form-control" id="subscribe-email" type="email" placeholder="E-mail">
+                        </div>
+                        <button class="btn btn-dark btn-block" type="submit">Подписаться</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="product__desc">
                 <p>Классический двубортный жакет из костюмной ткани. Приталенный силуэт, пуговицы в тон. Карманы с клапанами. Дополните образ классическими брюками и лодочками на каблуках. Сделано в России.</p>
                 <ul class="list__disc">

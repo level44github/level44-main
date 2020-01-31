@@ -53,6 +53,18 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
             <div class="col-6 col-lg-3 order-2">
                 <div class="footer__title footer__title_level">LEVEL44</div>
                 <ul class="nav flex-column">
+                    <li class="nav-item"><a class="footer__link pb-0" href="#">Showroom</a></li>
+                    <li class="nav-item text-muted pb-2">
+                        <? $APPLICATION->IncludeComponent(
+                            "bitrix:main.include",
+                            "",
+                            array(
+                                "AREA_FILE_SHOW" => "file",
+                                "PATH" => SITE_DIR . "include/footer_phone.php",
+                            ),
+                            false
+                        ); ?>
+                    </li>
                     <? $APPLICATION->IncludeComponent(
                         "bitrix:menu",
                         "footer_links",
@@ -107,19 +119,24 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
             <circle cx="6.645" cy="6.645" r="6.145" data-stroke="true" fill="none"/>
             <path d="M10.857 11.037l4.609 4.609" data-stroke="true" fill="none"/>
         </symbol>
+        <symbol viewBox="0 0 14 14" id="stop" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7" cy="7" r="6.5" data-stroke="true" fill="none"/>
+            <path d="M1.98 11.78l9.334-9.334" data-stroke="true" fill="none"/>
+        </symbol>
         <symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#fclip0)" fill="none">
+            <g clip-path="url(#gclip0)" fill="none">
                 <path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z"
                       data-stroke="true" fill="none"/>
                 <path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z"
                       data-fill="true"/>
             </g>
             <defs fill="none">
-                <clipPath id="fclip0" fill="none"/>
+                <clipPath id="gclip0" fill="none"/>
             </defs>
         </symbol>
     </svg>
 </div>
+
 
 </body>
 </html>

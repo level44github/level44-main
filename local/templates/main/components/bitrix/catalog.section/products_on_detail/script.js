@@ -225,11 +225,11 @@
 		{
 			if (!result)
 				return;
-
+            $(document).trigger("unset_slick_carousel");
 			var position = bigData ? this.bigData.rows : {};
 			$(".catalog__show-more").hide();
 			this.processItems(result.items, BX.util.array_keys(position));
-            $(document).trigger("set_slick_carousel")
+            $(document).trigger("set_slick_carousel");
 		},
 
 		processItems: function(itemsHtml, position)
