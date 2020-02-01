@@ -53,14 +53,14 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
             <div class="col-6 col-lg-3 order-2">
                 <div class="footer__title footer__title_level">LEVEL44</div>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="footer__link pb-0" href="#">Showroom</a></li>
+                    <li class="nav-item"><a class="footer__link pb-0">Showroom</a></li>
                     <li class="nav-item text-muted pb-2">
                         <? $APPLICATION->IncludeComponent(
                             "bitrix:main.include",
                             "",
                             array(
                                 "AREA_FILE_SHOW" => "file",
-                                "PATH" => SITE_DIR . "include/footer_phone.php",
+                                "PATH" => SITE_DIR . "include/footer_showroom.php",
                             ),
                             false
                         ); ?>
