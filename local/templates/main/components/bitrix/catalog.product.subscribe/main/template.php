@@ -56,13 +56,65 @@ $templateData['showSubscribe'] = $showSubscribe;
 $subscribeBtnName = !empty($arParams['MESS_BTN_SUBSCRIBE']) ? $arParams['MESS_BTN_SUBSCRIBE'] : Loc::getMessage('CPST_SUBSCRIBE_BUTTON_NAME');
 
 if($showSubscribe):?>
-    <button class="btn btn-dark btn-block mb-4 <?=htmlspecialcharsbx($arResult['BUTTON_CLASS'])?>"
+    <button class="btn btn-block mb-4 btn-outline-dark <?= htmlspecialcharsbx($arResult['BUTTON_CLASS']) ?>"
             type="button"
-            id="<?=htmlspecialcharsbx($arResult['BUTTON_ID'])?>"
-            data-item="<?=htmlspecialcharsbx($arResult['PRODUCT_ID'])?>"
-            style="<?=($arResult['DEFAULT_DISPLAY']?'':'display: none;')?>"
-            onclick="return false;"
-    ><?=$subscribeBtnName?></button>
+            id="<?= htmlspecialcharsbx($arResult['BUTTON_ID']) ?>"
+            data-item="<?= htmlspecialcharsbx($arResult['PRODUCT_ID']) ?>"
+            style="<?= ($arResult['DEFAULT_DISPLAY'] ? '' : 'display: none;') ?>">
+        <?= $subscribeBtnName ?>
+    </button>
+    <button type="button"
+            class="modal-toggle"
+            data-toggle="modal"
+            data-target="#subscribe-modal"
+            style="display:none;"
+    ></button>
+    <div class="js-subscribe-modal modal fade" id="subscribe-modal" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="js-subscribe-form modal-dialog modal-dialog-centered product-subscribe__dialog"
+             style="display: none"
+             role="document"
+        >
+            <div class="modal-content">
+                <button class="close product-subscribe__close" type="button" data-dismiss="modal"
+                        aria-label="Закрыть">
+                    <svg class="icon icon-close ">
+                        <use xlink:href="#close"></use>
+                    </svg>
+                </button>
+                <div class="product-subscribe__header">
+                    <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
+                </div>
+                <div class="js-subscribe-form-body modal-body product-subscribe__body">
+                    <div class="text-center px-lg-1 mb-3"><?= Loc::getMessage("DESC_POPUP_SUBSCRIBED") ?></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="js-subscribe-suc modal-dialog modal-dialog-centered product-subscribe__dialog"
+             style="display: none"
+             role="document"
+        >
+            <div class="modal-content">
+                <button class="close product-subscribe__close" type="button" data-dismiss="modal"
+                        aria-label="Закрыть">
+                    <svg class="icon icon-close ">
+                        <use xlink:href="#close"></use>
+                    </svg>
+                </button>
+                <div class="product-subscribe__header">
+                    <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
+                </div>
+                <div class="modal-body product-subscribe__body">
+                    <div class="js-text text-center px-lg-1 mb-3"></div>
+
+
+                    <button class="btn btn-dark btn-block" type="submit"><?=Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE")?></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 	<input type="hidden" id="<?=htmlspecialcharsbx($arResult['BUTTON_ID'])?>_hidden">
 
 	<script type="text/javascript">

@@ -11,7 +11,9 @@ $MESS["CPST_SUBSCRIBE_CAPTCHA_TITLE"] = "Введите слово на карт
 $MESS["CPST_STATUS_SUCCESS"] = "Успешно";
 $MESS["CPST_STATUS_ERROR"] = "Произошла ошибка";
 $MESS["CPST_ENTER_WORD_PICTURE"] = "Введите слово на картинке";
-$MESS["CPST_TITLE_ALREADY_SUBSCRIBED"] = "Уже подписаны";
+$MESS["CPST_TITLE_ALREADY_SUBSCRIBED"] = "Вы уже подписаны";
 $MESS["CPST_POPUP_SUBSCRIBED_TITLE"] = "Вы подписаны";
 $MESS["CPST_POPUP_SUBSCRIBED_TEXT"] = "Список товаров на которые вы подписаны можно увидеть по ссылке #URL#";
+$MESS["TITLE_POPUP_SUBSCRIBED"] = "Подписаться на товар";
+$MESS["DESC_POPUP_SUBSCRIBED"] = "Оставьте адрес электронной почты, и мы напишем вам, когда товар появится в наличии.";
 ?>
