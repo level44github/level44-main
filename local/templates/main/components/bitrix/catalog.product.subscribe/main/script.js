@@ -125,74 +125,15 @@
 				{
 					this.createSuccessPopup(result);
 					this.setButton(true);
-					this.listOldItemId[this.elemButtonSubscribe.dataset.item] = true;
 				}
 				else if(result.contactFormSubmit)
 				{
-					this.initPopupWindow();
-					this.elemPopupWin.setTitleBar(BX.message('CPST_SUBSCRIBE_POPUP_TITLE'));
-					var form = this.createContentForPopup(result);
-					this.elemPopupWin.setContent(form);
-					this.elemPopupWin.setButtons([
-						new subscribeButton({
-							text: BX.message('CPST_SUBSCRIBE_BUTTON_NAME'),
-							className : 'btn btn-primary',
-							events: {
-								click : BX.delegate(function() {
-									if(!this.validateContactField(result.contactTypeData))
-									{
-										return false;
-									}
-									BX.ajax.submitAjax(form, {
-										method : 'POST',
-										url: this.ajaxUrl,
-										processData : true,
-										onsuccess: BX.delegate(function (resultForm) {
-											resultForm = BX.parseJSON(resultForm, {});
-											if(resultForm.success)
-											{
-												this.createSuccessPopup(resultForm);
-												this.setButton(true);
-												this.listOldItemId[this.elemButtonSubscribe.dataset.item] = true;
-											}
-											else if(resultForm.error)
-											{
-												if(resultForm.hasOwnProperty('setButton'))
-												{
-													this.listOldItemId[this.elemButtonSubscribe.dataset.item] = true;
-													this.setButton(true);
-												}
-												var errorMessage = resultForm.message;
-												if(resultForm.hasOwnProperty('typeName'))
-												{
-													errorMessage = resultForm.message.replace('USER_CONTACT',
-														resultForm.typeName);
-												}
-												BX('bx-catalog-subscribe-form-notify').style.color = 'red';
-												BX('bx-catalog-subscribe-form-notify').innerHTML = errorMessage;
-											}
-										}, this)
-									});
-								}, this)
-							}
-						}),
-						new subscribeButton({
-							text : BX.message('CPST_SUBSCRIBE_BUTTON_CLOSE'),
-							className : 'btn',
-							events : {
-								click : BX.delegate(function() {
-									this.elemPopupWin.destroy();
-								}, this)
-							}
-						})
-					]);
-					this.elemPopupWin.show();
+					this.showFormModal(result);
 				}
 				else if(result.error)
 				{
 					if(result.hasOwnProperty('setButton'))
 					{
-						this.listOldItemId[this.elemButtonSubscribe.dataset.item] = true;
 						this.setButton(true);
 					}
 					this.showWindowWithAnswer({status: 'error', message: result.message});
@@ -203,8 +144,8 @@
 
 	window.JCCatalogProductSubscribe.prototype.validateContactField = function(contactTypeData)
 	{
-		var inputFields = BX.findChildren(BX('bx-catalog-subscribe-form'),
-			{'tag': 'input', 'attribute': {id: 'userContact'}}, true);
+		var inputFields = BX.findChildren(BX('bx-catalog-subscribe-form-div'),
+			{'tag': 'input', 'attribute': {id: 'subscribe-email'}}, true);
 		if(!inputFields.length || typeof contactTypeData !== 'object')
 		{
 			BX('bx-catalog-subscribe-form-notify').style.color = 'red';
@@ -268,152 +209,41 @@
 		var contactTypeData = responseData.contactTypeData, contactCount = Object.keys(contactTypeData).length,
 			styleInputForm = '', manyContact = 'N', content = document.createDocumentFragment();
 
-		if(contactCount > 1)
-		{
-			manyContact = 'Y';
-			styleInputForm = 'display:none;';
-			content.appendChild(BX.create('p', {
-				text: BX.message('CPST_SUBSCRIBE_MANY_CONTACT_NOTIFY')
-			}));
-		}
 
-		content.appendChild(BX.create('p', {
-			props: {id: 'bx-catalog-subscribe-form-notify'}
-		}));
-
-		for(var k in contactTypeData)
-		{
-			if(contactCount > 1)
-			{
-				content.appendChild(BX.create('div', {
-					props: {
-						className: 'bx-catalog-subscribe-form-container'
-					},
-					children: [
-						BX.create('div', {
-							props: {
-								className: 'checkbox'
-							},
-							children: [
-								BX.create('lable', {
-									props: {
-										className: 'bx-filter-param-label'
-									},
-									attrs: {
-										onclick: this.jsObject+'.selectContactType('+k+', event);'
-									},
-									children: [
-										BX.create('input', {
-											props: {
-												type: 'hidden',
-												id: 'bx-contact-use-'+k,
-												name: 'contact['+k+'][use]',
-												value: 'N'
-											}
-										}),
-										BX.create('input', {
-											props: {
-												id: 'bx-contact-checkbox-'+k,
-												type: 'checkbox'
-											}
-										}),
-										BX.create('span', {
-											props: {
-												className: 'bx-filter-param-text'
-											},
-											text: contactTypeData[k].contactLable
-										})
-									]
-								})
-							]
-						})
-					]
-				}));
-			}
 			content.appendChild(BX.create('div', {
 				props: {
-					id: 'bx-catalog-subscribe-form-container-'+k,
-					className: 'bx-catalog-subscribe-form-container',
-					style: styleInputForm
+					id: 'bx-catalog-subscribe-form-div',
+					className: 'form-group',
 				},
 				children: [
-					BX.create('div', {
+					BX.create('p', {
 						props: {
-							className: 'bx-catalog-subscribe-form-container-label'
+							id: 'bx-catalog-subscribe-form-notify'
 						},
-						text: BX.message('CPST_SUBSCRIBE_LABLE_CONTACT_INPUT').replace(
-							'#CONTACT#', contactTypeData[k].contactLable)
+						text: ''
 					}),
-					BX.create('div', {
+					BX.create('label', {
 						props: {
-							className: 'bx-catalog-subscribe-form-container-input'
+							className: 'sr-only',
 						},
-						children: [
-							BX.create('input', {
-								props: {
-									id: 'userContact',
-									className: '',
-									type: 'text',
-									name: 'contact['+k+'][user]'
-								},
-								attrs: {'data-id': k}
-							})
-						]
-					})
+                        attrs: {
+                            for: "subscribe-email"
+                        },
+                        text: 'E-mail',
+					}),
+                    BX.create('input', {
+                        props: {
+                            id: 'subscribe-email',
+                            className: 'form-control',
+                            type: 'text',
+                            name: 'contact[1][user]',
+                            placeholder: 'E-mail'
+                        },
+                        attrs: {'data-id': 1}
+                    })
 				]
 			}));
-		}
-		if(responseData.hasOwnProperty('captchaCode'))
-		{
-			content.appendChild(BX.create('div', {
-				props: {
-					className: 'bx-catalog-subscribe-form-container'
-				},
-				children: [
-					BX.create('span', {props: {className: 'bx-catalog-subscribe-form-star-required'}, text: '*'}),
-					BX.message('CPST_ENTER_WORD_PICTURE'),
-					BX.create('div', {
-						props: {className: 'bx-captcha'},
-						children: [
-							BX.create('input', {
-								props: {
-									type: 'hidden',
-									id: 'captcha_sid',
-									name: 'captcha_sid',
-									value: responseData.captchaCode
-								}
-							}),
-							BX.create('img', {
-								props: {
-									id: 'captcha_img',
-									src: '/bitrix/tools/captcha.php?captcha_sid='+responseData.captchaCode+''
-								},
-								attrs: {
-									width: '180',
-									height: '40',
-									alt: 'captcha',
-									onclick: this.jsObject+'.reloadCaptcha();'
-								}
-							})
-						]
-					}),
-					BX.create('div', {
-						props: {className: 'bx-catalog-subscribe-form-container-input'},
-						children: [
-							BX.create('input', {
-								props: {
-									id: 'captcha_word',
-									className: '',
-									type: 'text',
-									name: 'captcha_word'
-								},
-								attrs: {maxlength: '50'}
-							})
-						]
-					})
-				]
-			}));
-		}
+
 		var form = BX.create('form', {
 			props: {
 				id: 'bx-catalog-subscribe-form'
@@ -465,6 +295,48 @@
 		});
 
 		form.appendChild(content);
+		form.appendChild(BX.create('button', {
+            props: {
+                type: 'submit',
+                className: 'js-subscribe-button btn btn-dark btn-block',
+            },
+            text: BX.message('CPST_SUBSCRIBE_BUTTON_NAME'),
+            events: {
+                click: BX.delegate(function (e) {
+                    e.preventDefault();
+                    if (!this.validateContactField(responseData.contactTypeData)) {
+                        return false;
+                    }
+
+                    BX.ajax.submitAjax(form, {
+                        method: 'POST',
+                        url: this.ajaxUrl,
+                        processData: true,
+                        onsuccess: BX.delegate(function (resultForm) {
+                            resultForm = BX.parseJSON(resultForm, {});
+                            if (resultForm.success) {
+                                this.createSuccessPopup(resultForm);
+                                this.setButton(true);
+                                this.listOldItemId[this.elemButtonSubscribe.dataset.item] = true;
+                            }
+                            else if (resultForm.error) {
+                                if (resultForm.hasOwnProperty('setButton')) {
+                                    this.listOldItemId[this.elemButtonSubscribe.dataset.item] = true;
+                                    this.setButton(true);
+                                }
+                                var errorMessage = resultForm.message;
+                                if (resultForm.hasOwnProperty('typeName')) {
+                                    errorMessage = resultForm.message.replace('USER_CONTACT',
+                                        resultForm.typeName);
+                                }
+                                BX('bx-catalog-subscribe-form-notify').style.color = 'red';
+                                BX('bx-catalog-subscribe-form-notify').innerHTML = errorMessage;
+                            }
+                        }, this)
+                    });
+                }, this)
+            },
+        }));
 
 		return form;
 	};
@@ -514,34 +386,44 @@
 
 	window.JCCatalogProductSubscribe.prototype.createSuccessPopup = function(result)
 	{
-		this.initPopupWindow();
-		this.elemPopupWin.setTitleBar(BX.message('CPST_SUBSCRIBE_POPUP_TITLE'));
-		var content = BX.create('div', {
-			props:{
-				className: 'bx-catalog-popup-content'
-			},
-			children: [
-				BX.create('p', {
-					props: {
-						className: 'bx-catalog-popup-message'
-					},
-					text: result.message
-				})
-			]
-		});
-		this.elemPopupWin.setContent(content);
-		this.elemPopupWin.setButtons([
-			new subscribeButton({
-				text : BX.message('CPST_SUBSCRIBE_BUTTON_CLOSE'),
-				className : 'btn btn-primary',
-				events : {
-					click : BX.delegate(function() {
-						this.elemPopupWin.destroy();
-					}, this)
-				}
-			})
-		]);
-		this.elemPopupWin.show();
+		this.showSuccessModal(result.message)
+	};
+
+    window.JCCatalogProductSubscribe.prototype.showSuccessModal = function (successText) {
+        var $subscribeSucModal = $(".js-subscribe-modal .js-subscribe-suc");
+        $(".js-subscribe-modal .modal-dialog").hide();
+        $subscribeSucModal.find(".js-text").text(successText);
+        $subscribeSucModal.show();
+        if (!$(".js-subscribe-modal").hasClass("show")) {
+            $(".modal-toggle").click()
+        }
+    };
+
+    window.JCCatalogProductSubscribe.prototype.showFormModal = function (result) {
+        var form = this.createContentForPopup(result);
+        if (!form) {
+            return false;
+        }
+        var subscribeFormBody = document.querySelector(".js-subscribe-form-body");
+        if (!subscribeFormBody) {
+            return false;
+        }
+        subscribeFormBody.appendChild(form);
+
+
+        $(".js-subscribe-modal .modal-dialog").hide();
+        $(".js-subscribe-modal .js-subscribe-form").show();
+
+        if (!$(".js-subscribe-modal").hasClass("show")) {
+            $(".modal-toggle").click()
+        }
+    };
+
+	window.JCCatalogProductSubscribe.prototype.closeModal = function()
+	{
+        if ($(".js-subscribe-modal").hasClass("show")) {
+            $(".modal-toggle").click()
+        }
 	};
 
 	window.JCCatalogProductSubscribe.prototype.initPopupWindow = function()

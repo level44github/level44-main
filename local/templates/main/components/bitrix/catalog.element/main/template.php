@@ -395,24 +395,26 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         </span>
                     </button>
                 </div>
-                <button class="btn btn-dark btn-block mb-4"
-                        type="button"
-                        id="<?=$itemIds['NOT_AVAILABLE_MESS']?>"
-                        onclick="return false;"
-                        style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
-                ><?= Loc::getMessage("NOT_AVAILABLE") ?></button>
+                <button class="btn btn-dark btn-block mb-3" type="button" disabled>
+                    <svg class="icon icon-stop product__basket-icon">
+                        <use xlink:href="#stop"></use>
+                    </svg>
+
+                    <?= Loc::getMessage("NOT_AVAILABLE") ?>
+                </button>
                 <?
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.product.subscribe",
-                    "main",
+                    "",
                     Array(
-                        "BUTTON_CLASS" => "btn btn-dark btn-block mb-4",
+                        "BUTTON_CLASS" => "btn btn-block mb-4 btn-outline-dark",
                         "BUTTON_ID" => $itemIds["SUBSCRIBE_LINK"],
                         "CACHE_TIME" => "3600",
-                        "CACHE_TYPE" => "A",
+                        "CACHE_TYPE" => "N",
                         "PRODUCT_ID" => $actualItem["ID"],
                         'DEFAULT_DISPLAY' => !$actualItem['CAN_BUY'],
-                    )
+                    ),
+                    $component
                 );
                 ?>
                 <?

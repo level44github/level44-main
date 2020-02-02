@@ -11,7 +11,9 @@ $MESS["CPST_SUBSCRIBE_CAPTCHA_TITLE"] = "Type the characters you see on the pict
 $MESS["CPST_STATUS_SUCCESS"] = "Success";
 $MESS["CPST_STATUS_ERROR"] = "That's an error.";
 $MESS["CPST_ENTER_WORD_PICTURE"] = "Type the characters you see on the picture";
-$MESS["CPST_TITLE_ALREADY_SUBSCRIBED"] = "Subscribed";
+$MESS["CPST_TITLE_ALREADY_SUBSCRIBED"] = "You are already subscribed to this item";
 $MESS["CPST_POPUP_SUBSCRIBED_TITLE"] = "You subscription is active";
 $MESS["CPST_POPUP_SUBSCRIBED_TEXT"] = "View the products you have subscribed for here: #URL#";
+$MESS["TITLE_POPUP_SUBSCRIBED"] = "Subscribe to product";
+$MESS["DESC_POPUP_SUBSCRIBED"] = "Leave your email address and we will write to you when the product becomes available.";
 ?>

@@ -281,10 +281,21 @@
                  Нет в наличии
               </button>
               <button class="btn btn-block mb-4 btn-outline-dark" type="button" data-toggle="modal" data-target="#subscribe-modal"> Узнать о появлении</button>
-              <div class="modal fade" id="subscribe-modal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered product-subscribe__dialog" role="document">
+              <button type="button"
+                      class="modal-toggle"
+                      data-toggle="modal"
+                      data-target="#subscribe-modal"
+                      style="display:none;"
+              ></button>
+              <div class="js-subscribe-modal modal fade" id="subscribe-modal" tabindex="-1" role="dialog"
+                   aria-hidden="true">
+                <div class="js-subscribe-form modal-dialog modal-dialog-centered product-subscribe__dialog"
+                     style="display: none"
+                     role="document"
+                >
                   <div class="modal-content">
-                    <button class="close product-subscribe__close" type="button" data-dismiss="modal" aria-label="Закрыть">
+                    <button class="close product-subscribe__close" type="button" data-dismiss="modal"
+                            aria-label="Закрыть">
                       <svg class="icon icon-close ">
                         <use xlink:href="#close"></use>
                       </svg>
@@ -293,7 +304,9 @@
                       <h5 class="product-subscribe__title">Подписаться на товар</h5>
                     </div>
                     <div class="modal-body product-subscribe__body">
-                      <div class="text-center px-lg-1 mb-3">Оставьте адрес электронной почты, и мы напишем вам, когда товар появится в наличии.</div>
+                      <div class="text-center px-lg-1 mb-3">Оставьте адрес электронной почты, и мы напишем вам, когда
+                        товар появится в наличии.
+                      </div>
                       <form>
                         <div class="form-group">
                           <label class="sr-only" for="subscribe-email">E-mail</label>
@@ -304,7 +317,33 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="js-subscribe-suc modal-dialog modal-dialog-centered product-subscribe__dialog"
+                     style="display: none"
+                     role="document"
+                >
+                  <div class="modal-content">
+                    <button class="close product-subscribe__close" type="button" data-dismiss="modal"
+                            aria-label="Закрыть">
+                      <svg class="icon icon-close ">
+                        <use xlink:href="#close"></use>
+                      </svg>
+                    </button>
+                    <div class="product-subscribe__header">
+                      <h5 class="product-subscribe__title">Подписка на товар</h5>
+                    </div>
+                    <div class="modal-body product-subscribe__body">
+                      <div class="text-center px-lg-1 mb-3">Вы успешно подписались</div>
+
+
+                      <button class="btn btn-dark btn-block" type="submit">Закрыть</button>
+
+                    </div>
+                  </div>
+                </div>
               </div>
+
+
               <div class="product__desc">
                 <p>Классический двубортный жакет из костюмной ткани. Приталенный силуэт, пуговицы в тон. Карманы с клапанами. Дополните образ классическими брюками и лодочками на каблуках. Сделано в России.</p>
                 <ul class="list__disc">
