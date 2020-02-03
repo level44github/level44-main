@@ -8,6 +8,9 @@ BX.saleOrderAjax = {
 
     modes: {},
     properties: {},
+    BXFormPosting: false,
+    isLocationProEnabled: false,
+    propAddressFieldName: "",
 
     // called once, on component load
     init: function (options) {
@@ -466,8 +469,74 @@ BX.saleOrderAjax = {
             }
 
         });
-    }
+    },
+    submitForm: function (val) {
+        if (this.BXFormPosting === true)
+            return true;
 
+        this.BXFormPosting = true;
+
+        $(".checkout-loading-overlay").show();
+        var orderForm = BX('ORDER_FORM');
+
+        if (val !== 'Y') {
+            BX('confirmorder').value = 'N';
+        } else {
+            var currentDeliveryId = $(orderForm).find(".js-delivery-input:checked").val();
+            var addressField = $(orderForm)
+                .find("[name='" + this.propAddressFieldName + "-fake'][data-delivery='" + currentDeliveryId + "']");
+            if (addressField.length) {
+                $("[name='" + this.propAddressFieldName + "']").val(addressField.val())
+            }
+        }
+
+
+        BX.showWait();
+
+
+        if (this.isLocationProEnabled) {
+            BX.saleOrderAjax.cleanUp();
+        }
+
+        BX.ajax.submit(orderForm, BX.delegate(this.ajaxResult, this));
+
+        return true;
+    },
+    ajaxResult: function (res) {
+        var orderForm = BX('ORDER_FORM');
+        try {
+            // if json came, it obviously a successfull order submit
+
+            var json = JSON.parse(res);
+            BX.closeWait();
+
+            if (json.error) {
+                this.BXFormPosting = false;
+                return;
+            }
+            else if (json.redirect) {
+                window.top.location.href = json.redirect;
+            }
+        }
+        catch (e) {
+            // json parse failed, so it is a simple chunk of html
+
+            this.BXFormPosting = false;
+            if ($.isReady) {
+                var $obContent = $("<div></div>").append($(res));
+                $(".js-form_block").html($obContent.find(".js-form_block").html());
+                $(".js-basket_block").html($obContent.find(".js-basket_block").html());
+            }
+
+            if (this.isLocationProEnabled) {
+                BX.saleOrderAjax.initDeferredControl();
+            }
+        }
+
+        BX.closeWait();
+        $(".checkout-loading-overlay").hide();
+        BX.onCustomEvent(orderForm, 'onAjaxSuccess');
+    }
 }
 
 $(function () {

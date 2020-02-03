@@ -105,7 +105,7 @@ if (!function_exists("PrintPropsForm")) {
 
             <div style="clear: both;"></div>
 
-        <? elseif ($arProperty["TYPE"] == "TEXT"): ?>
+        <? elseif ($arProperty["TYPE"] == "STRING"): ?>
             <div class="form-group">
                 <label for="form-email"><?= $arProperty["NAME"] ?></label>
                 <input type="text"

@@ -36,34 +36,21 @@ use Bitrix\Main\Localization\Loc;
                     <div class="collapse <?= $delivery["CHECKED"] ? "show" : "" ?>" id="delivery<?= $key ?>"
                          data-parent="#delivery">
                         <div class="option__body">
-                            <? if ($arResult["ORDER_PROP_ADDRESS"]["TYPE"] === "TEXT"): ?>
-                                    <? if (empty($delivery["STORE"])): ?>
+                            <? if (!empty($arResult["ORDER_PROP_ADDRESS"]) && $arResult["ORDER_PROP_ADDRESS"]["TYPE"] === "STRING"): ?>
                                     <div class="form-group">
                                     <label for="form-delivery<?= $key ?>-address"><?= $arResult["ORDER_PROP_ADDRESS"]["NAME"] ?></label>
                                         <input class="form-control js-form__control"
                                                type="text"
                                                id="form-delivery<?= $key ?>-address"
                                                maxlength="250"
+                                               data-delivery="<?=$delivery["ID"]?>"
                                                size="<?= $arResult["ORDER_PROP_ADDRESS"]["SIZE1"] ?>"
-                                               name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
+                                               name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>-fake"
                                                value="<?= $arResult["ORDER_PROP_ADDRESS"]["VALUE"] ?>"
                                                data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
                                                placeholder="<?= $arResult["ORDER_PROP_ADDRESS"]["DESCRIPTION"] ?>"
                                         >
                                     </div>
-                                    <? else: ?>
-                                    <div class="form-group" style="display: none;">
-                                    <label for="form-delivery<?= $key ?>-address"><?= $arResult["ORDER_PROP_ADDRESS"]["NAME"] ?></label>
-                                        <input class="form-control js-form__control"
-                                               type="text"
-                                               id="form-delivery<?= $key ?>-address"
-                                               maxlength="250"
-                                               name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
-                                               value="Самовывоз"
-                                               data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
-                                        >
-                                    </div>
-                                    <? endif; ?>
                             <? endif; ?>
                         </div>
                     </div>

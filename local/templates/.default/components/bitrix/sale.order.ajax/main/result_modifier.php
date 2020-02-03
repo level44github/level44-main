@@ -11,7 +11,14 @@ use Bitrix\Highloadblock as HL;
 $columns = [];
 $fulls = [];
 
-foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"] as &$prop) {
+ёforeach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
+$prop["VALUE"] = reset($prop["VALUE"]);
+    if ($prop["CODE"] === "LOCATION") {
+        $prop["VALUE"] = \CSaleLocation::getLocationIDbyCODE($prop["VALUE"]);
+    }
+
+    $prop["FIELD_NAME"] = "ORDER_PROP_".$prop["ID"];
+
     if (empty($prop["DESCRIPTION"])) {
         $prop["DESCRIPTION"] = Loc::getMessage("INPUT") . strtolower($prop["NAME"]);
     }
