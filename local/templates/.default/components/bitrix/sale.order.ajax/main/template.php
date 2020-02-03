@@ -66,78 +66,23 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             ]
         )?>);
 
+        <?else:?>
+        BX.saleOrderAjax.init({});
         <?endif?>
 
-        var BXFormPosting = false;
+        BX.saleOrderAjax.BXFormPosting = false;
+        <?if(CSaleLocation::isLocationProEnabled()):?>
+        BX.saleOrderAjax.isLocationProEnabled = true;
+        BX.saleOrderAjax.propAddressFieldName = '<?=(string)$arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"]?>';
+        <?endif;?>
 
         function submitForm(val) {
-            if (BXFormPosting === true)
-                return true;
-
-            BXFormPosting = true;
-
-            $(".checkout-loading-overlay").show();
-
-            if (val !== 'Y') {
-                BX('confirmorder').value = 'N';
-            }
-
-            var orderForm = BX('ORDER_FORM');
-            BX.showWait();
-
-            <?if(CSaleLocation::isLocationProEnabled()):?>
-            BX.saleOrderAjax.cleanUp();
-            <?endif?>
-
-            BX.ajax.submit(orderForm, ajaxResult);
-
-            return true;
+            return BX.saleOrderAjax.submitForm(val);
         }
 
         function submitChangeLocation() {
             submitForm();
             $(".js-form__control[data-prop='ADDRESS']").val("")
-        }
-
-        function ajaxResult(res)
-        {
-            var orderForm = BX('ORDER_FORM');
-            try
-            {
-                // if json came, it obviously a successfull order submit
-
-                var json = JSON.parse(res);
-                BX.closeWait();
-
-                if (json.error)
-                {
-                    BXFormPosting = false;
-                    return;
-                }
-                else if (json.redirect)
-                {
-                    window.top.location.href = json.redirect;
-                }
-            }
-            catch (e)
-            {
-                // json parse failed, so it is a simple chunk of html
-
-                BXFormPosting = false;
-                if ($.isReady) {
-                    var $obContent = $("<div></div>").append($(res));
-                    $(".js-form_block").html($obContent.find(".js-form_block").html());
-                    $(".js-basket_block").html($obContent.find(".js-basket_block").html());
-                }
-
-                <?if(CSaleLocation::isLocationProEnabled()):?>
-                BX.saleOrderAjax.initDeferredControl();
-                <?endif?>
-            }
-
-            BX.closeWait();
-            $(".checkout-loading-overlay").hide();
-            BX.onCustomEvent(orderForm, 'onAjaxSuccess');
         }
 
         function SetContact(profileId)
@@ -217,6 +162,11 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
     <input type="hidden" name="confirmorder" id="confirmorder" value="Y">
     <input type="hidden" name="profile_change" id="profile_change" value="N">
     <input type="hidden" name="is_ajax_post" id="is_ajax_post" value="Y">
+    <input type="hidden"
+           name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
+           data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
+           id="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>-input"
+           value="">
     <input type="hidden" name="json" value="Y">
     </form>
     <? else:?>
