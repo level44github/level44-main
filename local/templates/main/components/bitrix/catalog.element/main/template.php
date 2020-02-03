@@ -395,7 +395,13 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         </span>
                     </button>
                 </div>
-                <button class="btn btn-dark btn-block mb-3" type="button" disabled>
+                <button class="btn btn-dark btn-block mb-3"
+                        type="button"
+                        id="<?=$itemIds['NOT_AVAILABLE_MESS']?>"
+                        onclick="return false;"
+                        style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
+                        disabled
+                >
                     <svg class="icon icon-stop product__basket-icon">
                         <use xlink:href="#stop"></use>
                     </svg>
