@@ -19,8 +19,8 @@ function ResizeUploadedPhoto($arFields) {
     CModule::IncludeModule('iblock');
     $IBLOCK_ID = 2; // ID инфоблока свойство которых нуждается в масштабировании
     $PROPERTY_CODE = "MORE_PHOTO";  // код свойства
-    $imageMaxWidth = 900; // Максимальная ширина картинки
-    $imageMaxHeight = 1600; // Максимальная высота картинки
+    $imageMaxWidth = 640; // Максимальная ширина картинки
+    $imageMaxHeight = 640; // Максимальная высота картинки
     // для начала убедимся, что изменяется элемент нужного нам инфоблока
     if($arFields["IBLOCK_ID"] == $IBLOCK_ID) {
         $VALUES = $VALUES_OLD = array();
@@ -36,7 +36,7 @@ function ResizeUploadedPhoto($arFields) {
                     $file = CFile::ResizeImageGet($ob['VALUE'], array(
                         'width'=>$imageMaxWidth,
                         'height'=>$imageMaxHeight
-                    ), BX_RESIZE_IMAGE_PROPORTIONAL, true);
+                    ), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
                     // добавляем в массив VALUES новую уменьшенную картинку
                     $VALUES[] = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"].$file["src"]);
                 } else {
