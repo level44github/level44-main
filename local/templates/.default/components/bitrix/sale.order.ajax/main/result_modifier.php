@@ -11,7 +11,7 @@ use Bitrix\Highloadblock as HL;
 $columns = [];
 $fulls = [];
 
-ёforeach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
+foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
 $prop["VALUE"] = reset($prop["VALUE"]);
     if ($prop["CODE"] === "LOCATION") {
         $prop["VALUE"] = \CSaleLocation::getLocationIDbyCODE($prop["VALUE"]);
