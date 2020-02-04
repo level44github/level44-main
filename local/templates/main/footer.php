@@ -28,7 +28,9 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
                         false
                     ); ?>
                 </div>
-                <div><?= Loc::getMessage("CREATE_IN") ?><a class="footer__link" href="#">Genue</a>
+                <div><?= Loc::getMessage("CREATE_IN") ?><a class="footer__link"
+                                           href="https://genue.ru"
+                                           target="_blank">Genue</a>
                 </div>
             </div>
             <div class="col-6 col-lg-3 order-2">
