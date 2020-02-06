@@ -176,6 +176,7 @@ $APPLICATION->SetTitle("Каталог");
             "SIZE_REF",
             "COLOR_REF",
             "NAME_EN",
+            "OTHER_COLOR",
         ],
         "LIST_PROPERTY_CODE" => [
             "NAME_EN",

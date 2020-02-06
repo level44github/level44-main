@@ -2,9 +2,6 @@
 
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Sale\PriceMaths;
-use Bitrix\Highloadblock as HL;
-
-\Bitrix\Main\Loader::includeModule("highloadblock");
 
 
 /**
@@ -24,39 +21,27 @@ $result['BASKET_ITEM_RENDER_DATA'] = array();
 
 $totalQuantity = 0;
 
-$colorsRef = [];
-
-$hlblock = HL\HighloadBlockTable::getList([
-    'filter' => [
-        '=TABLE_NAME' => "eshop_color_reference"
-    ]
-])->fetch();
-
-if ($hlblock) {
-    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-    $entityClass = $entity->getDataClass();
-
-    $res = $entityClass::getList(
-        [
-            "select" => [
-                "ID",
-                "UF_NAME_EN",
-            ]
-        ]
-    );
-
-    while ($color = $res->fetch()) {
-        $colorsRef[$color["ID"]] = $color;
-    }
-}
-
-unset($item);
 
 $basketProductIds = [];
 
 foreach ($this->basketItems as $item) {
     $basketProductIds[] = (int)$item["PRODUCT_ID"];
 }
+
+$productList = \CCatalogSKU::getProductList($basketProductIds);
+
+$productIds = [];
+foreach ($productList as $offerId => $product) {
+    $productIds[$offerId] = $product["ID"];
+}
+
+$products = array_map(function ($productId) {
+    return [
+        "ID" => $productId
+    ];
+}, $productIds);
+
+\Level44\Base::setColorOffers($products);
 
 $arProductsLoc = [];
 
@@ -84,6 +69,7 @@ foreach ($this->basketItems as $row)
 {
 	$rowData = array(
 		'ID' => $row['ID'],
+		'COLOR' => $products[$row['PRODUCT_ID']],
 		'PRODUCT_ID' => $row['PRODUCT_ID'],
 		'NAME' => isset($row['~NAME']) ? $row['~NAME'] : $row['NAME'],
 		'QUANTITY' => $row['QUANTITY'],
@@ -255,20 +241,20 @@ foreach ($this->basketItems as $row)
                 return $item["SELECTED"] === true;
             }));
 
-        if ($prop["CODE"] === "COLOR_REF") {
-            $propValue["NAME"] = \Level44\Base::getMultiLang(
-                $propValue["NAME"],
-                $colorsRef[$propValue["ID"]]["UF_NAME_EN"]
-            );
-        }
-
         $propValue["PROP_NAME"] = $prop["NAME"];
-        if (in_array($prop["CODE"], ["COLOR_REF", "SIZE_REF"])) {
+        if (in_array($prop["CODE"], ["SIZE_REF"])) {
             $rowData["SELECT_PROP"][$prop["CODE"]] = [
                 "NAME" => $propValue["PROP_NAME"],
                 "VALUE" => $propValue["NAME"],
             ];
         }
+    }
+
+    if (!empty($rowData["COLOR"])) {
+        $rowData["SELECT_PROP"]["COLOR_REF"] = [
+            "NAME" => "",
+            "VALUE" => $rowData["COLOR"]["COLOR_NAME"]
+        ];
     }
 
 	if ($row['NOT_AVAILABLE'] && false)

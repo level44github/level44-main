@@ -250,7 +250,8 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                 <div class="modal-header">
                                                     <h5 class="modal-title"><?= Loc::getMessage("SIZE_TABLE") ?></h5>
                                                     <button class="close" type="button" data-dismiss="modal"
-                                                            aria-label="<?= Loc::getMessage("CLOSE_MODAL") ?>"><svg class="icon icon-close ">
+                                                            aria-label="<?= Loc::getMessage("CLOSE_MODAL") ?>">
+                                                        <svg class="icon icon-close ">
                                                             <use xlink:href="#close"></use>
                                                         </svg>
                                                     </button>
@@ -351,37 +352,43 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                     </div>
                                 </div>
                             <? endif; ?>
-                            <?
-                            if ($skuProperty['CODE'] === "COLOR_REF"): ?>
-                                <div class="color" data-entity="sku-line-block">
-                                    <div class="color__title" style="display: none">
-                                        <?= Loc::getMessage("CURRENT_COLOR") ?>:
+                        <? endforeach; ?>
+
+                        <? if (!empty($arResult["COLORS"])): ?>
+                            <div class="color" data-entity="sku-line-block">
+                                <? if (!empty($arResult["COLOR_NAME"])): ?>
+                                    <div class="color__title">
+                                        <?= Loc::getMessage("CURRENT_COLOR") ?>: <?= $arResult["COLOR_NAME"] ?>
                                         <span class="js-color__text"></span>
                                     </div>
-                                    <div class="color__group btn-group-toggle" data-toggle="buttons">
-                                        <? foreach ($skuProperty['VALUES'] as $value): ?>
-                                            <label class="btn color__btn js-color__btn"
-                                                   title="<?= $value['NAME'] ?>"
-                                                   data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
-                                                   data-onevalue="<?= $value['ID'] ?>"
-                                                   data-property-code="<?= $skuProperty['CODE'] ?>"
+                                <? endif; ?>
+                                <div class="color__group btn-group-toggle">
+                                    <? foreach ($arResult["COLORS"] as $item): ?>
+                                        <? if ($item["ACTIVE"]): ?>
+                                            <label class="btn color__btn js-color__btn active"
+                                                   title="<?= $item["COLOR_NAME"] ?>"
                                                    style="box-shadow: none"
                                             >
-
-                                                <input id="color<?= $skuProperty['ID'] ?><?= $value['ID'] ?>"
-                                                       type="radio"
-                                                       name="color"
-                                                       autocomplete="off"
-                                                >
-                                                <span class="color__value"
-                                                      style="background-image: url('<?= $value['PICT']['SRC'] ?>');"
-                                                ></span>
+                                            <span class="color__value"
+                                                  style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');"
+                                            ></span>
                                             </label>
-                                        <? endforeach; ?>
-                                    </div>
+                                        <? else: ?>
+                                            <label class="btn color__btn js-color__btn"
+                                                   title="<?= $item["COLOR_NAME"] ?>"
+                                                   style="box-shadow: none"
+                                            >
+                                                <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
+                                        <span class="color__value"
+                                              style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');"
+                                        ></span>
+                                                </a>
+                                            </label>
+                                        <? endif; ?>
+                                    <? endforeach; ?>
                                 </div>
-                            <? endif; ?>
-                        <? endforeach; ?>
+                            </div>
+                        <? endif; ?>
                     </div>
                 <? endif; ?>
                 <div id="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
@@ -397,7 +404,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 </div>
                 <button class="btn btn-dark btn-block mb-3"
                         type="button"
-                        id="<?=$itemIds['NOT_AVAILABLE_MESS']?>"
+                        id="<?= $itemIds['NOT_AVAILABLE_MESS'] ?>"
                         onclick="return false;"
                         style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
                         disabled
@@ -425,21 +432,21 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 ?>
                 <?
                 if (!empty($arResult["DETAIL_TEXT"]) || !empty($arResult["PRODUCT_PROPERTIES"])): ?>
-	                <div class="product__desc">
-		                <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
-			                <?= $arResult['DETAIL_TEXT'] ?>
-		                <? else: ?>
-			                <p><?= $arResult['DETAIL_TEXT'] ?></p>
-		                <? endif; ?>
+                    <div class="product__desc">
+                        <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
+                            <?= $arResult['DETAIL_TEXT'] ?>
+                        <? else: ?>
+                            <p><?= $arResult['DETAIL_TEXT'] ?></p>
+                        <? endif; ?>
 
-		                <? if (!empty($arResult["PRODUCT_PROPERTIES"])): ?>
-			                <ul class="list__disc">
-				                <? foreach ($arResult["PRODUCT_PROPERTIES"] as $property): ?>
-					                <li><?= $property["NAME"] ?>: <?= $property["DISPLAY_VALUE"] ?></li>
-				                <? endforeach; ?>
-			                </ul>
-		                <? endif; ?>
-	                </div>
+                        <? if (!empty($arResult["PRODUCT_PROPERTIES"])): ?>
+                            <ul class="list__disc">
+                                <? foreach ($arResult["PRODUCT_PROPERTIES"] as $property): ?>
+                                    <li><?= $property["NAME"] ?>: <?= $property["DISPLAY_VALUE"] ?></li>
+                                <? endforeach; ?>
+                            </ul>
+                        <? endif; ?>
+                    </div>
                 <? endif; ?>
                 <div class="product__question">
                     <div class="product__question-title mb-2"><?= Loc::getMessage("EXIST_QUESTIONS") ?></div>

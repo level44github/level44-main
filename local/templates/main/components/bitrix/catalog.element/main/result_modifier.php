@@ -7,7 +7,6 @@
  * @var CatalogElementComponent $component
  */
 
-use Bitrix\Highloadblock as HL;
 
 \Bitrix\Main\Loader::includeModule("highloadblock");
 
@@ -46,44 +45,11 @@ foreach ($arResult["PROPERTIES"] as $pid => $arProperty) {
 
 $arResult["PRODUCT_PROPERTIES"] = $productProperties;
 
-$colorsRef = [];
-$colorRefTableName = $arResult['SKU_PROPS']["COLOR_REF"]["USER_TYPE_SETTINGS"]["TABLE_NAME"];
-if (!empty($colorRefTableName)) {
 
-    $hlblock = HL\HighloadBlockTable::getList([
-        'filter' => [
-            '=TABLE_NAME' => $colorRefTableName
-        ]
-    ])->fetch();
+$linkedElements = $arResult["DISPLAY_PROPERTIES"]["OTHER_COLORS"]["LINK_ELEMENT_VALUE"];
 
-    if ($hlblock) {
-        $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-        $entityClass = $entity->getDataClass();
+\Level44\Base::setColorOffers($linkedElements, $arResult);
 
-        $res = $entityClass::getList(
-            [
-                "select" => [
-                    "ID",
-                    "UF_NAME_EN",
-                ]
-            ]
-        );
+$arResult["COLORS"] = $linkedElements;
 
-        while ($color = $res->fetch()) {
-            $colorsRef[$color["ID"]] = $color;
-        }
-
-    }
-}
-
-foreach ($arResult['SKU_PROPS']["COLOR_REF"]["VALUES"] as &$colorValue) {
-
-    $colorValue["NAME"] = \Level44\Base::getMultiLang(
-        $colorValue["NAME"],
-        $colorsRef[$colorValue["ID"]]["UF_NAME_EN"]
-    );
-}
-
-unset($colorValue);
-
-    $APPLICATION->SetTitle($arResult["NAME"]);
+$APPLICATION->SetTitle($arResult["NAME"]);
