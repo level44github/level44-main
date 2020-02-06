@@ -3,21 +3,18 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-\Bitrix\Main\Loader::includeModule("highloadblock");
-
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Highloadblock as HL;
 
 $columns = [];
 $fulls = [];
 
 foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
-$prop["VALUE"] = reset($prop["VALUE"]);
+    $prop["VALUE"] = reset($prop["VALUE"]);
     if ($prop["CODE"] === "LOCATION") {
         $prop["VALUE"] = \CSaleLocation::getLocationIDbyCODE($prop["VALUE"]);
     }
 
-    $prop["FIELD_NAME"] = "ORDER_PROP_".$prop["ID"];
+    $prop["FIELD_NAME"] = "ORDER_PROP_" . $prop["ID"];
 
     if (empty($prop["DESCRIPTION"])) {
         $prop["DESCRIPTION"] = Loc::getMessage("INPUT") . strtolower($prop["NAME"]);
@@ -54,34 +51,6 @@ unset($prop);
 
 $basketItemsQuantity = 0;
 
-$colorsRef = [];
-
-$hlblock = HL\HighloadBlockTable::getList([
-    'filter' => [
-        '=TABLE_NAME' => "eshop_color_reference"
-    ]
-])->fetch();
-
-if ($hlblock) {
-    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-    $entityClass = $entity->getDataClass();
-
-    $res = $entityClass::getList(
-        [
-            "select" => [
-                "ID",
-                "UF_XML_ID",
-                "UF_NAME_EN",
-            ]
-        ]
-    );
-
-    while ($color = $res->fetch()) {
-        $colorsRef[$color["UF_XML_ID"]] = $color;
-    }
-}
-
-
 foreach ($arResult["BASKET_ITEMS"] as $item) {
     $basketProductIds[] = (int)$item["PRODUCT_ID"];
 }
@@ -113,7 +82,23 @@ if (!empty($basketProductIds)) {
 
 }
 
+$productList = \CCatalogSKU::getProductList($basketProductIds);
+
+$productIds = [];
+foreach ($productList as $offerId => $product) {
+    $productIds[$offerId] = $product["ID"];
+}
+
+$products = array_map(function ($productId) {
+    return [
+        "ID" => $productId
+    ];
+}, $productIds);
+
+\Level44\Base::setColorOffers($products);
+
 foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
+    $basketItem["COLOR"] = $products[$basketItem["PRODUCT_ID"]];
     $basketItemsQuantity += $basketItem["QUANTITY"];
     if (!empty($basketItem["PREVIEW_PICTURE_SRC"])) {
         $basketItem["PICTURE"] = $basketItem["PREVIEW_PICTURE_SRC"];
@@ -128,14 +113,13 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $arProductsAdd[$basketItem["PRODUCT_ID"]]["NAME_EN"]
     );
 
-    foreach ($basketItem["PROPS"] as &$prop) {
-        if ($prop["CODE"] === "COLOR_REF") {
-            $prop["VALUE"] = \Level44\Base::getMultiLang(
-                $prop["VALUE"],
-                $colorsRef[$arProductsAdd[$basketItem["PRODUCT_ID"]]["COLOR_XML_ID"]]["UF_NAME_EN"]
-            );
-        }
+    if (!empty($basketItem["COLOR"])) {
+        $basketItem["PROPS"]["COLOR_REF"] = [
+            "CODE" => "COLOR_REF",
+            "VALUE" => $basketItem["COLOR"]["COLOR_NAME"],
+        ];
     }
+
     unset($prop);
 }
 unset($basketItem);
