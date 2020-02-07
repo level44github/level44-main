@@ -431,7 +431,7 @@ BX.saleOrderAjax = {
             return;
         }
 
-        ShowWaitWindow();
+        window.spinnerCity(true);
 
         var ctx = this;
 
@@ -449,7 +449,7 @@ BX.saleOrderAjax = {
 
                 //try{
 
-                CloseWaitWindow();
+                window.spinnerCity(false);
                 if (result.result) {
 
                     ctx.indexCache[value] = result.data.ID;
@@ -464,7 +464,7 @@ BX.saleOrderAjax = {
             },
             onfailure: function (type, e) {
 
-                CloseWaitWindow();
+                window.spinnerCity(false);
                 // on error do nothing
             }
 
@@ -491,7 +491,7 @@ BX.saleOrderAjax = {
         }
 
 
-        BX.showWait();
+        window.spinnerCity(true);
 
 
         if (this.isLocationProEnabled) {
@@ -508,7 +508,7 @@ BX.saleOrderAjax = {
             // if json came, it obviously a successfull order submit
 
             var json = JSON.parse(res);
-            BX.closeWait();
+            window.spinnerCity(false);
 
             if (json.error) {
                 this.BXFormPosting = false;
@@ -533,7 +533,7 @@ BX.saleOrderAjax = {
             }
         }
 
-        BX.closeWait();
+        window.spinnerCity(false);
         $(".checkout-loading-overlay").hide();
         BX.onCustomEvent(orderForm, 'onAjaxSuccess');
     }

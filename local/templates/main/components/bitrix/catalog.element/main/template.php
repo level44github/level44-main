@@ -393,7 +393,10 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <? endif; ?>
                 <div id="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
                      style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
-                    <button class="btn btn-dark btn-block mb-4" type="button" id="<?= $itemIds['ADD_BASKET_LINK'] ?>">
+                    <button class="btn btn-dark btn-block mb-4 js-btn__add-basket"
+                            type="button"
+                            id="<?= $itemIds['ADD_BASKET_LINK'] ?>"
+                    >
                         <svg class="icon icon-basket product__basket-icon">
                             <use xlink:href="#basket"></use>
                         </svg>

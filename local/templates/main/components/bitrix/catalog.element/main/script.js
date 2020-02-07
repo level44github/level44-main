@@ -3361,6 +3361,7 @@
 		basketResult: function(arResult)
 		{
 			BX.onCustomEvent('OnBasketChange',[{showAfterAdd: true}]);
+            $(this.obAddToBasketBtn).removeClass("btn__spinner");
 			var $textContent = $(this.obAddToBasketBtn).find(".js-text-content");
             $textContent.text($textContent.data("added-text"));
 			return; //Не выводим попап при добавлении в корзину
