@@ -1,6 +1,19 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 } ?>
+<script>
+    $(function () {
+        var $yaMoneyForm = $("form[name='yandexapi_form']");
+        if ($yaMoneyForm.length) {
+            var siteDir = '<?=SITE_DIR?>';
+            var orderId = '<?=$arResult["ORDER"]["ID"]?>';
+            var successUrl = $yaMoneyForm.find("input[name='successURL']").val();
+            successUrl = successUrl.replace("/personal/order/", siteDir + "checkout/success/?ps=ym&orderId=" + orderId);
+            $yaMoneyForm.find("input[name='successURL']").val(successUrl);
+            $yaMoneyForm.submit();
+        }
+    })
+</script>
 <?
 use Bitrix\Main\Localization\Loc;
 \Level44\Base::$typePage = "thank-order";

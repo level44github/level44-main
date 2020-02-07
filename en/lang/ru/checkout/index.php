@@ -1,0 +1,3 @@
+<?
+$MESS ['VAMPIRUS.YANDEX_ORDER_PAY_SUM'] = "";
+?>

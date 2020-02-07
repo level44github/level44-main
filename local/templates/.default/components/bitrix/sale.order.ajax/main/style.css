@@ -9,3 +9,7 @@
     opacity: .7;
     display: none;
 }
+
+form[name='yandexapi_form'] {
+    display: none;
+}
