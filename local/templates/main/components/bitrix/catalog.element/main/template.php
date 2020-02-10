@@ -185,12 +185,11 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         </div>
                     <? endforeach; ?>
                 </div>
-                <div class="gallery__main" data-entity="images-slider-block">
+                <div class="gallery__main">
                     <div class="gallery__picture js-gallery__picture">
                         <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
                             <div>
-                                <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>"
-                                     data-entity="images-container">
+                                <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>">
                             </div>
                         <? endforeach; ?>
                     </div>
