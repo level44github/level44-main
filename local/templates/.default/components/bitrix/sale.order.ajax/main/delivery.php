@@ -23,7 +23,7 @@ use Bitrix\Main\Localization\Loc;
                         <div class="option__title"><?= $delivery["NAME"] ?></div>
                         <div class="option__hint"><?= $delivery["PRICE_PERIOD_TEXT"] ?></div>
                     </a>
-                    <label for="delivery<?= $key ?>input" id="delivery<?= $key ?>label"></label>
+                    <label style="display: none;" for="delivery<?= $key ?>input" id="delivery<?= $key ?>label"></label>
                     <input id="delivery<?= $key ?>input"
                            name="<?= htmlspecialcharsbx($delivery["FIELD_NAME"]) ?>"
                            class="js-delivery-input"
