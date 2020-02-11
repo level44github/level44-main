@@ -464,6 +464,33 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <? endforeach; ?>
                             </ul>
                         <? endif; ?>
+
+                        <? if (!empty($arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"])): ?>
+                            <!-- Button modal-->
+                            <button class="btn measurement__btn" type="button" data-toggle="modal"
+                                    data-target="#measurement__modal"><?= Loc::getMessage("MEASUREMENTS") ?></button>
+                            <!-- Modal-->
+                            <div class="modal fade" id="measurement__modal" tabindex="-1" role="dialog"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered measurement__modal-dialog"
+                                     role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"><?= Loc::getMessage("MEASUREMENTS") ?></h5>
+                                            <button class="close" type="button" data-dismiss="modal"
+                                                    aria-label="Закрыть">
+                                                <svg class="icon icon-close ">
+                                                    <use xlink:href="#close"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body measurement__modal-body">
+                                            <?= $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"] ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <? endif; ?>
                     </div>
                 <? endif; ?>
                 <div class="product__question">

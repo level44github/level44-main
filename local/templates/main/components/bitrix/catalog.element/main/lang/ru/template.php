@@ -49,5 +49,6 @@ $MESS["NOT_AVAILABLE"] = "Нет в наличии";
 $MESS["CURRENT_COLOR"] = "Цвет";
 $MESS["EXIST_QUESTIONS"] = "Есть вопросы?";
 $MESS["SUBSCRIBE"] = "Подписаться";
+$MESS["MEASUREMENTS"] = "Обмеры";
 
 ?>
