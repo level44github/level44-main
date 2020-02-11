@@ -60,7 +60,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 	                    ); ?>
 	                    <li class="nav-item m-search js-m-search">
 		                    <div class="m-search__container">
-			                    <form action="<?= SITE_DIR ?>search">
+			                    <form action="<?= SITE_DIR ?>search" class="js-search__line">
 				                    <div class="input-group m-search__group">
 					                    <input class="form-control m-search__control js-m-search__control"
 					                           type="text"
