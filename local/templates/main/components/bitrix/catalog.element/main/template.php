@@ -188,10 +188,26 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <div class="gallery__main">
                     <div class="gallery__picture js-gallery__picture">
                         <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
-                            <div>
-                                <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>">
-                            </div>
+                            <a class="gallery__full" href="#" data-toggle="modal"
+                               data-target="#gallery__popup">
+                                <img class="img-fluid js-gallery__popup-img" alt="" data-lazy="<?= $photo["SRC"] ?>">
+                            </a>
                         <? endforeach; ?>
+                    </div>
+                </div>
+                <div class="modal fade" id="gallery__popup" tabindex="-1" role="dialog" aria-labelledby="gallery__popup" aria-hidden="true">
+                    <button class="close gallery__popup-close" type="button" data-dismiss="modal" aria-label="Закрыть">
+                        <svg class="icon icon-close ">
+                            <use xlink:href="#close"></use>
+                        </svg>
+                    </button>
+                    <div class="modal-dialog gallery__popup-dialog" role="document">
+                        <div class="modal-content gallery__popup-content">
+                            <div class="modal-body gallery__popup-body">
+                                <div class="gallery__popup-list mb-0"></div>
+                                <div class="gallery__popup-thumbs"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -224,7 +240,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <div class="dimension" data-entity="sku-line-block">
                                     <div class="dimension__group btn-group-toggle" data-toggle="buttons">
                                         <? foreach ($skuProperty['VALUES'] as $value): ?>
-                                            <label class="btn dimension__btn"
+                                            <label class="btn dimension__btn dimension__btn_auto-width"
                                                    data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
                                                    data-onevalue="<?= $value['ID'] ?>"
                                                    style="box-shadow: none"
@@ -447,6 +463,33 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                     <li><?= $property["NAME"] ?>: <?= $property["DISPLAY_VALUE"] ?></li>
                                 <? endforeach; ?>
                             </ul>
+                        <? endif; ?>
+
+                        <? if (!empty($arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"])): ?>
+                            <!-- Button modal-->
+                            <button class="btn measurement__btn" type="button" data-toggle="modal"
+                                    data-target="#measurement__modal"><?= Loc::getMessage("MEASUREMENTS") ?></button>
+                            <!-- Modal-->
+                            <div class="modal fade" id="measurement__modal" tabindex="-1" role="dialog"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered measurement__modal-dialog"
+                                     role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"><?= Loc::getMessage("MEASUREMENTS") ?></h5>
+                                            <button class="close" type="button" data-dismiss="modal"
+                                                    aria-label="Закрыть">
+                                                <svg class="icon icon-close ">
+                                                    <use xlink:href="#close"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body measurement__modal-body">
+                                            <?= $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"] ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <? endif; ?>
                     </div>
                 <? endif; ?>

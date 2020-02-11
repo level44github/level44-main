@@ -48,4 +48,5 @@ $MESS["ADD_TO_BASKET"] = "Add to Basket";
 $MESS["NOT_AVAILABLE"] = "Not available";
 $MESS["CURRENT_COLOR"] = "Color";
 $MESS["EXIST_QUESTIONS"] = "Have questions?";
+$MESS["MEASUREMENTS"] = "Measurements";
 ?>
