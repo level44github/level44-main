@@ -52,4 +52,10 @@ $linkedElements = $arResult["DISPLAY_PROPERTIES"]["OTHER_COLORS"]["LINK_ELEMENT_
 
 $arResult["COLORS"] = $linkedElements;
 
+$arResult["MEASUREMENTS"] = \Level44\Base::getMultiLang(
+    $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"],
+    $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS_EN"]["DISPLAY_VALUE"]
+);
+
+
 $APPLICATION->SetTitle($arResult["NAME"]);
