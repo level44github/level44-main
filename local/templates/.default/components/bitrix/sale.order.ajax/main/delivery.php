@@ -36,10 +36,12 @@ use Bitrix\Main\Localization\Loc;
                     <div class="collapse <?= $delivery["CHECKED"] ? "show" : "" ?>" id="delivery<?= $key ?>"
                          data-parent="#delivery">
                         <div class="option__body">
-                            <? if (!empty($arResult["ORDER_PROP_ADDRESS"]) && $arResult["ORDER_PROP_ADDRESS"]["TYPE"] === "STRING"): ?>
+                            <? if (!empty($arResult["ORDER_PROP_ADDRESS"]) && $arResult["ORDER_PROP_ADDRESS"]["TYPE"] === "STRING"):
+                                $required = $arResult["ORDER_PROP_ADDRESS"]["REQUIRED"];
+                                ?>
                                     <div class="form-group">
                                     <label for="form-delivery<?= $key ?>-address"><?= $arResult["ORDER_PROP_ADDRESS"]["NAME"] ?></label>
-                                        <input class="form-control js-form__control"
+                                        <input class="form-control js-form__control <?= $required ? "is-required" : "" ?>"
                                                type="text"
                                                id="form-delivery<?= $key ?>-address"
                                                maxlength="250"
@@ -50,6 +52,11 @@ use Bitrix\Main\Localization\Loc;
                                                data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
                                                placeholder="<?= $arResult["ORDER_PROP_ADDRESS"]["DESCRIPTION"] ?>"
                                         >
+                                        <div class="invalid-feedback">
+                                            <?= Loc::getMessage($arResult["ORDER_PROP_ADDRESS"]["ERROR_MES_TYPE"], [
+                                                "#FIELD#" => $arResult["ORDER_PROP_ADDRESS"]["NAME"]
+                                            ]) ?>
+                                        </div>
                                     </div>
                             <? endif; ?>
                         </div>

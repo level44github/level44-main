@@ -61,7 +61,7 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
 							itemData.PATH = path;
 						}else
 							itemData.PATH = '';
-	
+
 						var query = '';
 
 						if(this.vars && this.vars.lastQuery && this.vars.lastQuery.QUERY)
@@ -90,10 +90,20 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
 				code: 'sls'
 			}
 		});
-		
-		this.handleInitStack(nf, BX.Sale.component.location.selector.search, opts);
-        $(".bx-ui-sls-input-block.form-control input.bx-ui-sls-fake").show();
-	}
+
+        this.handleInitStack(nf, BX.Sale.component.location.selector.search, opts);
+        var $fakeLocationField = $(".bx-ui-sls-input-block.form-control input.bx-ui-sls-fake");
+
+        $fakeLocationField.addClass("js-form__location");
+
+        if (opts.required) {
+            $fakeLocationField.addClass("is-required")
+        }
+
+        $fakeLocationField.show();
+
+        $(document).trigger("set_validators");
+	};
 	BX.extend(BX.Sale.component.location.selector.search, BX.ui.autoComplete);
 	BX.merge(BX.Sale.component.location.selector.search.prototype, {
 

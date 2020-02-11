@@ -80,4 +80,5 @@ $MESS["OFERTA"] = "public offer";
 $MESS["TO_CHECKOUT"] = "Proceed to Checkout";
 $MESS["OFERTA_MESS2"] = "By clicking the \"Checkout\" button, you agree to";
 $MESS["OFERTA2"] = "public offer";
+$MESS["CHECKOUT_TITLE"] = "Checkout";
 ?>

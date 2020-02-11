@@ -9,6 +9,8 @@ $columns = [];
 $fulls = [];
 
 foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
+    $prop["REQUIRED"] = $prop["REQUIRED"] === "Y";
+
     $prop["VALUE"] = reset($prop["VALUE"]);
     if ($prop["CODE"] === "LOCATION") {
         $prop["VALUE"] = \CSaleLocation::getLocationIDbyCODE($prop["VALUE"]);
@@ -24,10 +26,15 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
 
     if ($prop["CODE"] === "EMAIL") {
         $prop["VALIDATION_CLASS"] = "js-form__email";
+        $prop["ERROR_MES_TYPE"] = "EMAIL_ERROR_MES";
     }
 
     if ($prop["CODE"] === "PHONE") {
         $prop["VALIDATION_CLASS"] = "js-form__phone";
+    }
+
+    if (empty($prop["ERROR_MES_TYPE"])) {
+        $prop["ERROR_MES_TYPE"] = "REQUIRED_ERROR_MES";
     }
 
     if ($prop["CODE"] === "ADDRESS") {

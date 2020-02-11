@@ -106,6 +106,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
     }?>
     <div class="col-lg-8 js-form_block">
         <div class="checkout-loading-overlay"></div>
+        <h1 class="page__title"><?= Loc::getMessage("CHECKOUT_TITLE") ?></h1>
         <?
 
         if($_REQUEST['PERMANENT_MODE_STEPS'] == 1)
