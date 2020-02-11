@@ -111,12 +111,17 @@ if (!function_exists("PrintPropsForm")) {
                 <input type="text"
                        maxlength="250"
                        size="<?= $arProperty["SIZE1"] ?>"
-                       class="form-control js-form__control <?=$arProperty["VALIDATION_CLASS"]?>"
+                       class="form-control js-form__control <?= $arProperty["VALIDATION_CLASS"] ?>
+                       <?= $arProperty["REQUIRED"] ? "is-required" : "" ?>"
                        id="form-email <?= $arProperty["FIELD_NAME"] ?>"
                        name="<?= $arProperty["FIELD_NAME"] ?>"
                        value="<?= $arProperty["VALUE"] ?>"
                        placeholder="<?= $arProperty["DESCRIPTION"] ?>">
-                <div class="invalid-feedback"><?= Loc::getMessage("INCORRECT") ?></div>
+                <div class="invalid-feedback">
+                    <?= Loc::getMessage($arProperty["ERROR_MES_TYPE"], [
+                        "#FIELD#" => $arProperty["NAME"]
+                    ]) ?>
+                </div>
             </div>
         <? elseif ($arProperty["TYPE"] == "SELECT" && false): ?>
             <br/>
@@ -264,7 +269,11 @@ if (!function_exists("PrintPropsForm")) {
                         "JS_CONTROL_GLOBAL_ID" => intval($arProperty["ID"]),
 
                         "DISABLE_KEYBOARD_INPUT" => 'Y',
-                        "PLACEHOLDER_TEXT" => $arProperty["DESCRIPTION"]
+                        "PLACEHOLDER_TEXT" => $arProperty["DESCRIPTION"],
+                        "REQUIRED" => $arProperty["REQUIRED"],
+                        "LOCATION_ERROR_MES" => Loc::getMessage($arProperty["ERROR_MES_TYPE"], [
+                            "#FIELD#" => $arProperty["NAME"]
+                        ])
                     ),
                     $locationTemplate,
                     true,

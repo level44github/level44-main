@@ -49,7 +49,7 @@ if ($arParams["UI_FILTER"])
                    name="<?=$arParams['INPUT_NAME']?>"
                    value="<?=$arResult['VALUE']?>"
                    style="display: none"
-                   class="dropdown-field"
+                   class="dropdown-field js-form__location__value"
                    data-prop="LOCATION"
                    placeholder="<?= $arParams["PLACEHOLDER_TEXT"] ?>"
             />
@@ -77,19 +77,9 @@ if ($arParams["UI_FILTER"])
 			</div>
 		</script>
 
-		<div class="bx-ui-sls-error-message">
-			<?if(!$arParams['SUPPRESS_ERRORS']):?>
-				<?if(!empty($arResult['ERRORS']['NONFATAL'])):?>
+        <div class="invalid-feedback"><?= $arParams['LOCATION_ERROR_MES'] ?></div>
 
-					<?foreach($arResult['ERRORS']['NONFATAL'] as $error):?>
-						<?ShowError($error)?>
-					<?endforeach?>
-
-				<?endif?>
-			<?endif?>
-		</div>
-
-	</div>
+    </div>
 
 	<script>
 
@@ -103,13 +93,14 @@ if ($arParams["UI_FILTER"])
 
 			<?if(strlen($arParams['JS_CONTROL_GLOBAL_ID'])):?>
 				if(typeof window.BX.locationSelectors == 'undefined') window.BX.locationSelectors = {};
-				window.BX.locationSelectors['<?=$arParams['JS_CONTROL_GLOBAL_ID']?>'] = 
+				window.BX.locationSelectors['<?=$arParams['JS_CONTROL_GLOBAL_ID']?>'] =
 			<?endif?>
 
 			new BX.Sale.component.location.selector.search(<?=CUtil::PhpToJSObject(array(
 
 				// common
 				'scope' => 'sls-'.$arResult['RANDOM_TAG'],
+				'required' => $arParams['REQUIRED'],
 				'source' => $this->__component->getPath().'/get.php',
 				'query' => array(
 					'FILTER' => array(

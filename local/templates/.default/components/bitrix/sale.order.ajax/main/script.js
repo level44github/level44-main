@@ -482,6 +482,21 @@ BX.saleOrderAjax = {
         if (val !== 'Y') {
             BX('confirmorder').value = 'N';
         } else {
+            $(".js-form__location.is-required").blur();
+            $(".js-form__email").blur();
+            $(".js-form__phone").blur();
+            $(".js-form__control.is-required:input:visible")
+                .not(".js-form__phone")
+                .not(".js-form__email")
+                .not(".js-form__location")
+                .blur();
+
+            if ($(".is-invalid").length){
+                this.BXFormPosting = false;
+                $(".checkout-loading-overlay").hide();
+                return;
+            }
+
             var currentDeliveryId = $(orderForm).find(".js-delivery-input:checked").val();
             var addressField = $(orderForm)
                 .find("[name='" + this.propAddressFieldName + "-fake'][data-delivery='" + currentDeliveryId + "']");
