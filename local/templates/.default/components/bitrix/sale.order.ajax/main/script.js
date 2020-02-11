@@ -535,6 +535,7 @@ BX.saleOrderAjax = {
 
         window.spinnerCity(false);
         $(".checkout-loading-overlay").hide();
+        $(document).trigger("set_validators");
         BX.onCustomEvent(orderForm, 'onAjaxSuccess');
     }
 }

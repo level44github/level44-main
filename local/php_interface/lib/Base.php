@@ -39,6 +39,7 @@ class Base
     {
         $asset = Asset::getInstance();
         $asset->addJs(self::getAssetsPath() . "/js/jquery.min.js");
+        $asset->addJs(self::getAssetsPath() . "/js/main.js");
         $asset->addJs(self::getAssetsPath() . "/js/app.js");
         if (SITE_TEMPLATE_ID === "checkout") {
             $asset->addJs(self::getAssetsPath() . "/js/form.js");
