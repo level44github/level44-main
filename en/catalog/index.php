@@ -183,6 +183,8 @@ $APPLICATION->SetTitle("Catalog");
         "DETAIL_PROPERTY_CODE" => [
             "NAME_EN",
             "DETAIL_TEXT_EN",
+            "MEASUREMENTS_EN",
+            "MEASUREMENTS",
         ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(
