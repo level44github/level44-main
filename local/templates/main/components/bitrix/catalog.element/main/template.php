@@ -485,7 +485,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                             </button>
                                         </div>
                                         <div class="modal-body measurement__modal-body">
-                                            <?=  ?>
+                                            <?= $arResult["MEASUREMENTS"] ?>
                                         </div>
                                     </div>
                                 </div>
