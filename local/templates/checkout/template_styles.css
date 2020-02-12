@@ -1,0 +1,9 @@
+.header {
+    border-bottom: none;
+}
+
+@media only screen and (max-width: 320px) {
+    .header__basket-text {
+        display: none;
+    }
+}

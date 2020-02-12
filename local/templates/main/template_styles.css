@@ -1,0 +1,14 @@
+.menu__basket-count {
+    width: 14px;
+    height: 14px;
+    padding-bottom: 1px;
+    padding-left: 1px;
+}
+
+.header {
+    border-bottom: none;
+}
+
+.product__title {
+    font-weight: 600;
+}
