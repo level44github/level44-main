@@ -16,7 +16,7 @@
             <use xlink:href="#basket"></use>
         </svg>
         <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
-            <div class="menu__basket-count"><?= $arResult['NUM_PRODUCTS'] ?></div>
+            <div class="menu__basket-count menu__basket-count-new"><?= $arResult['NUM_PRODUCTS'] ?></div>
         <? endif; ?>
     </div>
 </a>
