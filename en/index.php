@@ -10,7 +10,7 @@ $arrFilter = [
 
 $APPLICATION->IncludeComponent(
 	"bitrix:catalog.section",
-	"products_on_main",
+    "main",
 	Array(
 		"ACTION_VARIABLE" => "action",
 		"ADD_PICT_PROP" => "MORE_PHOTO",
@@ -40,9 +40,9 @@ $APPLICATION->IncludeComponent(
 		"DISCOUNT_PERCENT_POSITION" => "bottom-right",
 		"DISPLAY_BOTTOM_PAGER" => "Y",
 		"DISPLAY_TOP_PAGER" => "N",
-		"ELEMENT_SORT_FIELD" => "active_from",
+        "ELEMENT_SORT_FIELD" => "sort",
 		"ELEMENT_SORT_FIELD2" => "sort",
-		"ELEMENT_SORT_ORDER" => "desc",
+        "ELEMENT_SORT_ORDER" => "asc",
 		"ELEMENT_SORT_ORDER2" => "asc",
 		"ENLARGE_PRODUCT" => "PROP",
 		"ENLARGE_PROP" => "NEWPRODUCT",
@@ -56,8 +56,8 @@ $APPLICATION->IncludeComponent(
 		"LABEL_PROP_MOBILE" => array(),
 		"LABEL_PROP_POSITION" => "top-left",
 		"LAZY_LOAD" => "Y",
-		"LINE_ELEMENT_COUNT" => "3",
-		"LOAD_ON_SCROLL" => "N",
+        "LINE_ELEMENT_COUNT" => "4",
+        "LOAD_ON_SCROLL" => "Y",
 		"MESSAGE_404" => "",
 		"MESS_BTN_ADD_TO_BASKET" => "В корзину",
 		"MESS_BTN_BUY" => "Купить",
@@ -84,7 +84,7 @@ $APPLICATION->IncludeComponent(
 		"PAGER_SHOW_ALWAYS" => "N",
 		"PAGER_TEMPLATE" => ".default",
 		"PAGER_TITLE" => "Товары",
-		"PAGE_ELEMENT_COUNT" => "1000",
+        "PAGE_ELEMENT_COUNT" => "12",
 		"PARTIAL_PRODUCT_PROPERTIES" => "N",
 		"PRICE_CODE" => array("BASE"),
 		"PRICE_VAT_INCLUDE" => "Y",
@@ -129,7 +129,6 @@ $APPLICATION->IncludeComponent(
 		"USE_PRODUCT_QUANTITY" => "N"
 	)
 );?>
-
 <?
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php');
 ?>
