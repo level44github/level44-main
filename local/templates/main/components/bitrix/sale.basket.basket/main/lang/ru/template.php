@@ -41,4 +41,5 @@ $MESS["SBB_EMPTY_BASKET_HINT"] = "#A1#Нажмите здесь#A2#, чтобы 
 $MESS["SBB_GIFTS_BLOCK_TITLE"] = "Выберите один из подарков";
 $MESS["BASKET"] = "Корзина";
 $MESS["TOTAL"] = "Итого";
+$MESS["PCS"] = "шт";
 ?>

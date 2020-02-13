@@ -432,14 +432,14 @@
 		showItemsCount: function()
 		{
 			var itemCountNode = this.getEntity(
-				this.getCacheNode(this.ids.itemListWrapper),
+				this.getCacheNode(this.ids.basketRoot),
 				'basket-items-count',
 				'[data-filter="all"]'
 			);
 
 			if (BX.type.isDomNode(itemCountNode))
 			{
-				itemCountNode.innerHTML = BX.message('SBB_IN_BASKET') + ' ' + this.result.BASKET_ITEMS_COUNT + ' ' + this.getGoodsMessage(this.result.BASKET_ITEMS_COUNT);
+				itemCountNode.innerHTML = this.result.TOTAL_RENDER_DATA.QUANTITY + ' ' + BX.message('PCS');
 				itemCountNode.style.display = '';
 			}
 		},
@@ -651,10 +651,15 @@
 						this.restoreBasketItems(result.RESTORED_BASKET_ITEMS);
 					}
 
-					if (result.DELETED_BASKET_ITEMS)
-					{
-						this.deleteBasketItems(result.DELETED_BASKET_ITEMS, this.params.SHOW_RESTORE === 'Y');
-					}
+					var oldResult = this.result;
+
+                    if (result.DELETED_BASKET_ITEMS) {
+                        oldResult.BASKET_ITEM_RENDER_DATA = oldResult.BASKET_ITEM_RENDER_DATA.filter(function (item) {
+                            return result.DELETED_BASKET_ITEMS.indexOf(Number(item.ID)) < 0;
+                        });
+
+                        this.deleteBasketItems(result.DELETED_BASKET_ITEMS, this.params.SHOW_RESTORE === 'Y');
+                    }
 
 					if (result.MERGED_BASKET_ITEMS)
 					{
@@ -663,6 +668,15 @@
 
 					this.applyBasketResult(result.BASKET_DATA);
 					this.editBasketItems(this.getItemsToEdit());
+
+                    var totalQuantity = 0;
+
+                    oldResult.BASKET_ITEM_RENDER_DATA.forEach(function (item) {
+                        totalQuantity += item.QUANTITY;
+                    });
+
+                    this.result.TOTAL_RENDER_DATA.QUANTITY = totalQuantity;
+
 					this.editTotal();
 
 					this.applyPriceAnimation();
@@ -1881,6 +1895,18 @@
                     }catch (e) {
                         $(BX(this.ids.item + itemData.ID)).find(".basket-items-list-item-overlay").remove()
                     }
+
+                    var totalQuantity = 0;
+
+                    this.result.BASKET_ITEM_RENDER_DATA.forEach(function (item) {
+                        if (Number(item.ID) === Number(itemData.ID)) {
+                            item.QUANTITY = Number(quantity);
+                        }
+
+                        totalQuantity += item.QUANTITY;
+                    });
+
+                    this.result.TOTAL_RENDER_DATA.QUANTITY = totalQuantity;
 				}
 			}
 		},
