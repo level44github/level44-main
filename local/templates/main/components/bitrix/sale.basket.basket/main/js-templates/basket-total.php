@@ -9,7 +9,9 @@ use Bitrix\Main\Localization\Loc;
  */
 ?>
 <script id="basket-total-template" type="text/html">
-    <div class="d-flex mb-3"><?= Loc::getMessage("GOODS") ?><span class="basket-aside__pieces"><?= Loc::getMessage("PCS") ?></span>
+    <div class="d-flex mb-3"><?= Loc::getMessage("GOODS") ?>
+        <span class="basket-aside__pieces"
+              data-entity="basket-items-count" data-filter="all"></span>
         <div class="ml-auto" data-entity="basket-total-price">{{{PRICE_FORMATED}}}</div>
     </div>
     <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>

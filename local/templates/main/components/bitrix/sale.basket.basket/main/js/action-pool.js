@@ -211,7 +211,8 @@
 		if (!this.isPoolEmpty())
 		{
 			this.component.sendRequest('recalculateAjax', {
-				basket: this.getPoolData()
+				basket: this.getPoolData(),
+                fullRecalculation: "Y",
 			});
 
 			this.lastActualPool = this.pool;
