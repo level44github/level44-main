@@ -185,6 +185,7 @@ $APPLICATION->SetTitle("Catalog");
             "DETAIL_TEXT_EN",
             "MEASUREMENTS_EN",
             "MEASUREMENTS",
+            "MEASUREMENTS_KIT_EN",
         ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(

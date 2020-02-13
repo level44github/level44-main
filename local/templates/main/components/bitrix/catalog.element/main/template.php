@@ -465,7 +465,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                             </ul>
                         <? endif; ?>
 
-                        <? if (!empty($arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"])): ?>
+                        <? if (!empty($arResult["MEASUREMENTS"]) || !empty($arResult["MEASUREMENTS_ROWS"])): ?>
                             <!-- Button modal-->
                             <button class="btn measurement__btn" type="button" data-toggle="modal"
                                     data-target="#measurement__modal"><?= Loc::getMessage("MEASUREMENTS") ?></button>
@@ -485,7 +485,16 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                             </button>
                                         </div>
                                         <div class="modal-body measurement__modal-body">
-                                            <?= $arResult["MEASUREMENTS"] ?>
+                                            <? if (!empty($arResult["MEASUREMENTS"])): ?>
+                                                <?= $arResult["MEASUREMENTS"] ?>
+                                            <? else: ?>
+                                                <div class="measurement__item">
+                                                    <?
+                                                    foreach ($arResult["MEASUREMENTS_ROWS"] as $row): ?>
+                                                        <div><?= $row ?></div>
+                                                    <? endforeach; ?>
+                                                </div>
+                                            <? endif; ?>
                                         </div>
                                     </div>
                                 </div>
