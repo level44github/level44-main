@@ -496,15 +496,14 @@ BX.saleOrderAjax = {
                 $(".checkout-loading-overlay").hide();
                 return;
             }
-
-            var currentDeliveryId = $(orderForm).find(".js-delivery-input:checked").val();
-            var addressField = $(orderForm)
-                .find("[name='" + this.propAddressFieldName + "-fake'][data-delivery='" + currentDeliveryId + "']");
-            if (addressField.length) {
-                $("[name='" + this.propAddressFieldName + "']").val(addressField.val())
-            }
         }
 
+        var currentDeliveryId = $(orderForm).find(".js-delivery-input:checked").val();
+        var addressField = $(orderForm)
+            .find("[name='" + this.propAddressFieldName + "-fake'][data-delivery='" + currentDeliveryId + "']");
+        if (addressField.length) {
+            $("[name='" + this.propAddressFieldName + "']").val(addressField.val())
+        }
 
         window.spinnerCity(true);
 
