@@ -12,3 +12,7 @@
 .product__title {
     font-weight: 600;
 }
+
+.catalog__item-footer {
+    height: inherit;
+}
