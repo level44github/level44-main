@@ -141,4 +141,21 @@ if ($arParams["UI_FILTER"])
 
 	</script>
 
+    <style>
+        .bx-sls .bx-ui-sls-clear {
+            background: url(<?=\Level44\Base::getAssetsPath()."/img/clear.svg"?>) center no-repeat scroll;
+        }
+
+        .bx-sls .bx-ui-sls-clear:hover {
+            background-position: center;
+        }
+
+        .bx-sls .dropdown-icon {
+            background: url(<?=\Level44\Base::getAssetsPath()."/img/lens.svg"?>) no-repeat center center;
+            padding: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+
 <?endif?>
