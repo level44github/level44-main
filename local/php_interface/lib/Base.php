@@ -14,6 +14,7 @@ class Base
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
+    const SIZE_HL_TBL_NAME = "size_reference";
 
     public static $typePage = "";
 
