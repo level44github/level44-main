@@ -2,6 +2,10 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
+use Bitrix\Highloadblock as HL;
+
+\Bitrix\Main\Loader::includeModule("highloadblock");
+
 
 $totalQuantity = 0;
 $productIds = [];
@@ -14,6 +18,37 @@ foreach ($arResult["CATEGORIES"] as $category) {
 
 
 if (!empty($productIds)) {
+
+    $sizeRefTableName = \Level44\Base::SIZE_HL_TBL_NAME;
+
+    $sizes = [];
+
+    $hlblock = HL\HighloadBlockTable::getList([
+        'filter' => [
+            '=TABLE_NAME' => $sizeRefTableName
+        ]
+    ])->fetch();
+
+    if ($hlblock) {
+        $entity = HL\HighloadBlockTable::compileEntity($hlblock);
+        $entityClass = $entity->getDataClass();
+
+        $res = $entityClass::getList(
+            [
+                "select" => [
+                    "ID",
+                    "UF_NAME",
+                    "UF_XML_ID"
+                ],
+            ]
+        );
+
+        while ($size = $res->fetch()) {
+            $sizes[$size["UF_XML_ID"]] = $size["UF_NAME"];
+        }
+    }
+
+
     $properties = [];
     $rsProperties = \CIBlockElement::GetList(
         [],
@@ -38,6 +73,10 @@ if (!empty($productIds)) {
     foreach ($arResult["CATEGORIES"] as &$category) {
         foreach ($category as &$item) {
             $item["SIZE"] = $properties[$item["PRODUCT_ID"]]["PROPERTY_SIZE_REF_VALUE"];
+            if (!empty($sizes[$item["SIZE"]])) {
+                $item["SIZE"] = $sizes[$item["SIZE"]];
+            }
+
             $item["NAME"] = \Level44\Base::getMultiLang(
                 $item["NAME"],
                 $properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"]
