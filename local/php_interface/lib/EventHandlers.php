@@ -167,18 +167,12 @@ HTML;
                 $imageSrc = $arProductsData[$productIds[$basketProductId]]["DETAIL_PICTURE"];
             }
 
-            $imageBase64 = "";
+            $imageSrc = \CFile::GetFileArray($imageSrc)["SRC"];
 
-            $image = \CFile::GetFileArray($imageSrc);
-
-            if ($image) {
-                if (!$image["CONTENT_TYPE"]) {
-                    $image["CONTENT_TYPE"] = "image/jpeg";
-                }
-
-                $image["SRC"] = $_SERVER["DOCUMENT_ROOT"] . $image["SRC"];
-                $imgBin = fread(fopen($image["SRC"], "r"), filesize($image["SRC"]));
-                $imageBase64 = 'data:' . $image["CONTENT_TYPE"] . ';base64,' . base64_encode($imgBin);
+            if ($imageSrc) {
+                $imageSrc = $hostName . $imageSrc;
+            } else {
+                $imageSrc = "";
             }
 
             $itemPrice = \CCurrencyLang::CurrencyFormat(
@@ -191,7 +185,7 @@ HTML;
 
             $arReplace = [
                 "#NAME#" => $itemName,
-                "#IMG_SRC#" => $imageBase64,
+                "#IMG_SRC#" => $imageSrc,
                 "#PRICE#" => $itemPrice,
                 "#QUANTITY#" => $basketItem->getQuantity(),
                 "#PCS#" => $basketItem->getField("MEASURE_NAME"),
@@ -201,6 +195,7 @@ HTML;
                 "#SIZE#" => $arProperties["SIZE_REF"],
                 "#PRODUCT_URL#" => $productUrl,
             ];
+
 
             $basketItemsContent .= str_replace(
                 array_keys($arReplace),
@@ -262,12 +257,6 @@ LAYOUT;
 
         $arFields["DELIVERY_ADDRESS"] = $deliveryAddress;
         $arFields["YEAR"] = date("Y");
-
-        $titleImgSrc = $_SERVER["DOCUMENT_ROOT"] . Base::getAssetsPath() . "/img/email-title.png";
-        if (file_exists($titleImgSrc)) {
-            $imgBin = fread(fopen($titleImgSrc, "r"), filesize($titleImgSrc));
-            $titleImgBase64 = 'data:image/png;base64,' . base64_encode($imgBin);
-        }
-        $arFields["EMAIL_TITLE_IMG"] = $titleImgBase64;
+        $arFields["EMAIL_TITLE_IMG"] = $hostName . Base::getAssetsPath() . "/img/email-title.png";
     }
 }
