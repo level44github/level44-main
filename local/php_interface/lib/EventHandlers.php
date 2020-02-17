@@ -197,6 +197,10 @@ HTML;
             ];
 
 
+            ob_start();
+            var_export($arReplace);
+            file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/debug.php", ob_get_clean());
+
             $basketItemsContent .= str_replace(
                 array_keys($arReplace),
                 array_values($arReplace),
