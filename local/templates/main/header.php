@@ -31,12 +31,12 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <div class="home">
         <style type="text/css">
             .home {
-                background-image: url("<?=\Level44\Base::getAssetsPath()?>/img/home-mobile.jpg");
+                background-image: url("<?=\Level44\Base::getMainBanner(true)?>");
             }
 
             @media (min-width: 768px) {
                 .home {
-                    background-image: url("<?=\Level44\Base::getAssetsPath()?>/img/home.jpg");
+                    background-image: url("<?=\Level44\Base::getMainBanner()?>");
                 }
             }
         </style>
