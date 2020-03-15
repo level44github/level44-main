@@ -12,6 +12,8 @@
             $yaMoneyForm.find("input[name='successURL']").val(successUrl);
             $yaMoneyForm.submit();
         }
+
+        $(".container.thank-order__container").find(".mb-4").find(".btn.btn-primary")[0].click();
     })
 </script>
 <?
