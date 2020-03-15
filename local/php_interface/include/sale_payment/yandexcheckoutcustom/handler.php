@@ -10,14 +10,15 @@ use Bitrix\Sale\Payment;
 use Bitrix\Sale\PaymentCollection;
 use Bitrix\Sale\PaySystem;
 use Bitrix\Sale\PriceMaths;
+use Level44\Base;
 
 Localization\Loc::loadMessages(__FILE__);
 
 /**
- * Class YandexCheckout
+ * Class YandexCheckoutCustom
  * @package Sale\Handlers\PaySystem
  */
-class YandexCheckoutHandler
+class YandexCheckoutCustomHandler
 	extends PaySystem\ServiceHandler
 	implements PaySystem\IRefund, PaySystem\IPartialHold
 {
@@ -156,8 +157,12 @@ class YandexCheckoutHandler
 		}
 		elseif ($template === 'template_embedded')
 		{
+            $returnUrl = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+            $returnUrl .= (Base::isEnLang() ? "/en" : "") . "/checkout/success/";
+            $returnUrl .= "?" . http_build_query(["ps" => "ym", "orderId" => $payment->getOrderId()]);
+
 			$params['CONFIRMATION_TOKEN'] = $additionalParams['confirmation']['confirmation_token'] ?? '';
-			$params['RETURN_URL'] = $this->getBusinessValue($payment, 'YANDEX_CHECKOUT_RETURN_URL');
+			$params['RETURN_URL'] = $returnUrl;
 		}
 
 		return $params;
@@ -369,6 +374,12 @@ class YandexCheckoutHandler
 	 */
 	protected function getYandexPaymentQueryParams(Payment $payment, Request $request)
 	{
+        $returnUrl = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+        $returnUrl .= (Base::isEnLang() ? "/en" : "") . "/checkout/success/";
+        $returnUrl .= "?" . http_build_query(["ps" => "ym", "orderId" => $payment->getOrderId()]);
+
+	    $payment->getOrderId();
+
 		$query = array(
 			'description' => $this->getPaymentDescription($payment),
 			'amount' => array(
@@ -378,7 +389,7 @@ class YandexCheckoutHandler
 			'capture' => true,
 			'confirmation' => array(
 				'type' => 'redirect',
-				'return_url' => $this->getBusinessValue($payment, 'YANDEX_CHECKOUT_RETURN_URL')
+				'return_url' => $returnUrl
 			),
 			'metadata' => array(
 				'BX_PAYMENT_NUMBER' => $payment->getId(),

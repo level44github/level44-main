@@ -13,7 +13,9 @@
             $yaMoneyForm.submit();
         }
 
-        $(".container.thank-order__container").find(".mb-4").find(".btn.btn-primary")[0].click();
+        if ($(".js-ya_cashier_link").length) {
+            $(".js-ya_cashier_link")[0].click();
+        }
     })
 </script>
 <?

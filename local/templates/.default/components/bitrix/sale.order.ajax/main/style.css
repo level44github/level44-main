@@ -14,6 +14,6 @@ form[name='yandexapi_form'] {
     display: none;
 }
 
-.container.thank-order__container .mb-4 {
+.ya_cashier {
     display: none;
 }
