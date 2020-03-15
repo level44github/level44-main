@@ -142,6 +142,18 @@ class Settings {
 
 			// TODO: check required fields
 
+            foreach ($_FILES as $fieldName => $file) {
+                if ($arFields[$fieldName . "_del"] === "Y") {
+                    $file["del"] = true;
+                }
+
+                if ((int)$arFields[$fieldName . "_old_id"] > 0) {
+                    $file["old_id"] = $arFields[$fieldName . "_old_id"];
+                }
+
+                $arFields[$fieldName] = $file;
+            }
+
 			$USER_FIELD_MANAGER->Update($entity_id, $ID, $arFields);
 			self::ClearCache();
 
