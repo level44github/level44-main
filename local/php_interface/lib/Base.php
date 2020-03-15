@@ -7,6 +7,7 @@ use Bitrix\Main\Loader;
 use Bitrix\Sale\Registry;
 use Level44\Sale\Basket;
 use Bitrix\Highloadblock as HL;
+use UniPlug\Settings;
 
 class Base
 {
@@ -85,6 +86,24 @@ class Base
             }
         } catch (\Exception $e) {
         }
+    }
+
+    public static function getMainBanner($mobile = false)
+    {
+        $imageUrl = "";
+        if (Loader::includeModule("germen.settings")) {
+            if ($mobile) {
+                $imageId = (int)Settings::get("MAIN_BANNER_MOBILE");
+            } else {
+                $imageId = (int)Settings::get("MAIN_BANNER");
+            }
+            $imageUrl = (string)\CFile::GetFileArray($imageId)["SRC"];
+        }
+
+        if (empty($imageUrl)) {
+            $imageUrl = $mobile ? self::getAssetsPath() . "/img/home-mobile.jpg" : self::getAssetsPath() . "/img/home.jpg";
+        }
+        return $imageUrl;
     }
 
     public static function setColorOffers(&$linkedElements, &$currentElement = [])
