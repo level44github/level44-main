@@ -35,6 +35,7 @@ class Base
         $asset->addString('<link rel="manifest" href="' . self::getAssetsPath() . '/img/favicons/site.webmanifest">');
         $asset->addString('<meta name="msapplication-config" href="' . self::getAssetsPath() . '/img/favicons/browserconfig.xml">');
         $asset->addCss(self::getAssetsPath() . "/css/app.css");
+        $asset->addCss(self::getAssetsPath() . "/css/main.css");
     }
 
     public static function loadScripts()

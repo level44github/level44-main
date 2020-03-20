@@ -30,5 +30,5 @@ use \Bitrix\Main\Localization\Loc;
 </a>
 <div class="carousel__footer">
     <a class="carousel__title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
-    <div class="carousel__price"><?= $price['PRINT_RATIO_PRICE'] ?></div>
+    <div><span class="carousel__price"><?= $price['PRINT_RATIO_PRICE'] ?></span> &middot; <span class="carousel__price">$ 120</span></div>
 </div>

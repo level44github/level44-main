@@ -216,8 +216,11 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <form>
                 <div class="product__header">
                     <h1 class="product__title"><?= $name ?></h1>
-                    <div class="product__price"
-                         id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_RATIO_PRICE'] ?></div>
+                    <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                        <?= $price['PRINT_RATIO_PRICE'] ?>
+                    </span> &middot; <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                        $ 120
+                    </span>
                 </div>
                 <?
                 if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>
