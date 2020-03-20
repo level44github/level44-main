@@ -43,7 +43,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
         <? endif; ?>
         <header class="header">
             <div class="container px-lg-1">
-                <nav class="navbar layout__navbar navbar-<?= $isMain ? "dark" : "light" ?>">
+                <nav class="navbar layout__navbar navbar-light">
                     <button class="nav-trigger__btn" type="button" aria-label="Toggle navigation">
                         <span class="nav-trigger__icon"></span>
                     </button>
