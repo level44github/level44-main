@@ -33,7 +33,9 @@ use \Bitrix\Main\Localization\Loc;
     <a class="catalog__item-title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
     <div>
       <span class="catalog__item-price"><?= $price['PRINT_RATIO_PRICE'] ?></span>
-        &middot;
-      <span class="catalog__item-price">$ 120</span>
+        <? if ($price["PRICE_DOLLAR"]): ?>
+            &middot;
+            <span class="catalog__item-price"><?= $price["PRICE_DOLLAR"] ?></span>
+        <? endif; ?>
     </div>
 </div>

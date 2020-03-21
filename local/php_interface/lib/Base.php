@@ -219,4 +219,18 @@ class Base
             });
         }
     }
+
+    public static function getDollarPrice($dollarPrice)
+    {
+        $dollarPrice = (int)$dollarPrice;
+        if ($dollarPrice <= 0) {
+            return false;
+        }
+
+        if (!self::isEnLang()) {
+            return false;
+        }
+
+        return "$ {$dollarPrice}";
+    }
 }

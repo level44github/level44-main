@@ -128,6 +128,7 @@ $skuProps = array();
 $arResult["MORE_PHOTO_COUNT"] = count($actualItem["MORE_PHOTO"]);
 
 $price = $actualItem['ITEM_PRICES'][$actualItem['ITEM_PRICE_SELECTED']];
+$price["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($arResult["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]);
 $measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];
 $showDiscount = $price['PERCENT'] > 0;
 
@@ -218,9 +219,13 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     <h1 class="product__title"><?= $name ?></h1>
                     <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
                         <?= $price['PRINT_RATIO_PRICE'] ?>
-                    </span> &middot; <span class="product__price">
-                        $ 120
                     </span>
+                    <?
+                    if ($price["PRICE_DOLLAR"]): ?>
+                        &middot; <span class="product__price">
+                        <?= $price["PRICE_DOLLAR"] ?>
+                    </span>
+                    <? endif; ?>
                 </div>
                 <?
                 if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>
