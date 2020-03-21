@@ -470,7 +470,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <? endif; ?>
                 <div class="product__question">
                     <div class="product__question-title mb-2"><?= Loc::getMessage("EXIST_QUESTIONS") ?></div>
-                    <div>
+                    <div class="d-flex">
                         <a class="btn btn-outline-secondary product__question-btn"
                            target="_blank"
                            href="https://wa.me/79153921144">
