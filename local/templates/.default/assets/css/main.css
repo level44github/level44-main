@@ -10,3 +10,93 @@
 .basket-aside .d-flex div:first-child {
   padding-top: 5px;
 }
+.modal-content {
+  width: 367px;
+  margin: 0 auto;
+}
+
+.modal-title {
+  width: 100%;
+  text-align: center;
+}
+
+.modal-header {
+  padding-top: 38px;
+  padding-bottom: 9px;
+}
+
+.modal-header .close {
+  position: absolute;
+  right: 17px;
+    top: 28px;
+}
+
+.table-borderless tbody+tbody, .table-borderless td, .table-borderless th, .table-borderless thead th {
+  border: 1px;
+}
+
+.modal-body {
+  margin: 0 23px;
+}
+
+.modal-body table {
+  margin-bottom: 29px;
+}
+
+.modal-body .d-lg-none {
+  @media (min-width: 992px) {
+    display: flex !important;
+  }
+}
+
+.modal-body table td{
+  border: 1px solid #dee2e6;
+  padding: 7px .75rem;
+  text-align: center;
+}
+
+.modal-body .table  td:first-child, .modal-body .table   th:first-child {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.modal-body .table   td:last-child, .modal-body .table  th:last-child {
+  padding-right: 0;
+  padding-left: 0;
+
+}
+
+.modal-body .table thead:first-of-type td:first-child, .modal-body .table thead:first-of-type  th:first-child {
+  padding-left: 12px;
+}
+
+.modal-body .table thead:first-of-type  td:last-child, .modal-body .table thead:first-of-type th:last-child {
+  padding-right: 12px;
+}
+
+.modal-body table thead:not(:first-of-type) tr th{
+  border: 0;
+  padding-left: 0;
+  font-size: 14px;
+  line-height: 32px;
+  color: #000000;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  opacity: 0.4;
+}
+
+.modal-body table thead th {
+  border: 0;
+}
+
+.modal-body table th {
+  font-weight: normal;
+}
+
+.modal-body table thead:first-of-type {
+  font-weight: bold;
+}
+
+.modal-body td {
+  width: 33.333%;
+}

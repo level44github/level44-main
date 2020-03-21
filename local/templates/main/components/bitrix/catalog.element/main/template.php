@@ -280,49 +280,10 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                     </button>
                                                 </div>
                                                 <div class="modal-body px-0">
-                                                    <div class="d-none d-lg-block">
-                                                        <table class="table table-hover table-borderless">
-                                                            <thead>
-                                                            <tr>
-                                                                <th><?= Loc::getMessage("SIZE") ?></th>
-                                                                <th><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
-                                                                <th><?= Loc::getMessage("HOIST_GIRTH") ?></th>
-                                                                <th><?= Loc::getMessage("HIP_GIRTH") ?></th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr>
-                                                                <td>XXS</td>
-                                                                <td>XS</td>
-                                                                <td>S</td>
-                                                                <td>M</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>80</td>
-                                                                <td>84</td>
-                                                                <td>88</td>
-                                                                <td>92</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>60</td>
-                                                                <td>64</td>
-                                                                <td>68</td>
-                                                                <td>72</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>88</td>
-                                                                <td>92</td>
-                                                                <td>96</td>
-                                                                <td>100</td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
                                                     <div class="d-lg-none">
-                                                        <table class="table table-borderless">
+                                                        <table class="table">
                                                             <thead>
                                                             <tr>
-                                                                <td>XXS</td>
                                                                 <td>XS</td>
                                                                 <td>S</td>
                                                                 <td>M</td>
@@ -335,10 +296,9 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                             </thead>
                                                             <tbody>
                                                             <tr>
-                                                                <td>80</td>
-                                                                <td>84</td>
-                                                                <td>88</td>
-                                                                <td>92</td>
+                                                                <td>84–88</td>
+                                                                <td>89–92</td>
+                                                                <td>93–96</td>
                                                             </tr>
                                                             </tbody>
                                                             <thead>
@@ -348,10 +308,9 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                             </thead>
                                                             <tbody>
                                                             <tr>
-                                                                <td>60</td>
-                                                                <td>64</td>
-                                                                <td>68</td>
-                                                                <td>72</td>
+                                                                <td>60–64</td>
+                                                                <td>65–69</td>
+                                                                <td>70–75</td>
                                                             </tr>
                                                             </tbody>
                                                             <thead>
@@ -361,10 +320,9 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                             </thead>
                                                             <tbody>
                                                             <tr>
-                                                                <td>88</td>
-                                                                <td>92</td>
-                                                                <td>96</td>
-                                                                <td>100</td>
+                                                                <td>89–93</td>
+                                                                <td>94–97</td>
+                                                                <td>98–102</td>
                                                             </tr>
                                                             </tbody>
                                                         </table>
