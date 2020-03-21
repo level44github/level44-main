@@ -45,7 +45,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <img class="img-fluid" src="{{IMAGE_URL}}" alt="">
         </a>
         <div class="cart__body">
-            <div class="font-weight-bold d-lg-none">{{{PRICE_FORMATED}}}</div>
+            <div class="font-weight-bold d-lg-none"><span>{{{PRICE_FORMATED}}}</span>&middot;<span> $ 120</span></div>
             <a class="cart__link" href="{{DETAIL_PAGE_URL}}">{{NAME}}</a>
             <ul class="cart__list">
                 {{#SELECT_PROP.COLOR_REF}}

@@ -218,7 +218,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     <h1 class="product__title"><?= $name ?></h1>
                     <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
                         <?= $price['PRINT_RATIO_PRICE'] ?>
-                    </span> &middot; <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                    </span> &middot; <span class="product__price">
                         $ 120
                     </span>
                 </div>
