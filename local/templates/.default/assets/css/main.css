@@ -1,38 +1,15 @@
-.home .header {
-  background-color: transparent;
-  color: #ffffff;
+.product__question a {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  padding-top: 4px;
+  padding-bottom: 3px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  line-height: 0.875;
+  min-height: 40px;
 }
 
-.home .navbar-brand {
-  color: #ffffff;
-  pointer-events: none;
+.product__question .product__question-btn .icon {
+  margin-right: 10px;
 }
-
-.home .btn-link,
-.home .menu__link,
-.home .menu__icon {
-  color: #ffffff;
-  transition: opacity 0.15s;
-}
-
-.home .btn-link:hover,
-.home .menu__link:hover,
-.home .menu__icon:hover {
-  opacity: 0.6;
-}
-
-.home .m-search:hover .menu__icon{
-  color: #000000;
-}
-
-
-
-.home .nav-trigger__icon {
-  background-color: #ffffff;
-}
-
-.home .layout__navbar .nav-trigger__icon::before,
-.home .layout__navbar .nav-trigger__icon::after {
-  background-color: #ffffff;
-}
-
