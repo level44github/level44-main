@@ -31,7 +31,7 @@ use Bitrix\Main\Localization\Loc;
                         <div class="m-basket__body">
                             <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
                                 <div><?= $item["NAME"] ?></div>
-                                <div><span><?= $item["PRICE_FMT"] ?></span>&middot; <span>$ 120</span></div>
+                                <div><span><?= $item["PRICE_FMT"] ?></span> &middot; <span>$ 120</span></div>
                                 <? if (!empty($item["SIZE"])): ?>
                                     <div><?= Loc::getMessage("SIZE") ?><?= $item["SIZE"] ?></div>
                                 <? endif; ?>
