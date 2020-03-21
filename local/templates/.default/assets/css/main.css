@@ -1,0 +1,32 @@
+.home .header {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+.home .navbar-brand {
+  color: #ffffff;
+}
+
+.home .btn-link {
+  color: #ffffff;
+  transition: opacity 0.15s;
+}
+
+.home .menu__basket svg path{
+  fill: #ffffff;
+  /* transition: opacity 0.15s; */
+}
+
+.home .btn-link:hover {
+  opacity: 0.6;
+}
+
+.home .nav-trigger__icon {
+  background-color: #ffffff;
+}
+
+.home .layout__navbar .nav-trigger__icon::before,
+.home .layout__navbar .nav-trigger__icon::after {
+  background-color: #ffffff;
+}
+
