@@ -20,7 +20,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
                         </div>
                         <div class="basket-aside__body">
-                            <div class="font-weight-bold"><?= $basketItem["SUM"] ?></div>
+                            <div class="font-weight-bold"><span><?= $basketItem["SUM"] ?></span> &middot; <span> $ 120</span></div>
                             <div><?= $basketItem["NAME"] ?></div>
                             <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
                             <? if (!empty($basketItem["PROPS"])): ?>
@@ -45,12 +45,12 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <?= $arResult["BASKET_ITEMS_QUANTITY"] ?>
                         <?= Loc::getMessage("PCS") ?>
                     </span>
-                    <div class="ml-auto"><?= $arResult["ORDER_PRICE_FORMATED"] ?></div>
+                    <div class="ml-auto"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span> &middot; <span> $ 120</span></div>
                 </div>
             </div>
-            <div class="d-flex align-items-center">
+            <div class="d-flex">
                 <div><?= Loc::getMessage("TOTAL_WITHOUT_DELIV") ?></div>
-                <div class="basket-aside__total"><?= $arResult["ORDER_PRICE_FORMATED"] ?></div>
+                <div class="basket-aside__total"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span><span> $ 120</span></div>
             </div>
         </div>
     </div>
