@@ -5,6 +5,7 @@
 
 .home .navbar-brand {
   color: #ffffff;
+  pointer-events: none;
 }
 
 .home .btn-link,
