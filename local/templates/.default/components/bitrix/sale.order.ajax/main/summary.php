@@ -20,7 +20,11 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
                         </div>
                         <div class="basket-aside__body">
-                            <div class="font-weight-bold"><span><?= $basketItem["SUM"] ?></span> &middot; <span> $ 120</span></div>
+                            <div class="font-weight-bold"><span><?= $basketItem["SUM"] ?></span>
+                                <? if ($basketItem["PRICE_DOLLAR"]): ?>
+                                    &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
+                                <? endif; ?>
+                            </div>
                             <div><?= $basketItem["NAME"] ?></div>
                             <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
                             <? if (!empty($basketItem["PROPS"])): ?>
@@ -45,12 +49,20 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <?= $arResult["BASKET_ITEMS_QUANTITY"] ?>
                         <?= Loc::getMessage("PCS") ?>
                     </span>
-                    <div class="ml-auto"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span> &middot; <span> $ 120</span></div>
+                    <div class="ml-auto"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+                        <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
+                            &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                        <? endif; ?>
+                    </div>
                 </div>
             </div>
             <div class="d-flex">
                 <div><?= Loc::getMessage("TOTAL_WITHOUT_DELIV") ?></div>
-                <div class="basket-aside__total"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span><span> $ 120</span></div>
+                <div class="basket-aside__total"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+                    <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
+                        <span><?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                    <? endif; ?>
+                </div>
             </div>
         </div>
     </div>

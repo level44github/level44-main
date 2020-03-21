@@ -96,6 +96,36 @@ foreach ($productList as $offerId => $product) {
     $productIds[$offerId] = $product["ID"];
 }
 
+$productsData = $productIds;
+
+$rsProductsData = \CIBlockElement::GetList(
+    [],
+    [
+        "ID" => array_values($productsData),
+        "IBLOCK_ID" => \Level44\Base::CATALOG_IBLOCK_ID
+    ],
+    false,
+    false,
+    [
+        "ID",
+        "IBLOCK_ID",
+        "PROPERTY_PRICE_DOLLAR"
+    ]
+);
+
+$sumPriceDollar = 0;
+$productsDataExt = [];
+while ($productData = $rsProductsData->GetNext()) {
+    $productsDataExt[$productData["ID"]] = $productData;
+}
+
+foreach ($productsData as $key => &$productsDataItem) {
+    $productsDataItem = $productsDataExt[$productsDataItem];
+}
+unset($productsDataItem);
+
+$productsData = array_filter($productsData);
+
 $products = array_map(function ($productId) {
     return [
         "ID" => $productId
@@ -115,6 +145,10 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $basketItem["PICTURE"] = "";
     }
 
+    $basketItem["PRICE_DOLLAR"] = $productsData[$basketItem["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"];
+    $sumPriceDollar += ((float) $basketItem["PRICE_DOLLAR"] * $basketItem["QUANTITY"]);
+    $basketItem["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice((float)$basketItem["PRICE_DOLLAR"] * $basketItem["QUANTITY"]);
+
     $basketItem["NAME"] = \Level44\Base::getMultiLang(
         $basketItem["NAME"],
         $arProductsAdd[$basketItem["PRODUCT_ID"]]["NAME_EN"]
@@ -132,6 +166,7 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 unset($basketItem);
 
 $arResult["BASKET_ITEMS_QUANTITY"] = $basketItemsQuantity;
+$arResult["SUM_PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($sumPriceDollar);
 
 if (count($columns) & 1) {
     array_unshift($fulls, array_pop($columns));
