@@ -21,6 +21,8 @@ $result['BASKET_ITEM_RENDER_DATA'] = array();
 
 $totalQuantity = 0;
 
+$sumPriceDollar = 0;
+
 
 $basketProductIds = [];
 
@@ -34,6 +36,35 @@ $productIds = [];
 foreach ($productList as $offerId => $product) {
     $productIds[$offerId] = $product["ID"];
 }
+
+$productsData = $productIds;
+
+$rsProductsData = \CIBlockElement::GetList(
+    [],
+    [
+        "ID" => array_values($productsData),
+        "IBLOCK_ID" => \Level44\Base::CATALOG_IBLOCK_ID
+    ],
+    false,
+    false,
+    [
+        "ID",
+        "IBLOCK_ID",
+        "PROPERTY_PRICE_DOLLAR"
+    ]
+);
+
+$productsDataExt = [];
+while ($productData = $rsProductsData->GetNext()) {
+    $productsDataExt[$productData["ID"]] = $productData;
+}
+
+foreach ($productsData as $key => &$productsDataItem) {
+    $productsDataItem = $productsDataExt[$productsDataItem];
+}
+unset($productsDataItem);
+
+$productsData = array_filter($productsData);
 
 $products = array_map(function ($productId) {
     return [
@@ -232,6 +263,10 @@ foreach ($this->basketItems as $row)
 			$rowData['SKU_BLOCK_LIST'][] = $skuBlockData;
 		}
 	}
+
+	$rowData["PRICE_DOLLAR"] = $productsData[$rowData["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"];
+	$sumPriceDollar += ((float) $rowData["PRICE_DOLLAR"] * $rowData["QUANTITY"]);
+	$rowData["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($rowData["PRICE_DOLLAR"]);
 
     $rowData["SELECT_PROP"] = [];
 
@@ -481,7 +516,8 @@ $totalData = array(
 	'PRICE' => $result['allSum'],
 	'PRICE_FORMATED' => $result['allSum_FORMATED'],
 	'PRICE_WITHOUT_DISCOUNT_FORMATED' => $result['PRICE_WITHOUT_DISCOUNT'],
-	'CURRENCY' => $result['CURRENCY']
+	'CURRENCY' => $result['CURRENCY'],
+	'SUM_PRICE_DOLLAR' => \Level44\Base::getDollarPrice($sumPriceDollar),
 );
 
 if ($result['DISCOUNT_PRICE_ALL'] > 0)
