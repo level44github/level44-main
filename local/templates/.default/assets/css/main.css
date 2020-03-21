@@ -7,19 +7,24 @@
   color: #ffffff;
 }
 
-.home .btn-link {
+.home .btn-link,
+.home .menu__link,
+.home .menu__icon {
   color: #ffffff;
   transition: opacity 0.15s;
 }
 
-.home .menu__basket svg path{
-  fill: #ffffff;
-  /* transition: opacity 0.15s; */
-}
-
-.home .btn-link:hover {
+.home .btn-link:hover,
+.home .menu__link:hover,
+.home .menu__icon:hover {
   opacity: 0.6;
 }
+
+.home .m-search:hover .menu__icon{
+  color: #000000;
+}
+
+
 
 .home .nav-trigger__icon {
   background-color: #ffffff;
