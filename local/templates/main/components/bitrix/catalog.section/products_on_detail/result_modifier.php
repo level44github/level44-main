@@ -15,6 +15,7 @@ foreach ($arResult["ITEMS"] as &$item) {
         $item["NAME"],
         $item["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"]
     );
+    $item["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($item["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]);
 }
 
 unset($item);

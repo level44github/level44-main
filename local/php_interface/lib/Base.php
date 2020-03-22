@@ -35,6 +35,7 @@ class Base
         $asset->addString('<link rel="manifest" href="' . self::getAssetsPath() . '/img/favicons/site.webmanifest">');
         $asset->addString('<meta name="msapplication-config" href="' . self::getAssetsPath() . '/img/favicons/browserconfig.xml">');
         $asset->addCss(self::getAssetsPath() . "/css/app.css");
+        $asset->addCss(self::getAssetsPath() . "/css/main.css");
     }
 
     public static function loadScripts()
@@ -217,5 +218,19 @@ class Base
                 return ($a["ID"] < $b["ID"]) ? -1 : 1;
             });
         }
+    }
+
+    public static function getDollarPrice($dollarPrice)
+    {
+        $dollarPrice = (int)$dollarPrice;
+        if ($dollarPrice <= 0) {
+            return false;
+        }
+
+        if (!self::isEnLang()) {
+            return false;
+        }
+
+        return "$ {$dollarPrice}";
     }
 }

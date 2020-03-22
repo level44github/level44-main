@@ -85,7 +85,7 @@ if (isset($arResult['ITEM']))
 		$morePhoto = $actualItem['MORE_PHOTO'];
 	}
 
-
+    $price["PRICE_DOLLAR"] =  \Level44\Base::getDollarPrice($item["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]);
 	$showSlider = is_array($morePhoto) && count($morePhoto) > 1;
 	$showSubscribe = $arParams['PRODUCT_SUBSCRIPTION'] === 'Y' && ($item['CATALOG_SUBSCRIBE'] === 'Y' || $haveOffers);
 

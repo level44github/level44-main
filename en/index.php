@@ -96,7 +96,7 @@ $APPLICATION->IncludeComponent(
 		"PRODUCT_QUANTITY_VARIABLE" => "",
 		"PRODUCT_ROW_VARIANTS" => "",
 		"PRODUCT_SUBSCRIPTION" => "Y",
-        "PROPERTY_CODE" => array("NEWPRODUCT","NAME_EN"),
+        "PROPERTY_CODE" => array("NEWPRODUCT","NAME_EN","PRICE_DOLLAR"),
 		"PROPERTY_CODE_MOBILE" => array(),
 		"RCM_TYPE" => "personal",
 		"SECTION_CODE" => "",

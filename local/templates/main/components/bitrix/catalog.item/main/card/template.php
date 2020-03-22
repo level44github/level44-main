@@ -31,5 +31,11 @@ use \Bitrix\Main\Localization\Loc;
 </a>
 <div class="catalog__item-footer">
     <a class="catalog__item-title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
-    <div class="catalog__item-price"><?= $price['PRINT_RATIO_PRICE'] ?></div>
+    <div>
+      <span class="catalog__item-price"><?= $price['PRINT_RATIO_PRICE'] ?></span>
+        <? if ($price["PRICE_DOLLAR"]): ?>
+            &middot;
+            <span class="catalog__item-price"><?= $price["PRICE_DOLLAR"] ?></span>
+        <? endif; ?>
+    </div>
 </div>

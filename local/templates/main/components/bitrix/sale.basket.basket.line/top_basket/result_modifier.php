@@ -66,6 +66,35 @@ if (!empty($productIds)) {
         ]
     );
 
+    $products = \CCatalogSku::getProductList($productIds, \Level44\Base::OFFERS_IBLOCK_ID);
+    $products = array_map(function ($item) {
+        return $item["ID"];
+    }, $products);
+
+    $rsProductsData = \CIBlockElement::GetList(
+        [],
+        [],
+        false,
+        false,
+        [
+            "ID",
+            "IBLOCK_ID",
+            "PROPERTY_PRICE_DOLLAR"
+        ]
+    );
+    $productsData = [];
+    while ($productData = $rsProductsData->GetNext()) {
+        $productsData[$productData["ID"]] = $productData;
+    }
+
+    foreach ($products as $key => &$product) {
+        $product = $productsData[$product];
+    }
+    unset($product);
+
+    $product = array_filter($product);
+
+
     while ($property = $rsProperties->GetNext()) {
         $properties[$property["ID"]] = $property;
     }
@@ -80,6 +109,10 @@ if (!empty($productIds)) {
             $item["NAME"] = \Level44\Base::getMultiLang(
                 $item["NAME"],
                 $properties[$item["PRODUCT_ID"]]["PROPERTY_NAME_EN_VALUE"]
+            );
+
+            $item["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice(
+                $products[$item["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"]
             );
         }
         unset($item);

@@ -180,6 +180,7 @@ $APPLICATION->SetTitle("Каталог");
         ],
         "LIST_PROPERTY_CODE" => [
             "NAME_EN",
+            "PRICE_DOLLAR",
         ],
         "DETAIL_PROPERTY_CODE" => [
             "NAME_EN",
@@ -188,6 +189,7 @@ $APPLICATION->SetTitle("Каталог");
             "MEASUREMENTS",
             "MEASUREMENTS_KIT",
             "MEASUREMENTS_KIT_EN",
+            "PRICE_DOLLAR",
         ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(
