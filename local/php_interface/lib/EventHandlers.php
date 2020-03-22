@@ -37,10 +37,28 @@ class EventHandlers
 
     public static function OnOrderNewSendEmailHandler($orderId, $eventName, &$arFields)
     {
+        if (!in_array($eventName, ["SALE_ORDER_PAID", "SALE_NEW_ORDER"])) {
+            return true;
+        }
+
         $order = \Bitrix\Sale\Order::load($arFields["ORDER_ID"]);
+        /** @var $paySystem \Bitrix\Sale\PaySystem\Service */
+
+        $paySystem = $order->getPaymentCollection()->current()->getPaySystem();
+        if (!$paySystem) {
+            return false;
+        }
 
         if (!$order) {
             return true;
+        }
+
+        if (!$paySystem->isCash() && $eventName === "SALE_NEW_ORDER") {
+            return false;
+        }
+
+        if ($paySystem->isCash() && $eventName === "SALE_ORDER_PAID") {
+            return false;
         }
 
         $basketItems = $order->getBasket()->getBasketItems();
@@ -258,5 +276,8 @@ LAYOUT;
         $arFields["DELIVERY_ADDRESS"] = $deliveryAddress;
         $arFields["YEAR"] = date("Y");
         $arFields["EMAIL_TITLE_IMG"] = $hostName . Base::getAssetsPath() . "/img/email-title.png";
+        $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
+        $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
+        $arFields["ADMIN_LINK"] = "https://level44.net/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
     }
 }
