@@ -147,17 +147,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         <?
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/summary.php");
         ?>
-        <div class="d-lg-none">
-            <div class="form-group">
-                <button class="btn btn-dark btn-block"
-                        onclick="submitForm('Y'); return false;"
-                        type="submit"><?= Loc::getMessage("TO_CHECKOUT") ?></button>
-            </div>
-            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS2") ?><a href="<?= SITE_DIR ?>about/offer/">
-                <?= Loc::getMessage("OFERTA2") ?>
-                </a>
-            </p>
-        </div>
+
     </div>
         <? if ($_POST["is_ajax_post"] !== "Y"): ?>
     <input type="hidden" name="confirmorder" id="confirmorder" value="Y">
