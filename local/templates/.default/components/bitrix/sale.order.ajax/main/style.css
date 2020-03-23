@@ -17,3 +17,13 @@ form[name='yandexapi_form'] {
 .ya_cashier {
     display: none;
 }
+
+.js-ya_cashier_link {
+    width: 100%;
+    max-width: 384px;
+    height: 56px;
+    left: 16px;
+    top: 296px;
+    margin: 0 auto;
+    background: #212121;
+}
