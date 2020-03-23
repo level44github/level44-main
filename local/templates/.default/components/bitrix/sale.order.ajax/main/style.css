@@ -15,7 +15,7 @@ form[name='yandexapi_form'] {
 }
 
 .ya_cashier {
-    display: none;
+    display: flex;
 }
 
 .js-ya_cashier_link {
