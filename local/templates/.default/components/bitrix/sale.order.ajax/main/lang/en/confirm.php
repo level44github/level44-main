@@ -4,6 +4,7 @@ $MESS["SUC_MESS1"] = "Our manager will contact you during the day to confirm the
 $MESS["TO_MAIN"] = "Go to Main page";
 $MESS["ORDER_COMPLETE"] = "Order is processed";
 $MESS["WAIT_PAYMENT"] = "Expect redirect to payment page ...";
+$MESS["WAIT_ERROR"] = "If the page was not redirected please press «Pay»";
 $MESS["ALREADY_PAYED"] = "Order already paid";
 $MESS["TO_MAIN"] = "Go to Main page";
 $MESS["ERROR_ORDER"] = "Checkout error";
