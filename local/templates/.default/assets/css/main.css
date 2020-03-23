@@ -123,3 +123,10 @@
 .thank-order__title {
   text-align: center;
 }
+
+.thank-order__desc,
+.thank-order__btn {
+  margin: 0 auto 50px;
+}
+
+
