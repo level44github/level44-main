@@ -26,4 +26,8 @@ form[name='yandexapi_form'] {
     top: 296px;
     margin: 0 auto;
     background: #212121;
+    text-align: center;
+    color: #FFFFFF;
+    font-size: 16px;
+    line-height: 18px;
 }
