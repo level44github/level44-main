@@ -27,7 +27,7 @@ $showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty
     <header class="header header_divider">
         <div class="container">
             <nav class="navbar navbar-light bg-light layout__navbar">
-                <!-- <div class="position-relative">
+                <div class="position-relative">
                     <? if ($showBasketCart): ?>
                         <a class="header__basket-link" href="<?= SITE_DIR . "cart" ?>">
                             <svg class="icon icon-arrow-left mr-2">
@@ -36,7 +36,7 @@ $showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty
                             <span class="header__basket-text"><?= Loc::getMessage("TO_BASKET") ?></span>
                         </a>
                     <? endif; ?>
-                </div> -->
+                </div>
                 <a class="navbar-brand mx-auto" href="<?= SITE_DIR ?>">LEVEL44</a>
             </nav>
         </div>
