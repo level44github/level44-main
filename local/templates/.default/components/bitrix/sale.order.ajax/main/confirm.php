@@ -30,8 +30,8 @@ if (!empty($arResult["ORDER"])):?>
         <? endif; ?>
         <? if (strlen($arResult["PAY_SYSTEM"]["ACTION_FILE"]) > 0): ?>
             <? if (!$arResult["IS_CASH"]): ?>
-                <h1 class="thank-order__title"><?= Loc::getMessage("ORDER_COMPLETE") ?></h1>
-                <div class="thank-order__desc"><?= Loc::getMessage("WAIT_PAYMENT") ?></div>
+                <h1 class="thank-order__title"><?= Loc::getMessage("WAIT_PAYMENT") ?></h1>
+                <div class="thank-order__desc"><?= Loc::getMessage("WAIT_ERROR") ?></div>
             <? endif; ?>
             <? if ($arResult["PAY_SYSTEM"]["NEW_WINDOW"] == "Y"): ?>
                 <script language="JavaScript">
