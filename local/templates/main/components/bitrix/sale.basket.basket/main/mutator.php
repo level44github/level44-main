@@ -264,9 +264,21 @@ foreach ($this->basketItems as $row)
 		}
 	}
 
-	$rowData["PRICE_DOLLAR"] = $productsData[$rowData["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"];
-	$sumPriceDollar += ((float) $rowData["PRICE_DOLLAR"] * $rowData["QUANTITY"]);
-	$rowData["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($rowData["PRICE_DOLLAR"]);
+    $rowData["PRICE_DOLLAR"] = (int)$productsData[$rowData["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"];
+    $itemPriceDollar = 0;
+
+    if ($rowData["PRICE_DOLLAR"] <= 0) {
+        $itemPriceDollar = \Level44\Base::getDollarPrice(
+            $rowData["PRICE"],
+            null,
+            true
+        );
+    } else {
+        $itemPriceDollar = $rowData["PRICE_DOLLAR"];
+    }
+
+    $sumPriceDollar = $sumPriceDollar + ($itemPriceDollar * $rowData["QUANTITY"]);
+    $rowData["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($rowData["PRICE"], $rowData["PRICE_DOLLAR"]);
 
     $rowData["SELECT_PROP"] = [];
 
@@ -510,6 +522,7 @@ foreach ($this->basketItems as $row)
 
 	$result['BASKET_ITEM_RENDER_DATA'][] = $rowData;
 }
+$sumPriceDollar = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($sumPriceDollar) : false;
 $result["QUANTITY"] = $totalQuantity;
 $totalData = array(
 	'DISABLE_CHECKOUT' => (int)$result['ORDERABLE_BASKET_ITEMS_COUNT'] === 0,
@@ -517,7 +530,7 @@ $totalData = array(
 	'PRICE_FORMATED' => $result['allSum_FORMATED'],
 	'PRICE_WITHOUT_DISCOUNT_FORMATED' => $result['PRICE_WITHOUT_DISCOUNT'],
 	'CURRENCY' => $result['CURRENCY'],
-	'SUM_PRICE_DOLLAR' => \Level44\Base::getDollarPrice($sumPriceDollar),
+    'SUM_PRICE_DOLLAR' => $sumPriceDollar,
 );
 
 if ($result['DISCOUNT_PRICE_ALL'] > 0)

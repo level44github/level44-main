@@ -220,17 +220,25 @@ class Base
         }
     }
 
-    public static function getDollarPrice($dollarPrice)
+    public static function getDollarPrice($rubPrice, $defaultDollarPrice = null, $notFormat = false)
     {
-        $dollarPrice = (int)$dollarPrice;
-        if ($dollarPrice <= 0) {
-            return false;
-        }
-
         if (!self::isEnLang()) {
             return false;
         }
 
-        return "$ {$dollarPrice}";
+        $defaultDollarPrice = (int)$defaultDollarPrice;
+        if ($defaultDollarPrice > 0) {
+            return self::formatDollar($defaultDollarPrice);
+        }
+
+        $dollarPrice = (int)round(\CCurrencyRates::ConvertCurrency($rubPrice, "RUB", "USD"));
+
+        return $notFormat ? $dollarPrice : self::formatDollar($dollarPrice);
+    }
+
+    public static function formatDollar($price)
+    {
+        $price = (int)round($price);
+        return "$ {$price}";
     }
 }

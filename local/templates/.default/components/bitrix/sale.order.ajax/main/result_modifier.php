@@ -145,9 +145,24 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $basketItem["PICTURE"] = "";
     }
 
-    $basketItem["PRICE_DOLLAR"] = $productsData[$basketItem["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"];
-    $sumPriceDollar += ((float) $basketItem["PRICE_DOLLAR"] * $basketItem["QUANTITY"]);
-    $basketItem["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice((float)$basketItem["PRICE_DOLLAR"] * $basketItem["QUANTITY"]);
+    $basketItem["PRICE_DOLLAR"] = (int)$productsData[$basketItem["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"];
+    $itemPriceDollar = 0;
+
+    if ($basketItem["PRICE_DOLLAR"] <= 0) {
+        $itemPriceDollar = \Level44\Base::getDollarPrice(
+            $basketItem["PRICE"],
+            null,
+            true
+        );
+    } else {
+        $itemPriceDollar = $basketItem["PRICE_DOLLAR"];
+    }
+
+    $itemPriceDollar = $itemPriceDollar * $basketItem["QUANTITY"];
+
+    $sumPriceDollar += $itemPriceDollar;
+
+    $basketItem["PRICE_DOLLAR"] = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($itemPriceDollar) : false;
 
     $basketItem["NAME"] = \Level44\Base::getMultiLang(
         $basketItem["NAME"],
@@ -166,7 +181,7 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 unset($basketItem);
 
 $arResult["BASKET_ITEMS_QUANTITY"] = $basketItemsQuantity;
-$arResult["SUM_PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($sumPriceDollar);
+$arResult["SUM_PRICE_DOLLAR"] = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($sumPriceDollar) : false;
 
 if (count($columns) & 1) {
     array_unshift($fulls, array_pop($columns));
@@ -190,6 +205,9 @@ foreach ($arResult["DELIVERY"] as $key => &$delivery) {
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PERIOD_TEXT"];
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PRICE_PERIOD_TEXT"] .
         (!empty($delivery["PRICE_PERIOD_TEXT"]) ? ", " : "");
+
+    $delivery["PRICE_FORMATED"] = \Level44\Base::isEnLang() ? \Level44\Base::getDollarPrice($delivery["PRICE"])
+        : $delivery["PRICE_FORMATED"];
     if (empty($delivery["PRICE_FORMATED"]) || (int)$delivery["PRICE"] <= 0) {
         $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");
     }
