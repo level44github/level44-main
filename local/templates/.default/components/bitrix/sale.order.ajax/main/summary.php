@@ -66,7 +66,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
             <div class="d-flex">
                 <div class="basket-aside__total"><span><?= $arResult["ORDER_TOTAL_PRICE"] ?></span>
                     <? if ($arResult["ORDER_TOTAL_PRICE_DOLLAR"]): ?>
-                        <span><?= $arResult["ORDER_TOTAL_PRICE_DOLLAR"] ?></span>
+                        &middot; <span> <?= $arResult["ORDER_TOTAL_PRICE_DOLLAR"] ?></span>
                     <? endif; ?>
                 </div>
             </div>

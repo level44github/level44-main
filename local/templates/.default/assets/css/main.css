@@ -1,8 +1,3 @@
-.basket-aside__total {
-  display: flex;
-  flex-direction: column;
-}
-
 .basket-aside__total span {
   display: block;
 }
