@@ -18,3 +18,10 @@ foreach ($arResult["ITEMS"] as &$item) {
 }
 
 unset($item);
+
+$arResult["ITEMS"] = array_filter(
+    $arResult["ITEMS"],
+    function ($item) use ($arParams) {
+        return (int)$arParams["RCM_PROD_ID"] !== (int)$item["ID"];
+    }
+);
