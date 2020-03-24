@@ -118,6 +118,7 @@
 
 .home {
   height:100vh;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 .thank-order__title {
@@ -131,6 +132,17 @@
 .thank-order__btn {
   margin-left: calc(50% - 144px);
 }
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width:991px) {
+  .mobile-only {
+    display: block;
+  }
+}
+
 
 
 
