@@ -147,7 +147,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         <?
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/summary.php");
         ?>
-        <div class="d-lg-none">
+        <div class="d-lg-none mobile-only">
             <div class="form-group">
                 <button class="btn btn-dark btn-block"
                         onclick="submitForm('Y'); return false;"
