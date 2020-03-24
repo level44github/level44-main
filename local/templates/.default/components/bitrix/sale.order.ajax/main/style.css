@@ -19,9 +19,12 @@ form[name='yandexapi_form'] {
 }
 
 .js-ya_cashier_link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     max-width: 384px;
-    height: 56px;
+    min-height: 56px;
     left: 16px;
     top: 296px;
     margin: 0 auto;
@@ -30,4 +33,6 @@ form[name='yandexapi_form'] {
     color: #FFFFFF;
     font-size: 16px;
     line-height: 18px;
+    font-weight: normal;
+    padding: 0 15px;
 }

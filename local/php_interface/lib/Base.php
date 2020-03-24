@@ -56,7 +56,7 @@ class Base
             ->getRequest()
             ->getQuery("ORDER_ID");
         $curPage = $APPLICATION->GetCurPage();
-        return $curPage === SITE_DIR . "checkout/" && !isset($orderId);
+        return $curPage === SITE_DIR . "checkout/";
     }
 
     public static function isEnLang()

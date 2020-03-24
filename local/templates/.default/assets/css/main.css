@@ -119,3 +119,19 @@
 .home {
   height:100vh;
 }
+
+.thank-order__title {
+  text-align: center;
+}
+
+.thank-order__desc {
+  margin: 0 auto 50px;
+}
+
+.thank-order__btn {
+  margin-left: calc(50% - 144px);
+}
+
+
+
+
