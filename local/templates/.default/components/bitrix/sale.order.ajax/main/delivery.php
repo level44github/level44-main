@@ -21,7 +21,11 @@ use Bitrix\Main\Localization\Loc;
                        data-target-label="delivery<?= $key ?>label"
                     >
                         <div class="option__title"><?= $delivery["NAME"] ?></div>
-                        <div class="option__hint"><?= $delivery["PRICE_PERIOD_TEXT"] ?></div>
+                        <div class="option__hint"><span><?= $delivery["PRICE_PERIOD_TEXT"] ?></span>
+                            <? if ($delivery["DOLLAR_PRICE"]): ?>
+                                &middot; <span><?= $delivery["DOLLAR_PRICE"] ?></span>
+                            <? endif; ?>
+                        </div>
                     </a>
                     <label style="display: none;" for="delivery<?= $key ?>input" id="delivery<?= $key ?>label"></label>
                     <input id="delivery<?= $key ?>input"

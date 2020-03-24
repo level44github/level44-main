@@ -1,15 +1,5 @@
-.basket-aside__total {
-  display: flex;
-  flex-direction: column;
-}
 
-.basket-aside__total span {
-  display: block;
-}
 
-.basket-aside .d-flex div:first-child {
-  padding-top: 5px;
-}
 .modal-content {
   width: 367px;
   margin: 0 auto;

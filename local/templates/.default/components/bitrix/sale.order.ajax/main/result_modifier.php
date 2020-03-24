@@ -206,12 +206,15 @@ foreach ($arResult["DELIVERY"] as $key => &$delivery) {
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PRICE_PERIOD_TEXT"] .
         (!empty($delivery["PRICE_PERIOD_TEXT"]) ? ", " : "");
 
-    $delivery["PRICE_FORMATED"] = \Level44\Base::isEnLang() ? \Level44\Base::getDollarPrice($delivery["PRICE"])
-        : $delivery["PRICE_FORMATED"];
+    $delivery["DOLLAR_PRICE"] = \Level44\Base::getDollarPrice($delivery["PRICE"]);
     if (empty($delivery["PRICE_FORMATED"]) || (int)$delivery["PRICE"] <= 0) {
         $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");
+        $delivery["DOLLAR_PRICE"] = false;
     }
     $delivery["PRICE_PERIOD_TEXT"] .= $delivery["PRICE_FORMATED"];
+    if ($delivery["CHECKED"]) {
+        $arResult["CURRENT_DELIVERY"] = $delivery;
+    }
 }
 unset($delivery);
 
@@ -221,3 +224,8 @@ if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
         && strripos($arResult["PAY_SYSTEM"]["ACTION_FILE"], "cash") !== false
         && !empty($arResult["PAY_SYSTEM"]["ACTION_FILE"]);
 }
+
+$dollarTotalPrice = \Level44\Base::getDollarPrice($arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"], null, true) + $sumPriceDollar;
+$arResult["ORDER_TOTAL_PRICE_DOLLAR"] = $dollarTotalPrice <= 0 || !\Level44\Base::isEnLang() ? false
+    : \Level44\Base::formatDollar($dollarTotalPrice);
+$arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];
