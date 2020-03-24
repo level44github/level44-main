@@ -127,15 +127,15 @@
 
 .thank-order__desc {
   margin: 0 auto 50px;
-
-  &~.btn {
-
-  }
 }
 
-.thank-order__desc ~ .btn {
+/* .thank-order__desc ~ .btn {
   margin-left: calc(50% - 144px);
 }
+
+.thank-order__btn {
+  margin-left: calc(50% - 144px);
+} */
 
 .mobile-only {
   display: none;
