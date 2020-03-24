@@ -30,7 +30,7 @@ use \Bitrix\Main\Localization\Loc;
 </a>
 <div class="carousel__footer">
     <a class="carousel__title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
-    <div><span class="carousel__price"><?= $price['PRINT_RATIO_PRICE'] ?></span>
+    <div><span class="carousel__price"><?= $price['PRINT_PRICE'] ?></span>
         <? if ($item["PRICE_DOLLAR"]): ?>
             &middot; <span class="carousel__price"><?= $item["PRICE_DOLLAR"] ?></span>
         <? endif; ?>

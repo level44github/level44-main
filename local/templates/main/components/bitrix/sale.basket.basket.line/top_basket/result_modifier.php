@@ -112,6 +112,7 @@ if (!empty($productIds)) {
             );
 
             $item["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice(
+                $item["PRICE"],
                 $products[$item["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"]
             );
         }
