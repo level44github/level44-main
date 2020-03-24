@@ -52,11 +52,7 @@ class Base
     public static function isCheckoutPage()
     {
         global $APPLICATION;
-        $orderId = \Bitrix\Main\Context::getCurrent()
-            ->getRequest()
-            ->getQuery("ORDER_ID");
-        $curPage = $APPLICATION->GetCurPage();
-        return $curPage === SITE_DIR . "checkout/";
+        return $APPLICATION->GetCurPage() === SITE_DIR . "checkout/";
     }
 
     public static function isEnLang()

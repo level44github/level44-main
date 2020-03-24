@@ -55,12 +55,18 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <? endif; ?>
                     </div>
                 </div>
+                <div class="d-flex"><?= Loc::getMessage("DELIVERY") ?>
+                    <div class="ml-auto"><span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span>
+                        <? if ($arResult["CURRENT_DELIVERY"]["DOLLAR_PRICE"]): ?>
+                            &middot; <span> <?= $arResult["CURRENT_DELIVERY"]["DOLLAR_PRICE"] ?></span>
+                        <? endif; ?>
+                    </div>
+                </div>
             </div>
             <div class="d-flex">
-                <div><?= Loc::getMessage("TOTAL_WITHOUT_DELIV") ?></div>
-                <div class="basket-aside__total"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
-                    <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
-                        <span><?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                <div class="basket-aside__total"><span><?= $arResult["ORDER_TOTAL_PRICE"] ?></span>
+                    <? if ($arResult["ORDER_TOTAL_PRICE_DOLLAR"]): ?>
+                        <span><?= $arResult["ORDER_TOTAL_PRICE_DOLLAR"] ?></span>
                     <? endif; ?>
                 </div>
             </div>
