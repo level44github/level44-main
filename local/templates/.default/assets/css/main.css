@@ -111,6 +111,10 @@
   height: calc(var(--vh, 1vh) * 100);
 }
 
+.home > .btn-catalog {
+  margin-bottom: 50%;
+}
+
 .thank-order__title {
   text-align: center;
 }
