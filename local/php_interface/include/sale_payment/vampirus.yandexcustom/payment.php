@@ -34,7 +34,6 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 				case '2': $payment_type = 'MC';break;
 				default: $payment_type = 'PC';
 			}
-			echo GetMessage("VAMPIRUS.YANDEX_ORDER_PAY_SUM",array('#SUM#'=>$bill['SUM']));
 				$rsSites = CSite::GetByID(SITE_ID);
 				$arSite = $rsSites->Fetch();
 				$domain = (CSalePaySystemAction::GetParamValue("DOMAIN",false))?CSalePaySystemAction::GetParamValue("DOMAIN"):$_SERVER['SERVER_NAME'];
@@ -57,22 +56,6 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 		<input type="hidden" name="paymentType" value="<?php echo $payment_type;?>">
 		<input type="hidden" name="successURL" value="<?php echo $order_url; ?>">
 		<input type="submit" class="vampirus_yandex_submit_button" value="<?=GetMessage("VAMPIRUS.YANDEX_PAY");?>" />
-		<p class="mb-2"><?=Loc::getMessage('VAMPIRUS.YANDEX_DESCRIPTION');?></p>
-		<p class="mb-2"><?=Loc::getMessage('VAMPIRUS.YANDEX_SHOULD_PAY')." ".SaleFormatCurrency($params['SUM'], $params['CURRENCY']);?></p>
-		<?if (isset($params['FIELDS'])):?>
-			<fieldset class="form-group">
-				<?foreach ($params['FIELDS'] as $field):?>
-					<?if (in_array($field, $params['PHONE_FIELDS'])):?>
-						<label for="<?=$field?>"><?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_'.ToUpper($params['PAYMENT_METHOD']).'_'.ToUpper($field));?>:</label>
-						<input name="<?=$field;?>" type="text" style="max-width: 300px;" id="<?=$field;?>" class="form-control js-paysystem-yandex-input-phone" value="" autocomplete="off" placeholder="">
-					<?else:?>
-						<label for="<?=$field;?>"><?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_'.ToUpper($params['PAYMENT_METHOD']).'_'.ToUpper($field));?></label>
-						<input name="<?=$field;?>" type="text" style="max-width: 300px;" id="<?=$field;?>" class="form-control" placeholder="<?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_'.ToUpper($params['PAYMENT_METHOD']).'_'.ToUpper($field));?>">
-					<?endif;?>
-				<?endforeach;?>
-			</fieldset>
-		<?endif;?>
-		<input class="btn btn-primary pl-4 pr-4" name="BuyButton" value="<?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_BUTTON_NEXT')?>" type="submit">
 		</form>
 
 	<? } ?>
