@@ -141,4 +141,42 @@
   padding-top: 2px;
 }
 
+.option__header {
+  align-items: center;
+}
 
+.option__system {
+  height: 15px;
+  width: 60px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+.mastercard {
+  background-image: url("./../img/mastercard.svg");
+}
+
+.visa {
+  background-image: url("./../img/visa-logo.svg");
+}
+
+.maestro {
+  background-image: url("./../img/maestro.svg");
+}
+
+.mir {
+  background-image: url("./../img/mir.svg");
+}
+
+.jcb {
+  background-image: url("./../img/jcb.svg");
+}
+.diners-club {
+  background-image: url("./../img/diners-club.svg");
+}
+
+.american-express {
+  background-image: url("./../img/american-express.svg");
+}
