@@ -57,8 +57,8 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 		<input type="hidden" name="paymentType" value="<?php echo $payment_type;?>">
 		<input type="hidden" name="successURL" value="<?php echo $order_url; ?>">
 		<input type="submit" class="vampirus_yandex_submit_button" value="<?=GetMessage("VAMPIRUS.YANDEX_PAY");?>" />
-		<p class="mb-2"><?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_DESCRIPTION');?></p>
-		<p class="mb-2"><?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_DESCRIPTION_SUM')." ".SaleFormatCurrency($params['SUM'], $params['CURRENCY']);?></p>
+		<p class="mb-2"><?=Loc::getMessage('VAMPIRUS.YANDEX_DESCRIPTION');?></p>
+		<p class="mb-2"><?=Loc::getMessage('VAMPIRUS.YANDEX_SHOULD_PAY')." ".SaleFormatCurrency($params['SUM'], $params['CURRENCY']);?></p>
 		<?if (isset($params['FIELDS'])):?>
 			<fieldset class="form-group">
 				<?foreach ($params['FIELDS'] as $field):?>
@@ -74,6 +74,7 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 		<?endif;?>
 		<input class="btn btn-primary pl-4 pr-4" name="BuyButton" value="<?=Loc::getMessage('SALE_HANDLERS_PAY_SYSTEM_YANDEX_CHECKOUT_BUTTON_NEXT')?>" type="submit">
 		</form>
+
 	<? } ?>
 	<br>
 <? }
