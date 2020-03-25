@@ -10,9 +10,6 @@
     display: none;
 }
 
-form[name='yandexapi_form'] {
-    display: none;
-}
 
 .ya_cashier {
     display: flex;

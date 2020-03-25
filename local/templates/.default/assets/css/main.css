@@ -102,6 +102,12 @@
   min-height: 40px;
 }
 
+.f-center-column {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+
 .product__question .product__question-btn .icon {
   margin-right: 10px;
 }
@@ -125,13 +131,9 @@
   margin: 0 auto 50px;
 }
 
-/* .thank-order__desc ~ .btn {
-  margin-left: calc(50% - 144px);
-}
-
 .thank-order__btn {
   margin-left: calc(50% - 144px);
-} */
+}
 
 .mobile-only {
   display: none;

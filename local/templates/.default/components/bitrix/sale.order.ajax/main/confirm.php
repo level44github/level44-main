@@ -67,5 +67,5 @@ if (!empty($arResult["ORDER"])):?>
 
     <h1 class="thank-order__title"><?= Loc::getMessage("ORDER_NOT_FOUND") ?></h1>
     <div class="thank-order__desc"><?= Loc::getMessage("ERROR_MESS2") ?></div>
-    <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
+    <a class="btn btn-dark btn__fix-width thank-order__btn" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
 <? endif; ?>
