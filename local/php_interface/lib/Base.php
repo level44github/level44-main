@@ -34,6 +34,7 @@ class Base
         $asset->addString('<link rel="mask-icon" color="#ffffff" href="' . self::getAssetsPath() . '/img/favicons/safari-pinned-tab.svg">');
         $asset->addString('<link rel="manifest" href="' . self::getAssetsPath() . '/img/favicons/site.webmanifest">');
         $asset->addString('<meta name="msapplication-config" href="' . self::getAssetsPath() . '/img/favicons/browserconfig.xml">');
+        $asset->addString('<meta  name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">');
         $asset->addCss(self::getAssetsPath() . "/css/app.css");
         $asset->addCss(self::getAssetsPath() . "/css/main.css");
     }
