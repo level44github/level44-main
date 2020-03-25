@@ -11,7 +11,7 @@ if (empty($aMenuLinks)) {
 }
 
 $aMenuLinks[] = [
-    "Все вещи",
+    "Вся одежда",
     SITE_DIR . "catalog/",
     Array(),
     Array(),
