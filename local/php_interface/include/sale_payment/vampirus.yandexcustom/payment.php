@@ -34,7 +34,6 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 				case '2': $payment_type = 'MC';break;
 				default: $payment_type = 'PC';
 			}
-			echo GetMessage("VAMPIRUS.YANDEX_ORDER_PAY_SUM",array('#SUM#'=>$bill['SUM']));
 				$rsSites = CSite::GetByID(SITE_ID);
 				$arSite = $rsSites->Fetch();
 				$domain = (CSalePaySystemAction::GetParamValue("DOMAIN",false))?CSalePaySystemAction::GetParamValue("DOMAIN"):$_SERVER['SERVER_NAME'];
@@ -57,7 +56,6 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 		<input type="hidden" name="paymentType" value="<?php echo $payment_type;?>">
 		<input type="hidden" name="successURL" value="<?php echo $order_url; ?>">
 		<input type="submit" class="vampirus_yandex_submit_button" value="<?=GetMessage("VAMPIRUS.YANDEX_PAY");?>" />
-            112345
 		</form>
 	<? } ?>
 	<br>
