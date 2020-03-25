@@ -147,11 +147,11 @@
 
 .option__system {
   height: 15px;
-  width: 60px;
+  width: 34px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-
+  margin-right: 5px;
 }
 
 .mastercard {
@@ -178,5 +178,16 @@
 }
 
 .american-express {
-  background-image: url("./../img/american-express.svg");
+  background-image: url("./../img/american_express.svg");
+  width: 24px;
+}
+
+.qiwi {
+  background-image: url("./../img/qiwi.svg");
+  width: 24px;
+}
+
+.ya-money {
+  background-image: url("./../img/ya-money.svg");
+  width: 40px;
 }

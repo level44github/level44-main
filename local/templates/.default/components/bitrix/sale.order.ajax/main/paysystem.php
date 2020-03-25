@@ -26,6 +26,8 @@ use Bitrix\Main\Localization\Loc;
                         <div class="option__system jcb"></div>
                         <div class="option__system diners-club"></div>
                         <div class="option__system american-express"></div>
+                        <div class="option__system qiwi"></div>
+                        <div class="option__system ya-money"></div>
                     </a>
                     <label style="display: none;" for="pay_system<?= $paySystem["ID"] ?>input"
                            id="pay_system<?= $paySystem["ID"] ?>label"></label>
