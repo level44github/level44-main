@@ -679,7 +679,7 @@
 
 					this.editTotal();
 
-					this.applyPriceAnimation();
+					// this.applyPriceAnimation();
 					this.editWarnings();
 
 					this.actionPool.switchTimer();
@@ -776,10 +776,6 @@
 				}
 			}
 
-			if (result.TOTAL_RENDER_DATA)
-			{
-				result.TOTAL_RENDER_DATA = this.checkTotalAnimation(result.TOTAL_RENDER_DATA);
-			}
 
 			this.result = result;
 		},
@@ -883,22 +879,6 @@
 			return !this.items[itemId].NOT_AVAILABLE
 				&& !this.items[itemId].SHOW_RESTORE
 				&& BX.util.in_array(itemId, sortedItems);
-		},
-
-		checkTotalAnimation: function(totalData)
-		{
-			if (this.result && this.result.TOTAL_RENDER_DATA && parseFloat(this.result.TOTAL_RENDER_DATA.PRICE) > parseFloat(totalData.PRICE))
-			{
-				totalData.PRICE_NEW = totalData.PRICE;
-				totalData.PRICE = this.result.TOTAL_RENDER_DATA.PRICE;
-
-				totalData.PRICE_FORMATED_NEW = totalData.PRICE_FORMATED;
-				totalData.PRICE_FORMATED = this.result.TOTAL_RENDER_DATA.PRICE_FORMATED;
-
-				this.addPriceAnimationData(this.ids.total, totalData.PRICE, totalData.PRICE_NEW, totalData.CURRENCY);
-			}
-
-			return totalData;
 		},
 
 		checkBasketItemsAnimation: function(itemData)
@@ -1364,7 +1344,7 @@
 
 		applyPriceAnimation: function()
 		{
-			if (!this.priceAnimationData || Object.keys(this.priceAnimationData.start).length === 0)
+			if (!this.priceAnimationData || Object.keys(this.priceAnimationData.start).length === 0 || true)
 				return;
 
 			var animationData = this.priceAnimationData,
@@ -1889,7 +1869,7 @@
                             $('<div class="basket-items-list-item-overlay"></div>')
                                 .css("background-color", "transparent")
                         );
-                    this.animatePriceByQuantity(itemData, quantity);
+                    // this.animatePriceByQuantity(itemData, quantity);
                     try {
                         this.actionPool.changeQuantity(itemData.ID, quantity, currentQuantity);
                     }catch (e) {
