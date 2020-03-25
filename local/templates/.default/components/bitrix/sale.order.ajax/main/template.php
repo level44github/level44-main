@@ -133,7 +133,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         ?>
         <div class="d-lg-block">
             <div class="form-group">
-                <button class="btn btn-dark btn__fix-width"
+                <button class="btn btn-dark btn__fix-width thank-order__btn"
                         onclick="submitForm('Y'); return false;"
                         type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
             </div>

@@ -41,7 +41,7 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 				$order_url = CVampiRUSYandexPayment::getSchema().$domain.'/personal/order/';
 				$order_number = isset($arOrder['ACCOUNT_NUMBER'])?$arOrder['ACCOUNT_NUMBER']:$order_id;
 			?>
-		<form method="POST" name="yandexapi_form" action="https://money.yandex.ru/quickpay/confirm.xml">
+		<form class="f-center-column method="POST" name="yandexapi_form" action="https://money.yandex.ru/quickpay/confirm.xml">
 		<input type="hidden" name="receiver" value="<?=$wallet?>">
 		<input type="hidden" name="formcomment" value="<?=$arSite['SITE_NAME']?>">
 		<input type="hidden" name="short-dest" value="<?=GetMessage("VAMPIRUS.YANDEX_ORDER_PAY");?>">
@@ -55,7 +55,7 @@ if  ($payment_status && $payment_status != $arOrder['STATUS_ID']){
 		<input type="hidden" name="need-address" value="false">
 		<input type="hidden" name="paymentType" value="<?php echo $payment_type;?>">
 		<input type="hidden" name="successURL" value="<?php echo $order_url; ?>">
-		<input type="submit" class="vampirus_yandex_submit_button" value="<?=GetMessage("VAMPIRUS.YANDEX_PAY");?>" />
+		<input type="submit" class="vampirus_yandex_submit_button btn btn-dark" value="<?=GetMessage("VAMPIRUS.YANDEX_PAY");?>" />
 		</form>
 
 	<? } ?>
