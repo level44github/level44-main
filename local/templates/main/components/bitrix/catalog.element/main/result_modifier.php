@@ -13,6 +13,13 @@
 $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
 
+\Level44\Base::setOriginalMorePhoto($arResult["MORE_PHOTO"]);
+
+foreach ($arResult['OFFERS'] as &$offer) {
+   \Level44\Base::setOriginalMorePhoto($offer["MORE_PHOTO"]);
+}
+unset($offer);
+
 $arResult["NAME"] = \Level44\Base::getMultiLang(
     $arResult["NAME"],
     $arResult["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"]
