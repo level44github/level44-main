@@ -15,6 +15,7 @@ class Base
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
+    const IMAGES_ORIGINAL_HL_TBL_NAME = "images_original";
     const SIZE_HL_TBL_NAME = "size_reference";
 
     public static $typePage = "";
@@ -237,5 +238,14 @@ class Base
     {
         $price = (int)round($price);
         return "$ {$price}";
+    }
+
+    public static function clearImageOriginal($fileId)
+    {
+        $imagesOriginal = HLWrapper::table(self::IMAGES_ORIGINAL_HL_TBL_NAME);
+        $images = $imagesOriginal->getList(["filter" => ["UF_RESIZED_IMAGE_ID" => $fileId]]);
+        while ($image = $images->fetch()) {
+            $imagesOriginal->delete($image["ID"]);
+        }
     }
 }

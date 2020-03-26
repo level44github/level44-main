@@ -18,6 +18,7 @@ class EventHandlers
 
         self::addEventHandler("sale", "OnBeforeBasketAdd");
         self::addEventHandler("sale", "OnOrderNewSendEmail");
+        self::addEventHandler("main", "OnFileDelete");
     }
 
     private static function addEventHandler($moduleId, $eventType)
@@ -279,5 +280,10 @@ LAYOUT;
         $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
         $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
         $arFields["ADMIN_LINK"] = "https://level44.net/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
+    }
+
+    public static function OnFileDeleteHandler($arFile)
+    {
+        \Level44\Base::clearImageOriginal($arFile["ID"]);
     }
 }
