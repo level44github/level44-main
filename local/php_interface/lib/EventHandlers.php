@@ -17,7 +17,7 @@ class EventHandlers
         }
 
         self::addEventHandler("sale", "OnBeforeBasketAdd");
-        self::addEventHandler("sale", "OnOrderNewSendEmail");
+        self::addEventHandler("main", "OnBeforeEventSend");
         self::addEventHandler("main", "OnFileDelete");
     }
 
@@ -36,9 +36,9 @@ class EventHandlers
         );
     }
 
-    public static function OnOrderNewSendEmailHandler($orderId, $eventName, &$arFields)
+    public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
     {
-        if (!in_array($eventName, ["SALE_ORDER_PAID", "SALE_NEW_ORDER"])) {
+        if (!in_array($templateData["EVENT_NAME"], ["SALE_ORDER_PAID", "SALE_NEW_ORDER"])) {
             return true;
         }
 
@@ -54,11 +54,11 @@ class EventHandlers
             return true;
         }
 
-        if (!$paySystem->isCash() && $eventName === "SALE_NEW_ORDER") {
+        if (!$paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_NEW_ORDER") {
             return false;
         }
 
-        if ($paySystem->isCash() && $eventName === "SALE_ORDER_PAID") {
+        if ($paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_ORDER_PAID") {
             return false;
         }
 
@@ -276,6 +276,7 @@ LAYOUT;
 
         $arFields["DELIVERY_ADDRESS"] = $deliveryAddress;
         $arFields["YEAR"] = date("Y");
+        $arFields["PRICE"] = $order->getPrice();
         $arFields["EMAIL_TITLE_IMG"] = $hostName . Base::getAssetsPath() . "/img/email-title.png";
         $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
         $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
