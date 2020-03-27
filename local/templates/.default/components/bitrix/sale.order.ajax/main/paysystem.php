@@ -19,6 +19,11 @@ use Bitrix\Main\Localization\Loc;
                        data-target-label="pay_system<?= $paySystem["ID"] ?>label"
                     >
                         <div class="option__title"><?= $paySystem["NAME"] ?></div>
+                        <? if (!empty($paySystem["ICONS"])): ?>
+                            <? foreach ($paySystem["ICONS"] as $icon): ?>
+                                <div class="option__system <?= $icon ?>"></div>
+                            <? endforeach; ?>
+                        <? endif; ?>
                     </a>
                     <label style="display: none;" for="pay_system<?= $paySystem["ID"] ?>input"
                            id="pay_system<?= $paySystem["ID"] ?>label"></label>
