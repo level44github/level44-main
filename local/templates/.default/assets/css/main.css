@@ -153,6 +153,19 @@
   align-items: center;
 }
 
+@media (max-width:991px) {
+  .option__header {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width:991px) {
+  .option__title {
+    width: 100%;
+  }
+}
+
 .option__system {
   height: 15px;
   width: 34px;
@@ -160,6 +173,13 @@
   background-position: center;
   background-repeat: no-repeat;
   margin-right: 5px;
+  margin-top: 5px;
+}
+
+@media (max-width:991px) {
+  .option__system {
+    margin-top: 5px;
+  }
 }
 
 .mastercard {
