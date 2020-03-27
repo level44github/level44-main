@@ -127,11 +127,11 @@
 
 /* .thank-order__desc ~ .btn {
   margin-left: calc(50% - 144px);
-}
+}*/
 
 .thank-order__btn {
   margin-left: calc(50% - 144px);
-} */
+}
 
 .mobile-only {
   display: none;
