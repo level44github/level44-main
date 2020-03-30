@@ -133,6 +133,7 @@
 
 .thank-order__btn {
   margin-left: calc(50% - 144px);
+  display: flex;
 }
 
 .mobile-only {
