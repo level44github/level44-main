@@ -217,6 +217,38 @@ foreach ($arResult["DELIVERY"] as $key => &$delivery) {
     }
 }
 unset($delivery);
+foreach ($arResult["PAY_SYSTEM"] as &$paySystem) {
+    if (!is_array($paySystem)) {
+        continue;
+    }
+
+    if ($paySystem["PSA_ACTION_FILE"] === "yandexcheckoutcustom") {
+        $paySystem["ICONS"] = [
+            "visa",
+            "mastercard",
+            "maestro",
+            "mir",
+            "jcb",
+            "diners-club",
+            "american-express",
+            "qiwi",
+            "ya-money",
+        ];
+    }
+
+    if (strripos($paySystem["PSA_ACTION_FILE"], "vampirus.yandexcustom") !== false) {
+        $paySystem["ICONS"] = [
+            "visa",
+            "mastercard",
+            "maestro",
+            "mir",
+            "qiwi",
+            "ya-money",
+        ];
+    }
+
+}
+unset($paySystem);
 
 if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
     $arResult["IS_CASH"] = !empty($arResult["ORDER"]) && !empty($arResult["PAY_SYSTEM"])

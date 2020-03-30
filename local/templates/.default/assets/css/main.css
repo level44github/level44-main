@@ -102,6 +102,12 @@
   min-height: 40px;
 }
 
+.f-center-column {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+
 .product__question .product__question-btn .icon {
   margin-right: 10px;
 }
@@ -125,10 +131,6 @@
   margin: 0 auto 50px;
 }
 
-/* .thank-order__desc ~ .btn {
-  margin-left: calc(50% - 144px);
-}*/
-
 .thank-order__btn {
   margin-left: calc(50% - 144px);
 }
@@ -147,4 +149,73 @@
   padding-top: 2px;
 }
 
+.option__header {
+  align-items: center;
+}
 
+@media (max-width:991px) {
+  .option__header {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width:991px) {
+  .option__title {
+    width: 100%;
+  }
+}
+
+.option__system {
+  height: 15px;
+  width: 34px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+@media (max-width:991px) {
+  .option__system {
+    margin-top: 5px;
+  }
+}
+
+.mastercard {
+  background-image: url("./../img/mastercard.svg");
+}
+
+.visa {
+  background-image: url("./../img/visa-logo.svg");
+}
+
+.maestro {
+  background-image: url("./../img/maestro.svg");
+}
+
+.mir {
+  background-image: url("./../img/mir.svg");
+}
+
+.jcb {
+  background-image: url("./../img/jcb.svg");
+}
+.diners-club {
+  background-image: url("./../img/diners-club.svg");
+}
+
+.american-express {
+  background-image: url("./../img/american_express.svg");
+  width: 24px;
+}
+
+.qiwi {
+  background-image: url("./../img/qiwi.svg");
+  width: 24px;
+}
+
+.ya-money {
+  background-image: url("./../img/ya-money.svg");
+  width: 40px;
+}

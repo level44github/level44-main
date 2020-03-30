@@ -15,6 +15,7 @@ class Base
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
+    const IMAGES_ORIGINAL_HL_TBL_NAME = "images_original";
     const SIZE_HL_TBL_NAME = "size_reference";
 
     public static $typePage = "";
@@ -237,5 +238,62 @@ class Base
     {
         $price = (int)round($price);
         return "$ {$price}";
+    }
+
+    public static function clearImageOriginal($fileId)
+    {
+        $imagesOriginal = HLWrapper::table(self::IMAGES_ORIGINAL_HL_TBL_NAME);
+        $images = $imagesOriginal->getList(["filter" => ["UF_RESIZED_IMAGE_ID" => $fileId]]);
+        while ($image = $images->fetch()) {
+            $imagesOriginal->delete($image["ID"]);
+        }
+    }
+
+    public static function setOriginalMorePhoto(&$morePhoto)
+    {
+        if (!is_array($morePhoto)) {
+            return false;
+        }
+
+        $fileIds = array_map(function ($item) {
+            return $item["ID"];
+        }, $morePhoto);
+
+        if (empty($fileIds)) {
+            return false;
+        }
+
+        $HLOriginalImages = HLWrapper::table(Base::IMAGES_ORIGINAL_HL_TBL_NAME);
+        $rsOriginalImages = $HLOriginalImages->getList(["filter" => $fileIds]);
+        $originalImages = [];
+        while ($originalImage = $rsOriginalImages->fetch()) {
+            $originalImages[$originalImage["UF_RESIZED_IMAGE_ID"]] = $originalImage["UF_IMAGE"];
+        }
+
+        $rsFiles = \CFile::GetList([], ["@ID" => implode(",", array_values($originalImages))]);
+        $origFiles = [];
+        while ($file = $rsFiles->GetNext()) {
+            $file["PATH"] = \CFile::GetPath($file["ID"]);
+            $origFiles[$file["ID"]] = [
+                "ID" => (int)$file["ID"],
+                "SRC" => $file["PATH"],
+                "WIDTH" => (int)$file["WIDTH"],
+                "HEIGHT" => (int)$file["HEIGHT"],
+            ];
+        }
+
+        foreach ($originalImages as &$originalImage) {
+            if (!empty($origFiles[$originalImage])) {
+                $originalImage = $origFiles[$originalImage];
+            }
+        }
+        unset($originalImage);
+
+        foreach ($morePhoto as &$morePhotoItem) {
+            if (!empty($originalImages[$morePhotoItem["ID"]])) {
+                $morePhotoItem = $originalImages[$morePhotoItem["ID"]];
+            }
+        }
+        unset($morePhotoItem);
     }
 }
