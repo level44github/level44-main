@@ -56,11 +56,11 @@ if (!empty($arResult["ORDER"])):?>
         <? endif ?>
     <? elseif ($arResult["ORDER"]["PAYED"] === "Y"): ?>
         <h1 class="thank-order__title"><?= Loc::getMessage("ALREADY_PAYED") ?></h1>
-        <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
+        <a class="btn btn-dark btn__fix-width thank-order__btn" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
     <? else: ?>
         <h1 class="thank-order__title"><?= Loc::getMessage("ERROR_ORDER") ?></h1>
         <div class="thank-order__desc"><?= Loc::getMessage("ERROR_MESS") ?></div>
-        <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
+        <a class="btn btn-dark btn__fix-width thank-order__btn" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
     <? endif; ?>
 
 <? else:?>
