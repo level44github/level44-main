@@ -222,3 +222,7 @@
   background-image: url("./../img/ya-money.svg");
   width: 40px;
 }
+
+.bx-sls .dropdown-fade2white {
+  display: none;
+}
