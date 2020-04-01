@@ -5,6 +5,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 
 use Bitrix\Main\Localization\Loc;
 
+$request = \Bitrix\Main\Context::getCurrent()->getRequest();
+
 $columns = [];
 $fulls = [];
 
@@ -42,9 +44,34 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
         continue;
     }
 
-    if ($prop["CODE"] === "LOCATION" && empty($prop["VALUE"])) {
-        $arResult["DELIVERY"] = [];
-        $arResult["PAY_SYSTEM"] = [];
+    if ($prop["CODE"] === "LOCATION") {
+        if (empty($prop["VALUE"])) {
+            $arResult["DELIVERY"] = [];
+            $arResult["PAY_SYSTEM"] = [];
+        }
+
+        $locPath = [];
+        if ((int)$prop["VALUE"] > 0) {
+            $locPath = \Bitrix\Sale\Location\LocationTable::getPathToNode($prop["VALUE"], [])->fetchAll();
+            $locPath = current($locPath);
+        }
+
+        $countryId = !empty($locPath) ? (int)$locPath["ID"] : false;
+        if (!$countryId) {
+            $countryId = 1;
+        }
+
+        $arResult["OUT_RUSSIA"] = $countryId !== 1;
+
+        if ($request->getPost("out_russia") === "Y") {
+            $arResult["OUT_RUSSIA"] = true;
+        } elseif ($request->getPost("out_russia") === "N") {
+            $arResult["OUT_RUSSIA"] = false;
+        }
+        $prop["OUT_RUSSIA"] = $arResult["OUT_RUSSIA"];
+        if ($prop["OUT_RUSSIA"]) {
+            $prop["NAME"] = \Level44\Base::getMultiLang("Страна", "Country");
+        }
     }
 
     if (in_array($prop["CODE"], ["EMAIL", "PHONE"])) {

@@ -142,6 +142,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                 </a>
             </p>
         </div>
+        <input type="hidden" name="out_russia">
     </div>
     <div class="col-lg-4 js-basket_block">
         <?

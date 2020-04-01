@@ -223,7 +223,15 @@ if (!function_exists("PrintPropsForm")) {
                 ?>
             </div>
             <div style="clear: both;"></div>
-        <? elseif ($arProperty["TYPE"] == "LOCATION"): ?>
+        <? elseif ($arProperty["TYPE"] == "LOCATION"):?>
+            <div class="form-group">
+                <label for="out-russia"><?= Loc::getMessage("OUT_RUSSIA") ?></label>
+                <input type="checkbox"
+                    <?= $arProperty["OUT_RUSSIA"] ? "checked" : "" ?>
+                       id="out-russia" class="js-out_russia"
+                >
+            </div>
+
             <div class="form-group bx_block">
                 <label for="form-email"><?= $arProperty["NAME"] ?></label>
                 <?
@@ -237,49 +245,91 @@ if (!function_exists("PrintPropsForm")) {
                     }
                 }
                 ?>
-
-                <?
-                CSaleLocation::proxySaleAjaxLocationsComponent(array(
-                    "AJAX_CALL" => "N",
-                    "COUNTRY_INPUT_NAME" => "COUNTRY",
-                    "REGION_INPUT_NAME" => "REGION",
-                    "CITY_INPUT_NAME" => $arProperty["FIELD_NAME"],
-                    "CITY_OUT_LOCATION" => "Y",
-                    "LOCATION_VALUE" => $value,
-                    "ORDER_PROPS_ID" => $arProperty["ID"],
-                    "ONCITYCHANGE" => ($arProperty["IS_LOCATION"] == "Y" || $arProperty["IS_LOCATION4TAX"] == "Y") ? "submitChangeLocation()" : "",
-                    "SIZE1" => $arProperty["SIZE1"],
-                ),
-                    array(
-                        "ID" => $arProperty["VALUE"],
-                        "CODE" => "",
-                        "SHOW_DEFAULT_LOCATIONS" => "Y",
-
-                        // function called on each location change caused by user or by program
-                        // it may be replaced with global component dispatch mechanism coming soon
-                        "JS_CALLBACK" => "submitFormProxy",
-                        //($arProperty["IS_LOCATION"] == "Y" || $arProperty["IS_LOCATION4TAX"] == "Y") ? "submitFormProxy" : "",
-
-                        // function window.BX.locationsDeferred['X'] will be created and lately called on each form re-draw.
-                        // it may be removed when sale.order.ajax will use real ajax form posting with BX.ProcessHTML() and other stuff instead of just simple iframe transfer
-                        "JS_CONTROL_DEFERRED_INIT" => intval($arProperty["ID"]),
-
-                        // an instance of this control will be placed to window.BX.locationSelectors['X'] and lately will be available from everywhere
-                        // it may be replaced with global component dispatch mechanism coming soon
-                        "JS_CONTROL_GLOBAL_ID" => intval($arProperty["ID"]),
-
-                        "DISABLE_KEYBOARD_INPUT" => 'Y',
-                        "PLACEHOLDER_TEXT" => $arProperty["DESCRIPTION"],
-                        "REQUIRED" => $arProperty["REQUIRED"],
-                        "LOCATION_ERROR_MES" => Loc::getMessage($arProperty["ERROR_MES_TYPE"], [
-                            "#FIELD#" => $arProperty["NAME"]
-                        ])
+                <? if ($arProperty["OUT_RUSSIA"]): ?>
+                    <?
+                    CSaleLocation::proxySaleAjaxLocationsComponent(array(
+                        "AJAX_CALL" => "N",
+                        "COUNTRY_INPUT_NAME" => "COUNTRY",
+                        "REGION_INPUT_NAME" => "REGION",
+                        "CITY_INPUT_NAME" => $arProperty["FIELD_NAME"],
+                        "CITY_OUT_LOCATION" => "Y",
+                        "LOCATION_VALUE" => $value,
+                        "ORDER_PROPS_ID" => $arProperty["ID"],
+                        "ONCITYCHANGE" => ($arProperty["IS_LOCATION"] == "Y" || $arProperty["IS_LOCATION4TAX"] == "Y") ? "submitChangeLocation()" : "",
+                        "SIZE1" => $arProperty["SIZE1"],
                     ),
-                    $locationTemplate,
-                    true,
-                    'location-block-wrapper'
-                ) ?>
+                        array(
+                            "ID" => $arProperty["VALUE"],
+                            "CODE" => "",
+                            "DISABLE_KEYBOARD_INPUT" => "N",
+                            "SHOW_DEFAULT_LOCATIONS" => "Y",
 
+                            // function called on each location change caused by user or by program
+                            // it may be replaced with global component dispatch mechanism coming soon
+                            "JS_CALLBACK" => "submitFormProxy",
+                            //($arProperty["IS_LOCATION"] == "Y" || $arProperty["IS_LOCATION4TAX"] == "Y") ? "submitFormProxy" : "",
+
+                            // function window.BX.locationsDeferred['X'] will be created and lately called on each form re-draw.
+                            // it may be removed when sale.order.ajax will use real ajax form posting with BX.ProcessHTML() and other stuff instead of just simple iframe transfer
+                            "JS_CONTROL_DEFERRED_INIT" => intval($arProperty["ID"]),
+
+                            // an instance of this control will be placed to window.BX.locationSelectors['X'] and lately will be available from everywhere
+                            // it may be replaced with global component dispatch mechanism coming soon
+                            "JS_CONTROL_GLOBAL_ID" => intval($arProperty["ID"]),
+
+                            "PLACEHOLDER_TEXT" => $arProperty["DESCRIPTION"],
+                            "REQUIRED" => $arProperty["REQUIRED"],
+                            "LOCATION_ERROR_MES" => Loc::getMessage($arProperty["ERROR_MES_TYPE"], [
+                                "#FIELD#" => $arProperty["NAME"]
+                            ])
+                        ),
+                        "steps",
+                        true,
+                        'location-block-wrapper'
+                    ) ?>
+                <? else: ?>
+                    <?
+                    CSaleLocation::proxySaleAjaxLocationsComponent(array(
+                        "AJAX_CALL" => "N",
+                        "COUNTRY_INPUT_NAME" => "COUNTRY",
+                        "REGION_INPUT_NAME" => "REGION",
+                        "CITY_INPUT_NAME" => $arProperty["FIELD_NAME"],
+                        "CITY_OUT_LOCATION" => "Y",
+                        "LOCATION_VALUE" => $value,
+                        "ORDER_PROPS_ID" => $arProperty["ID"],
+                        "ONCITYCHANGE" => ($arProperty["IS_LOCATION"] == "Y" || $arProperty["IS_LOCATION4TAX"] == "Y") ? "submitChangeLocation()" : "",
+                        "SIZE1" => $arProperty["SIZE1"],
+                    ),
+                        array(
+                            "ID" => $arProperty["VALUE"],
+                            "CODE" => "",
+                            "DISABLE_KEYBOARD_INPUT" => "N",
+                            "SHOW_DEFAULT_LOCATIONS" => "Y",
+
+                            // function called on each location change caused by user or by program
+                            // it may be replaced with global component dispatch mechanism coming soon
+                            "JS_CALLBACK" => "submitFormProxy",
+                            //($arProperty["IS_LOCATION"] == "Y" || $arProperty["IS_LOCATION4TAX"] == "Y") ? "submitFormProxy" : "",
+
+                            // function window.BX.locationsDeferred['X'] will be created and lately called on each form re-draw.
+                            // it may be removed when sale.order.ajax will use real ajax form posting with BX.ProcessHTML() and other stuff instead of just simple iframe transfer
+                            "JS_CONTROL_DEFERRED_INIT" => intval($arProperty["ID"]),
+
+                            // an instance of this control will be placed to window.BX.locationSelectors['X'] and lately will be available from everywhere
+                            // it may be replaced with global component dispatch mechanism coming soon
+                            "JS_CONTROL_GLOBAL_ID" => intval($arProperty["ID"]),
+
+                            "PLACEHOLDER_TEXT" => $arProperty["DESCRIPTION"],
+                            "REQUIRED" => $arProperty["REQUIRED"],
+                            "LOCATION_ERROR_MES" => Loc::getMessage($arProperty["ERROR_MES_TYPE"], [
+                                "#FIELD#" => $arProperty["NAME"]
+                            ])
+                        ),
+                        "search",
+                        true,
+                        'location-block-wrapper'
+                    ) ?>
+                <? endif; ?>
             </div>
         <? elseif ($arProperty["TYPE"] == "RADIO" && false): ?>
             <div class="bx_block r1x3 pt8">
