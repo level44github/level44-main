@@ -241,6 +241,7 @@
   padding: 0;
   outline: none;
   transition: opacity 0.3s;
+  background-color: #ffffff;
 }
 
 .region-select button:hover {
