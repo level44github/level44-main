@@ -26,7 +26,7 @@ if (!empty($arResult["ORDER"])):?>
         <? if ($arResult["IS_CASH"]): ?>
             <h1 class="thank-order__title"><?= Loc::getMessage("THANK_ORGER") ?></h1>
             <div class="thank-order__desc"><?= Loc::getMessage("SUC_MESS1") ?></div>
-            <a class="btn btn-dark btn__fix-width" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
+            <a class="btn btn-dark btn__fix-width thank-order__btn" href="<?= SITE_DIR ?>"><?= Loc::getMessage("TO_MAIN") ?></a>
         <? endif; ?>
         <? if (strlen($arResult["PAY_SYSTEM"]["ACTION_FILE"]) > 0): ?>
             <? if (!$arResult["IS_CASH"]): ?>
