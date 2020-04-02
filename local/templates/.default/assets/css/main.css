@@ -270,3 +270,9 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+.bx-slst .dropdown-block {
+  font-size: 14px;
+  padding: 0 22px 0 30px;
+  position: relative;
+  backgrou
