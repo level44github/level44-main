@@ -223,6 +223,8 @@
   width: 40px;
 }
 
-.bx-sls .dropdown-fade2white {
+.bx-sls .dropdown-fade2white,
+.bx-slst .dropdown-fade2white,
+.bx-slst .bx-ui-combobox-toggle {
   display: none;
 }
