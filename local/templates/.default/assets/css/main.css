@@ -228,3 +228,40 @@
 .bx-slst .bx-ui-combobox-toggle {
   display: none;
 }
+
+.region-select {
+  display: flex;
+  font-size: 14px;
+  line-height: 14px;
+  color: #212121;
+}
+
+.region-select button {
+  font-weight: bold;
+  margin-right: 20px;
+  border: none;
+  padding: 0;
+  outline: none;
+  transition: opacity 0.3s;
+}
+
+.region-select button:hover {
+  opacity: 0.6;
+}
+
+.region-select button.region-selected {
+  font-weight: normal;
+  position: relative;
+  pointer-events: none;
+}
+
+.region-selected:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  border: 1px solid #212121;
+  opacity: 0.2;
+}

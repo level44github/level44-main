@@ -31,7 +31,7 @@ BX.saleOrderAjax = {
         this.controls.scope = BX('order_form_div');
 
         // user presses "add location" when he cannot find location in popup mode
-        BX.bindDelegate(this.controls.scope, 'click', {className: '-bx-popup-set-mode-add-loc'}, function () {
+        BX.bindDelegate(this.controls.scope, 'click', { className: '-bx-popup-set-mode-add-loc' }, function () {
 
             var input = BX.create('input', {
                 attrs: {
@@ -82,10 +82,10 @@ BX.saleOrderAjax = {
 
                 window.BX.locationsDeferred[k].call(this);
                 window.BX.locationsDeferred[k] = null;
-                delete(window.BX.locationsDeferred[k]);
+                delete (window.BX.locationsDeferred[k]);
 
                 this.properties[k].control = window.BX.locationSelectors[k];
-                delete(window.BX.locationSelectors[k]);
+                delete (window.BX.locationSelectors[k]);
             }
         }
 
@@ -443,7 +443,7 @@ BX.saleOrderAjax = {
             processData: true,
             emulateOnload: true,
             start: true,
-            data: {'ACT': 'GET_LOC_BY_ZIP', 'ZIP': value},
+            data: { 'ACT': 'GET_LOC_BY_ZIP', 'ZIP': value },
             //cache: true,
             onsuccess: function (result) {
 
@@ -491,7 +491,7 @@ BX.saleOrderAjax = {
                 .not(".js-form__location")
                 .blur();
 
-            if ($(".is-invalid").length){
+            if ($(".is-invalid").length) {
                 this.BXFormPosting = false;
                 $(".checkout-loading-overlay").hide();
                 return;
@@ -593,12 +593,18 @@ $(function () {
         }
     })
 
-    $(document).on("change", ".js-out_russia", function (event) {
-        var value = $(this).prop("checked") ? "Y" : "N";
+    $(document).on("click", ".region-select--button", function (event) {
+        $(".region-select--button").removeClass("region-selected");
+        var clickedButton = $(event.target);
+        clickedButton.addClass("region-selected");
+        var value = clickedButton.hasClass("region-select--russia") ? "Y" : "N";
+
         var $outRussiaInput = $(document).find("[name='out_russia']");
         $outRussiaInput.attr("value", value);
         $(this).closest("form").find(".js-form__location__value").val("");
         BX.saleOrderAjax.submitForm();
+
+        return false;
     });
 
     $(document).on("change", ".bx-ui-combobox-fake.js-form__location", function (event) {

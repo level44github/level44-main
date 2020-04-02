@@ -232,6 +232,11 @@ if (!function_exists("PrintPropsForm")) {
                 >
             </div>
 
+            <div class="form-group region-select">
+                <button class="region-select--button region-select--russia region-selected">По России</button>
+                <button class="region-select--button region-select--world">За границу</button>
+            </div>
+
             <div class="form-group bx_block">
                 <label for="form-email"><?= $arProperty["NAME"] ?></label>
                 <?
