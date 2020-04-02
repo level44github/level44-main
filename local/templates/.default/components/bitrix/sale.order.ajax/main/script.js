@@ -597,7 +597,7 @@ $(function () {
         $(".region-select--button").removeClass("region-selected");
         var clickedButton = $(event.target);
         clickedButton.addClass("region-selected");
-        var value = clickedButton.hasClass("region-select--russia") ? "Y" : "N";
+        var value = clickedButton.hasClass("region-select--russia") ? "N" : "Y";
         $("[name='out_russia']").val(value);
         $(this).closest("form").find(".js-form__location__value").val("");
         BX.saleOrderAjax.submitForm();
