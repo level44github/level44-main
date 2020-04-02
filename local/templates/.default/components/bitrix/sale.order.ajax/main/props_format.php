@@ -224,13 +224,13 @@ if (!function_exists("PrintPropsForm")) {
             </div>
             <div style="clear: both;"></div>
         <? elseif ($arProperty["TYPE"] == "LOCATION"):?>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="out-russia"><?= Loc::getMessage("OUT_RUSSIA") ?></label>
                 <input type="checkbox"
                     <?= $arProperty["OUT_RUSSIA"] ? "checked" : "" ?>
                        id="out-russia" class="js-out_russia"
                 >
-            </div>
+            </div> -->
 
             <div class="form-group region-select">
                 <button class="region-select--button region-select--russia region-selected">По России</button>
@@ -238,7 +238,7 @@ if (!function_exists("PrintPropsForm")) {
             </div>
 
             <div class="form-group bx_block">
-                <label for="form-email"><?= $arProperty["NAME"] ?></label>
+                <!-- <label for="form-email"><?= $arProperty["NAME"] ?></label> -->
                 <?
                 $value = 0;
                 if (is_array($arProperty["VARIANTS"]) && count($arProperty["VARIANTS"]) > 0) {
