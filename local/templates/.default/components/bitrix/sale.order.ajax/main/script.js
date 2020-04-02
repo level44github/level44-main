@@ -598,7 +598,7 @@ $(function () {
         var clickedButton = $(event.target);
         clickedButton.addClass("region-selected");
         var value = clickedButton.hasClass("region-select--russia") ? "Y" : "N";
-        // console.log({ value });
+        console.log({ value })
         var $outRussiaInput = $(document).find("[name='out_russia']");
         $outRussiaInput.attr("value", value);
         $(this).closest("form").find(".js-form__location__value").val("");
