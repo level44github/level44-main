@@ -4,10 +4,12 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 $request = \Bitrix\Main\Context::getCurrent()->getRequest();
 $orderId = 0;
 $status = false;
+\Bitrix\Main\Loader::includeModule("sale");
 
 if ($request->getQuery("ps") === "ym") {
     $orderId = $request->getQuery("orderId");
-    $status = true;
+    $order = \Bitrix\Sale\Order::load($orderId);
+    $status = $order->getPaymentCollection()->current()->getField("PAID") === "Y";
 } else {
     $status = (string)$request->getQuery("st");
     $cm = (string)$request->getQuery("cm");
@@ -16,7 +18,7 @@ if ($request->getQuery("ps") === "ym") {
     $status = (string)$request->getQuery("st") === "Completed1";
 }
 
-if ($orderId <= 0) {
+if (!$status && $request->getQuery("ps") === "ym") {
     LocalRedirect(SITE_DIR);
 }
 ?>
