@@ -9,7 +9,7 @@ use Bitrix\Main\Localization\Loc;
 
 <? if (!empty($arResult["DELIVERY"])): ?>
     <fieldset class="fieldset">
-        <legend><?= Loc::getMessage("DELIVERY") ?></legend>
+        <legend>2. <?= Loc::getMessage("DELIVERY") ?></legend>
         <div class="checkout__radio" id="delivery">
             <? foreach ($arResult["DELIVERY"] as $key => $delivery): ?>
                 <div class="card option">
