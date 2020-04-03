@@ -159,7 +159,7 @@ class YandexCheckoutCustomHandler
 		{
             $returnUrl = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
             $returnUrl .= (Base::isEnLang() ? "/en" : "") . "/checkout/success/";
-            $returnUrl .= "?" . http_build_query(["ps" => "ym", "orderId" => $payment->getOrderId()]);
+            $returnUrl .= "?" . http_build_query(["ps" => "yk", "orderId" => $payment->getOrderId()]);
 
 			$params['CONFIRMATION_TOKEN'] = $additionalParams['confirmation']['confirmation_token'] ?? '';
 			$params['RETURN_URL'] = $returnUrl;
@@ -376,7 +376,7 @@ class YandexCheckoutCustomHandler
 	{
         $returnUrl = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
         $returnUrl .= (Base::isEnLang() ? "/en" : "") . "/checkout/success/";
-        $returnUrl .= "?" . http_build_query(["ps" => "ym", "orderId" => $payment->getOrderId()]);
+        $returnUrl .= "?" . http_build_query(["ps" => "yk", "orderId" => $payment->getOrderId()]);
 
 	    $payment->getOrderId();
 

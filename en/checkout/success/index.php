@@ -8,6 +8,9 @@ $status = false;
 
 if ($request->getQuery("ps") === "ym") {
     $orderId = $request->getQuery("orderId");
+    $status = true;
+} elseif ($request->getQuery("ps") === "yk") {
+    $orderId = $request->getQuery("orderId");
     $order = \Bitrix\Sale\Order::load($orderId);
     $status = $order->getPaymentCollection()->current()->getField("PAID") === "Y";
 } else {
@@ -18,7 +21,7 @@ if ($request->getQuery("ps") === "ym") {
     $status = (string)$request->getQuery("st") === "Completed1";
 }
 
-if (!$status && $request->getQuery("ps") === "ym") {
+if (!$status && $request->getQuery("ps") === "yk") {
     LocalRedirect(SITE_DIR);
 }
 ?>

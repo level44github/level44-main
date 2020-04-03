@@ -5,11 +5,6 @@
     $(function () {
         var $yaMoneyForm = $("form[name='yandexapi_form']");
         if ($yaMoneyForm.length) {
-            var siteDir = '<?=SITE_DIR?>';
-            var orderId = '<?=$arResult["ORDER"]["ID"]?>';
-            var successUrl = $yaMoneyForm.find("input[name='successURL']").val();
-            successUrl = successUrl.replace("/personal/order/", siteDir + "checkout/success/?ps=ym&orderId=" + orderId);
-            $yaMoneyForm.find("input[name='successURL']").val(successUrl);
             $yaMoneyForm.submit();
         }
 
