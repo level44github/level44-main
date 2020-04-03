@@ -235,13 +235,25 @@
 }
 
 .region-select button {
-  font-weight: bold;
+  font-weight: normal;
   margin-right: 20px;
   border: none;
   padding: 0;
   outline: none;
   transition: opacity 0.3s;
   background-color: #ffffff;
+  position: relative;
+}
+
+.region-select button:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  border: 1px solid #212121;
+  opacity: 0.2;
 }
 
 .region-select button:hover {
@@ -249,9 +261,12 @@
 }
 
 .region-select button.region-selected {
-  font-weight: normal;
-  position: relative;
+  font-weight: bold;
   pointer-events: none;
+}
+
+.region-selected:after {
+  display: none;
 }
 
 .region-selected:after {
