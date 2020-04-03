@@ -31,7 +31,7 @@ BX.saleOrderAjax = {
         this.controls.scope = BX('order_form_div');
 
         // user presses "add location" when he cannot find location in popup mode
-        BX.bindDelegate(this.controls.scope, 'click', {className: '-bx-popup-set-mode-add-loc'}, function () {
+        BX.bindDelegate(this.controls.scope, 'click', { className: '-bx-popup-set-mode-add-loc' }, function () {
 
             var input = BX.create('input', {
                 attrs: {
@@ -82,10 +82,10 @@ BX.saleOrderAjax = {
 
                 window.BX.locationsDeferred[k].call(this);
                 window.BX.locationsDeferred[k] = null;
-                delete(window.BX.locationsDeferred[k]);
+                delete (window.BX.locationsDeferred[k]);
 
                 this.properties[k].control = window.BX.locationSelectors[k];
-                delete(window.BX.locationSelectors[k]);
+                delete (window.BX.locationSelectors[k]);
             }
         }
 
@@ -213,8 +213,8 @@ BX.saleOrderAjax = {
                     var selectBox = adapter.getControl();
                     if (selectBox.getValue() == false) {
 
-                        adapter.getControl().replaceMessage('notSelected', ctx.options.messages.moreInfoLocation);
-                        adapter.setValuePair('', ctx.options.messages.moreInfoLocation);
+                        // adapter.getControl().replaceMessage('notSelected', ctx.options.messages.moreInfoLocation);
+                        // adapter.setValuePair('', ctx.options.messages.moreInfoLocation);
                     }
                 }
             }
@@ -443,7 +443,7 @@ BX.saleOrderAjax = {
             processData: true,
             emulateOnload: true,
             start: true,
-            data: {'ACT': 'GET_LOC_BY_ZIP', 'ZIP': value},
+            data: { 'ACT': 'GET_LOC_BY_ZIP', 'ZIP': value },
             //cache: true,
             onsuccess: function (result) {
 
@@ -491,7 +491,7 @@ BX.saleOrderAjax = {
                 .not(".js-form__location")
                 .blur();
 
-            if ($(".is-invalid").length){
+            if ($(".is-invalid").length) {
                 this.BXFormPosting = false;
                 $(".checkout-loading-overlay").hide();
                 return;
@@ -540,6 +540,7 @@ BX.saleOrderAjax = {
                 var $obContent = $("<div></div>").append($(res));
                 $(".js-form_block").html($obContent.find(".js-form_block").html());
                 $(".js-basket_block").html($obContent.find(".js-basket_block").html());
+                BX.saleOrderAjax.setErrorForCountryField();
             }
 
             if (this.isLocationProEnabled) {
@@ -551,10 +552,25 @@ BX.saleOrderAjax = {
         $(".checkout-loading-overlay").hide();
         $(document).trigger("set_validators");
         BX.onCustomEvent(orderForm, 'onAjaxSuccess');
-    }
-}
+    },
+    setErrorForCountryField: function () {
+        if (!$.isReady) {
+            return;
+        }
+
+        var countryContainer = $(document).find(".js-location_container");
+        var countryField = countryContainer.find(".form-control.js-form__control");
+        if (countryContainer.length) {
+            var errorBlock = countryContainer.find(".invalid-feedback");
+            if (!$(countryField).siblings(".invalid-feedback").length) {
+                $(countryField).after(errorBlock);
+            }
+        }
+    },
+};
 
 $(function () {
+    BX.saleOrderAjax.setErrorForCountryField()
     $(document).on("click", ".js-delivery-link", function (event) {
         var labelId = $(this).data("target-label");
         if (labelId) {
@@ -574,6 +590,24 @@ $(function () {
 
         if ($(document).find(".js-pay_system-link").not(".collapsed").length <= 0) {
             $(document).find(".js-pay_system-input").prop("checked", false)
+        }
+    })
+
+    $(document).on("click", ".region-select--button", function (event) {
+        $(".region-select--button").removeClass("region-selected");
+        var clickedButton = $(event.target);
+        clickedButton.addClass("region-selected");
+        var value = clickedButton.hasClass("region-select--russia") ? "N" : "Y";
+        $("[name='out_russia']").val(value);
+        $(this).closest("form").find(".js-form__location__value").val("");
+        BX.saleOrderAjax.submitForm();
+
+        return false;
+    });
+
+    $(document).on("change", ".bx-ui-combobox-fake.js-form__location", function (event) {
+        if ($(this).val().length <= 0) {
+            $(this).closest(".js-location_container").find(".js-form__location__value").val("")
         }
     })
 });

@@ -222,3 +222,73 @@
   background-image: url("./../img/ya-money.svg");
   width: 40px;
 }
+
+.bx-sls .dropdown-fade2white,
+.bx-slst .dropdown-fade2white,
+.bx-slst .bx-ui-combobox-toggle {
+  display: none;
+}
+
+.region-select {
+  display: flex;
+  margin-top: 18px;
+}
+
+.region-select button {
+  font-weight: normal;
+  margin-right: 20px;
+  border: none;
+  padding: 0;
+  outline: none;
+  transition: opacity 0.3s;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.region-select button:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  border: 1px solid #212121;
+  opacity: 0.2;
+}
+
+.region-select button:hover {
+  opacity: 0.6;
+}
+
+.region-select button.region-selected {
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.region-selected:after {
+  display: none;
+}
+
+.region-selected:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  border: 1px solid #212121;
+  opacity: 0.2;
+}
+
+.bx-slst .dropdown-icon {
+  background: url(/local/templates/.default/assets/img/lens.svg) no-repeat center center;
+  padding: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.bx-slst .dropdown-block {
+  font-size: 14px;
+  padding: 0 22px 0 35px;
+  position: relative;
+}

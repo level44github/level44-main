@@ -22,9 +22,13 @@ if ($arParams["UI_FILTER"])
 <?else:?>
 
 	<?CJSCore::Init();?>
+    <?CJSCore::Init(array("fx"));?>
 	<?$GLOBALS['APPLICATION']->AddHeadScript('/bitrix/js/sale/core_ui_widget.js')?>
 	<?$GLOBALS['APPLICATION']->AddHeadScript('/bitrix/js/sale/core_ui_etc.js')?>
 	<?$GLOBALS['APPLICATION']->AddHeadScript('/bitrix/js/sale/core_ui_autocomplete.js');?>
+    <?$GLOBALS['APPLICATION']->AddHeadScript('/bitrix/js/sale/core_ui_pager.js')?>
+    <?$GLOBALS['APPLICATION']->AddHeadScript('/bitrix/js/sale/core_ui_combobox.js')?>
+    <?$GLOBALS['APPLICATION']->AddHeadScript('/bitrix/js/sale/core_ui_chainedselectors.js')?>
 
 	<div id="sls-<?=$arResult['RANDOM_TAG']?>" class="bx-sls <?if(strlen($arResult['MODE_CLASSES'])):?> <?=$arResult['MODE_CLASSES']?><?endif?>">
 
@@ -101,7 +105,7 @@ if ($arParams["UI_FILTER"])
 				// common
 				'scope' => 'sls-'.$arResult['RANDOM_TAG'],
 				'required' => $arParams['REQUIRED'],
-				'source' => $this->__component->getPath().'/get.php',
+				'source' => "/ajax/findLocations.php",
 				'query' => array(
 					'FILTER' => array(
 						'EXCLUDE_ID' => intval($arParams['EXCLUDE_SUBTREE']),

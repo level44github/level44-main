@@ -11,7 +11,9 @@ use Bitrix\Main\Localization\Loc;
         <? if (!empty($arResult["ORDER_PROP"]["USER_PROPS_Y"]["COLUMNS"])): ?>
             <? foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"]["COLUMNS"] as $row): ?>
                 <div class="row">
-                    <? foreach ($row as $col): ?>
+                    <? foreach ($row as $col):
+                        $col["OUT_RUSSIA"] = $arResult["OUT_RUSSIA"];
+                        ?>
                         <div class="col-lg-6">
                             <? PrintPropsForm($col, $arParams["TEMPLATE_LOCATION"]) ?>
                         </div>
@@ -19,7 +21,9 @@ use Bitrix\Main\Localization\Loc;
                 </div>
             <? endforeach; ?>
         <? endif; ?>
-        <? foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"]["FULLS"] as $row): ?>
+        <? foreach ($arResult["ORDER_PROP"]["USER_PROPS_Y"]["FULLS"] as $row):
+            $row["OUT_RUSSIA"] = $arResult["OUT_RUSSIA"];
+            ?>
             <? PrintPropsForm($row, $arParams["TEMPLATE_LOCATION"]) ?>
         <? endforeach; ?>
     </fieldset>
