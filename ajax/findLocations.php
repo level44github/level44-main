@@ -28,7 +28,7 @@ try {
     $data["ITEMS"] = array_filter(
         $data["ITEMS"],
         function ($item) {
-            return !empty($item["PATH"][0]) && (int)$item["PATH"][0] === 1;
+            return \Bitrix\Sale\Location\LocationTable::checkNodeIsParentOfNode(1, $item["VALUE"]);
         });
 } catch (Main\SystemException $e) {
     $result = false;
