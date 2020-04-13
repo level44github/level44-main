@@ -25,11 +25,11 @@ try {
 
     $request = Main\Context::getCurrent()->getRequest()->getPostList();
     $data = CBitrixLocationSelectorSearchComponent::processSearchRequestV2($_REQUEST);
-    $data["ITEMS"] = array_filter(
+    $data["ITEMS"] = array_values(array_filter(
         $data["ITEMS"],
         function ($item) {
             return \Bitrix\Sale\Location\LocationTable::checkNodeIsParentOfNode(1, $item["VALUE"]);
-        });
+        }));
 } catch (Main\SystemException $e) {
     $result = false;
     $errors[] = $e->getMessage();
