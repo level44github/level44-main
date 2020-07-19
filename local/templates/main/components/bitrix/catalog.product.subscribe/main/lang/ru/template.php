@@ -1,5 +1,5 @@
 <?
-$MESS["CPST_SUBSCRIBE_BUTTON_NAME"] = "Подписаться";
+$MESS["CPST_SUBSCRIBE_BUTTON_NAME"] = "Предзаказ";
 $MESS["CPST_SUBSCRIBE_POPUP_TITLE"] = "Подписка на товар";
 $MESS["CPST_SUBSCRIBE_BUTTON_CLOSE"] = "Закрыть";
 $MESS["CPST_SUBSCRIBE_MANY_CONTACT_NOTIFY"] = "Выберите способ уведомления:";
