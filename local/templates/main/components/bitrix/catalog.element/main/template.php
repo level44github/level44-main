@@ -402,7 +402,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 
                     <?= Loc::getMessage("NOT_AVAILABLE") ?>
                 </button>
-                <button class="btn btn-dark btn-block mb-3"
+                <button class="btn btn-block mb-3"
                         type="button"
                         id=""
                         style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
