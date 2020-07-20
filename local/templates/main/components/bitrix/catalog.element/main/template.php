@@ -405,7 +405,6 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <button class="btn btn-block mb-3"
                         type="button"
                         id=""
-                        style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
                 >
                     <svg class="icon icon-stop product__basket-icon">
                         <use xlink:href="#bell"></use>
