@@ -408,7 +408,9 @@
         if (!subscribeFormBody) {
             return false;
         }
-        subscribeFormBody.appendChild(form);
+
+		$(subscribeFormBody).find("form").remove();
+		subscribeFormBody.appendChild(form);
 
 
         $(".js-subscribe-modal .modal-dialog").hide();
