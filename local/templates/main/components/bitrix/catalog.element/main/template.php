@@ -415,7 +415,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <?
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.product.subscribe",
-                    "",
+                    "main",
                     Array(
                         "BUTTON_CLASS" => "btn btn-block mb-4 btn-outline-dark",
                         "BUTTON_ID" => $itemIds["SUBSCRIBE_LINK"],
