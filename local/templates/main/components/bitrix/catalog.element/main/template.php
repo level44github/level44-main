@@ -402,16 +402,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 
                     <?= Loc::getMessage("NOT_AVAILABLE") ?>
                 </button>
-                <button class="btn btn-block mb-3"
-                        type="button"
-                        id=""
-                >
-                    <svg class="icon icon-stop product__basket-icon">
-                        <use xlink:href="#bell"></use>
-                    </svg>
 
-                    <?= Loc::getMessage("PREORDER") ?>
-                </button>
                 <?
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.product.subscribe",
