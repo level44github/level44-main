@@ -313,6 +313,6 @@
   margin-top: -3px;
 }
 
-.bx-catalog-subscribe-button:hover svg {
+.bx-catalog-subscribe-button:hover svg path {
   fill: #ffffff;
 }
