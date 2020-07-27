@@ -240,6 +240,14 @@
             },
             attrs: { 'data-id': 1 },
           }),
+        ],
+      }),
+      BX.create('div', {
+        props: {
+          id: 'bx-catalog-subscribe-form-div',
+          className: 'form-group',
+        },
+        children: [
           BX.create('p', {
             props: {
               id: 'bx-catalog-subscribe-form-notify',
@@ -253,7 +261,7 @@
             attrs: {
               for: 'subscribe-tel',
             },
-            text: 'Телефон',
+            text: 'E-mail',
           }),
           BX.create('input', {
             props: {
@@ -261,7 +269,7 @@
               className: 'form-control',
               type: 'text',
               name: 'contact[1][user]',
-              placeholder: 'Телефон',
+              placeholder: 'E-mail',
             },
             attrs: { 'data-id': 1 },
           }),
