@@ -240,6 +240,12 @@
             },
             attrs: { 'data-id': 1 },
           }),
+          BX.create('p', {
+            props: {
+              id: 'bx-catalog-subscribe-form-notify',
+            },
+            text: '',
+          }),
           BX.create('label', {
             props: {
               className: 'sr-only',
