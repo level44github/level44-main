@@ -326,7 +326,7 @@
           type: 'submit',
           className: 'js-subscribe-button btn btn-dark btn-block',
         },
-        text: BX.message('CPST_SUBSCRIBE_BUTTON_NAME'),
+        text: BX.message('CPST_SUBSCRIBE_BUTTON_NAME_POPUP'),
         events: {
           click: BX.delegate(function (e) {
             e.preventDefault();
