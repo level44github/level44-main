@@ -578,6 +578,7 @@ BUTTONS;
             "ORDER_LIST" => $basketList,
             "SALE_EMAIL" => \Bitrix\Main\Config\Option::get("sale", "order_email", "order@" . $_SERVER["SERVER_NAME"]),
             "DELIVERY_PRICE" => $entity->getDeliveryPrice(),
+            "PRE_ORDER" => "Y",
             "ORDER_PUBLIC_URL" => \Bitrix\Sale\Helpers\Order::isAllowGuestView($entity) ? \Bitrix\Sale\Helpers\Order::getPublicLink($entity) : ""
         );
 

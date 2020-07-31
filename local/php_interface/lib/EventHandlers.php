@@ -63,11 +63,12 @@ class EventHandlers
             return true;
         }
 
-        if (!$paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_NEW_ORDER") {
+        $preOrder = $arFields["PRE_ORDER"] === "Y";
+        if (!$paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_NEW_ORDER" && !$preOrder) {
             return false;
         }
 
-        if ($paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_ORDER_PAID") {
+        if ($paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_ORDER_PAID" && !$preOrder) {
             return false;
         }
 
