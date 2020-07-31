@@ -73,9 +73,14 @@ class EventHandlers
 
         $basketItems = $order->getBasket()->getBasketItems();
         $basketItemsContent = "";
-        $hostName = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
-            . '://'
-            . $_SERVER['HTTP_HOST'];
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $hostName = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
+                . '://'
+                . $_SERVER['HTTP_HOST'];
+        } else {
+            $hostName = "https://level44.net";
+        }
+
 
         /** @var \Bitrix\Sale\BasketItem $basketItem */
 
@@ -153,7 +158,9 @@ HTML;
             }
         }
 
+        $iBlockId = Base::CATALOG_IBLOCK_ID;
         $arFields["PRODUCT_NAME"] = "";
+        $arFields["ADMIN_PRODUCT_URL"] = "";
 
         foreach ($basketItems as $basketItem) {
             $basketProductId = $basketItem->getProductId();
@@ -167,6 +174,15 @@ HTML;
                 $arFields["PRODUCT_NAME"] = $itemName;
             }
 
+            $curProductId = $arProductsData[$productIds[$basketProductId]]["ID"];
+
+            if ((int)$curProductId <= 0) {
+                $curProductId = $basketProductId;
+            }
+
+            if (empty($arFields["ADMIN_PRODUCT_URL"])) {
+                $arFields["ADMIN_PRODUCT_URL"] = "$hostName/bitrix/admin/iblock_element_edit.php?IBLOCK_ID={$iBlockId}&type=catalog&ID={$curProductId}&lang=ru";
+            }
 
             $offerProps = "";
 
@@ -294,7 +310,7 @@ LAYOUT;
         $arFields["EMAIL_TITLE_IMG"] = $hostName . Base::getAssetsPath() . "/img/email-title.png";
         $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
         $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
-        $arFields["ADMIN_LINK"] = "https://level44.net/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
+        $arFields["ADMIN_LINK"] = "{$hostName}/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
     }
 
     public static function OnFileDeleteHandler($arFile)
