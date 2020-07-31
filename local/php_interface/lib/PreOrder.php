@@ -7,11 +7,13 @@ use Bitrix\Currency\CurrencyManager;
 use Bitrix\Main\Context;
 use Bitrix\Catalog\Model\Product;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\SiteTable;
 use Bitrix\Sale\Basket;
 use Bitrix\Sale\BasketItem;
 use Bitrix\Sale\Order;
 use Bitrix\Sale\PersonType;
 use Bitrix\Sale\PaySystem\Manager as PaySystemManager;
+use Bitrix\Sale\PropertyValueCollection;
 
 Loc::loadMessages(__FILE__);
 
@@ -521,5 +523,115 @@ BUTTONS;
         }
 
         return $order->getField("STATUS_ID") === self::ORDER_STATUS_ID;
+    }
+
+    public static function sendOrderConfirm(Order $entity)
+    {
+
+        $by = $sort = '';
+
+        $separator = "<br/>";
+
+        $eventName = "SALE_NEW_ORDER";
+
+        $filter = array(
+            "EVENT_NAME" => $eventName,
+            'ACTIVE' => 'Y',
+        );
+
+        $filter['SITE_ID'] = $entity->getSiteId();
+
+
+        $res = \CEventMessage::GetList($by, $sort, $filter);
+        if ($eventMessage = $res->Fetch())
+        {
+            if ($eventMessage['BODY_TYPE'] == 'text')
+            {
+                $separator = "\n";
+            }
+        }
+
+        $basketList = '';
+        /** @var Basket $basket */
+        $basket = $entity->getBasket();
+        if ($basket)
+        {
+            $basketTextList = $basket->getListOfFormatText();
+            if (!empty($basketTextList))
+            {
+                foreach ($basketTextList as $basketItemCode => $basketItemData)
+                {
+                    $basketList .= $basketItemData.$separator;
+                }
+            }
+        }
+
+        $fields = Array(
+            "ORDER_ID" => $entity->getField("ACCOUNT_NUMBER"),
+            "ORDER_REAL_ID" => $entity->getField("ID"),
+            "ORDER_ACCOUNT_NUMBER_ENCODE" => urlencode(urlencode($entity->getField("ACCOUNT_NUMBER"))),
+            "ORDER_DATE" => $entity->getDateInsert()->toString(),
+            "ORDER_USER" => static::getUserName($entity),
+            "PRICE" => SaleFormatCurrency($entity->getPrice(), $entity->getCurrency()),
+            "BCC" => \Bitrix\Main\Config\Option::get("sale", "order_email", "order@" . $_SERVER["SERVER_NAME"]),
+            "EMAIL" => static::getUserEmail($entity),
+            "ORDER_LIST" => $basketList,
+            "SALE_EMAIL" => \Bitrix\Main\Config\Option::get("sale", "order_email", "order@" . $_SERVER["SERVER_NAME"]),
+            "DELIVERY_PRICE" => $entity->getDeliveryPrice(),
+            "ORDER_PUBLIC_URL" => \Bitrix\Sale\Helpers\Order::isAllowGuestView($entity) ? \Bitrix\Sale\Helpers\Order::getPublicLink($entity) : ""
+        );
+
+        $event = new \CEvent;
+        $result = $event->Send($eventName, $entity->getField('LID'), $fields, "Y", "", array(),static::getOrderLanguageId($entity));
+        return $result;
+    }
+
+    public static function getOrderLanguageId(Order $order)
+    {
+        $siteData = SiteTable::GetById($order->getSiteId())->fetch();
+        return $siteData['LANGUAGE_ID'];
+    }
+
+    protected static function getUserName(Order $order)
+    {
+        $userName = "";
+
+        if (empty($userName)) {
+            /** @var PropertyValueCollection $propertyCollection */
+            if ($propertyCollection = $order->getPropertyCollection()) {
+                if ($propPayerName = $propertyCollection->getPayerName()) {
+                    $userName = $propPayerName->getValue();
+                }
+            }
+        }
+
+        if (empty($userName)) {
+            $userRes = \Bitrix\Main\UserTable::getList(array(
+                'select' => array('ID', 'LOGIN', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'EMAIL'),
+                'filter' => array('=ID' => $order->getUserId()),
+            ));
+            if ($userData = $userRes->fetch()) {
+                $userData['PAYER_NAME'] = \CUser::FormatName(\CSite::GetNameFormat(null, $order->getSiteId()), $userData, true);
+                $userName = $userData['PAYER_NAME'];
+            }
+        }
+
+        return $userName;
+    }
+
+    protected static function getUserEmail(Order $order)
+    {
+        $userEmail = "";
+
+        if (empty($userEmail)) {
+            /** @var PropertyValueCollection $propertyCollection */
+            if ($propertyCollection = $order->getPropertyCollection()) {
+                if ($propUserEmail = $propertyCollection->getUserEmail()) {
+                    $userEmail = $propUserEmail->getValue();
+                }
+            }
+        }
+
+        return $userEmail;
     }
 }

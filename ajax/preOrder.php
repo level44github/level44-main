@@ -35,11 +35,12 @@ try {
     if ($request->get("type") === "checkSubscribed") {
         $result["initData"] = $preOrder->getInitData();
     } elseif ($request->get("type") === "adminConfirm") {
-        if (empty($USER) || !$USER->IsAdmin()) {
+        if (empty($USER) || !$USER->IsAdmin() || empty($request->get("orderId"))) {
             throw new \Exception();
         }
 
-        $result["success"] = false;
+        $order = \Bitrix\Sale\Order::load($request->get("orderId"));
+        $result["success"] = PreOrder::sendOrderConfirm($order);
     } elseif ($request->get("type") === "subscribed") {
 
         $fields = [
