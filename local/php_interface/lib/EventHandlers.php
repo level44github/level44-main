@@ -150,6 +150,7 @@ HTML;
 
             while ($product = $resProduct->GetNext()) {
                 $arProductsData[$product["ID"]] = [
+                    "ID" => $product["ID"],
                     "NAME_EN" => $product["PROPERTY_NAME_EN_VALUE"],
                     "PREVIEW_PICTURE" => $product["PREVIEW_PICTURE"],
                     "DETAIL_PICTURE" => $product["DETAIL_PICTURE"],
