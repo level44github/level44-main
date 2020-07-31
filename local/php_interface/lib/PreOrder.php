@@ -581,9 +581,8 @@ BUTTONS;
             "ORDER_PUBLIC_URL" => \Bitrix\Sale\Helpers\Order::isAllowGuestView($entity) ? \Bitrix\Sale\Helpers\Order::getPublicLink($entity) : ""
         );
 
-        $event = new \CEvent;
-        $result = $event->Send($eventName, $entity->getField('LID'), $fields, "Y", "", array(),static::getOrderLanguageId($entity));
-        return $result;
+
+        return \CEvent::SendImmediate($eventName, $entity->getField('LID'),$fields, "Y", "", array(),static::getOrderLanguageId($entity));
     }
 
     public static function getOrderLanguageId(Order $order)
