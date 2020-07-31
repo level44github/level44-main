@@ -414,12 +414,14 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                         <input id="subscribe-email" class="form-control" type="text"
                                                name="email" placeholder="E-mail">
                                         <p></p>
-                                        <label for="subscribe-tel" class="sr-only">Телефон</label>
+                                        <label for="subscribe-tel"
+                                               class="sr-only"><?= Loc::getMessage("PHONE_POPUP_SUBSCRIBED") ?></label>
                                         <input id="subscribe-tel" class="form-control" type="text"
-                                               name="phone" placeholder="Телефон">
+                                               name="phone"
+                                               placeholder="<?= Loc::getMessage("PHONE_POPUP_SUBSCRIBED") ?>">
                                     </div>
                                     <button type="submit" class="js-subscribe-button btn btn-dark btn-block">
-                                        Подписаться
+                                        <?= Loc::getMessage("BTN_SEND_POPUP_SUBSCRIBED") ?>
                                     </button>
                                 </form>
                             </div>
@@ -441,7 +443,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
                             </div>
                             <div class="modal-body product-subscribe__body">
-                                <div class="js-text text-center px-lg-1 mb-3">Вы успешно подписались</div>
+                                <div class="js-text text-center px-lg-1 mb-3"><?= Loc::getMessage("SUCCESS_POPUP_SUBSCRIBED") ?></div>
                                 <button class="btn btn-dark btn-block" data-dismiss="modal" aria-label="Закрыть"
                                         type="submit"><?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?></button>
                             </div>

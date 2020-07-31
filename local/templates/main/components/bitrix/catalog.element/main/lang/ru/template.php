@@ -53,10 +53,13 @@ $MESS["SUBSCRIBE"] = "Подписаться";
 $MESS["MEASUREMENTS"] = "Обмеры товара";
 $MESS["TITLE_POPUP_SUBSCRIBED"] = "Подписаться на товар";
 $MESS["DESC_POPUP_SUBSCRIBED"] = "Оставьте адрес электронной почты, и мы напишем вам, когда товар появится в наличии.";
+$MESS["PHONE_POPUP_SUBSCRIBED"] = "Телефон";
 $MESS["CPST_SUBSCRIBE_BUTTON_CLOSE"] = "Закрыть";
 $MESS["SUBSCRIBE_INVALID_EMAIL"] = "Не заполнено поле Email";
 $MESS["SUBSCRIBE_INVALID_PHONE"] = "Не заполнено поле Телефон";
 $MESS["SUBSCRIBE_INTERNAL_ERROR"] = "Произошла ошибка отправки. Обновите страницу, и повторите попытку.";
 $MESS["ALREADY_SUBSCRIBED"] = "Вы уже подписаны";
+$MESS["BTN_SEND_POPUP_SUBSCRIBED"] = "Подписаться";
+$MESS["SUCCESS_POPUP_SUBSCRIBED"] = "Вы успешно подписались";
 
 ?>

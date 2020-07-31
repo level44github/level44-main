@@ -21,6 +21,7 @@ class EventHandlers
         self::addEventHandler("main", "OnFileDelete");
         self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
         self::addEventHandler("main", "OnEpilog", PreOrder::class);
+        self::addEventHandler("sale", "OnOrderNewSendEmail");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -40,14 +41,16 @@ class EventHandlers
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
     {
-        if (!in_array($templateData["EVENT_NAME"], ["SALE_ORDER_PAID", "SALE_NEW_ORDER"])) {
+        if (!in_array($templateData["EVENT_NAME"],
+            [
+                "SALE_ORDER_PAID",
+                "SALE_NEW_ORDER",
+                "CUSTOM_NEW_PREORDER",
+            ])) {
             return true;
         }
 
         $order = \Bitrix\Sale\Order::load($arFields["ORDER_ID"]);
-        if ($order->getField("STATUS_ID") === PreOrder::ORDER_STATUS_ID){
-            return true;
-        }
 
         /** @var $paySystem \Bitrix\Sale\PaySystem\Service */
 
@@ -150,6 +153,7 @@ HTML;
             }
         }
 
+        $arFields["PRODUCT_NAME"] = "";
 
         foreach ($basketItems as $basketItem) {
             $basketProductId = $basketItem->getProductId();
@@ -158,6 +162,10 @@ HTML;
                 $basketItem->getField("NAME"),
                 $arProductsData[$productIds[$basketProductId]]["NAME_EN"]
             );
+
+            if (empty($arFields["PRODUCT_NAME"])) {
+                $arFields["PRODUCT_NAME"] = $itemName;
+            }
 
 
             $offerProps = "";
@@ -282,7 +290,7 @@ LAYOUT;
 
         $arFields["DELIVERY_ADDRESS"] = $deliveryAddress;
         $arFields["YEAR"] = date("Y");
-        $arFields["PRICE"] = $order->getPrice();
+        $arFields["PRICE"] = CurrencyFormat($order->getPrice(), "RUB");
         $arFields["EMAIL_TITLE_IMG"] = $hostName . Base::getAssetsPath() . "/img/email-title.png";
         $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
         $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
@@ -292,5 +300,12 @@ LAYOUT;
     public static function OnFileDeleteHandler($arFile)
     {
         \Level44\Base::clearImageOriginal($arFile["ID"]);
+    }
+
+    public static function OnOrderNewSendEmailHandler($orderId, &$eventName, $fields)
+    {
+        if (PreOrder::isPreOrder($orderId)){
+            $eventName = "CUSTOM_NEW_PREORDER";
+        }
     }
 }

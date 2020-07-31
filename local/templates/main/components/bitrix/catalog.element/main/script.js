@@ -232,7 +232,6 @@
 		}
 
 		this.params = {};
-		this.preOrderData = {};
 
 		BX.addCustomEvent('onSaleProductIsGift', BX.delegate(this.onSaleProductIsGift, this));
 		BX.addCustomEvent('onSaleProductIsNotGift', BX.delegate(this.onSaleProductIsNotGift, this));
@@ -318,8 +317,7 @@
 		},
 
 		setPreOrderData: function (preOrderData) {
-			this.preOrderData = preOrderData;
-			$(".js-subscribe-buttons").html(this.preOrderData.button);
+			$(".js-subscribe-buttons").html(preOrderData.button);
 		},
 
 		updatePreOrderButtons: function (offerId) {
