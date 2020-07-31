@@ -1,7 +1,7 @@
 <? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
 use Bitrix\Main\Loader;
-
+use Level44\PreOrder;
 /**
  * @var array $templateData
  * @var array $arParams
@@ -127,4 +127,15 @@ if (isset($templateData['JS_OBJ']))
 		</script>
 		<?
 	}
+
+    $preOrder = new PreOrder($arResult["ACTUAL_ITEM"]["ID"]);
+    ?>
+    <script>
+        BX.ready(function () {
+            if (!!window.<?=$templateData['JS_OBJ']?>) {
+                window.<?=$templateData['JS_OBJ']?>.setPreOrderData(<?=$preOrder->getInitJSData()?>);
+            }
+        });
+    </script>
+    <?
 }

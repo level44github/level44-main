@@ -46,10 +46,17 @@ $MESS["HIP_GIRTH"] = "Обхват бедер";
 $MESS["ADD_TO_BASKET"] = "Добавить в корзину";
 $MESS["ADDED_TO_BASKET"] = "Добавлено в корзину";
 $MESS["NOT_AVAILABLE"] = "Нет в наличии";
-$MESS["PREORDER"] = "Нет в наличии";
+$MESS["PREORDER"] = "Предзаказ";
 $MESS["CURRENT_COLOR"] = "Цвет";
 $MESS["EXIST_QUESTIONS"] = "Есть вопросы?";
 $MESS["SUBSCRIBE"] = "Подписаться";
 $MESS["MEASUREMENTS"] = "Обмеры товара";
+$MESS["TITLE_POPUP_SUBSCRIBED"] = "Подписаться на товар";
+$MESS["DESC_POPUP_SUBSCRIBED"] = "Оставьте адрес электронной почты, и мы напишем вам, когда товар появится в наличии.";
+$MESS["CPST_SUBSCRIBE_BUTTON_CLOSE"] = "Закрыть";
+$MESS["SUBSCRIBE_INVALID_EMAIL"] = "Не заполнено поле Email";
+$MESS["SUBSCRIBE_INVALID_PHONE"] = "Не заполнено поле Телефон";
+$MESS["SUBSCRIBE_INTERNAL_ERROR"] = "Произошла ошибка отправки. Обновите страницу, и повторите попытку.";
+$MESS["ALREADY_SUBSCRIBED"] = "Вы уже подписаны";
 
 ?>

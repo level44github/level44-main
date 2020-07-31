@@ -84,44 +84,7 @@ $alt = !empty($arResult['IPROPERTY_VALUES']['ELEMENT_DETAIL_PICTURE_FILE_ALT'])
     : $arResult['NAME'];
 
 $haveOffers = !empty($arResult['OFFERS']);
-if ($haveOffers) {
-    foreach ($arResult["OFFERS"] as &$offer) {
-        $offer["MORE_PHOTO"] = array_filter($offer["MORE_PHOTO"], function ($item) {
-            return (bool)$item && is_array($item);
-        });
-
-        $offer["MORE_PHOTO"] = is_array($offer["MORE_PHOTO"]) ? $offer["MORE_PHOTO"] : [];
-        $offer["MORE_PHOTO_COUNT"] = count($offer["MORE_PHOTO"]);
-    }
-    unset($offer);
-
-    foreach ($arResult['JS_OFFERS'] as &$offer) {
-        $offer["SLIDER"] = array_filter($offer["SLIDER"], function ($item) {
-            return (bool)$item && is_array($item);
-        });
-
-        $offer["SLIDER"] = is_array($offer["SLIDER"]) ? $offer["SLIDER"] : [];
-        $offer["SLIDER_COUNT"] = count($offer["SLIDER"]);
-    }
-
-    unset($offer);
-
-
-    $actualItem = isset($arResult['OFFERS'][$arResult['OFFERS_SELECTED']])
-        ? $arResult['OFFERS'][$arResult['OFFERS_SELECTED']]
-        : reset($arResult['OFFERS']);
-    $showSliderControls = false;
-
-    foreach ($arResult['OFFERS'] as $offer) {
-        if ($offer['MORE_PHOTO_COUNT'] > 1) {
-            $showSliderControls = true;
-            break;
-        }
-    }
-} else {
-    $actualItem = $arResult;
-    $showSliderControls = $arResult['MORE_PHOTO_COUNT'] > 1;
-}
+$actualItem = $arResult["ACTUAL_ITEM"];
 
 $skuProps = array();
 
@@ -403,21 +366,88 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     <?= Loc::getMessage("NOT_AVAILABLE") ?>
                 </button>
 
+                <div class="js-subscribe-buttons"
+                     style="display:<?= !$actualItem["CAN_BUY"] ? "block" : "none" ?>;"
+                >
                 <?
-                $APPLICATION->IncludeComponent(
-                    "bitrix:catalog.product.subscribe",
-                    "main",
-                    Array(
-                        "BUTTON_CLASS" => "btn btn-block mb-4 btn-outline-dark",
-                        "BUTTON_ID" => $itemIds["SUBSCRIBE_LINK"],
-                        "CACHE_TIME" => "3600",
-                        "CACHE_TYPE" => "N",
-                        "PRODUCT_ID" => $actualItem["ID"],
-                        'DEFAULT_DISPLAY' => !$actualItem['CAN_BUY'],
-                    ),
-                    $component
-                );
-                ?>
+                if (!$actualItem["CAN_BUY"]): ?>
+                    <button class="btn btn-block mb-4 btn-outline-dark bx-catalog-subscribe-button js-open-subscribe"
+                            data-toggle="modal" data-target="#subscribe-modal"
+                            type="button"
+                            style="<?= ($actualItem["CAN_BUY"] ? 'display: none;' : '') ?>">
+                        <svg width="14" height="16" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.5791 12.624H8.46289C8.4082 13.5469 7.82031 14.1348 6.99316 14.1348C6.17285 14.1348 5.57812 13.5469 5.53027 12.624H4.46387C4.51855 13.9365 5.55078 15.0918 6.99316 15.0918C8.44238 15.0918 9.47461 13.9434 9.5293 12.624H12.4141C13.0566 12.624 13.4463 12.2891 13.4463 11.7969C13.4463 11.1133 12.749 10.498 12.1611 9.88965C11.71 9.41797 11.5869 8.44727 11.5322 7.66113C11.4844 4.96777 10.7871 3.22461 8.96875 2.56836C8.73633 1.67969 8.00488 0.96875 6.99316 0.96875C5.98828 0.96875 5.25 1.67969 5.02441 2.56836C3.20605 3.22461 2.50879 4.96777 2.46094 7.66113C2.40625 8.44727 2.2832 9.41797 1.83203 9.88965C1.2373 10.498 0.546875 11.1133 0.546875 11.7969C0.546875 12.2891 0.929688 12.624 1.5791 12.624ZM1.87305 11.5918V11.5098C1.99609 11.3047 2.40625 10.9082 2.76172 10.5049C3.25391 9.95801 3.48633 9.08301 3.54785 7.74316C3.60254 4.7627 4.49121 3.80566 5.66016 3.49121C5.83105 3.4502 5.92676 3.36133 5.93359 3.19043C5.9541 2.47266 6.36426 1.97363 6.99316 1.97363C7.62891 1.97363 8.03223 2.47266 8.05957 3.19043C8.06641 3.36133 8.15527 3.4502 8.32617 3.49121C9.50195 3.80566 10.3906 4.7627 10.4453 7.74316C10.5068 9.08301 10.7393 9.95801 11.2246 10.5049C11.5869 10.9082 11.9902 11.3047 12.1133 11.5098V11.5918H1.87305Z"
+                                  fill="#212121"/>
+                        </svg>
+                        <span><?= Loc::getMessage("PREORDER") ?></span>
+                    </button>
+                <? endif; ?>
+                </div>
+                <button type="button"
+                        class="modal-toggle"
+                        style="display:none;"
+                ></button>
+                <div class="js-subscribe-modal modal fade" id="subscribe-modal" tabindex="-1" role="dialog"
+                     aria-hidden="true">
+                    <div class="js-subscribe-form modal-dialog modal-dialog-centered product-subscribe__dialog"
+                         role="document"
+                    >
+                        <div class="modal-content">
+                            <button class="close product-subscribe__close" type="button" data-dismiss="modal"
+                                    aria-label="Закрыть">
+                                <svg class="icon icon-close ">
+                                    <use xlink:href="#close"></use>
+                                </svg>
+                            </button>
+                            <div class="product-subscribe__header">
+                                <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
+                            </div>
+                            <div class="js-subscribe-form-body modal-body product-subscribe__body">
+                                <div class="text-center px-lg-1 mb-3"><?= Loc::getMessage("DESC_POPUP_SUBSCRIBED") ?></div>
+                                <form id="bx-catalog-subscribe-form">
+                                    <input type="hidden" class="js-preorder-productId" name="productId"
+                                           value="<?= $actualItem["ID"] ?>">
+                                    <input type="hidden" name="siteId" value="<?= SITE_ID ?>">
+                                    <div id="bx-catalog-subscribe-form-div" class="form-group">
+                                        <div class="js-errors" style="color: red;"></div>
+                                        <label for="subscribe-email" class="sr-only">E-mail</label>
+                                        <input id="subscribe-email" class="form-control" type="text"
+                                               name="email" placeholder="E-mail">
+                                        <p></p>
+                                        <label for="subscribe-tel" class="sr-only">Телефон</label>
+                                        <input id="subscribe-tel" class="form-control" type="text"
+                                               name="phone" placeholder="Телефон">
+                                    </div>
+                                    <button type="submit" class="js-subscribe-button btn btn-dark btn-block">
+                                        Подписаться
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="js-subscribe-suc modal-dialog modal-dialog-centered product-subscribe__dialog"
+                         style="display: none"
+                         role="document"
+                    >
+                        <div class="modal-content">
+                            <button class="close product-subscribe__close" type="button" data-dismiss="modal"
+                                    aria-label="Закрыть">
+                                <svg class="icon icon-close ">
+                                    <use xlink:href="#close"></use>
+                                </svg>
+                            </button>
+                            <div class="product-subscribe__header">
+                                <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
+                            </div>
+                            <div class="modal-body product-subscribe__body">
+                                <div class="js-text text-center px-lg-1 mb-3">Вы успешно подписались</div>
+                                <button class="btn btn-dark btn-block" data-dismiss="modal" aria-label="Закрыть"
+                                        type="submit"><?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?
                 if (!empty($arResult["DETAIL_TEXT"]) || !empty($arResult["PRODUCT_PROPERTIES"])): ?>
                     <div class="product__desc">
@@ -730,6 +760,9 @@ if ($arParams['DISPLAY_COMPARE']) {
             BTN_MESSAGE_COMPARE_REDIRECT: '<?=GetMessageJS('CT_BCE_CATALOG_BTN_MESSAGE_COMPARE_REDIRECT')?>',
             PRODUCT_GIFT_LABEL: '<?=GetMessageJS('CT_BCE_CATALOG_PRODUCT_GIFT_LABEL')?>',
             PRICE_TOTAL_PREFIX: '<?=GetMessageJS('CT_BCE_CATALOG_MESS_PRICE_TOTAL_PREFIX')?>',
+            SUBSCRIBE_INVALID_EMAIL: '<?=GetMessageJS('SUBSCRIBE_INVALID_EMAIL')?>',
+            SUBSCRIBE_INVALID_PHONE: '<?=GetMessageJS('SUBSCRIBE_INVALID_PHONE')?>',
+            SUBSCRIBE_INTERNAL_ERROR: '<?=GetMessageJS('SUBSCRIBE_INTERNAL_ERROR')?>',
             RELATIVE_QUANTITY_MANY: '<?=CUtil::JSEscape($arParams['MESS_RELATIVE_QUANTITY_MANY'])?>',
             RELATIVE_QUANTITY_FEW: '<?=CUtil::JSEscape($arParams['MESS_RELATIVE_QUANTITY_FEW'])?>',
             SITE_ID: '<?=CUtil::JSEscape($component->getSiteId())?>'

@@ -19,9 +19,11 @@ class EventHandlers
         self::addEventHandler("sale", "OnBeforeBasketAdd");
         self::addEventHandler("main", "OnBeforeEventSend");
         self::addEventHandler("main", "OnFileDelete");
+        self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
+        self::addEventHandler("main", "OnEpilog", PreOrder::class);
     }
 
-    private static function addEventHandler($moduleId, $eventType)
+    private static function addEventHandler($moduleId, $eventType, $class = self::class)
     {
         if (!$moduleId || !$eventType || !self::$instance) {
             return false;
@@ -30,7 +32,7 @@ class EventHandlers
             $moduleId,
             $eventType,
             [
-                self::class,
+                $class,
                 $eventType . "Handler"
             ]
         );
@@ -43,6 +45,10 @@ class EventHandlers
         }
 
         $order = \Bitrix\Sale\Order::load($arFields["ORDER_ID"]);
+        if ($order->getField("STATUS_ID") === PreOrder::ORDER_STATUS_ID){
+            return true;
+        }
+
         /** @var $paySystem \Bitrix\Sale\PaySystem\Service */
 
         $paySystem = $order->getPaymentCollection()->current()->getPaySystem();

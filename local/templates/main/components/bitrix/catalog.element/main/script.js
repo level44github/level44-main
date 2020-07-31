@@ -232,6 +232,7 @@
 		}
 
 		this.params = {};
+		this.preOrderData = {};
 
 		BX.addCustomEvent('onSaleProductIsGift', BX.delegate(this.onSaleProductIsGift, this));
 		BX.addCustomEvent('onSaleProductIsNotGift', BX.delegate(this.onSaleProductIsNotGift, this));
@@ -314,6 +315,39 @@
 		{
 			this.offerNum = parseInt(offerNum);
 			this.setCurrent();
+		},
+
+		setPreOrderData: function (preOrderData) {
+			this.preOrderData = preOrderData;
+			$(".js-subscribe-buttons").html(this.preOrderData.button);
+		},
+
+		updatePreOrderButtons: function (offerId) {
+             var preOrderData = this.preOrderData;
+
+            if ($.isReady){
+				var siteId = $(".js-subscribe-button").closest("form").find("[name='siteId']").val();
+				var data = {
+					siteId:siteId,
+					productId:offerId,
+					sessid: BX.bitrix_sessid(),
+					type: "checkSubscribed",
+				};
+
+                $.ajax({
+                    method: "POST",
+                    url: "/ajax/preOrder.php",
+                    data: data,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success && data.initData) {
+                            $(".js-subscribe-buttons").html(data.initData.button);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+			}
 		},
 
 		init: function()
@@ -1966,20 +2000,11 @@
 					this.obNotAvail && BX.style(this.obNotAvail, 'display', '');
 					this.smallCardNodes.notAvailableButton && BX.style(this.smallCardNodes.notAvailableButton, 'display', '');
 
-					if (this.obSubscribe)
-					{
-						if (newOffer.CATALOG_SUBSCRIBE === 'Y')
-						{
-							BX.style(this.obSubscribe, 'display', '');
-							this.obSubscribe.setAttribute('data-item', newOffer.ID);
-							BX(this.visual.SUBSCRIBE_LINK + '_hidden').click();
-						}
-						else
-						{
-							BX.style(this.obSubscribe, 'display', 'none');
-						}
-					}
+					$(document).find(".js-preorder-productId").val(newOffer.ID);
+					this.updatePreOrderButtons(newOffer.ID);
 				}
+
+				$(".js-subscribe-buttons").css("display", newOffer.CAN_BUY ? "none" : "block");
 
 				this.isDblQuantity = newOffer.QUANTITY_FLOAT;
 				this.checkQuantity = newOffer.CHECK_QUANTITY;
@@ -3543,3 +3568,74 @@
 		}
 	}
 })(window);
+
+$(function () {
+	$(document).on("click", ".js-subscribe-button", function (e) {
+		e.preventDefault();
+		var $subscribeForm = $(this).closest("form");
+		var $errors = $subscribeForm.find(".js-errors");
+		var productId = Number($subscribeForm.find("[name='productId']").val());
+		$errors.html("");
+
+		var siteId = $subscribeForm.find("[name='siteId']").val();
+
+		if (productId <= 0 || !siteId) {
+			$errors.append("<p>" + BX.message("SUBSCRIBE_INTERNAL_ERROR") + "</p>");
+			return true;
+		}
+		var email = $subscribeForm.find("[name='email']").val();
+		if (email.length <= 0) {
+			$errors.append("<p>" + BX.message("SUBSCRIBE_INVALID_EMAIL") + "</p>");
+			return true;
+		}
+		var phone = $subscribeForm.find("[name='phone']").val();
+		if (phone.length <= 0) {
+			$errors.append("<p>" + BX.message("SUBSCRIBE_INVALID_PHONE") + "</p>");
+			return true;
+		}
+
+		var data = {
+			siteId: siteId,
+			productId: productId,
+			type: "subscribed",
+			sessid: BX.bitrix_sessid(),
+			email: email,
+			phone: phone,
+		};
+
+		$.ajax({
+			method: "POST",
+			url: "/ajax/preOrder.php",
+			data: data,
+			dataType: "json",
+			success: function (data) {
+				if (data.success) {
+					if (data.initData) {
+						$(".js-subscribe-buttons").html(data.initData.button);
+					}
+					var $subscribeSucModal = $('.js-subscribe-modal .js-subscribe-suc');
+					$('.js-subscribe-modal .modal-dialog').hide();
+					$subscribeSucModal.show();
+					if (!$('.js-subscribe-modal').hasClass('show')) {
+						$('.modal-toggle').click();
+					}
+				} else if (data.errorMes.length) {
+					$errors.append("<p>" + data.errorMes + "</p>");
+				} else {
+					$errors.append(BX.message("SUBSCRIBE_INTERNAL_ERROR"));
+				}
+			},
+			error: function () {
+				$errors.html("");
+				$errors.append(BX.message("SUBSCRIBE_INTERNAL_ERROR"));
+			}
+		});
+	});
+
+	$(document).on("click", ".js-open-subscribe", function (e) {
+		e.preventDefault();
+		$('.js-subscribe-modal .js-subscribe-suc').hide();
+		$('.js-subscribe-modal .modal-dialog').show();
+	});
+});
+

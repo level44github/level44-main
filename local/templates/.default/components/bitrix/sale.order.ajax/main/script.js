@@ -536,7 +536,7 @@ BX.saleOrderAjax = {
             // json parse failed, so it is a simple chunk of html
 
             this.BXFormPosting = false;
-            if ($.isReady) {
+            if (window.hasOwnProperty("$") && $.isReady) {
                 var $obContent = $("<div></div>").append($(res));
                 $(".js-form_block").html($obContent.find(".js-form_block").html());
                 $(".js-basket_block").html($obContent.find(".js-basket_block").html());
@@ -570,7 +570,9 @@ BX.saleOrderAjax = {
 };
 
 $(function () {
-    BX.saleOrderAjax.setErrorForCountryField()
+    if (window.hasOwnProperty("$") && $.isReady) {
+        BX.saleOrderAjax.setErrorForCountryField()
+    }
     $(document).on("click", ".js-delivery-link", function (event) {
         var labelId = $(this).data("target-label");
         if (labelId) {

@@ -49,4 +49,9 @@ $MESS["NOT_AVAILABLE"] = "Not available";
 $MESS["CURRENT_COLOR"] = "Color";
 $MESS["EXIST_QUESTIONS"] = "Have questions?";
 $MESS["MEASUREMENTS"] = "Product measurements";
+$MESS["TITLE_POPUP_SUBSCRIBED"] = "Subscribe to product";
+$MESS["DESC_POPUP_SUBSCRIBED"] = "Leave your email address and we will write to you when the product becomes available.";
+$MESS["CPST_SUBSCRIBE_BUTTON_CLOSE"] = "Close";
+$MESS["ALREADY_SUBSCRIBED"] = "You are already subscribed to this item";
+
 ?>
