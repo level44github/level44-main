@@ -152,70 +152,51 @@ class PreOrder
 
     public static function showTab($div, $iblockElementInfo)
     {
+        $productsId = self::getOffersId($iblockElementInfo["ID"]);
+
+        if (!empty($productsId)) {
+            $orders = \Bitrix\Sale\Order::getList([
+                'filter' => [
+                    'BASKET.PRODUCT_ID' => $productsId,
+                    'STATUS_ID' => "PO"
+                ],
+                'order' => [
+                    'ID' => 'DESC'
+                ],
+                'select' => [
+                    "ID",
+                    "DATE_INSERT",
+                    "STATUS_ID",
+                    "PAYED",
+                    "CANCELED",
+                    "DEDUCTED",
+                    "PRICE",
+                    "LID",
+                ],
+                'count_total' => true,
+            ]);
+
+            $orders = $orders->fetchAll();
+        } else {
+            $orders = [];
+        }
         ?>
+
+
         <tr id="tr_PREORDERS">
             <td colspan="2">
                 <?
-                $productsId = self::getOffersId($iblockElementInfo["ID"]);
-
-                $sTableID = "tbl_pre_order";
-                $lAdmin = new \CAdminList($sTableID);
-
-                $arHeaders = array(
-                    array("id" => "ID", "content" => "ID", "sort" => "ID", "default" => true),
-                    array("id" => "DATE_INSERT", "content" => "Дата создания", "sort" => "DATE_INSERT", "default" => true),
-                    array("id" => "PRICE", "content" => "Сумма", "sort" => "PRICE", "default" => true),
-                    array("id" => "LID", "content" => "Сайт", "sort" => "LID", "default" => true),
-                );
-
-
-                $lAdmin->AddHeaders($arHeaders);
-
-                if (!empty($productsId)) {
-                    $rsData = \Bitrix\Sale\Order::getList([
-                        'filter' => [
-                            'BASKET.PRODUCT_ID' => $productsId,
-                            'STATUS_ID' => "PO"
-                        ],
-                        'order' => [
-                            'ID' => 'DESC'
-                        ],
-                        'select' => [
-                            "ID",
-                            "DATE_INSERT",
-                            "STATUS_ID",
-                            "PAYED",
-                            "CANCELED",
-                            "DEDUCTED",
-                            "PRICE",
-                            "LID",
-                        ],
-                        'count_total' => true,
-                    ]);
-                } else {
-                    $rsData = [];
-                }
-
-                $rsData = new \CAdminResult($rsData, $sTableID);
-
-                while ($arRes = $rsData->NavNext(true, "f_")) {
-                    $row = $lAdmin->AddRow($arRes["ID"], $arRes);
-                    $arActions = Array();
-
-                    $arActions[] = array(
-                        "ICON" => "list",
-                        "TEXT" => "Просмотр заказа",
-                        "ACTION" => $lAdmin->ActionRedirect("sale_order_view.php?ID={$arRes["ID"]}&lang=" . LANGUAGE_ID),
-                        "DEFAULT" => true
-                    );
-
-                    $row->AddActions($arActions);
-                }
-
-                $lAdmin->CheckListMode();
-                $lAdmin->DisplayList();
-
-                ?>
+                if (!empty($orders)):?>
+                    <table>
+                        <? foreach ($orders as $order):?>
+                            <tr>
+                                <td>
+                                    <a href="/bitrix/admin/sale_order_view.php?ID=<?= $order["ID"] ?>&lang=<?= LANGUAGE_ID ?>">#<?= $order["ID"] ?></a> <?= $order["DATE_INSERT"] ?>
+                                </td>
+                            </tr>
+                        <? endforeach; ?>
+                    </table>
+                <? endif; ?>
             </td>
         </tr>
         <?
