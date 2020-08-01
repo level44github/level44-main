@@ -45,8 +45,19 @@ $MESS["CHEST_CIRCUMFERENCE"] = "Chest girth (cm)";
 $MESS["HOIST_GIRTH"] = "Waist circumference";
 $MESS["HIP_GIRTH"] = "Hip girth";
 $MESS["ADD_TO_BASKET"] = "Add to Basket";
-$MESS["NOT_AVAILABLE"] = "Not available";
+$MESS["NOT_AVAILABLE"] = "Sold Out";
 $MESS["CURRENT_COLOR"] = "Color";
 $MESS["EXIST_QUESTIONS"] = "Have questions?";
 $MESS["MEASUREMENTS"] = "Product measurements";
+$MESS["TITLE_POPUP_SUBSCRIBED"] = "Availability notification";
+$MESS["DESC_POPUP_SUBSCRIBED"] = "Please, leave your email and we will notify you as soon as this item available again.";
+$MESS["PHONE_POPUP_SUBSCRIBED"] = "Phone";
+$MESS["CPST_SUBSCRIBE_BUTTON_CLOSE"] = "Close";
+$MESS["SUBSCRIBE_INVALID_EMAIL"] = "E-mail field is required";
+$MESS["SUBSCRIBE_INVALID_PHONE"] = "Phone field is required";
+$MESS["SUBSCRIBE_INTERNAL_ERROR"] = "A sending error has occurred. Refresh the page and try again.";
+$MESS["ALREADY_SUBSCRIBED"] = "You are already subscribed to this item";
+$MESS["BTN_SEND_POPUP_SUBSCRIBED"] = "Subscribe";
+$MESS["SUCCESS_POPUP_SUBSCRIBED"] = "You have successfully subscribed";
+
 ?>

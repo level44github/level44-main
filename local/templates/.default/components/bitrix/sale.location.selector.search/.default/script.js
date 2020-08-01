@@ -482,7 +482,9 @@ if(typeof BX.Sale.component.location.selector.steps == 'undefined' && typeof BX.
 
         this.handleInitStack(nf, BX.Sale.component.location.selector.steps, opts);
         $(document).trigger("set_validators");
-        BX.saleOrderAjax.setErrorForCountryField();
+		if (BX.saleOrderAjax) {
+			BX.saleOrderAjax.setErrorForCountryField();
+		}
     };
     BX.extend(BX.Sale.component.location.selector.steps, BX.ui.chainedSelectors);
     BX.merge(BX.Sale.component.location.selector.steps.prototype, {

@@ -76,6 +76,7 @@ class Base
                 [
                     "\Level44\Sale\Basket" => "/local/php_interface/lib/Sale/Basket.php",
                     "\Level44\EventHandlers" => "/local/php_interface/lib/EventHandlers.php",
+                    "\Level44\PreOrder" => "/local/php_interface/lib/PreOrder.php",
                 ]
             );
 

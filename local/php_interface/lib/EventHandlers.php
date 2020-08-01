@@ -19,9 +19,12 @@ class EventHandlers
         self::addEventHandler("sale", "OnBeforeBasketAdd");
         self::addEventHandler("main", "OnBeforeEventSend");
         self::addEventHandler("main", "OnFileDelete");
+        self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
+        self::addEventHandler("main", "OnEpilog", PreOrder::class);
+        self::addEventHandler("sale", "OnOrderNewSendEmail");
     }
 
-    private static function addEventHandler($moduleId, $eventType)
+    private static function addEventHandler($moduleId, $eventType, $class = self::class)
     {
         if (!$moduleId || !$eventType || !self::$instance) {
             return false;
@@ -30,7 +33,7 @@ class EventHandlers
             $moduleId,
             $eventType,
             [
-                self::class,
+                $class,
                 $eventType . "Handler"
             ]
         );
@@ -38,14 +41,26 @@ class EventHandlers
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
     {
-        if (!in_array($templateData["EVENT_NAME"], ["SALE_ORDER_PAID", "SALE_NEW_ORDER"])) {
+        if (!in_array($templateData["EVENT_NAME"],
+            [
+                "SALE_ORDER_PAID",
+                "SALE_NEW_ORDER",
+                "CUSTOM_NEW_PREORDER",
+            ])) {
             return true;
         }
 
         $order = \Bitrix\Sale\Order::load($arFields["ORDER_ID"]);
+
         /** @var $paySystem \Bitrix\Sale\PaySystem\Service */
 
-        $paySystem = $order->getPaymentCollection()->current()->getPaySystem();
+        $payment = $order->getPaymentCollection()->current();
+
+        if (!$payment) {
+            return false;
+        }
+
+        $paySystem = $payment->getPaySystem();
         if (!$paySystem) {
             return false;
         }
@@ -54,19 +69,25 @@ class EventHandlers
             return true;
         }
 
-        if (!$paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_NEW_ORDER") {
+        $preOrder = $arFields["PRE_ORDER"] === "Y";
+        if (!$paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_NEW_ORDER" && !$preOrder) {
             return false;
         }
 
-        if ($paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_ORDER_PAID") {
+        if ($paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_ORDER_PAID" && !$preOrder) {
             return false;
         }
 
         $basketItems = $order->getBasket()->getBasketItems();
         $basketItemsContent = "";
-        $hostName = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
-            . '://'
-            . $_SERVER['HTTP_HOST'];
+        if (!empty($_SERVER['HTTP_HOST'])) {
+            $hostName = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
+                . '://'
+                . $_SERVER['HTTP_HOST'];
+        } else {
+            $hostName = "https://level44.net";
+        }
+
 
         /** @var \Bitrix\Sale\BasketItem $basketItem */
 
@@ -136,6 +157,7 @@ HTML;
 
             while ($product = $resProduct->GetNext()) {
                 $arProductsData[$product["ID"]] = [
+                    "ID" => $product["ID"],
                     "NAME_EN" => $product["PROPERTY_NAME_EN_VALUE"],
                     "PREVIEW_PICTURE" => $product["PREVIEW_PICTURE"],
                     "DETAIL_PICTURE" => $product["DETAIL_PICTURE"],
@@ -144,6 +166,9 @@ HTML;
             }
         }
 
+        $iBlockId = Base::CATALOG_IBLOCK_ID;
+        $arFields["PRODUCT_NAME"] = "";
+        $arFields["ADMIN_PRODUCT_URL"] = "";
 
         foreach ($basketItems as $basketItem) {
             $basketProductId = $basketItem->getProductId();
@@ -153,6 +178,19 @@ HTML;
                 $arProductsData[$productIds[$basketProductId]]["NAME_EN"]
             );
 
+            if (empty($arFields["PRODUCT_NAME"])) {
+                $arFields["PRODUCT_NAME"] = $itemName;
+            }
+
+            $curProductId = $arProductsData[$productIds[$basketProductId]]["ID"];
+
+            if ((int)$curProductId <= 0) {
+                $curProductId = $basketProductId;
+            }
+
+            if (empty($arFields["ADMIN_PRODUCT_URL"])) {
+                $arFields["ADMIN_PRODUCT_URL"] = "$hostName/bitrix/admin/iblock_element_edit.php?IBLOCK_ID={$iBlockId}&type=catalog&ID={$curProductId}&lang=ru";
+            }
 
             $offerProps = "";
 
@@ -276,15 +314,28 @@ LAYOUT;
 
         $arFields["DELIVERY_ADDRESS"] = $deliveryAddress;
         $arFields["YEAR"] = date("Y");
-        $arFields["PRICE"] = $order->getPrice();
+        $arFields["PRICE"] = CurrencyFormat($order->getPrice(), "RUB");
         $arFields["EMAIL_TITLE_IMG"] = $hostName . Base::getAssetsPath() . "/img/email-title.png";
         $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
         $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
-        $arFields["ADMIN_LINK"] = "https://level44.net/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
+        $arFields["ADMIN_LINK"] = "{$hostName}/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
+        $arFields["DELIVERY_DATA"] = '<strong style="font-weight: bold;">#DELIVERY_PRICE#</strong> <br>
+                      #DELIVERY_NAME#';
+        if ($preOrder){
+            $arFields["DELIVERY_DATA"] = "";
+            $arFields["ORDER_USER"] = "";
+        }
     }
 
     public static function OnFileDeleteHandler($arFile)
     {
         \Level44\Base::clearImageOriginal($arFile["ID"]);
+    }
+
+    public static function OnOrderNewSendEmailHandler($orderId, &$eventName, $fields)
+    {
+        if (PreOrder::isPreOrder($orderId)){
+            $eventName = "CUSTOM_NEW_PREORDER";
+        }
     }
 }
