@@ -1,5 +1,5 @@
 <?
-$MESS["LPO_ALREADY_SUBSCRIBED"] = "Вы уже подписаны";
+$MESS["LPO_ALREADY_SUBSCRIBED"] = "Вы уже предзаказали";
 $MESS["LPO_PREORDER"] = "Предзаказ";
 $MESS["LPO_EMAIL_EMPTY"] = "Не заполнено поле Email";
 $MESS["LPO_PHONE_EMPTY"] = "Не заполнено поле Телефон";
