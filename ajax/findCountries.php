@@ -6,6 +6,7 @@ define("NOT_CHECK_PERMISSIONS", true);
 
 use Bitrix\Main;
 use Bitrix\Main\Loader;
+use Level44\Base;
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/bitrix/modules/main/include/prolog_before.php');
 
@@ -29,7 +30,7 @@ try
     $data["ITEMS"] = array_filter(
         $data["ITEMS"],
         function ($item) {
-            return (int)$item["VALUE"] !== 1;
+            return !in_array((int)$item["VALUE"], Base::getSngCountriesId(), true);
         });
 }
 catch(Main\SystemException $e)

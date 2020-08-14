@@ -6,6 +6,8 @@ define("NOT_CHECK_PERMISSIONS", true);
 
 use Bitrix\Main;
 use Bitrix\Main\Loader;
+use Bitrix\Sale\Location\LocationTable;
+use Level44\Base;
 
 require_once($_SERVER["DOCUMENT_ROOT"] . '/bitrix/modules/main/include/prolog_before.php');
 
@@ -28,7 +30,14 @@ try {
     $data["ITEMS"] = array_values(array_filter(
         $data["ITEMS"],
         function ($item) {
-            return \Bitrix\Sale\Location\LocationTable::checkNodeIsParentOfNode(1, $item["VALUE"]);
+            $isSng = false;
+            foreach (Base::getSngCountriesId() as $countryId) {
+                $isSng = LocationTable::checkNodeIsParentOfNode($countryId, $item["VALUE"]);
+                if ($isSng) {
+                    break;
+                }
+            }
+            return $isSng;
         }));
 } catch (Main\SystemException $e) {
     $result = false;

@@ -4,6 +4,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 }
 
 use Bitrix\Main\Localization\Loc;
+use \Level44\Base;
 
 $request = \Bitrix\Main\Context::getCurrent()->getRequest();
 
@@ -61,7 +62,7 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
             $countryId = 1;
         }
 
-        $arResult["OUT_RUSSIA"] = $countryId !== 1;
+        $arResult["OUT_RUSSIA"] = !in_array($countryId, Base::getSngCountriesId(), true);
 
         if ($request->getPost("out_russia") === "Y") {
             $arResult["OUT_RUSSIA"] = true;
