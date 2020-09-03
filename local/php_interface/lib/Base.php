@@ -4,6 +4,7 @@ namespace Level44;
 
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
+use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Registry;
 use Level44\Sale\Basket;
 use Bitrix\Highloadblock as HL;
@@ -19,6 +20,7 @@ class Base
     const SIZE_HL_TBL_NAME = "size_reference";
 
     public static $typePage = "";
+    public static $sngCountriesId = [];
 
     public static function getAssetsPath()
     {
@@ -296,5 +298,32 @@ class Base
             }
         }
         unset($morePhotoItem);
+    }
+
+    public static function getSngCountriesId()
+    {
+        if (empty(self::$sngCountriesId)) {
+            Loader::includeModule("sale");
+            $countries = LocationTable::getList([
+                'filter' => array(
+                    '=NAME.LANGUAGE_ID' => "ru",
+                    '=NAME.NAME' => [
+                        "Россия",
+                        "Беларусь",
+                        "Казахстан",
+                    ],
+                    '=TYPE.CODE' => 'COUNTRY'
+                ),
+                'select' => array(
+                    'ID'
+                )
+            ])->fetchAll();
+
+            foreach ($countries as $country) {
+                self::$sngCountriesId[] = (int)$country["ID"];
+            }
+        }
+
+        return self::$sngCountriesId;
     }
 }
