@@ -95,6 +95,7 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
         var $fakeLocationField = $(".bx-ui-sls-input-block.form-control input.bx-ui-sls-fake");
 
         $fakeLocationField.addClass("js-form__location");
+		$fakeLocationField.attr("placeholder", this.opts.messages.sngPlaceholder);
 
         if (opts.required) {
             $fakeLocationField.addClass("is-required")

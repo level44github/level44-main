@@ -124,6 +124,7 @@ if ($arParams["UI_FILTER"])
 				'messages' => array(
 					'nothingFound' => Loc::getMessage('SALE_SLS_NOTHING_FOUND'),
 					'error' => Loc::getMessage('SALE_SLS_ERROR_OCCURED'),
+					'sngPlaceholder' => Loc::getMessage('SNG_PLACEHOLDER'),
 				),
 
 				// "js logic"-related part
