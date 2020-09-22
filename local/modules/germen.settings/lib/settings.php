@@ -83,7 +83,7 @@ class Settings {
 	public static function clearCache() {
 		$obCache = new \CPHPCache();
 		$obCache->CleanDir(self::MODULE_ID);
-		self::$arFields = false;
+		self::$arFields = [];
 	}
 
 	public static function setOptions(array $arOptions) {
@@ -121,7 +121,7 @@ class Settings {
 
 		$APPLICATION->ResetException();
 		$eventManager = \Bitrix\Main\EventManager::getInstance();
-		$arrList = $eventManager->findEventHandlers(self::MODULE_ID, "OnAfterSettingsUpdate");
+		$arrList = $eventManager->findEventHandlers(self::MODULE_ID, "OnBeforeSettingsUpdate");
 		foreach ($arrList as $arEvent) {
 			$bEventRes = ExecuteModuleEventEx($arEvent, [&$arFields]);
 			if ( $bEventRes === false ) {
