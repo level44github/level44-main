@@ -4,6 +4,8 @@ namespace Level44;
 
 
 use Bitrix\Main\EventManager;
+use Bitrix\Main\Loader;
+use UniPlug\Settings;
 
 class EventHandlers
 {
@@ -22,6 +24,7 @@ class EventHandlers
         self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
         self::addEventHandler("main", "OnEpilog", PreOrder::class);
         self::addEventHandler("sale", "OnOrderNewSendEmail");
+        self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -325,6 +328,34 @@ LAYOUT;
             $arFields["DELIVERY_DATA"] = "";
             $arFields["ORDER_USER"] = "";
         }
+    }
+
+    public static function OnAfterSettingsUpdateHandler()
+    {
+        $existAgent = \CAgent::GetList(
+            [],
+            [
+                "NAME" => "\Level44\Base::ClearProductReservedQuantity();"
+            ])->GetNext();
+
+        Loader::includeModule("germen.settings");
+        $minPeriod = (int)Settings::get("RESERVE_CLEAR_PERIOD");
+        if ($minPeriod <= 0) {
+            if (!empty($existAgent)) {
+                \CAgent::Delete($existAgent["ID"]);
+            }
+            return true;
+        }
+
+        $secPeriod = $minPeriod * 60;
+        if (empty($existAgent)) {
+            \CAgent::AddAgent("\Level44\Base::ClearProductReservedQuantity();", "", "N", $secPeriod, "", "Y");
+        } elseif ((int)$existAgent["AGENT_INTERVAL"] !== $secPeriod) {
+            \CAgent::Delete($existAgent["ID"]);
+            \CAgent::AddAgent("\Level44\Base::ClearProductReservedQuantity();", "", "N", $secPeriod, "", "Y");
+        }
+
+        return true;
     }
 
     public static function OnFileDeleteHandler($arFile)

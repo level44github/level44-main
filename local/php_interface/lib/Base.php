@@ -77,6 +77,7 @@ class Base
                 null,
                 [
                     "\Level44\Sale\Basket" => "/local/php_interface/lib/Sale/Basket.php",
+                    "\Level44\Sale\Helpers\ReservedProductCleaner" => "/local/php_interface/lib/Sale/Helpers/ReservedProductCleaner.php",
                     "\Level44\EventHandlers" => "/local/php_interface/lib/EventHandlers.php",
                     "\Level44\PreOrder" => "/local/php_interface/lib/PreOrder.php",
                 ]
@@ -325,5 +326,17 @@ class Base
         }
 
         return self::$sngCountriesId;
+    }
+
+    /**
+     * The agent function. Moves reserved quantity back to the quantity field for each product
+     * for orders which were placed earlier than specific date
+     *
+     * @return string
+     */
+    public static function ClearProductReservedQuantity()
+    {
+        \Level44\Sale\Helpers\ReservedProductCleaner::bind(60);
+        return "\Level44\Base::ClearProductReservedQuantity();";
     }
 }
