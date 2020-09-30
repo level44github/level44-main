@@ -230,14 +230,27 @@ foreach ($arResult["DELIVERY"] as $key => &$delivery) {
         $delivery["PERIOD_TEXT"] = Loc::getMessage("DAY");
     }
 
+    if ($delivery["NAME"] === "DHL") {
+        if (strripos($delivery["PERIOD_TEXT"], "Приблизительное число дней доставки: ") !== false) {
+            $delivery["PERIOD_TEXT"] = str_replace("Приблизительное число дней доставки: ", "", $delivery["PERIOD_TEXT"]);
+        }
+        $delivery["PERIOD_TEXT"] = $delivery["PERIOD_TEXT"] . " " . Base::getMultiLang("дн.", "dd.");
+    }
+
+
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PERIOD_TEXT"];
     $delivery["PRICE_PERIOD_TEXT"] = $delivery["PRICE_PERIOD_TEXT"] .
         (!empty($delivery["PRICE_PERIOD_TEXT"]) ? ", " : "");
 
     $delivery["DOLLAR_PRICE"] = \Level44\Base::getDollarPrice($delivery["PRICE"]);
     if (empty($delivery["PRICE_FORMATED"]) || (int)$delivery["PRICE"] <= 0) {
-        $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");
-        $delivery["DOLLAR_PRICE"] = false;
+        if (!empty($delivery["CALCULATE_ERRORS"])) {
+            $delivery["CALCULATE_INVALID"] = true;
+            $delivery["CHECKED"] = false;
+        } else {
+            $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");
+            $delivery["DOLLAR_PRICE"] = false;
+        }
     }
     $delivery["PRICE_PERIOD_TEXT"] .= $delivery["PRICE_FORMATED"];
     if ($delivery["CHECKED"]) {
