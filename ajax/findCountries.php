@@ -52,15 +52,15 @@ try {
     ];
 
     foreach ($data["ITEMS"] as &$item) {
-
-
-        $children = LocationTable::getChildren($item["VALUE"], $cityParams)->fetch();
-        if (!$children) {
-            $item = null;
-            continue;
+        if ((int)$item["TYPE_ID"] === 1) {
+            $children = LocationTable::getChildren($item["VALUE"], $cityParams)->fetch();
+            if (!$children) {
+                $item = null;
+                continue;
+            }
+            $item["VALUE"] = $children["ID"];
+            $item["CODE"] = $children["CODE"];
         }
-        $item["VALUE"] = $children["ID"];
-        $item["CODE"] = $children["CODE"];
     }
     unset($item);
 

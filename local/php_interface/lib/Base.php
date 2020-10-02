@@ -8,6 +8,7 @@ use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Registry;
 use Level44\Sale\Basket;
 use Bitrix\Highloadblock as HL;
+use Level44\Sale\PropertyValue;
 use UniPlug\Settings;
 
 class Base
@@ -59,14 +60,17 @@ class Base
         return $APPLICATION->GetCurPage() === SITE_DIR . "checkout/";
     }
 
-    public static function isEnLang()
+    public static function isEnLang($siteId = null)
     {
+        if (!empty($siteId)) {
+            return $siteId === "en";
+        }
         return SITE_ID === "en" && LANGUAGE_ID === "en";
     }
 
-    public static function getMultiLang($ruContent, $enContent)
+    public static function getMultiLang($ruContent, $enContent, $siteId = null)
     {
-        return self::isEnLang() && !empty($enContent)
+        return self::isEnLang($siteId) && !empty($enContent)
             ? $enContent : $ruContent;
     }
 
@@ -77,6 +81,7 @@ class Base
                 null,
                 [
                     "\Level44\Sale\Basket" => "/local/php_interface/lib/Sale/Basket.php",
+                    "\Level44\Sale\PropertyValue" => "/local/php_interface/lib/Sale/PropertyValue.php",
                     "\Level44\Sale\Helpers\ReservedProductCleaner" => "/local/php_interface/lib/Sale/Helpers/ReservedProductCleaner.php",
                     "\Level44\EventHandlers" => "/local/php_interface/lib/EventHandlers.php",
                     "\Level44\PreOrder" => "/local/php_interface/lib/PreOrder.php",
@@ -86,6 +91,9 @@ class Base
             if (Loader::includeModule('sale')) {
                 Registry::getInstance(Registry::REGISTRY_TYPE_ORDER)
                     ->set(Registry::ENTITY_BASKET, Basket::class);
+
+                Registry::getInstance(Registry::REGISTRY_TYPE_ORDER)
+                    ->set(Registry::ENTITY_PROPERTY_VALUE, PropertyValue::class);
             }
         } catch (\Exception $e) {
         }
