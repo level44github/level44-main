@@ -11,7 +11,11 @@ use Bitrix\Main\Localization\Loc;
     <fieldset class="fieldset">
         <legend>2. <?= Loc::getMessage("DELIVERY") ?></legend>
         <div class="checkout__radio" id="delivery">
-            <? foreach ($arResult["DELIVERY"] as $key => $delivery): ?>
+            <? foreach ($arResult["DELIVERY"] as $key => $delivery):
+                if ($delivery["CALCULATE_INVALID"]) {
+                    continue;
+                }
+                ?>
                 <div class="card option">
                     <a class="option__header
                     <?= $delivery["CHECKED"] ? "" : "collapsed" ?> js-delivery-link"

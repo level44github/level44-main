@@ -4,7 +4,9 @@ namespace Level44;
 
 
 use Bitrix\Main\EventManager;
+use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
+use Bitrix\Sale\Delivery\CalculationResult;
 use UniPlug\Settings;
 
 class EventHandlers
@@ -25,6 +27,7 @@ class EventHandlers
         self::addEventHandler("main", "OnEpilog", PreOrder::class);
         self::addEventHandler("sale", "OnOrderNewSendEmail");
         self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
+        self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -368,5 +371,16 @@ LAYOUT;
         if (PreOrder::isPreOrder($orderId)){
             $eventName = "CUSTOM_NEW_PREORDER";
         }
+    }
+
+    public static function onSaleDeliveryServiceCalculateHandler($event)
+    {
+        /** @var CalculationResult $result */
+        $result = $event->getParameter("RESULT");
+        $result->setDeliveryPrice(floor($result->getDeliveryPrice()));
+        $parameters = [
+            "RESULT" => $result,
+        ];
+        return new EventResult(EventResult::SUCCESS, $parameters);
     }
 }
