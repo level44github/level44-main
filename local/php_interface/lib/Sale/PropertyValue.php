@@ -17,7 +17,7 @@ class PropertyValue extends Sale\PropertyValue
     {
         $value = parent::getValue();
 
-        if (static::isOrderView() && $this->getField("CODE") === "LOCATION") {
+        if (static::isOrderView() && $this->getField("CODE") === "LOCATION" && $value) {
             $location = LocationTable::getByCode($value)->fetch();
             $countryId = $location["COUNTRY_ID"];
 
@@ -42,7 +42,7 @@ class PropertyValue extends Sale\PropertyValue
     {
         $name = parent::getName();
 
-        if (static::isOrderView() && $this->getField("CODE") === "LOCATION") {
+        if (static::isOrderView() && $this->getField("CODE") === "LOCATION" && parent::getValue()) {
 
             $location = LocationTable::getByCode(parent::getValue())->fetch();
             $countryId = $location["COUNTRY_ID"];
