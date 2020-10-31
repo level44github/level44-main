@@ -5,7 +5,7 @@ use Bitrix\Sale\Location\Name\LocationTable as LocationNameTable;
 
 class Builder
 {
-    private $lastLocationCode = 1;
+    private $lastLocationCode = 1000000000;
     private $addedCodes = [];
     private $zipCodes = array(
         "Kiev" => "01001",
@@ -105,22 +105,22 @@ class Builder
         return in_array($this->getPreparedCode(), $this->addedCodes);
     }
 
-//    public function createCountry($params)
-//    {
-//        if (empty($params["countryNameRu"]) || empty($params["capital"])) {
-//            return "";
-//        }
-//
-//        if (empty($params["countryNameEn"]) || empty($params["zip"])) {
-//            return "";
-//        }
-//
-//        $countryCode = $this->getCode();
-//        $result = "{$countryCode};;COUNTRY;{$params["countryNameEn"]};{$params["countryNameRu"]};\n";
-//        $cityCode = $this->getCode();
-//        $result .= "{$cityCode};{$countryCode};CITY;{$params["capital"]};;{$params["zip"]}\n";
-//        return $result;
-//    }
+    public function createCountry($params)
+    {
+        if (empty($params["countryNameRu"]) || empty($params["capital"])) {
+            return "";
+        }
+
+        if (empty($params["countryNameEn"])) {
+            return "";
+        }
+
+        $countryCode = $this->getCode();
+        $result = "{$countryCode};;COUNTRY;{$params["countryNameEn"]};{$params["countryNameRu"]};\n";
+        $cityCode = $this->getCode();
+        $result .= "{$cityCode};{$countryCode};CITY;{$params["capital"]};;{$params["zip"]}\n";
+        return $result;
+    }
 
     public static function fixAstana()
     {
