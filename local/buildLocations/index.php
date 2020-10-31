@@ -58,10 +58,32 @@ if ($_GET["buildList"] === "Y") {
             $locationsLog .= "bitrix: Zip is empty. ID={$country["ID"]}\n";
             continue;
         }
-        $locationsResult .= "{$code};{$country["CODE"]};CITY;{$capital};$zip\n";
+        $locationsResult .= "{$code};{$country["CODE"]};CITY;{$capital};;$zip\n";
 
         continue;
     }
+
+    $locationsResult .= $builder->createCountry([
+        "countryNameRu" => "Кипр",
+        "countryNameEn" => "Cyprus",
+        "capital" => "Nicosia",
+        "zip" => "1010",
+    ]);
+
+    $locationsResult .= $builder->createCountry([
+        "countryNameRu" => "Китай",
+        "countryNameEn" => "China",
+        "capital" => "Beijing",
+        "zip" => "100027",
+    ]);
+
+    $locationsResult .= $builder->createCountry([
+        "countryNameRu" => "ОАЭ",
+        "countryNameEn" => "United Arab Emirates",
+        "capital" => "Abu Dhabi",
+        "zip" => "",
+    ]);
+
 
     file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/locations.txt", $locationsResult);
     file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/locations.log", $locationsLog);
