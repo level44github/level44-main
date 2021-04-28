@@ -183,15 +183,28 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <form>
                 <div class="product__header">
                     <h1 class="product__title"><?= $name ?></h1>
-                    <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
-                        <?= $price['PRINT_PRICE'] ?>
-                    </span>
-                    <?
-                    if ($price["PRICE_DOLLAR"]): ?>
-                        &middot; <span class="product__price">
-                        <?= $price["PRICE_DOLLAR"] ?>
-                    </span>
-                    <? endif; ?>
+                    <div>
+                        <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                            <?= $price['PRINT_PRICE'] ?>
+                        </span>
+                        <?
+                        if ($price["PRICE_DOLLAR"]): ?>
+                            &middot; <span class="product__price">
+                            <?= $price["PRICE_DOLLAR"] ?>
+                        </span>
+                        <? endif; ?>
+                    </div>
+                    <div class="product__price-crossed">
+                        <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                            <?= $price['PRINT_PRICE'] ?>
+                        </span>
+                        <?
+                        if ($price["PRICE_DOLLAR"]): ?>
+                            &middot; <span class="product__price">
+                            <?= $price["PRICE_DOLLAR"] ?>
+                        </span>
+                        <? endif; ?>
+                    </div>
                 </div>
                 <?
                 if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>

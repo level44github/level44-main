@@ -12,10 +12,17 @@ use Bitrix\Main\Localization\Loc;
     <div class="d-flex mb-3"><?= Loc::getMessage("GOODS") ?>
         <span class="basket-aside__pieces"
               data-entity="basket-items-count" data-filter="all"></span>
-        <div class="ml-auto" data-entity="basket-total-price"><span>{{{PRICE_FORMATED}}}</span>
+        <div class="ml-auto" data-entity="basket-total-price">
+            <div><span>{{{PRICE_FORMATED}}}</span>
 	        {{#SUM_PRICE_DOLLAR}}
 	        &middot; <span>{{{SUM_PRICE_DOLLAR}}}</span>
 	        {{/SUM_PRICE_DOLLAR}}
+            </div>
+            <div class="basket-aside__price-crossed"><span>{{{PRICE_FORMATED}}}</span>
+	        {{#SUM_PRICE_DOLLAR}}
+	        &middot; <span>{{{SUM_PRICE_DOLLAR}}}</span>
+	        {{/SUM_PRICE_DOLLAR}}
+            </div>
         </div>
     </div>
     <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
