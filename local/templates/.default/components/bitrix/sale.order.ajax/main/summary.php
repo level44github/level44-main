@@ -25,6 +25,11 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                     &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
                                 <? endif; ?>
                             </div>
+                            <div class="basket-aside__price-crossed"><span><?= $basketItem["SUM"] ?></span>
+                                <? if ($basketItem["PRICE_DOLLAR"]): ?>
+                                    &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
+                                <? endif; ?>
+                            </div>
                             <div><?= $basketItem["NAME"] ?></div>
                             <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
                             <? if (!empty($basketItem["PROPS"])): ?>
@@ -49,10 +54,19 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <?= $arResult["BASKET_ITEMS_QUANTITY"] ?>
                         <?= Loc::getMessage("PCS") ?>
                     </span>
-                    <div class="ml-auto"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
-                        <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
-                            &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
-                        <? endif; ?>
+                    <div class="ml-auto">
+                        <div>
+                            <span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+                            <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
+                                &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                            <? endif; ?>
+                        </div>
+                        <div class="basket-aside__price-crossed">
+                            <span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+                            <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
+                                &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                            <? endif; ?>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex"><?= Loc::getMessage("DELIVERY") ?>
