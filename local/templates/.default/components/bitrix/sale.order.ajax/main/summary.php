@@ -78,15 +78,10 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                 </div>
             </div>
             <div class="d-flex">
-                <div class="basket-aside__total">
-                    <div><span><?= $arResult["ORDER_TOTAL_PRICE"] ?></span>
+                <div class="basket-aside__total"><span><?= $arResult["ORDER_TOTAL_PRICE"] ?></span>
                     <? if ($arResult["ORDER_TOTAL_PRICE_DOLLAR"]): ?>
                         &middot; <span> <?= $arResult["ORDER_TOTAL_PRICE_DOLLAR"] ?></span>
-                    <? endif; ?></div>
-                    <div class="basket-aside__price-crossed"><span><?= $arResult["ORDER_TOTAL_PRICE"] ?></span>
-                    <? if ($arResult["ORDER_TOTAL_PRICE_DOLLAR"]): ?>
-                        &middot; <span> <?= $arResult["ORDER_TOTAL_PRICE_DOLLAR"] ?></span>
-                    <? endif; ?></div>
+                    <? endif; ?>
                 </div>
             </div>
         </div>
