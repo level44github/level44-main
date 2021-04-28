@@ -7,3 +7,11 @@
         display: none;
     }
 }
+
+.catalog__item-price-crossed,
+.product__price-crossed,
+.basket-aside__price-crossed {
+    text-decoration-line: line-through;
+    color: #989690;
+}
+
