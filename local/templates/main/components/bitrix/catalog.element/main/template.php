@@ -95,6 +95,7 @@ $price["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice(
     $price['PRICE'],
     $arResult["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]
 );
+$price = array_merge($price, $arParams["ECOMMERCE_DATA"]["prices"]);
 $measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];
 $showDiscount = $price['PERCENT'] > 0;
 
@@ -194,17 +195,19 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         </span>
                         <? endif; ?>
                     </div>
+                    <?if (!empty($price["oldPrice"])):?>
                     <div class="product__price-crossed">
                         <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
-                            <?= $price['PRINT_PRICE'] ?>
+                            <?= $price["oldPriceFormat"] ?>
                         </span>
                         <?
                         if ($price["PRICE_DOLLAR"]): ?>
                             &middot; <span class="product__price">
-                            <?= $price["PRICE_DOLLAR"] ?>
+                            <?= $price["oldPriceDollarFormat"] ?>
                         </span>
                         <? endif; ?>
                     </div>
+                    <?endif;?>
                 </div>
                 <?
                 if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>

@@ -89,6 +89,7 @@ if (isset($arResult['ITEM']))
         $price["PRICE"],
         $item["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]
     );
+    $price = array_merge($price, $item["ecommerceData"]["prices"]);
 	$showSlider = is_array($morePhoto) && count($morePhoto) > 1;
 	$showSubscribe = $arParams['PRODUCT_SUBSCRIPTION'] === 'Y' && ($item['CATALOG_SUBSCRIBE'] === 'Y' || $haveOffers);
 

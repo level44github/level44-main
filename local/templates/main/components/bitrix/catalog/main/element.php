@@ -17,6 +17,7 @@
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\ModuleManager;
+use Level44\Product;
 
 $this->setFrameMode(true);
 \Level44\Base::$typePage = "product";
@@ -28,6 +29,23 @@ if (isset($arParams['USE_COMMON_SETTINGS_BASKET_POPUP']) && $arParams['USE_COMMO
 }
 ?>
 <?
+if (empty($arResult['VARIABLES']['ELEMENT_ID'])) {
+	$filter = array('IBLOCK_ID' => $arParams['IBLOCK_ID'], 'CODE' => $arResult['VARIABLES']['ELEMENT_CODE']);
+	$select = array('IBLOCK_ID', 'ID');
+	$result = CIBlockElement::GetList(array(), $filter, false, false, $select);
+	if ($row = $result->Fetch()) {
+		$id = $row['ID'];
+	}
+} else {
+	$id = $arResult['VARIABLES']['ELEMENT_ID'];
+}
+
+$ecommerceData = array();
+if (!empty($id)) {
+	$product = new Product();
+	$ecommerceData = $product->getEcommerceData([$id]);
+	$ecommerceData = $ecommerceData[$id];
+}
 
 $componentElementParams = array(
     'IBLOCK_TYPE' => $arParams['IBLOCK_TYPE'],
@@ -174,6 +192,7 @@ $componentElementParams = array(
     'GIFTS_MAIN_PRODUCT_DETAIL_PAGE_ELEMENT_COUNT' => $arParams['GIFTS_MAIN_PRODUCT_DETAIL_PAGE_ELEMENT_COUNT'],
     'GIFTS_MAIN_PRODUCT_DETAIL_BLOCK_TITLE' => $arParams['GIFTS_MAIN_PRODUCT_DETAIL_BLOCK_TITLE'],
     'GIFTS_MAIN_PRODUCT_DETAIL_HIDE_BLOCK_TITLE' => $arParams['GIFTS_MAIN_PRODUCT_DETAIL_HIDE_BLOCK_TITLE'],
+	"ECOMMERCE_DATA" => $ecommerceData,
 );
 
 if (isset($arParams['USER_CONSENT'])) {

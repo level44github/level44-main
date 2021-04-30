@@ -28,6 +28,9 @@ class EventHandlers
         self::addEventHandler("sale", "OnOrderNewSendEmail");
         self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
         self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
+
+        self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
+        self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -382,5 +385,15 @@ LAYOUT;
             "RESULT" => $result,
         ];
         return new EventResult(EventResult::SUCCESS, $parameters);
+    }
+
+    public static function OnBeforeIBlockElementAddHandler(&$arFields)
+    {
+        return Base::checkOldPrices($arFields);
+    }
+
+    public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
+    {
+        return Base::checkOldPrices($arFields);
     }
 }

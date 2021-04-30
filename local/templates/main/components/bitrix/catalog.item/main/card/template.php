@@ -38,11 +38,13 @@ use \Bitrix\Main\Localization\Loc;
             <span class="catalog__item-price"><?= $price["PRICE_DOLLAR"] ?></span>
         <? endif; ?>
     </div>
-    <div class="catalog__item-price-crossed">
-      <span class="catalog__item-price"><?= $price['PRINT_PRICE'] ?></span>
-        <? if ($price["PRICE_DOLLAR"]): ?>
-            &middot;
-            <span class="catalog__item-price"><?= $price["PRICE_DOLLAR"] ?></span>
-        <? endif; ?>
-    </div>
+    <? if (!empty($price["oldPrice"])): ?>
+        <div class="catalog__item-price-crossed">
+            <span class="catalog__item-price"><?= $price['oldPriceFormat'] ?></span>
+            <? if ($price["PRICE_DOLLAR"]): ?>
+                &middot;
+                <span class="catalog__item-price"><?= $price["oldPriceDollarFormat"] ?></span>
+            <? endif; ?>
+        </div>
+    <? endif; ?>
 </div>
