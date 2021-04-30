@@ -81,6 +81,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             </div>
             <a class="cart__remove d-lg-none" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>
+        <div>
         <div class="d-none d-lg-block cart__price"><span>{{{PRICE_FORMATED}}}</span>
 	        {{#PRICE_DOLLAR}}
 	        &middot; <span>{{PRICE_DOLLAR}}</span>
@@ -91,5 +92,6 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 	        &middot; <span>{{PRICE_DOLLAR}}</span>
 	        {{/PRICE_DOLLAR}}
         </div>
+</div>
     </div>
 </script>
