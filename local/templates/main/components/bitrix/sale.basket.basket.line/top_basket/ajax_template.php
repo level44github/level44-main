@@ -36,11 +36,13 @@ use Bitrix\Main\Localization\Loc;
                                         &middot; <span><?= $item["PRICE_DOLLAR"] ?></span>
                                     <? endif; ?>
                                 </div>
-                                <div class="product__price-crossed"><span><?= $item["PRICE_FMT"] ?></span>
-                                    <? if ($item["PRICE_DOLLAR"]): ?>
-                                        &middot; <span><?= $item["PRICE_DOLLAR"] ?></span>
-                                    <? endif; ?>
-                                </div>
+                                <? if (!empty($item["oldPrice"])): ?>
+                                    <div class="product__price-crossed"><span><?= $item["oldPriceFormat"] ?></span>
+                                        <? if ($item["PRICE_DOLLAR"]): ?>
+                                            &middot; <span><?= $item["oldPriceDollarFormat"] ?></span>
+                                        <? endif; ?>
+                                    </div>
+                                <? endif; ?>
                                 <? if (!empty($item["SIZE"])): ?>
                                     <div><?= Loc::getMessage("SIZE") ?><?= $item["SIZE"] ?></div>
                                 <? endif; ?>

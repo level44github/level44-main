@@ -2,6 +2,8 @@
 
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Sale\PriceMaths;
+use Level44\Base;
+use Level44\Product;
 
 
 /**
@@ -22,7 +24,8 @@ $result['BASKET_ITEM_RENDER_DATA'] = array();
 $totalQuantity = 0;
 
 $sumPriceDollar = 0;
-
+$oldSumPrice = 0;
+$oldSumPriceDollar = 0;
 
 $basketProductIds = [];
 
@@ -39,11 +42,13 @@ foreach ($productList as $offerId => $product) {
 
 $productsData = $productIds;
 
+$obProduct = new Product();
+$ecommerceData = $obProduct->getEcommerceData(array_values($productsData));
 $rsProductsData = \CIBlockElement::GetList(
     [],
     [
         "ID" => array_values($productsData),
-        "IBLOCK_ID" => \Level44\Base::CATALOG_IBLOCK_ID
+        "IBLOCK_ID" => Base::CATALOG_IBLOCK_ID
     ],
     false,
     false,
@@ -72,7 +77,7 @@ $products = array_map(function ($productId) {
     ];
 }, $productIds);
 
-\Level44\Base::setColorOffers($products);
+Base::setColorOffers($products);
 
 $arProductsLoc = [];
 
@@ -143,7 +148,7 @@ foreach ($this->basketItems as $row)
 	);
 
 
-    $rowData["NAME"] = \Level44\Base::getMultiLang(
+    $rowData["NAME"] = Base::getMultiLang(
         $rowData["NAME"],
         $arProductsLoc[$rowData["PRODUCT_ID"]]["NAME_EN"]
     );
@@ -268,7 +273,7 @@ foreach ($this->basketItems as $row)
     $itemPriceDollar = 0;
 
     if ($rowData["PRICE_DOLLAR"] <= 0) {
-        $itemPriceDollar = \Level44\Base::getDollarPrice(
+        $itemPriceDollar = Base::getDollarPrice(
             $rowData["PRICE"],
             null,
             true
@@ -278,8 +283,23 @@ foreach ($this->basketItems as $row)
     }
 
     $sumPriceDollar = $sumPriceDollar + ($itemPriceDollar * $rowData["QUANTITY"]);
-    $rowData["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice($rowData["PRICE"], $rowData["PRICE_DOLLAR"]);
+    $rowData["PRICE_DOLLAR"] = Base::getDollarPrice($rowData["PRICE"], $rowData["PRICE_DOLLAR"]);
 
+    $rowData = array_merge($rowData, (array)$ecommerceData[$productsData[$rowData["PRODUCT_ID"]]["ID"]]["prices"]);
+    $rowData["showOldPrice"] = !empty($rowData["oldPrice"]);
+    $rowData["oldPriceFormat"] = CCurrencyLang::CurrencyFormat($rowData["oldPrice"], "RUB");
+    $rowData["oldPriceDollarFormat"] = Base::formatDollar($rowData["oldPriceDollar"]);
+
+    $rowData["oldPrice"] = $rowData["oldPrice"] * $rowData["QUANTITY"];
+    $rowData["oldPriceDollar"] = $rowData["oldPriceDollar"] * $rowData["QUANTITY"];
+
+    if (empty($rowData["oldPrice"])) {
+        $oldSumPrice += $rowData["SUM_PRICE"];
+        $oldSumPriceDollar += $itemPriceDollar;
+    } else {
+        $oldSumPrice += $rowData["oldPrice"];
+        $oldSumPriceDollar += $rowData["oldPriceDollar"];
+    }
     $rowData["SELECT_PROP"] = [];
 
     foreach ($rowData['SKU_BLOCK_LIST'] as $prop) {
@@ -522,7 +542,7 @@ foreach ($this->basketItems as $row)
 
 	$result['BASKET_ITEM_RENDER_DATA'][] = $rowData;
 }
-$sumPriceDollar = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($sumPriceDollar) : false;
+$sumPriceDollar = Base::isEnLang() ? Base::formatDollar($sumPriceDollar) : false;
 $result["QUANTITY"] = $totalQuantity;
 $totalData = array(
 	'DISABLE_CHECKOUT' => (int)$result['ORDERABLE_BASKET_ITEMS_COUNT'] === 0,
@@ -531,6 +551,9 @@ $totalData = array(
 	'PRICE_WITHOUT_DISCOUNT_FORMATED' => $result['PRICE_WITHOUT_DISCOUNT'],
 	'CURRENCY' => $result['CURRENCY'],
     'SUM_PRICE_DOLLAR' => $sumPriceDollar,
+    'OLD_SUM_PRICE' => CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB"),
+    'OLD_SUM_PRICE_DOLLAR' => Base::formatDollar($oldSumPriceDollar),
+    'SHOW_OLD_SUM_PRICE' => !empty($oldSumPrice) && $oldSumPrice !== $result["allSum"],
 );
 
 if ($result['DISCOUNT_PRICE_ALL'] > 0)

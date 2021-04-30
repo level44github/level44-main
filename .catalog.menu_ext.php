@@ -18,6 +18,14 @@ $aMenuLinks[] = [
     ""
 ];
 
+$aMenuLinks[] = [
+    "Распродажа",
+    SITE_DIR . "catalog/sale/",
+    Array(),
+    Array(),
+    ""
+];
+
 if (CModule::IncludeModule('iblock')) {
     $arFilter = array(
         "TYPE" => "catalog",
