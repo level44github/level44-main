@@ -17,6 +17,11 @@ use Bitrix\Main\Localization\Loc;
 	        &middot; <span>{{{SUM_PRICE_DOLLAR}}}</span>
 	        {{/SUM_PRICE_DOLLAR}}
         </div>
+        <div class="ml-auto basket-aside__price-crossed" data-entity="basket-total-price"><span>{{{PRICE_FORMATED}}}</span>
+	        {{#SUM_PRICE_DOLLAR}}
+	        &middot; <span>{{{SUM_PRICE_DOLLAR}}}</span>
+	        {{/SUM_PRICE_DOLLAR}}
+        </div>
     </div>
     <a class="btn btn-dark btn-block" href="<?= $arParams["PATH_TO_ORDER"] ?>"><?= Loc::getMessage("PROCEED_TO_CHECKOUT") ?></a>
 </script>

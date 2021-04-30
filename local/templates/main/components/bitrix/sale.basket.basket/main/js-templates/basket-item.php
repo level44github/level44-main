@@ -86,5 +86,10 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 	        &middot; <span>{{PRICE_DOLLAR}}</span>
 	        {{/PRICE_DOLLAR}}
         </div>
+        <div class="d-none d-lg-block cart__price cart__price-crossed"><span>{{{PRICE_FORMATED}}}</span>
+	        {{#PRICE_DOLLAR}}
+	        &middot; <span>{{PRICE_DOLLAR}}</span>
+	        {{/PRICE_DOLLAR}}
+        </div>
     </div>
 </script>
