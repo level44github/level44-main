@@ -12,8 +12,8 @@ use Bitrix\Main\Localization\Loc;
     <div class="d-flex mb-3"><?= Loc::getMessage("GOODS") ?>
         <span class="basket-aside__pieces"
               data-entity="basket-items-count" data-filter="all"></span>
-        <div>
-        <div class="ml-auto" data-entity="basket-total-price"><span>{{{PRICE_FORMATED}}}</span>
+        <div class="ml-auto">
+        <div data-entity="basket-total-price"><span>{{{PRICE_FORMATED}}}</span>
 	        {{#SUM_PRICE_DOLLAR}}
 	        &middot; <span>{{{SUM_PRICE_DOLLAR}}}</span>
 	        {{/SUM_PRICE_DOLLAR}}
