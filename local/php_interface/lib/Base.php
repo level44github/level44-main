@@ -384,7 +384,7 @@ class Base
                 $productId = (int)$request->get("PRODUCT_ID");
             } else {
                 $cml2link = $arFields["PROPERTY_VALUES"][$properties["CML2_LINK"]];
-                $productId = (int)$cml2link[array_key_first($cml2link)]["VALUE"];
+                $productId = (int)$cml2link[key($cml2link)]["VALUE"];
             }
 
             $product = new Product();
@@ -398,7 +398,7 @@ class Base
             return true;
         } else {
             $savedPriceDollar = $arFields["PROPERTY_VALUES"][$properties["PRICE_DOLLAR"]];
-            $savedPriceDollar = (int)$savedPriceDollar[array_key_first($savedPriceDollar)]["VALUE"];
+            $savedPriceDollar = (int)$savedPriceDollar[key($savedPriceDollar)]["VALUE"];
             $productPriceDollar = $savedPriceDollar;
 
             $offerIds = \CCatalogSku::getOffersList($arFields["ID"]);
@@ -420,7 +420,7 @@ class Base
 
                 switch ((int)$propId) {
                     case $properties["OLD_PRICE_DOLLAR"]:
-                        $value = &$property[array_key_first($property)]["VALUE"];
+                        $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
                         if ($value > 0) {
@@ -436,7 +436,7 @@ class Base
                         }
                         break;
                     case $properties["OLD_PRICE"]:
-                        $value = &$property[array_key_first($property)]["VALUE"];
+                        $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
                         if ($value > 0 && $offerPrice >= $value) {
