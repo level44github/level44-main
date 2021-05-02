@@ -50,6 +50,13 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 	            &middot; <span>{{PRICE_DOLLAR}}</span>
 	            {{/PRICE_DOLLAR}}
             </div>
+            {{#showOldPrice}}
+            <div class="font-weight-bold d-lg-none cart__price-crossed"><span>{{{oldPriceFormat}}}</span>
+                {{#PRICE_DOLLAR}}
+                &middot; <span>{{oldPriceDollarFormat}}</span>
+                {{/PRICE_DOLLAR}}
+            </div>
+            {{/showOldPrice}}
             <a class="cart__link" href="{{DETAIL_PAGE_URL}}">{{NAME}}</a>
             <ul class="cart__list">
                 {{#SELECT_PROP.COLOR_REF}}

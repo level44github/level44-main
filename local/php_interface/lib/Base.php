@@ -450,4 +450,50 @@ class Base
             return true;
         }
     }
+
+    /**
+     * @return bool
+     */
+    public static function existSaleProducts(): bool
+    {
+        $productsId = [];
+        $exist = false;
+        $result = \CIBlockElement::GetList(
+            [],
+            [
+                "ACTIVE"             => "Y",
+                "IBLOCK_ID"          => self::CATALOG_IBLOCK_ID,
+                ">PROPERTY_OLD_RICE" => 0,
+            ],
+            false,
+            [
+                "IBLOCK_ID",
+                "ID",
+                "PROPERTY_OLD_PRICE"
+            ]
+        );
+
+        while ($row = $result->GetNext()) {
+            $productsId[] = $row["ID"];
+        }
+
+        if (!empty($productsId)) {
+            $result = \CIBlockElement::GetList(
+                [],
+                [
+                    "ACTIVE"             => "Y",
+                    "CATALOG_AVAILABLE"  => "Y",
+                    "IBLOCK_ID"          => Base::OFFERS_IBLOCK_ID,
+                    "PROPERTY_CML2_LINK" => $productsId,
+                ],
+                false,
+                [
+                    "nTopCount" => 1
+                ]
+            )->GetNext();
+
+            $exist = !empty($result);
+        }
+        return $exist;
+    }
 }
