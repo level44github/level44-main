@@ -45,7 +45,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <img class="img-fluid" src="{{IMAGE_URL}}" alt="">
         </a>
         <div class="cart__body">
-            <div class="font-weight-bold d-lg-none"><span>{{{PRICE_FORMATED}}}</span>
+            <div class="font-weight-bold d-lg-none d-dt-none"><span>{{{PRICE_FORMATED}}}</span>
 	            {{#PRICE_DOLLAR}}
 	            &middot; <span>{{PRICE_DOLLAR}}</span>
 	            {{/PRICE_DOLLAR}}
