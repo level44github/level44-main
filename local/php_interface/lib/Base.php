@@ -463,7 +463,7 @@ class Base
             [
                 "ACTIVE"             => "Y",
                 "IBLOCK_ID"          => self::CATALOG_IBLOCK_ID,
-                ">PROPERTY_OLD_RICE" => 0,
+                ">PROPERTY_OLD_PRICE" => 0,
             ],
             false,
             [
