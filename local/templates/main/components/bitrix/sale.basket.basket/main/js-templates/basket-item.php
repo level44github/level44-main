@@ -51,7 +51,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 	            {{/PRICE_DOLLAR}}
             </div>
             {{#showOldPrice}}
-            <div class="font-weight-bold d-lg-none cart__price-crossed"><span>{{{oldPriceFormat}}}</span>
+            <div class="font-weight-bold d-lg-none d-dt-none cart__price-crossed"><span>{{{oldPriceFormat}}}</span>
                 {{#PRICE_DOLLAR}}
                 &middot; <span>{{oldPriceDollarFormat}}</span>
                 {{/PRICE_DOLLAR}}
