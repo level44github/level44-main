@@ -1,4 +1,7 @@
 <?
+
+use Level44\Base;
+
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -17,6 +20,16 @@ $aMenuLinks[] = [
     Array(),
     ""
 ];
+
+if (Base::existSaleProducts()) {
+    $aMenuLinks[] = [
+        "Распродажа",
+        SITE_DIR . "catalog/sale/",
+        [],
+        [],
+        ""
+    ];
+}
 
 if (CModule::IncludeModule('iblock')) {
     $arFilter = array(

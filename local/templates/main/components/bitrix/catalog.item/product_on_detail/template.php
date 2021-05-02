@@ -89,7 +89,8 @@ if (isset($arResult['ITEM']))
         $price["PRICE"],
         $item["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]
     );
-	$showSlider = is_array($morePhoto) && count($morePhoto) > 1;
+    $price = array_merge($price, $item["ecommerceData"]["prices"]);
+    $showSlider = is_array($morePhoto) && count($morePhoto) > 1;
 	$showSubscribe = $arParams['PRODUCT_SUBSCRIPTION'] === 'Y' && ($item['CATALOG_SUBSCRIBE'] === 'Y' || $haveOffers);
 
 	$discountPositionClass = isset($arResult['BIG_DISCOUNT_PERCENT']) && $arResult['BIG_DISCOUNT_PERCENT'] === 'Y'

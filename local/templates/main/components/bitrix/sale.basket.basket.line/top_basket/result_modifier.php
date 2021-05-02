@@ -3,6 +3,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 use Bitrix\Highloadblock as HL;
+use Level44\Product;
 
 \Bitrix\Main\Loader::includeModule("highloadblock");
 
@@ -73,7 +74,9 @@ if (!empty($productIds)) {
 
     $rsProductsData = \CIBlockElement::GetList(
         [],
-        [],
+        [
+            "ID" => array_values($products),
+        ],
         false,
         false,
         [
@@ -86,6 +89,8 @@ if (!empty($productIds)) {
     while ($productData = $rsProductsData->GetNext()) {
         $productsData[$productData["ID"]] = $productData;
     }
+    $obProduct = new Product();
+    $ecommerceData = $obProduct->getEcommerceData(array_values($products));
 
     foreach ($products as $key => &$product) {
         $product = $productsData[$product];
@@ -115,6 +120,7 @@ if (!empty($productIds)) {
                 $item["PRICE"],
                 $products[$item["PRODUCT_ID"]]["PROPERTY_PRICE_DOLLAR_VALUE"]
             );
+            $item = array_merge($item, (array)$ecommerceData[$products[$item["PRODUCT_ID"]]["ID"]]["prices"]);
         }
         unset($item);
     }

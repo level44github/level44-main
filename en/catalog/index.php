@@ -196,6 +196,7 @@ $APPLICATION->SetTitle("Catalog");
             "element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
             "compare" => "compare/",
             "smart_filter" => "#SECTION_CODE#/#SMART_FILTER_PATH#/",
+            "sale" => "sale/",
         )
 
     )

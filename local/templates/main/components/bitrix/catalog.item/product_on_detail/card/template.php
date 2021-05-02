@@ -35,4 +35,11 @@ use \Bitrix\Main\Localization\Loc;
             &middot; <span class="carousel__price"><?= $item["PRICE_DOLLAR"] ?></span>
         <? endif; ?>
     </div>
+    <? if (!empty($price['oldPrice'])): ?>
+        <div class="carousel__price-crossed"><span><?= $price['oldPriceFormat'] ?></span>
+            <? if ($item["PRICE_DOLLAR"]): ?>
+                &middot; <span class="carousel__price"><?= $price["oldPriceDollarFormat"] ?></span>
+            <? endif; ?>
+        </div>
+    <? endif; ?>
 </div>

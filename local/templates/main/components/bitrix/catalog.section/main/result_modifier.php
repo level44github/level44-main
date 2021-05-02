@@ -1,4 +1,6 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+<? use Level44\Content;
+
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
@@ -9,6 +11,8 @@
 
 $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
+
+$arResult = Content::setCatalogItemsEcommerceData($arResult);
 
 foreach ($arResult["ITEMS"] as &$item) {
     $item["NAME"] = \Level44\Base::getMultiLang(

@@ -39,9 +39,13 @@
   margin-bottom: 29px;
 }
 
-.modal-body .d-lg-none {
-  @media (min-width: 992px) {
+@media (min-width: 992px) {
+  .modal-body .d-lg-none {
     display: flex !important;
+  }
+
+  .d-dt-none {
+    display: none;
   }
 }
 
@@ -319,4 +323,12 @@
 
 .bx-catalog-subscribe-button:hover svg path {
   fill: #ffffff;
+}
+
+.catalog__item-price-crossed,
+.product__price-crossed,
+.basket-aside__price-crossed,
+.carousel__price-crossed {
+    text-decoration-line: line-through;
+    color: #989690;
 }

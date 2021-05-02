@@ -95,6 +95,7 @@ $price["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice(
     $price['PRICE'],
     $arResult["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]
 );
+$price = array_merge($price, $arParams["ECOMMERCE_DATA"]["prices"]);
 $measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];
 $showDiscount = $price['PERCENT'] > 0;
 
@@ -183,15 +184,30 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <form>
                 <div class="product__header">
                     <h1 class="product__title"><?= $name ?></h1>
-                    <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
-                        <?= $price['PRINT_PRICE'] ?>
-                    </span>
-                    <?
-                    if ($price["PRICE_DOLLAR"]): ?>
-                        &middot; <span class="product__price">
-                        <?= $price["PRICE_DOLLAR"] ?>
-                    </span>
-                    <? endif; ?>
+                    <div>
+                        <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                            <?= $price['PRINT_PRICE'] ?>
+                        </span>
+                        <?
+                        if ($price["PRICE_DOLLAR"]): ?>
+                            &middot; <span class="product__price">
+                            <?= $price["PRICE_DOLLAR"] ?>
+                        </span>
+                        <? endif; ?>
+                    </div>
+                    <?if (!empty($price["oldPrice"])):?>
+                    <div class="product__price-crossed">
+                        <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+                            <?= $price["oldPriceFormat"] ?>
+                        </span>
+                        <?
+                        if ($price["PRICE_DOLLAR"]): ?>
+                            &middot; <span class="product__price">
+                            <?= $price["oldPriceDollarFormat"] ?>
+                        </span>
+                        <? endif; ?>
+                    </div>
+                    <?endif;?>
                 </div>
                 <?
                 if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>

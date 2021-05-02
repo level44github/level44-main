@@ -2,6 +2,9 @@
 
 namespace Level44;
 
+use Bitrix\Catalog\PriceTable;
+use Bitrix\Iblock\PropertyTable;
+use Bitrix\Main\Context;
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Location\LocationTable;
@@ -238,7 +241,7 @@ class Base
 
         $defaultDollarPrice = (int)$defaultDollarPrice;
         if ($defaultDollarPrice > 0) {
-            return self::formatDollar($defaultDollarPrice);
+            return $notFormat ? $defaultDollarPrice : self::formatDollar($defaultDollarPrice);
         }
 
         $dollarPrice = (int)round(\CCurrencyRates::ConvertCurrency($rubPrice, "RUB", "USD"));
@@ -346,5 +349,151 @@ class Base
     {
         \Level44\Sale\Helpers\ReservedProductCleaner::bind(60);
         return "\Level44\Base::ClearProductReservedQuantity();";
+    }
+
+    public static function checkOldPrices(&$arFields)
+    {
+        global $APPLICATION;
+        $request = Context::getCurrent()->getRequest();
+        $properties = [];
+        $result = PropertyTable::getList([
+            "filter" => [
+                "IBLOCK_ID" => $arFields["IBLOCK_ID"],
+                "CODE"      => ["OLD_PRICE_DOLLAR", "OLD_PRICE", "PRICE_DOLLAR", "CML2_LINK"]
+            ]
+        ]);
+
+        while ($row = $result->fetch()) {
+            $properties[$row["CODE"]] = (int)$row["ID"];
+        }
+
+        if ($arFields["IBLOCK_ID"] === Base::OFFERS_IBLOCK_ID) {
+            $currentPrice = $request->get("SUBCAT_BASE_PRICE");
+            if (is_null($currentPrice)) {
+                $currentPrice = $request->get("CAT_BASE_PRICE");
+            }
+
+            if (is_null($currentPrice)) {
+                return true;
+            }
+            $currentPrice = (int)$currentPrice;
+            if (!empty($arFields["ID"])) {
+                $products = \CCatalogSku::getProductList($arFields["ID"]);
+                $productId = (int)$products[$arFields["ID"]]["ID"];
+            } elseif (!empty($request->get("PRODUCT_ID"))) {
+                $productId = (int)$request->get("PRODUCT_ID");
+            } else {
+                $cml2link = $arFields["PROPERTY_VALUES"][$properties["CML2_LINK"]];
+                $productId = (int)$cml2link[key($cml2link)]["VALUE"];
+            }
+
+            $product = new Product();
+            $ecommerceData = $product->getEcommerceData([$productId]);
+            $oldPrice = $ecommerceData[$productId]["prices"]["oldPrice"];
+
+            if ($oldPrice > 0 && $currentPrice > 0 && $currentPrice >= $oldPrice) {
+                $APPLICATION->throwException("Текущая цена должна быть меньше Старой цены");
+                return false;
+            }
+            return true;
+        } else {
+            $savedPriceDollar = $arFields["PROPERTY_VALUES"][$properties["PRICE_DOLLAR"]];
+            $savedPriceDollar = (int)$savedPriceDollar[key($savedPriceDollar)]["VALUE"];
+            $productPriceDollar = $savedPriceDollar;
+
+            $offerIds = \CCatalogSku::getOffersList($arFields["ID"]);
+            $offerIds = array_keys($offerIds[$arFields["ID"]]);
+            $offerData = [];
+            if (!empty($offerIds)) {
+                $offerData = PriceTable::getList([
+                    "filter" => ["PRODUCT_ID" => $offerIds],
+                    "limit"  => 1,
+                    "order"  => ["PRICE" => "desc"]
+                ])->fetch();
+            }
+            $offerPrice = (int)$offerData["PRICE"];
+
+            foreach ($arFields["PROPERTY_VALUES"] as $propId => &$property) {
+                if (empty($property)) {
+                    continue;
+                }
+
+                switch ((int)$propId) {
+                    case $properties["OLD_PRICE_DOLLAR"]:
+                        $value = &$property[key($property)]["VALUE"];
+                        $value = (int)$value;
+
+                        if ($value > 0) {
+                            if ($productPriceDollar <= 0) {
+                                $APPLICATION->throwException("Старая цена в валюте должна быть заполнена только вместе с Ценой в валюте");
+                                return false;
+                            }
+
+                            if ($productPriceDollar >= $value) {
+                                $APPLICATION->throwException("Старая цена в валюте должна быть больше Цены в валюте");
+                                return false;
+                            }
+                        }
+                        break;
+                    case $properties["OLD_PRICE"]:
+                        $value = &$property[key($property)]["VALUE"];
+                        $value = (int)$value;
+
+                        if ($value > 0 && $offerPrice >= $value) {
+                            $APPLICATION->throwException("Старая цена должна быть больше Текущей цены");
+                            return false;
+                        }
+                        break;
+                }
+            }
+            unset($property);
+            return true;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public static function existSaleProducts(): bool
+    {
+        $productsId = [];
+        $exist = false;
+        $result = \CIBlockElement::GetList(
+            [],
+            [
+                "ACTIVE"             => "Y",
+                "IBLOCK_ID"          => self::CATALOG_IBLOCK_ID,
+                ">PROPERTY_OLD_PRICE" => 0,
+            ],
+            false,
+            [
+                "IBLOCK_ID",
+                "ID",
+                "PROPERTY_OLD_PRICE"
+            ]
+        );
+
+        while ($row = $result->GetNext()) {
+            $productsId[] = $row["ID"];
+        }
+
+        if (!empty($productsId)) {
+            $result = \CIBlockElement::GetList(
+                [],
+                [
+                    "ACTIVE"             => "Y",
+                    "CATALOG_AVAILABLE"  => "Y",
+                    "IBLOCK_ID"          => Base::OFFERS_IBLOCK_ID,
+                    "PROPERTY_CML2_LINK" => $productsId,
+                ],
+                false,
+                [
+                    "nTopCount" => 1
+                ]
+            )->GetNext();
+
+            $exist = !empty($result);
+        }
+        return $exist;
     }
 }

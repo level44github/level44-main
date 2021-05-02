@@ -1,4 +1,6 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+<? use Level44\Content;
+
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
@@ -25,3 +27,5 @@ $arResult["ITEMS"] = array_filter(
         return (int)$arParams["RCM_PROD_ID"] !== (int)$item["ID"];
     }
 );
+
+$arResult = Content::setCatalogItemsEcommerceData($arResult);

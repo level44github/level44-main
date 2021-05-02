@@ -25,6 +25,13 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                     &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
                                 <? endif; ?>
                             </div>
+                            <? if (!empty($basketItem["oldPrice"])): ?>
+                                <div class="basket-aside__price-crossed"><span><?= $basketItem["oldPriceFormat"] ?></span>
+                                    <? if ($basketItem["PRICE_DOLLAR"]): ?>
+                                        &middot; <span><?= $basketItem["oldPriceDollarFormat"] ?></span>
+                                    <? endif; ?>
+                                </div>
+                            <? endif; ?>
                             <div><?= $basketItem["NAME"] ?></div>
                             <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
                             <? if (!empty($basketItem["PROPS"])): ?>
@@ -49,9 +56,20 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <?= $arResult["BASKET_ITEMS_QUANTITY"] ?>
                         <?= Loc::getMessage("PCS") ?>
                     </span>
-                    <div class="ml-auto"><span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
-                        <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
-                            &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                    <div class="ml-auto">
+                        <div>
+                            <span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+                            <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
+                                &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
+                            <? endif; ?>
+                        </div>
+                        <? if ($arResult["SHOW_OLD_SUM_PRICE"]): ?>
+                            <div class="basket-aside__price-crossed">
+                                <span><?= $arResult["OLD_SUM_PRICE"] ?></span>
+                                <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
+                                    &middot; <span> <?= $arResult["OLD_SUM_PRICE_DOLLAR"] ?></span>
+                                <? endif; ?>
+                            </div>
                         <? endif; ?>
                     </div>
                 </div>

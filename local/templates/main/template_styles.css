@@ -16,3 +16,14 @@
 .catalog__item-footer {
     height: inherit;
 }
+
+.catalog__item-price-crossed,
+.product__price-crossed,
+.basket-aside__price-crossed,
+.carousel__price-crossed,
+.cart__price-crossed {
+    text-decoration-line: line-through;
+    color: #989690;
+}
+
+

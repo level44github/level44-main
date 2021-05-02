@@ -5,6 +5,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 
 use Bitrix\Main\Localization\Loc;
 use \Level44\Base;
+use Level44\Product;
 
 $request = \Bitrix\Main\Context::getCurrent()->getRequest();
 
@@ -142,13 +143,20 @@ $rsProductsData = \CIBlockElement::GetList(
 );
 
 $sumPriceDollar = 0;
+$oldSumPrice = 0;
+$oldSumPriceDollar = 0;
 $productsDataExt = [];
 while ($productData = $rsProductsData->GetNext()) {
     $productsDataExt[$productData["ID"]] = $productData;
 }
 
+$product = new Product();
+$ecommerceData = $product->getEcommerceData(array_values($productsData));
+
 foreach ($productsData as $key => &$productsDataItem) {
-    $productsDataItem = $productsDataExt[$productsDataItem];
+    $productId = $productsDataItem;
+    $productsDataExt[$productId]["prices"] = $ecommerceData[$productId]["prices"];
+    $productsDataItem = $productsDataExt[$productId];
 }
 unset($productsDataItem);
 
@@ -186,9 +194,23 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $itemPriceDollar = $basketItem["PRICE_DOLLAR"];
     }
 
+    $basketItem = array_merge($basketItem, $productsData[$basketItem["PRODUCT_ID"]]["prices"]);
+    $basketItem["oldPrice"] = $basketItem["oldPrice"] * $basketItem["QUANTITY"];
+    $basketItem["oldPriceDollar"] = $basketItem["oldPriceDollar"] * $basketItem["QUANTITY"];
+    $basketItem["oldPriceFormat"] = CCurrencyLang::CurrencyFormat($basketItem["oldPrice"], "RUB");
+    $basketItem["oldPriceDollarFormat"] = Base::formatDollar($basketItem["oldPriceDollar"]);
+
     $itemPriceDollar = $itemPriceDollar * $basketItem["QUANTITY"];
 
     $sumPriceDollar += $itemPriceDollar;
+
+    if (empty($basketItem["oldPrice"])) {
+        $oldSumPrice += $basketItem["SUM_NUM"];
+        $oldSumPriceDollar += $itemPriceDollar;
+    } else {
+        $oldSumPrice += $basketItem["oldPrice"];
+        $oldSumPriceDollar += $basketItem["oldPriceDollar"];
+    }
 
     $basketItem["PRICE_DOLLAR"] = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($itemPriceDollar) : false;
 
@@ -210,6 +232,9 @@ unset($basketItem);
 
 $arResult["BASKET_ITEMS_QUANTITY"] = $basketItemsQuantity;
 $arResult["SUM_PRICE_DOLLAR"] = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($sumPriceDollar) : false;
+$arResult["OLD_SUM_PRICE"] = CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB");
+$arResult["OLD_SUM_PRICE_DOLLAR"] = Base::formatDollar($oldSumPriceDollar);
+$arResult["SHOW_OLD_SUM_PRICE"] = !empty($oldSumPrice) && $oldSumPrice !== $arResult["ORDER_PRICE"];
 
 if (count($columns) & 1) {
     array_unshift($fulls, array_pop($columns));

@@ -5,6 +5,8 @@
     [
         "\Level44\Base" => "/local/php_interface/lib/Base.php",
         "\Level44\HLWrapper" => "/local/php_interface/lib/HLWrapper.php",
+        "\Level44\Content" => "/local/php_interface/lib/Content.php",
+        "\Level44\Product" => "/local/php_interface/lib/Product.php",
     ]
 );
 
