@@ -21,16 +21,6 @@ $aMenuLinks[] = [
     ""
 ];
 
-if (Base::existSaleProducts()) {
-    $aMenuLinks[] = [
-        "Распродажа",
-        SITE_DIR . "catalog/sale/",
-        [],
-        [],
-        ""
-    ];
-}
-
 if (CModule::IncludeModule('iblock')) {
     $arFilter = array(
         "TYPE" => "catalog",
@@ -63,3 +53,13 @@ if (CModule::IncludeModule('iblock')) {
 }
 
 $aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);
+
+if (Base::existSaleProducts()) {
+    $aMenuLinks[] = [
+        "Sale",
+        SITE_DIR . "catalog/sale/",
+        [],
+        [],
+        ""
+    ];
+}
