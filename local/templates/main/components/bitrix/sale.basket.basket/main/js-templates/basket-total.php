@@ -13,7 +13,7 @@ use Bitrix\Main\Localization\Loc;
         <span class="basket-aside__pieces"
               data-entity="basket-items-count" data-filter="all"></span>
         <div class="ml-auto">
-        <div data-entity="basket-total-price"><span>{{{PRICE_FORMATED}}}</span>
+        <div data-entity="basket-total-price" class="{{#SHOW_OLD_SUM_PRICE}}product__final-price{{/SHOW_OLD_SUM_PRICE}}"><span>{{{PRICE_FORMATED}}}</span>
 	        {{#SUM_PRICE_DOLLAR}}
 	        &middot; <span>{{{SUM_PRICE_DOLLAR}}}</span>
 	        {{/SUM_PRICE_DOLLAR}}

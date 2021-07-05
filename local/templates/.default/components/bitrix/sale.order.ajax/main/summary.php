@@ -20,7 +20,8 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
                         </div>
                         <div class="basket-aside__body">
-                            <div class="font-weight-bold"><span><?= $basketItem["SUM"] ?></span>
+                            <div class="font-weight-bold <?= $basketItem["oldPrice"] ? "product__final-price" : "" ?>">
+                                <span><?= $basketItem["SUM"] ?></span>
                                 <? if ($basketItem["PRICE_DOLLAR"]): ?>
                                     &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
                                 <? endif; ?>
@@ -57,8 +58,8 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <?= Loc::getMessage("PCS") ?>
                     </span>
                     <div class="ml-auto">
-                        <div>
-                            <span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+                        <div class="<?= $arResult["SHOW_OLD_SUM_PRICE"] ? "product__final-price" : "" ?>">
+                        <span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
                             <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
                                 &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
                             <? endif; ?>
