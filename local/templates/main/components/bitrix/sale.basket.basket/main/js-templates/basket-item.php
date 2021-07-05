@@ -45,7 +45,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <img class="img-fluid" src="{{IMAGE_URL}}" alt="">
         </a>
         <div class="cart__body">
-            <div class="font-weight-bold d-lg-none d-dt-none"><span>{{{PRICE_FORMATED}}}</span>
+            <div class="font-weight-bold d-lg-none d-dt-none {{#showOldPrice}}product__final-price{{/showOldPrice}}"><span>{{{PRICE_FORMATED}}}</span>
 	            {{#PRICE_DOLLAR}}
 	            &middot; <span>{{PRICE_DOLLAR}}</span>
 	            {{/PRICE_DOLLAR}}
@@ -89,7 +89,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <a class="cart__remove d-lg-none" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>
         <div>
-        <div class="d-none d-lg-block cart__price"><span>{{{PRICE_FORMATED}}}</span>
+        <div class="d-none d-lg-block cart__price {{#showOldPrice}}product__final-price{{/showOldPrice}}"><span>{{{PRICE_FORMATED}}}</span>
 	        {{#PRICE_DOLLAR}}
 	        &middot; <span>{{PRICE_DOLLAR}}</span>
 	        {{/PRICE_DOLLAR}}

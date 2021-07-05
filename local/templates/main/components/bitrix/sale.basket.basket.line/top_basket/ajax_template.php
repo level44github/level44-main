@@ -31,7 +31,8 @@ use Bitrix\Main\Localization\Loc;
                         <div class="m-basket__body">
                             <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
                                 <div><?= $item["NAME"] ?></div>
-                                <div><span><?= $item["PRICE_FMT"] ?></span>
+                                <div class="<?= $item["oldPrice"] ? "product__final-price" : "" ?>">
+                                    <span><?= $item["PRICE_FMT"] ?></span>
                                     <? if ($item["PRICE_DOLLAR"]): ?>
                                         &middot; <span><?= $item["PRICE_DOLLAR"] ?></span>
                                     <? endif; ?>

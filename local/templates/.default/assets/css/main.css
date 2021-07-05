@@ -332,3 +332,7 @@
     text-decoration-line: line-through;
     color: #989690;
 }
+
+.product__final-price {
+  color: #800308;
+}

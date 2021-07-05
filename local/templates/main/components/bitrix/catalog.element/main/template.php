@@ -184,7 +184,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <form>
                 <div class="product__header">
                     <h1 class="product__title"><?= $name ?></h1>
-                    <div>
+                    <div class="<?= $price["oldPrice"] ? "product__final-price" : "" ?>">
                         <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
                             <?= $price['PRINT_PRICE'] ?>
                         </span>
