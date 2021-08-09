@@ -49,7 +49,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                     </ul>
                                 <? endif; ?>
                             </div>
-                        <div>
+                        </div>
                         <div class="basket-aside--error-container">
                            <div class="basket-aside--error">Товар недоступен. Пожалуйста, удалите его из корзины, чтобы оформить заказ</div>
                         </div>
