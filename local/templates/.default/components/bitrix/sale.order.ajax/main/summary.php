@@ -16,41 +16,47 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
             <div>
                 <? foreach ($arResult["BASKET_ITEMS"] as $basketItem): ?>
                     <div class="basket-aside__item">
-                        <div class="basket-aside__image">
-                            <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
-                        </div>
-                        <div class="basket-aside__body">
-                            <div class="font-weight-bold <?= $basketItem["oldPrice"] ? "product__final-price" : "" ?>">
-                                <span><?= $basketItem["SUM"] ?></span>
-                                <? if ($basketItem["PRICE_DOLLAR"]): ?>
-                                    &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
-                                <? endif; ?>
+                        <div class="basket-aside__main-block">
+                            <div class="basket-aside__image">
+                                <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
                             </div>
-                            <? if (!empty($basketItem["oldPrice"])): ?>
-                                <div class="basket-aside__price-crossed"><span><?= $basketItem["oldPriceFormat"] ?></span>
+                            <div class="basket-aside__body">
+                                <div class="font-weight-bold <?= $basketItem["oldPrice"] ? "product__final-price" : "" ?>">
+                                    <span><?= $basketItem["SUM"] ?></span>
                                     <? if ($basketItem["PRICE_DOLLAR"]): ?>
-                                        &middot; <span><?= $basketItem["oldPriceDollarFormat"] ?></span>
+                                        &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
                                     <? endif; ?>
                                 </div>
-                            <? endif; ?>
-                            <div><?= $basketItem["NAME"] ?></div>
-                            <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
-                            <? if (!empty($basketItem["PROPS"])): ?>
-                                <ul class="basket-aside__list">
-                                    <? foreach ($basketItem["PROPS"] as $prop): ?>
-                                        <? if ($prop["CODE"] === "COLOR_REF"): ?>
-                                            <li><?= Loc::getMessage("PROP_COLOR") ?>: <?= $prop["VALUE"] ?></li>
+                                <? if (!empty($basketItem["oldPrice"])): ?>
+                                    <div class="basket-aside__price-crossed"><span><?= $basketItem["oldPriceFormat"] ?></span>
+                                        <? if ($basketItem["PRICE_DOLLAR"]): ?>
+                                            &middot; <span><?= $basketItem["oldPriceDollarFormat"] ?></span>
                                         <? endif; ?>
-                                        <? if ($prop["CODE"] === "SIZE_REF"): ?>
-                                            <li><?= Loc::getMessage("PROP_SIZE") ?>: <?= $prop["VALUE"] ?></li>
-                                        <? endif; ?>
-                                    <? endforeach; ?>
-                                </ul>
-                            <? endif; ?>
+                                    </div>
+                                <? endif; ?>
+                                <div><?= $basketItem["NAME"] ?></div>
+                                <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
+                                <? if (!empty($basketItem["PROPS"])): ?>
+                                    <ul class="basket-aside__list">
+                                        <? foreach ($basketItem["PROPS"] as $prop): ?>
+                                            <? if ($prop["CODE"] === "COLOR_REF"): ?>
+                                                <li><?= Loc::getMessage("PROP_COLOR") ?>: <?= $prop["VALUE"] ?></li>
+                                            <? endif; ?>
+                                            <? if ($prop["CODE"] === "SIZE_REF"): ?>
+                                                <li><?= Loc::getMessage("PROP_SIZE") ?>: <?= $prop["VALUE"] ?></li>
+                                            <? endif; ?>
+                                        <? endforeach; ?>
+                                    </ul>
+                                <? endif; ?>
+                            </div>
+                        <div>
+                        <div class="basket-aside--error-container">
+                           <div class="basket-aside--error">Товар недоступен. Пожалуйста, удалите его из корзины, чтобы оформить заказ</div>
                         </div>
                     </div>
                 <? endforeach; ?>
             </div>
+
             <div class="basket-aside__footer">
                 <div class="d-flex"><?= Loc::getMessage("GOODS") ?>
                     <span class="basket-aside__pieces">

@@ -336,3 +336,20 @@
 .product__final-price {
   color: #E50009;
 }
+
+.basket-aside--error-container {
+  margin-top: 1rem;
+}
+
+.basket-aside--error {
+  border: 1px solid #FF0000;
+  padding: 15px;
+  font-size: 12px;
+  line-height: 17px;
+  color: #FF0000;
+  opacity: 0.8;
+}
+
+.basket-aside__main-block {
+  display: flex;
+}
