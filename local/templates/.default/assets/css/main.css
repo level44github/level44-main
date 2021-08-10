@@ -352,6 +352,7 @@
 
 .basket-aside__main-block {
   display: flex;
+  position: relative;
 }
 
 .basket-aside__remove {
