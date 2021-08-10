@@ -659,7 +659,8 @@ $(function () {
     });
 
     var removeProductLock = false;
-    $(document).on("click", ".js-remove-unavailable", function () {
+    $(document).on("click", ".js-remove-unavailable", function (e) {
+        e.preventDefault();
         if (removeProductLock || $(".checkout-loading-overlay").is(":visible")) {
             return;
         }
