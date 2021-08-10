@@ -11,13 +11,16 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
 ?>
 <? if ($arResult["BASKET_ITEMS"]): ?>
     <h3 class="aside__title"><?= Loc::getMessage("BASKET") ?></h3>
-    <div class="card mb-4">
+    <div class="card mb-4 js-summary-block" data-site-id="<?= SITE_ID ?>">
         <div class="basket-aside">
             <div>
                 <? foreach ($arResult["BASKET_ITEMS"] as $basketItem): ?>
-                    <div class="basket-aside__item">
+                    <div class="basket-aside__item js-summary-item"
+                         data-product-id="<?= $basketItem["PRODUCT_ID"] ?>"
+                         data-basket-item-id="<?= $basketItem["ID"] ?>"
+                    >
                         <div class="basket-aside__main-block">
-                            <a class="basket-aside__remove checkout-loading-overlay" href="#">
+                            <a class="basket-aside__remove js-remove-unavailable" style="display: none;" href="#">
                                 <svg class="icon icon-close ">
                                     <use xlink:href="#close"></use>
                                 </svg>
@@ -55,8 +58,8 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                 <? endif; ?>
                             </div>
                         </div>
-                        <div class="basket-aside--error-container">
-                           <div class="basket-aside--error">Товар недоступен. Пожалуйста, удалите его из корзины, чтобы оформить заказ</div>
+                        <div class="basket-aside--error-container js-unavailable-error" style="display: none">
+                            <div class="basket-aside--error"><?= Loc::getMessage("NOT_AVAILABLE_PRODUCT") ?></div>
                         </div>
                     </div>
                 <? endforeach; ?>

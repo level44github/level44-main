@@ -14,6 +14,7 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
+use Bitrix\Catalog\Model;
 use Exception;
 
 /**
@@ -47,6 +48,10 @@ class Product
      */
     public function getEcommerceData($productsId): array
     {
+        if (empty($productsId)) {
+            return [];
+        }
+
         $data = [];
         $result = \CIBlockElement::GetList(
             [],
@@ -70,6 +75,20 @@ class Product
             ];
         }
 
+        $products = Model\Product::getList(
+            [
+                "filter" => [
+                    "ID" => $productsId,
+                ],
+            ]
+        );
+
+        while ($product = $products->fetch()) {
+            if (!empty($productsData[$product["ID"]])) {
+                $productsData[$product["ID"]]["quantity"] = (int)$product["QUANTITY"];
+            }
+        }
+
         foreach ($productsId as $productId) {
             $productData = $productsData[$productId];
             $prices = [
@@ -88,6 +107,7 @@ class Product
                 $productData["oldPriceDollar"]
             );
             $data[$productId]["prices"] = $prices;
+            $data[$productId]["quantity"] = $productData["quantity"];
         }
 
         return $data;
