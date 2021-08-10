@@ -17,6 +17,11 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                 <? foreach ($arResult["BASKET_ITEMS"] as $basketItem): ?>
                     <div class="basket-aside__item">
                         <div class="basket-aside__main-block">
+                            <a class="basket-aside__remove checkout-loading-overlay" href="#">
+                                <svg class="icon icon-close ">
+                                    <use xlink:href="#close"></use>
+                                </svg>
+                            </a>
                             <div class="basket-aside__image">
                                 <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
                             </div>
