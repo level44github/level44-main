@@ -40,7 +40,7 @@ $showBasketCart = $APPLICATION->GetCurPage() === SITE_DIR . "checkout/" && empty
             <nav class="navbar navbar-light bg-light layout__navbar">
                 <div class="position-relative">
                     <? if ($showBasketCart): ?>
-                        <a class="header__basket-link" href="<?= SITE_DIR . "cart" ?>">
+                        <a class="header__basket-link js-basket-link" href="<?= SITE_DIR . "cart" ?>">
                             <svg class="icon icon-arrow-left mr-2">
                                 <use xlink:href="#arrow-left"></use>
                             </svg>

@@ -512,9 +512,54 @@ BX.saleOrderAjax = {
             BX.saleOrderAjax.cleanUp();
         }
 
-        BX.ajax.submit(orderForm, BX.delegate(this.ajaxResult, this));
+        if (val === 'Y') {
+            this.submitWithCheckQuantity(orderForm);
+        } else {
+            BX.ajax.submit(orderForm, BX.delegate(this.ajaxResult, this));
+        }
 
         return true;
+    },
+    submitWithCheckQuantity: function (orderForm) {
+        var component = this;
+        var $summaryBlock = $(document).find(".js-summary-block");
+
+        $.ajax({
+            method: "POST",
+            url: "/ajax/checkBasket.php",
+            data: {
+                siteId: $summaryBlock.data("site-id")
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.availableBasket) {
+                    BX.ajax.submit(orderForm, BX.delegate(component.ajaxResult, component));
+                } else {
+                    component.deactivateUnavailableProducts(data.unavailableProducts);
+                    window.spinnerCity(false);
+                    component.BXFormPosting = false;
+                    $(".checkout-loading-overlay").hide();
+                }
+            },
+            error: function (e) {
+                window.spinnerCity(false);
+                component.BXFormPosting = false;
+                $(".checkout-loading-overlay").hide();
+            }
+        });
+    },
+    deactivateUnavailableProducts: function (productsId) {
+        if (!Array.isArray(productsId)) {
+            productsId = [];
+        }
+
+        productsId.forEach(function (productId) {
+            var summaryItem = $(document).find(".js-summary-item[data-product-id='" + productId + "']");
+            if (summaryItem.length) {
+                summaryItem.find(".js-remove-unavailable").show();
+                summaryItem.find(".js-unavailable-error").show();
+            }
+        });
     },
     ajaxResult: function (res) {
         var orderForm = BX('ORDER_FORM');
@@ -611,5 +656,79 @@ $(function () {
         if ($(this).val().length <= 0) {
             $(this).closest(".js-location_container").find(".js-form__location__value").val("")
         }
+    });
+
+    var removeProductLock = false;
+    $(document).on("click", ".js-remove-unavailable", function (e) {
+        e.preventDefault();
+        if (removeProductLock || $(".checkout-loading-overlay").is(":visible")) {
+            return;
+        }
+        var fields = $(BX('ORDER_FORM')).serializeArray();
+        var $summaryItem = $(this).closest(".js-summary-item");
+        var $summaryBlock = $(this).closest(".js-summary-block");
+
+        for (var i = 0; i < fields.length; i++) {
+            if (fields[i].name === "confirmorder" && fields[i].value === "Y") {
+                fields[i].value = "N";
+            }
+        }
+
+        window.spinnerCity(true);
+        $(".checkout-loading-overlay").show();
+        removeProductLock = true;
+
+        $.ajax({
+            method: "POST",
+            url: "/ajax/actions.php",
+            dataType: "json",
+            data: {
+                sessid: BX.bitrix_sessid(),
+                basketItemId: $summaryItem.data("basket-item-id"),
+                siteId: $summaryBlock.data("site-id"),
+                action: "removeFromBasket",
+            },
+            success: function (data) {
+                if (data.success !== true) {
+                    window.spinnerCity(false);
+                    $(".checkout-loading-overlay").hide();
+                    removeProductLock = false;
+                    return;
+                }
+
+                $.ajax({
+                    method: "POST",
+                    data: fields,
+                    success: function (data) {
+                        try {
+                            var parseData = JSON.parse(data);
+                            if (parseData.redirect) {
+                                document.location.href = parseData.redirect;
+                            }
+                            return;
+                        } catch (e) {
+                        }
+
+                        if ($(data).find(".js-summary-block .js-summary-item").length > 0) {
+                            $(document).find(".js-summary-block").html($(data).find(".js-summary-block").html());
+                        }
+
+                        window.spinnerCity(false);
+                        $(".checkout-loading-overlay").hide();
+                        removeProductLock = false;
+                    },
+                    error: function () {
+                        window.spinnerCity(false);
+                        $(".checkout-loading-overlay").hide();
+                        removeProductLock = false;
+                    }
+                });
+            },
+            error: function () {
+                window.spinnerCity(false);
+                $(".checkout-loading-overlay").hide();
+                removeProductLock = false;
+            }
+        });
     })
 });
