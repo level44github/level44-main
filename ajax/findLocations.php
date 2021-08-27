@@ -37,7 +37,8 @@ try {
                     break;
                 }
             }
-            return $isSng;
+            //Скрываем Области, Районы области и не СНГ страны
+            return $isSng && !in_array((int)$item["TYPE_ID"], [3, 4]);
         }));
 } catch (Main\SystemException $e) {
     $result = false;
