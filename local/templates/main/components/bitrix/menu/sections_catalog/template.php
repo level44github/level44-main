@@ -5,7 +5,7 @@
     <div class="catalog__nav js-catalog__nav">
         <? foreach ($arResult as $item): ?>
             <div class="catalog__nav-item">
-                <a class="catalog__nav-link <?= $item["SELECTED"] ? "active" : "" ?>"
+                <a class="catalog__nav-link <?= $item["SELECTED"] ? "active" : "" ?> <?= $item["PARAMS"]["CSS_STYLE"] ?>"
                    href="<?= $item["LINK"] ?>"><?= $item["TEXT"] ?></a>
             </div>
         <? endforeach; ?>
