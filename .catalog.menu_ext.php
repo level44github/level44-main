@@ -59,7 +59,9 @@ if (Base::existSaleProducts()) {
         "Sale",
         SITE_DIR . "catalog/sale/",
         [],
-        [],
+        [
+            "CSS_CLASS"=>"sale-section"
+        ],
         ""
     ];
 }

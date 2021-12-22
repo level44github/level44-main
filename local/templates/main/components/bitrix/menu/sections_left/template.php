@@ -7,7 +7,7 @@ use Bitrix\Main\Localization\Loc;
     <ul class="nav flex-column">
         <? foreach ($arResult as $item): ?>
             <li class="nav-item">
-                <a class="nav-link" href="<?= $item["LINK"] ?>">
+                <a class="nav-link <?= $item["PARAMS"]["CSS_CLASS"] ?>" href="<?= $item["LINK"] ?>">
                     <?= $item["TEXT"] ?>
                 </a>
             </li>
