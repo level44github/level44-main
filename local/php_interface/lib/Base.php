@@ -466,6 +466,7 @@ class Base
                 ">PROPERTY_OLD_PRICE" => 0,
             ],
             false,
+            false,
             [
                 "IBLOCK_ID",
                 "ID",
