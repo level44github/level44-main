@@ -370,3 +370,38 @@
   width: 100%;
   height: 100%;
 }
+
+.carousel .slick-next,
+.carousel .slick-prev {
+  filter: brightness(1);
+  transition: filter 0.15s;
+}
+
+.carousel .slick-next::before,
+.carousel .slick-prev::before {
+  background-size: 10px 22px;
+}
+
+.carousel .slick-next::before {
+  background-image: url(../img/arrow_right.svg);
+}
+
+.carousel .slick-prev::before {
+  background-image: url(../img/arrow_left.svg);
+}
+
+.carousel .slick-next:hover,
+.carousel .slick-prev:hover {
+  filter: brightness(0);
+}
+
+.carousel .slick-next.slick-disabled,
+.carousel .slick-prev.slick-disabled {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .carousel .slick-slide {
+    width: calc(960px / 4);
+  }
+}
