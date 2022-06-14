@@ -373,6 +373,7 @@
 
 .carousel .slick-next,
 .carousel .slick-prev {
+  display: none !important;
   filter: brightness(1);
   transition: filter 0.15s;
 }
@@ -403,5 +404,10 @@
 @media (min-width: 992px) {
   .carousel .slick-slide {
     width: calc(960px / 4);
+  }
+
+  .carousel .slick-next,
+  .carousel .slick-prev {
+    display: block !important;
   }
 }
