@@ -12,3 +12,5 @@
 /upload/
 /.htaccess
 /urlrewrite.php
+
+.DS_Store
