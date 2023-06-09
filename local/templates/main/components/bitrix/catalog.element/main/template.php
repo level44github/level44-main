@@ -144,12 +144,20 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 
     <div class="row product__body" id="<?= $itemIds['ID'] ?>">
         <?
-        if (!empty($actualItem['MORE_PHOTO'])): ?>
+        if (!empty($actualItem['MORE_PHOTO']) || !empty($actualItem['VIDEOS'])): ?>
             <div class="col-lg-7 mb-lg-5 gallery" id="<?= $itemIds['BIG_SLIDER_ID'] ?>">
                 <div class="gallery__thumb js-gallery__thumb">
                     <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
                         <div class="gallery__thumb-item" data-entity="image" data-id="<?= $photo['ID'] ?>">
                             <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>">
+                        </div>
+                    <? endforeach; ?>
+
+                    <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
+                        <div class="gallery__thumb-item" data-entity="image" data-id="<?= $video["ID"] ?>">
+                            <video>
+                                <source class="img-fluid js-gallery__popup-img" src="<?= $video["PATH"] ?>"/>
+                            </video>
                         </div>
                     <? endforeach; ?>
                 </div>
@@ -161,8 +169,18 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <img class="img-fluid js-gallery__popup-img" alt="" data-lazy="<?= $photo["SRC"] ?>">
                             </a>
                         <? endforeach; ?>
+
+                        <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
+                            <a class="gallery__full" href="#" data-toggle="modal"
+                               data-target="#gallery__popup">
+                                <video>
+                                    <source class="img-fluid js-gallery__popup-img" src="<?= $video["PATH"] ?>"/>
+                                </video>
+                            </a>
+                        <? endforeach; ?>
                     </div>
                 </div>
+
                 <div class="modal fade" id="gallery__popup" tabindex="-1" role="dialog" aria-labelledby="gallery__popup" aria-hidden="true">
                     <button class="close gallery__popup-close" type="button" data-dismiss="modal" aria-label="Закрыть">
                         <svg class="icon icon-close ">

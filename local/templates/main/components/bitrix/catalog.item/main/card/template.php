@@ -26,9 +26,11 @@ use \Bitrix\Main\Localization\Loc;
 ?>
 
 
-<a class="catalog__item-image" href="<?= $item['DETAIL_PAGE_URL'] ?>">
-    <img class="img-fluid" src="<?= $item['PREVIEW_PICTURE']['SRC'] ?>" alt="<?= $item['NAME'] ?>">
-</a>
+<? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
+    <a class="catalog__item-image" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+        <img class="img-fluid" src="<?= $previewImage ?>" alt="<?= $item['NAME'] ?>">
+    </a>
+<? endforeach; ?>
 <div class="catalog__item-footer">
     <a class="catalog__item-title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
     <div class="<?= $price["oldPrice"] ? "product__final-price" : "" ?>">
