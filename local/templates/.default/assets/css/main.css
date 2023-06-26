@@ -371,6 +371,18 @@
   height: 100%;
 }
 
+.gallery__thumb-item {
+  border: 1px solid transparent;
+}
+
+.slick-slide:hover .gallery__thumb-item {
+  border-color: #989690;
+}
+
+.slick-current .gallery__thumb-item, .slick-current:hover .gallery__thumb-item {
+  border-color: #212121;
+}
+
 .gallery__thumb-item video {
   object-fit: cover;
   object-position: center;
