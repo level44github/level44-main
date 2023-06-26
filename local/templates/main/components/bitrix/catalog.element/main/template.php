@@ -173,7 +173,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
                             <a class="gallery__full" href="#" data-toggle="modal"
                                data-target="#gallery__popup">
-                                <video autoplay muted playsinline class="img-fluid js-gallery__popup-img">
+                                <video autoplay muted playsinline loop class="img-fluid js-gallery__popup-img">
                                     <source src="<?= $video["PATH"] ?>"/>
                                 </video>
                             </a>
