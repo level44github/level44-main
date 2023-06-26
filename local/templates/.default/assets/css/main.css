@@ -431,3 +431,10 @@
     padding-left: 4px;
   }
 }
+
+.catalog__scroll {
+  display: flex;
+  align-items: center;
+  overflow-y: auto;
+  max-width: 100%;
+}
