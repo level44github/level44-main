@@ -438,3 +438,8 @@
   overflow-y: auto;
   max-width: 100%;
 }
+
+.catalog__item-image {
+  display: flex;
+  align-items: center;
+}
