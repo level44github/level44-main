@@ -436,7 +436,14 @@
   display: flex;
   align-items: center;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow-y: scroll; 
   max-width: 100%;
+}
+
+.catalog__scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .catalog__item-image {
