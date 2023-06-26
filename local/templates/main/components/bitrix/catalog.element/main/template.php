@@ -171,11 +171,14 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                         <? endforeach; ?>
 
                         <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
-                            <a class="gallery__full" href="#" data-toggle="modal"
+                            <a class="gallery__full gallery__full--video" href="#" data-toggle="modal"
                                data-target="#gallery__popup">
                                 <video autoplay muted playsinline loop class="img-fluid js-gallery__popup-img">
                                     <source src="<?= $video["PATH"] ?>"/>
                                 </video>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="gallery__arrow">
+                                    <path d="M6 4.74741V19.2526C6 19.5721 6.35606 19.7626 6.62188 19.5854L17.5008 12.3328C17.7383 12.1745 17.7383 11.8255 17.5008 11.6672L6.62188 4.41459C6.35606 4.23737 6 4.42793 6 4.74741Z" stroke="white"/>
+                                </svg>
                             </a>
                         <? endforeach; ?>
                     </div>
