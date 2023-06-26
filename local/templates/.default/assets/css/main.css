@@ -422,3 +422,12 @@
   z-index: 1;
   pointer-events: none;
 }
+
+@media (max-width: 575.98px) {
+  .catalog__items .col-6:nth-child(odd) {
+      padding-right: 4px;
+  }
+  .catalog__items .col-6:nth-child(even) {
+    padding-left: 4px;
+}
+}
