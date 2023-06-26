@@ -386,11 +386,11 @@
   z-index: 2;
 }
 
-.gallery__full--video {
+.gallery__thumb--video {
   position: relative;
 }
 
-.gallery__full--video::after {
+.gallery__thumb--video::after {
   content: '';
   position: absolute;
   weight: 100%;
