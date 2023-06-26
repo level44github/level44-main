@@ -372,7 +372,6 @@
 }
 
 .gallery__thumb-item video {
-  max-height: 78px;
   object-fit: cover;
   object-position: center;
 }
@@ -391,6 +390,7 @@
 
 .gallery__thumb-video {
   position: relative;
+  height: 78px;
 }
 
 .gallery__thumb-video::after {
@@ -402,4 +402,5 @@
   right: 0;
   background: rgba(33, 33, 33, 0.50);
   z-index: 1;
+  pointer-events: none;
 }
