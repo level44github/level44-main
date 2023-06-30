@@ -408,7 +408,7 @@
 
 .gallery__thumb-video {
   position: relative;
-  height: 65px;
+  height: 66px;
 }
 
 .gallery__thumb-video::after {
@@ -450,21 +450,4 @@
 .catalog__item-image {
   display: flex;
   align-items: center;
-}
-
-.catalog__item-wrapper {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding-top: 150%;
-}
-
-.catalog__item-wrapper img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
 }
