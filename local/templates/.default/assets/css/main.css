@@ -408,7 +408,7 @@
 
 .gallery__thumb-video {
   position: relative;
-  height: 68px;
+  height: 65px;
 }
 
 .gallery__thumb-video::after {
