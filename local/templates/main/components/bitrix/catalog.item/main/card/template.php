@@ -27,9 +27,11 @@ use \Bitrix\Main\Localization\Loc;
 
 <div class="catalog__scroll">
     <a class="catalog__item-image" href="<?= $item['DETAIL_PAGE_URL'] ?>">
-        <? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
-            <img class="img-fluid" src="<?= $previewImage ?>" alt="<?= $item['NAME'] ?>">
-        <? endforeach; ?>
+        <div class="catalog__item-wrapper">
+            <? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
+                <img class="img-fluid" src="<?= $previewImage ?>" alt="<?= $item['NAME'] ?>">
+            <? endforeach; ?>
+        </div>
     </a>
 </div>
 <div class="catalog__item-footer">
