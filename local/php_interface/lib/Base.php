@@ -42,8 +42,19 @@ class Base
         $asset->addString('<link rel="manifest" href="' . self::getAssetsPath() . '/img/favicons/site.webmanifest">');
         $asset->addString('<meta name="msapplication-config" href="' . self::getAssetsPath() . '/img/favicons/browserconfig.xml">');
         $asset->addString('<meta  name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">');
-        $asset->addCss(self::getAssetsPath() . "/css/app.css");
-        $asset->addCss(self::getAssetsPath() . "/css/main.css");
+        $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/app.css") . '">');
+        $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/main.css") . '">');
+    }
+
+    public static function cssAutoVersion($file)
+    {
+        if (strpos($file, '/') !== 0 || !file_exists($_SERVER['DOCUMENT_ROOT'] . $file)) {
+            return $file;
+        }
+
+        $modifyTime = filemtime($_SERVER['DOCUMENT_ROOT'] . $file);
+
+        return $file . "?m=$modifyTime";
     }
 
     public static function loadScripts()
