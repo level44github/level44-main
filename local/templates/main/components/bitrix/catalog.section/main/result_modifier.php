@@ -9,12 +9,34 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
  * @var CatalogSectionComponent $component
  */
 
+foreach ($arResult["ITEMS"] as &$item) {
+    $previewImages = $item["DISPLAY_PROPERTIES"]["MORE_PHOTO"]["FILE_VALUE"];
+
+    if (!is_array($previewImages)) {
+        $previewImages = [];
+    }
+
+    if (!empty($previewImages) && !$previewImages[0]) {
+        $previewImages = [$previewImages];
+    }
+
+    $previewImages = array_map(fn($previewImage) => $previewImage['SRC'], $previewImages);
+
+    $item["PREVIEW_IMAGES"] = array_splice($previewImages, 0, 1);
+}
+
+unset($item);
+
 $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
 
 $arResult = Content::setCatalogItemsEcommerceData($arResult);
 
 foreach ($arResult["ITEMS"] as &$item) {
+    if ($item["PREVIEW_PICTURE"]["SRC"]) {
+        array_unshift($item["PREVIEW_IMAGES"], $item["PREVIEW_PICTURE"]["SRC"]);
+    }
+
     $item["NAME"] = \Level44\Base::getMultiLang(
         $item["NAME"],
         $item["DISPLAY_PROPERTIES"]["NAME_EN"]["DISPLAY_VALUE"]
@@ -28,6 +50,6 @@ $arResult["NAME"] = \Level44\Base::getMultiLang(
     $arResult["UF_NAME_EN"]
 );
 
-if (\Level44\Base::isEnLang()){
+if (\Level44\Base::isEnLang()) {
     $APPLICATION->SetTitle($arResult["NAME"]);
 }

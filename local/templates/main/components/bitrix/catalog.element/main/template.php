@@ -144,12 +144,25 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 
     <div class="row product__body" id="<?= $itemIds['ID'] ?>">
         <?
-        if (!empty($actualItem['MORE_PHOTO'])): ?>
+        if (!empty($actualItem['MORE_PHOTO']) || !empty($actualItem['VIDEOS'])): ?>
             <div class="col-lg-7 mb-lg-5 gallery" id="<?= $itemIds['BIG_SLIDER_ID'] ?>">
                 <div class="gallery__thumb js-gallery__thumb">
                     <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
                         <div class="gallery__thumb-item" data-entity="image" data-id="<?= $photo['ID'] ?>">
                             <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>">
+                        </div>
+                    <? endforeach; ?>
+
+                    <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
+                        <div class="gallery__thumb-item" data-entity="image" data-id="<?= $video["ID"] ?>">
+                            <div class="gallery__thumb-video">
+                                <video class="img-fluid js-gallery__popup-img">
+                                    <source src="<?= $video["PATH"] ?>"/>
+                                </video>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="gallery__arrow">
+                                <path d="M6 4.74741V19.2526C6 19.5721 6.35606 19.7626 6.62188 19.5854L17.5008 12.3328C17.7383 12.1745 17.7383 11.8255 17.5008 11.6672L6.62188 4.41459C6.35606 4.23737 6 4.42793 6 4.74741Z" stroke="white"/>
+                                </svg>
+                            </div>
                         </div>
                     <? endforeach; ?>
                 </div>
@@ -161,8 +174,18 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <img class="img-fluid js-gallery__popup-img" alt="" data-lazy="<?= $photo["SRC"] ?>">
                             </a>
                         <? endforeach; ?>
+
+                        <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
+                            <a class="gallery__full" href="#" data-toggle="modal"
+                               data-target="#gallery__popup">
+                                <video autoplay muted playsinline loop class="img-fluid js-gallery__popup-img">
+                                    <source src="<?= $video["PATH"] ?>"/>
+                                </video>
+                            </a>
+                        <? endforeach; ?>
                     </div>
                 </div>
+
                 <div class="modal fade" id="gallery__popup" tabindex="-1" role="dialog" aria-labelledby="gallery__popup" aria-hidden="true">
                     <button class="close gallery__popup-close" type="button" data-dismiss="modal" aria-label="Закрыть">
                         <svg class="icon icon-close ">

@@ -75,6 +75,22 @@ if (empty($arResult["MEASUREMENTS"])){
 
 $APPLICATION->SetTitle($arResult["NAME"]);
 
+$videoProperty = $arResult["DISPLAY_PROPERTIES"]["VIDEO"];
+$arResult["VIDEOS"] = [];
+
+if (is_array($videoProperty["VALUE"])) {
+    foreach ($videoProperty["VALUE"] as $key => $video) {
+        if (!$video["path"] || !$videoProperty["PROPERTY_VALUE_ID"][$key]) {
+            continue;
+        }
+
+        $arResult["VIDEOS"][] = [
+            "PATH" => $video["path"],
+            "ID"   => $videoProperty["PROPERTY_VALUE_ID"][$key],
+        ];
+    }
+}
+
 if (!empty($arResult['OFFERS'])) {
     foreach ($arResult["OFFERS"] as &$offer) {
         $offer["MORE_PHOTO"] = array_filter($offer["MORE_PHOTO"], function ($item) {
