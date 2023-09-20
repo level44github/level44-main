@@ -130,12 +130,6 @@
   height: calc(var(--vh, 1vh) * 100);
 }
 
-/* @media (max-width: 991px) {
-  .home > .btn-catalog {
-    margin-bottom: 60%;
-  }
-} */
-
 .thank-order__title {
   text-align: center;
 }
@@ -482,6 +476,7 @@
 
   .home__banner.desktop {
     display: block;
+    margin: -7% 0;
   }
 
   .home__banner.mobile {
