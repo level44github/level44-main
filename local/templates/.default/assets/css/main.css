@@ -454,6 +454,7 @@
 
 .home {
   height: auto !important;
+  padding-top: 0 !important;
   margin-top: 50px;
 }
 
@@ -486,9 +487,9 @@
   .home__banner.mobile {
     display: none;
   }
+}
 
-  .home .btn__fix-width {
-    position: absolute;
-  }
+.home .btn__fix-width {
+  position: absolute;
 }
 
