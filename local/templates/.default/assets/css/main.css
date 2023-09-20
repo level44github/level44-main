@@ -130,11 +130,11 @@
   height: calc(var(--vh, 1vh) * 100);
 }
 
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
   .home > .btn-catalog {
     margin-bottom: 60%;
   }
-}
+} */
 
 .thank-order__title {
   text-align: center;
@@ -458,7 +458,7 @@
   margin-top: 50px;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 991px) {
   .home {
     margin-top: 80px;
   }
