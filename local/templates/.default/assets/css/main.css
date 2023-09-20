@@ -472,7 +472,12 @@
   display: block;
 }
 
+.home__banner.desktop {
+  display: none;
+}
+
 @media (min-width: 768px) {
+
   .home__banner.desktop {
     display: block;
   }
