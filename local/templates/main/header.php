@@ -40,6 +40,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <div class="layout__wrapper">
     <? if ($isMain): ?>
     <div class="home">
+        <img src="<?=\Level44\Base::getMainBanner(true)?>" class="home__banner mobile" />
         <img src="<?=\Level44\Base::getMainBanner()?>" class="home__banner desktop" />
         <? endif; ?>
         <header class="header">
