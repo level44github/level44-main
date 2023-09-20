@@ -454,12 +454,11 @@
 
 .home {
   height: auto !important;
-  margin-top: 50px;
 }
 
 @media (min-width: 768px) {
   .home {
-    margin-top: 0;
+    margin-top: 54px;
   }
 }
 
