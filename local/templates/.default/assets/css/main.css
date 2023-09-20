@@ -484,9 +484,6 @@
 
   .home .btn__fix-width {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    margin: auto;
   }
 }
 
