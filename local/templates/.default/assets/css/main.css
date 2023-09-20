@@ -451,3 +451,34 @@
   display: flex;
   align-items: center;
 }
+
+.home {
+  height: auto !important;
+  margin-top: 50px;
+}
+
+@media (min-width: 768px) {
+  .home {
+    margin-top: 0;
+  }
+}
+
+.home__banner {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.home__banner.mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .home__banner.desktop {
+    display: none;
+  }
+  
+  .home__banner.mobile {
+    display: block;
+  }
+}
