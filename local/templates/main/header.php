@@ -42,11 +42,13 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <div class="home">
         <style type="text/css">
             .home {
+                margin-top: 50px;
                 background-image: url("<?=\Level44\Base::getMainBanner(true)?>");
             }
 
             @media (min-width: 768px) {
                 .home {
+                    margin-top: 0;
                     background-image: url("<?=\Level44\Base::getMainBanner()?>");
                 }
             }
