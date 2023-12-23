@@ -97,7 +97,7 @@ if (!empty($productIds)) {
     }
     unset($product);
 
-    $product = array_filter($product);
+    $products = array_filter($products);
 
 
     while ($property = $rsProperties->GetNext()) {

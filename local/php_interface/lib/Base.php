@@ -135,7 +135,7 @@ class Base
     {
 
         if (!empty($currentElement)) {
-            $linkedElements = array_filter($linkedElements, function ($item) use ($currentElement) {
+            $linkedElements = array_filter($linkedElements ?? [], function ($item) use ($currentElement) {
                 return (int)$item["ID"] !== (int)$currentElement["ID"];
             });
 

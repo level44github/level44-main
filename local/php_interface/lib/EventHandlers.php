@@ -20,7 +20,6 @@ class EventHandlers
             self::$instance = EventManager::getInstance();
         }
 
-        self::addEventHandler("sale", "OnBeforeBasketAdd");
         self::addEventHandler("main", "OnBeforeEventSend");
         self::addEventHandler("main", "OnFileDelete");
         self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
