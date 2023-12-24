@@ -133,9 +133,10 @@ class Base
 
     public static function setColorOffers(&$linkedElements, &$currentElement = [])
     {
+        $linkedElements = is_array($linkedElements) ? $linkedElements : [];
 
         if (!empty($currentElement)) {
-            $linkedElements = array_filter($linkedElements ?? [], function ($item) use ($currentElement) {
+            $linkedElements = array_filter($linkedElements, function ($item) use ($currentElement) {
                 return (int)$item["ID"] !== (int)$currentElement["ID"];
             });
 
