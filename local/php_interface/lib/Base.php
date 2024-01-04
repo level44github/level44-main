@@ -414,7 +414,13 @@ class Base
             $productPriceDollar = $savedPriceDollar;
 
             $offerIds = \CCatalogSku::getOffersList($arFields["ID"]);
-            $offerIds = array_keys($offerIds[$arFields["ID"]]);
+            
+            $offerIds = $offerIds[$arFields["ID"]];
+            if (!is_array($offerIds)){
+                offerIds = [];
+            }
+            
+            $offerIds = array_keys($offerIds);
             $offerData = [];
             if (!empty($offerIds)) {
                 $offerData = PriceTable::getList([
