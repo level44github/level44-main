@@ -417,7 +417,7 @@ class Base
             
             $offerIds = $offerIds[$arFields["ID"]];
             if (!is_array($offerIds)){
-                offerIds = [];
+                $offerIds = [];
             }
             
             $offerIds = array_keys($offerIds);
