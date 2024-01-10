@@ -396,6 +396,11 @@ class Base
                 $productId = (int)$request->get("PRODUCT_ID");
             } else {
                 $cml2link = $arFields["PROPERTY_VALUES"][$properties["CML2_LINK"]];
+
+                if (!is_array($cml2link)) {
+                    $cml2link = [];
+                }
+
                 $productId = (int)$cml2link[key($cml2link)]["VALUE"];
             }
 
@@ -410,6 +415,11 @@ class Base
             return true;
         } else {
             $savedPriceDollar = $arFields["PROPERTY_VALUES"][$properties["PRICE_DOLLAR"]];
+
+            if (!is_array($savedPriceDollar)){
+                $savedPriceDollar = [];
+            }
+
             $savedPriceDollar = (int)$savedPriceDollar[key($savedPriceDollar)]["VALUE"];
             $productPriceDollar = $savedPriceDollar;
 

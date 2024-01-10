@@ -17,8 +17,6 @@
 AddEventHandler("iblock", "OnAfterIBlockElementAdd", "ResizeUploadedPhoto");
 AddEventHandler("iblock", "OnAfterIBlockElementUpdate", "ResizeUploadedPhoto");
 
-AddEventHandler("main", "OnFileDelete", "OnFileDeleteHandler");
-
 function ResizeUploadedPhoto($arFields)
 {
     CModule::IncludeModule('iblock');
