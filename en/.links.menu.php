@@ -9,7 +9,7 @@ $aMenuLinks = Array(
     ),
     Array(
         "WhatsApp",
-        "https://wa.me/79153921144",
+        "https://wa.me/79672419889",
         Array(),
         Array(),
         ""

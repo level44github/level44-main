@@ -548,7 +548,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     <div class="d-flex">
                         <a class="btn btn-outline-secondary product__question-btn"
                            target="_blank"
-                           href="https://wa.me/79153921144">
+                           href="https://wa.me/79672419889">
                             <svg class="icon icon-whatsapp ">
                                 <use xlink:href="#whatsapp"></use>
                             </svg>
