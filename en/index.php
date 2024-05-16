@@ -57,7 +57,7 @@ $APPLICATION->IncludeComponent(
 		"LABEL_PROP_POSITION" => "top-left",
 		"LAZY_LOAD" => "Y",
         "LINE_ELEMENT_COUNT" => "4",
-        "LOAD_ON_SCROLL" => "Y",
+        "LOAD_ON_SCROLL" => "N",
 		"MESSAGE_404" => "",
 		"MESS_BTN_ADD_TO_BASKET" => "В корзину",
 		"MESS_BTN_BUY" => "Купить",
@@ -126,7 +126,8 @@ $APPLICATION->IncludeComponent(
 		"USE_ENHANCED_ECOMMERCE" => "Y",
 		"USE_MAIN_ELEMENT_SECTION" => "Y",
 		"USE_PRICE_COUNT" => "N",
-		"USE_PRODUCT_QUANTITY" => "N"
+		"USE_PRODUCT_QUANTITY" => "N",
+		"IS_PRODUCTS_ON_MAIN" => "Y",
 	)
 );?>
 <?
