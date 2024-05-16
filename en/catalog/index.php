@@ -90,7 +90,7 @@ $APPLICATION->SetTitle("Catalog");
         "LIST_BROWSER_TITLE" => "-",
         "LIST_META_DESCRIPTION" => "-",
         "LIST_META_KEYWORDS" => "-",
-        "LOAD_ON_SCROLL" => "Y",
+        "LOAD_ON_SCROLL" => "N",
         "MESSAGE_404" => "",
         "MESS_BTN_ADD_TO_BASKET" => "В корзину",
         "MESS_BTN_BUY" => "Купить",

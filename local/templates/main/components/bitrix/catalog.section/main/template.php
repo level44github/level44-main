@@ -202,13 +202,25 @@ $containerName = 'container-' . $navParams['NavNum'];
         );
     }
     ?>
-    <div class="catalog__show-more" data-use="show-more-<?= $navParams['NavNum'] ?>" style="display:none;">
-        <button class="btn btn-link">
-            <span class="spinner-border text-secondary" role="status">
-                <span class="sr-only">Loading...</span>
-            </span>
-        </button>
-    </div>
+
+    <? if ($showLazyLoad): ?>
+        <div class="product__question">
+            <a class="catalog__show-more btn btn-outline-secondary product__question-btn"
+               data-use="show-more-<?= $navParams['NavNum'] ?>"
+               target="_blank">
+                <?= Loc::getMessage('CT_BCS_CATALOG_MESS_BTN_LAZY_LOAD') ?>
+            </a>
+        </div>
+    <? endif; ?>
+
+    <? if ($arParams['IS_PRODUCTS_ON_MAIN'] === "Y"): ?>
+        <div class="product__question" data-use="to-catalog" style="display: none">
+            <a class="catalog__show-more btn btn-outline-secondary product__question-btn"
+               href="<?= SITE_DIR ?>catalog/">
+            <?= Loc::getMessage('CT_BCS_CATALOG_MESS_BTN_TO_CATALOG') ?>
+            </a>
+        </div>
+    <? endif; ?>
 </div>
 
 

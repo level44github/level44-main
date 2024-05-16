@@ -24,6 +24,7 @@
 		this.bigData = params.bigData || {enabled: false};
 		this.container = document.querySelector('[data-entity="' + params.container + '"]');
 		this.showMoreButton = null;
+		this.toCatalogButton = null;
 		this.showMoreButtonMessage = null;
 
 		if (this.bigData.enabled && BX.util.object_keys(this.bigData.rows).length > 0)
@@ -52,6 +53,8 @@
 			BX.bind(this.showMoreButton, 'click', BX.proxy(this.showMore, this));
 		}
 
+		this.toCatalogButton = document.querySelector('[data-use="to-catalog"]');
+
 		if (params.loadOnScroll)
 		{
 			BX.bind(window, 'load', BX.proxy(this.loadOnScroll, this));
@@ -65,13 +68,20 @@
 		{
 			if (this.showMoreButton)
 			{
-				if (this.navParams.NavPageNomer == this.navParams.NavPageCount)
+				if (this.navParams.NavPageNomer === this.navParams.NavPageCount)
 				{
 					BX.remove(this.showMoreButton);
 				}
 				else
 				{
 					this.container.appendChild(this.showMoreButton);
+				}
+			}
+
+			if (this.toCatalogButton) {
+				if (this.navParams.NavPageNomer === this.navParams.NavPageCount) {
+					$(this.toCatalogButton).show()
+					this.container.appendChild(this.toCatalogButton);
 				}
 			}
 		},
