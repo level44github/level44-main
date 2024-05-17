@@ -55,7 +55,7 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
             <div class="col-6 col-lg-3 order-2">
                 <div class="footer__title footer__title_level">LEVEL44</div>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="footer__link pb-0">Флагманский магазин</a></li>
+                    <li class="nav-item"><a class="footer__link pb-0"><?= Loc::getMessage("FOOTER_FLAGMAN") ?></a></li>
                     <li class="nav-item text-muted pb-2">
                         <? $APPLICATION->IncludeComponent(
                             "bitrix:main.include",
@@ -67,7 +67,7 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
                             false
                         ); ?>
                     </li>
-                    <li class="nav-item"><a class="footer__link pb-0">Шоурум</a></li>
+                    <li class="nav-item"><a class="footer__link pb-0"><?= Loc::getMessage("FOOTER_SHOWROOM") ?></a></li>
                     <li class="nav-item text-muted pb-2">
                         <? $APPLICATION->IncludeComponent(
                             "bitrix:main.include",
