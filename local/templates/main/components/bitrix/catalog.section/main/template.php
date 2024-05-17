@@ -204,10 +204,8 @@ $containerName = 'container-' . $navParams['NavNum'];
     ?>
 
     <? if ($showLazyLoad): ?>
-        <div class="product__question">
-            <a class="catalog__show-more btn btn-outline-secondary product__question-btn"
-               data-use="show-more-<?= $navParams['NavNum'] ?>"
-               target="_blank">
+        <div class="product__question" data-use="show-more-<?= $navParams['NavNum'] ?>">
+            <a class="catalog__show-more btn btn-outline-secondary product__question-btn" target="_blank">
                 <?= Loc::getMessage('CT_BCS_CATALOG_MESS_BTN_LAZY_LOAD') ?>
             </a>
         </div>
@@ -217,7 +215,7 @@ $containerName = 'container-' . $navParams['NavNum'];
         <div class="product__question" data-use="to-catalog" style="display: none">
             <a class="catalog__show-more btn btn-outline-secondary product__question-btn"
                href="<?= SITE_DIR ?>catalog/">
-            <?= Loc::getMessage('CT_BCS_CATALOG_MESS_BTN_TO_CATALOG') ?>
+                <?= Loc::getMessage('CT_BCS_CATALOG_MESS_BTN_TO_CATALOG') ?>
             </a>
         </div>
     <? endif; ?>
