@@ -125,7 +125,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     "bitrix:menu",
                     "sections_left",
                     Array(
-                        "ROOT_MENU_TYPE" => "catalog",
+                        "ROOT_MENU_TYPE" => "left",
                         "MAX_LEVEL" => "1",
                         "CHILD_MENU_TYPE" => "top",
                         "USE_EXT" => "Y",

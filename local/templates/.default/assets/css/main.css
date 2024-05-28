@@ -432,7 +432,7 @@
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  overflow-y: scroll; 
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
 }
@@ -494,3 +494,7 @@
   position: absolute;
 }
 
+.nav-item .nav.submenu {
+    margin-left: 10%;
+    display: none;
+}
