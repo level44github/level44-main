@@ -39,7 +39,9 @@ $aMenuLinks = Array(
     "Contacts",
     SITE_DIR . "about/",
     Array(),
-    Array(),
+    Array(
+        "IS_CONTACTS" => true
+    ),
     "",
   ),
 );
