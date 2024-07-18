@@ -71,7 +71,7 @@ class Content
 
         while ($row = $result->GetNext()) {
             //Исключаем текущий товар
-            if ((int)$row["ID"] !== (int)$productId) {
+            if ((int)$row["VALUE"] !== $productId) {
                 $resultList[] = (int)$row["VALUE"];
             }
         }
@@ -150,7 +150,45 @@ class Content
         } while ($commonCount > 0);
 
         //Удаляем пустые значения
-        $resultList = array_values(array_filter($resultList));
+        return array_values(array_filter($resultList));
+    }
+
+    /**
+     * @param int $productId
+     * @return array<int>
+     */
+    public static function getAddToYouLookProducts(int $productId): array
+    {
+        $resultList = [];
+        $productsId = [];
+        $propertyResult = \CIBlockElement::GetProperty(Base::CATALOG_IBLOCK_ID, $productId, [], ["CODE" => "ADD_TO_YOUR_LOOK"]);
+
+        while ($row = $propertyResult->GetNext()) {
+            if ($row["VALUE"] && (int)$row["VALUE"] !== $productId) {
+                $productsId[] = (int)$row["VALUE"];
+            }
+        }
+
+        if (!empty($productsId)) {
+            $result = \CIBlockElement::GetList(
+                ['ID' => $productsId],
+                [
+                    "IBLOCK_ID"  => Base::CATALOG_IBLOCK_ID,
+                    "=ID"        => $productsId,
+                    "=AVAILABLE" => "Y",
+                    "ACTIVE"     => "Y",
+                ],
+                false,
+                false,
+                [
+                    "ID",
+                    "IBLOCK_ID",
+                ]);
+
+            while ($row = $result->GetNext()) {
+                $resultList[] = (int)$row["ID"];
+            }
+        }
 
         return $resultList;
     }
