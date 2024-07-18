@@ -143,7 +143,6 @@ $obName = 'ob' . preg_replace('/[^a-zA-Z0-9_]/', 'x', $this->GetEditAreaId($navP
 $containerName = 'container-' . $navParams['NavNum'];
 ?>
 
-    <h4 class="text-center mb-4"><?= Loc::getMessage("YOU_LIKE") ?></h4>
     <div class="carousel js-carousel" data-entity="<?= $containerName ?>">
         <?
         if (!empty($arResult['ITEMS']) && !empty($arResult['ITEM_ROWS'])) {
