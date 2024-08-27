@@ -328,8 +328,8 @@ LAYOUT;
         $arFields["PAY_SYSTEM_NAME"] = $paySystem->getField("NAME");
         $arFields["USER_DESCRIPTION"] = $order->getField("USER_DESCRIPTION");
         $arFields["ADMIN_LINK"] = "{$hostName}/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
-        $arFields["DELIVERY_DATA"] = '<strong style="font-weight: bold;">#DELIVERY_PRICE#</strong> <br>
-                      #DELIVERY_NAME#';
+        $arFields["DELIVERY_DATA"] = "<strong style='font-weight: bold;'>{$arFields["DELIVERY_PRICE"]}</strong> <br>
+                      {$arFields["DELIVERY_NAME"]}";
         if ($preOrder) {
             $arFields["DELIVERY_DATA"] = "";
             $arFields["ORDER_USER"] = "";
