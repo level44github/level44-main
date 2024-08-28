@@ -76,7 +76,7 @@ class EventHandlers
         /** @var $paySystem \Bitrix\Sale\PaySystem\Service */
         $paySystem = $order?->getPaymentCollection()?->current()?->getPaySystem();
 
-        if (!$paySystem) {
+        if (!$paySystem || !$shipment) {
             return false;
         }
 
