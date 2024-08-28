@@ -7,6 +7,7 @@ use Bitrix\Main\EventManager;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Delivery\CalculationResult;
+use Bitrix\Sale\Order;
 use UniPlug\Settings;
 
 class EventHandlers
@@ -47,6 +48,15 @@ class EventHandlers
         );
     }
 
+    /**
+     * @throws \Bitrix\Main\ObjectNotFoundException
+     * @throws \Bitrix\Main\NotImplementedException
+     * @throws \Bitrix\Main\ArgumentNullException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\SystemException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\ArgumentException
+     */
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
     {
         if (!in_array($templateData["EVENT_NAME"],
@@ -54,35 +64,34 @@ class EventHandlers
                 "SALE_ORDER_PAID",
                 "SALE_NEW_ORDER",
                 "CUSTOM_NEW_PREORDER",
+                "SALE_STATUS_CHANGED_F",
             ])) {
             return true;
         }
 
-        $order = \Bitrix\Sale\Order::load($arFields["ORDER_ID"]);
+        $order = Order::load($arFields["ORDER_ID"]);
+
+        $shipment = $order?->getShipmentCollection()?->current()?->getFieldValues();
 
         /** @var $paySystem \Bitrix\Sale\PaySystem\Service */
+        $paySystem = $order?->getPaymentCollection()?->current()?->getPaySystem();
 
-        $payment = $order->getPaymentCollection()->current();
-
-        if (!$payment) {
-            return false;
-        }
-
-        $paySystem = $payment->getPaySystem();
         if (!$paySystem) {
             return false;
         }
 
-        if (!$order) {
-            return true;
-        }
-
         $preOrder = $arFields["PRE_ORDER"] === "Y";
+        $arFields["IS_PICKUP"] = in_array((int)$shipment["DELIVERY_ID"], Base::DELIVERY_PICKUP);
+
         if (!$paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_NEW_ORDER" && !$preOrder) {
             return false;
         }
 
         if ($paySystem->isCash() && $templateData["EVENT_NAME"] === "SALE_ORDER_PAID" && !$preOrder) {
+            return false;
+        }
+
+        if (!$arFields["IS_PICKUP"] && $templateData["EVENT_NAME"] === "SALE_STATUS_CHANGED_F") {
             return false;
         }
 
@@ -271,17 +280,11 @@ HTML;
 
         $arFields["BASKET_ITEMS_CONTENT"] = $basketItemsContent;
 
-        $shipment = $order->getShipmentCollection()
-            ->current()
-            ->getFieldValues();
-
         $arFields["DELIVERY_PRICE"] = $shipment["PRICE_DELIVERY"] > 0 ?
             \CCurrencyLang::CurrencyFormat($shipment["PRICE_DELIVERY"], $basketItem->getCurrency(),
                 true) : Base::getMultiLang("Бесплатно", "Is free");
 
         $arFields["DELIVERY_NAME"] = $shipment["DELIVERY_NAME"];
-        $arFields["IS_PICKUP"] = in_array((int)$shipment["DELIVERY_ID"], Base::DELIVERY_PICKUP);
-
 
         $addressField = $order->getPropertyCollection()->getAddress();
         $address = !empty($addressField) ? $addressField->getValue() : "";
