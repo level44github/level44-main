@@ -7,7 +7,10 @@ use Bitrix\Iblock\PropertyTable;
 use Bitrix\Main\Context;
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
+use Bitrix\Main\UserTable;
 use Bitrix\Sale\Location\LocationTable;
+use Bitrix\Sale\Order;
+use Bitrix\Sale\PropertyValueCollection;
 use Bitrix\Sale\Registry;
 use Level44\Sale\Basket;
 use Bitrix\Highloadblock as HL;
@@ -525,5 +528,52 @@ class Base
             $exist = !empty($result);
         }
         return $exist;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return mixed|null|string
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ArgumentOutOfRangeException
+     * @throws \Bitrix\Main\NotImplementedException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    public static function getUserName(Order $order)
+    {
+        $userName = "";
+
+
+        if (empty($userName)) {
+            /** @var PropertyValueCollection $propertyCollection */
+            if ($propertyCollection = $order->getPropertyCollection()) {
+                if ($propPayerName = $propertyCollection->getPayerName()) {
+                    $userName = $propPayerName->getValue();
+                }
+            }
+        }
+
+        if (empty($userName)) {
+            $userRes = UserTable::getList([
+                'select' => [
+                    'ID',
+                    'LOGIN',
+                    'NAME',
+                    'LAST_NAME',
+                    'SECOND_NAME',
+                    'EMAIL',
+                ],
+                'filter' => [
+                    '=ID' => $order->getUserId(),
+                ],
+            ]);
+            if ($userData = $userRes->fetch()) {
+                $userData['PAYER_NAME'] = \CUser::FormatName(\CSite::GetNameFormat(null, $order->getSiteId()), $userData, true);
+                $userName = $userData['PAYER_NAME'];
+            }
+        }
+
+        return $userName;
     }
 }

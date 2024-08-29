@@ -324,6 +324,7 @@ LAYOUT;
             $deliveryAddress = str_replace(array_keys($arReplace), array_values($arReplace), $deliveryAddressLayout);
         }
 
+        $arFields["ORDER_USER"] = $arFields["ORDER_USER"] ?? Base::getUserName($order);
         $arFields["DELIVERY_ADDRESS"] = $deliveryAddress;
         $arFields["YEAR"] = date("Y");
         $arFields["PRICE"] = CurrencyFormat($order->getPrice(), "RUB");
