@@ -17,21 +17,6 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
         <div class="row">
             <div class="col-6 col-lg-3 order-3 order-lg-1 footer__divider">
                 <div class="mb-2">© <?= date("Y") ?> Level 44</div>
-                <div>
-                    <? $APPLICATION->IncludeComponent(
-                        "bitrix:main.include",
-                        "",
-                        array(
-                            "AREA_FILE_SHOW" => "file",
-                            "PATH" => SITE_DIR . "include/footer_phone.php",
-                        ),
-                        false
-                    ); ?>
-                </div>
-                <div><?= Loc::getMessage("CREATE_IN") ?><a class="footer__link"
-                                           href="https://genue.ru"
-                                           target="_blank">Genue</a>
-                </div>
             </div>
             <div class="col-6 col-lg-3 order-2">
                 <div class="footer__title"><?= Loc::getMessage("FOOTER_BUYERS") ?></div>
