@@ -482,7 +482,7 @@
 
   .home__banner.desktop {
     display: block;
-    margin: -7% 0;
+    max-width: 1200px;
   }
 
   .home__banner.mobile {
