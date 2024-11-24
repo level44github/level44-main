@@ -75,7 +75,7 @@ $APPLICATION->SetTitle("Catalog");
         "GIFTS_SHOW_IMAGE" => "Y",
         "GIFTS_SHOW_NAME" => "Y",
         "GIFTS_SHOW_OLD_PRICE" => "Y",
-        "HIDE_NOT_AVAILABLE" => "Y",
+        "HIDE_NOT_AVAILABLE" => "N",
         "HIDE_NOT_AVAILABLE_OFFERS" => "N",
         "IBLOCK_ID" => "2",
         "IBLOCK_TYPE" => "rest_entity",
