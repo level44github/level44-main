@@ -47,7 +47,7 @@ $APPLICATION->IncludeComponent(
 		"ENLARGE_PRODUCT" => "PROP",
 		"ENLARGE_PROP" => "NEWPRODUCT",
 		"FILTER_NAME" => "arrFilter",
-		"HIDE_NOT_AVAILABLE" => "Y",
+		"HIDE_NOT_AVAILABLE" => "N",
 		"HIDE_NOT_AVAILABLE_OFFERS" => "N",
 		"IBLOCK_ID" => "2",
 		"IBLOCK_TYPE" => "catalog",
