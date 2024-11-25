@@ -126,11 +126,11 @@ class Content
             }
         }
 
+        $sections = array_filter($sections, fn($section) => is_array($section["PRODUCTS"]));
+
         //Внутри каждого раздела, сортируем товары в соответствии с сортировкой в каталоге
         foreach ($sections as &$section) {
-            if (is_array($section["PRODUCTS"])) {
-                Collection::sortByColumn($section["PRODUCTS"], ['SORT' => SORT_ASC, 'ID' => SORT_DESC]);
-            }
+            Collection::sortByColumn($section["PRODUCTS"], ['SORT' => SORT_ASC, 'ID' => SORT_DESC]);
         }
         unset($section);
 
