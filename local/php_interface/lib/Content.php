@@ -128,7 +128,9 @@ class Content
 
         //Внутри каждого раздела, сортируем товары в соответствии с сортировкой в каталоге
         foreach ($sections as &$section) {
-            Collection::sortByColumn($section["PRODUCTS"], ['SORT' => SORT_ASC, 'ID' => SORT_DESC]);
+            if (is_array($section["PRODUCTS"])) {
+                Collection::sortByColumn($section["PRODUCTS"], ['SORT' => SORT_ASC, 'ID' => SORT_DESC]);
+            }
         }
         unset($section);
 
