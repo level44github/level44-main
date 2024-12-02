@@ -67,6 +67,7 @@ use Bitrix\Main\Localization\Loc;
                                         </div>
                                     </div>
                             <? endif; ?>
+                            <div id="cdek_pickup"></div>
                         </div>
                     </div>
                 </div>
