@@ -290,7 +290,7 @@ BX.namespace('BX.Sale.OrderAjaxComponent');
 
 		getAllFormData: function()
 		{
-			var form = BX('ORDER_FORM'),
+			var form = BX('ORDER_FORM').cloneNode(true),
 				prepared = BX.ajax.prepareForm(form),
 				i;
 
