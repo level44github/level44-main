@@ -10,6 +10,13 @@
     ]
 );
 
+if (\Level44\Base::isEnLang()) {
+    global $MESS;
+
+    $MESS['IPOLSDEK_DELIV_ERR_NOPVZ'] = "To place an order, please specify an SDEK pick-up point.";
+    $MESS['IPOLSDEK_FRNT_CHOOSEPICKUP'] = "Select a pick-up point";
+}
+
 \Level44\Base::customRegistry();
 \Level44\EventHandlers::register();
 

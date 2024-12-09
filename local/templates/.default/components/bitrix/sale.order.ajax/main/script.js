@@ -471,10 +471,16 @@ BX.saleOrderAjax = {
         });
     },
     submitForm: function (val) {
+        setTimeout(function(){BX.Sale.OrderAjaxComponent.sendRequest()}, 20);
+
         if (this.BXFormPosting === true)
             return true;
 
         this.BXFormPosting = true;
+
+        if (!IPOLSDEK_pvz?.pvzId){
+            $(".js-form__control[data-prop='ADDRESS_SDEK']").val("")
+        }
 
         $(".checkout-loading-overlay").show();
         var orderForm = BX('ORDER_FORM');
