@@ -31,8 +31,8 @@ use Bitrix\Main\Localization\Loc;
                             <? endif; ?>
                         </div>
                     </a>
-                    <label style="display: none;" for="delivery<?= $key ?>input" id="delivery<?= $key ?>label"></label>
-                    <input id="delivery<?= $key ?>input"
+                    <label style="display: none;" for="ID_DELIVERY_ID_<?= $delivery["ID"] ?>" id="delivery<?= $key ?>label"></label>
+                    <input id="ID_DELIVERY_ID_<?= $delivery["ID"] ?>"
                            name="<?= htmlspecialcharsbx($delivery["FIELD_NAME"]) ?>"
                            class="js-delivery-input"
                            type="radio"
@@ -66,6 +66,32 @@ use Bitrix\Main\Localization\Loc;
                                             ]) ?>
                                         </div>
                                     </div>
+                            <? endif; ?>
+                            <? if (in_array($delivery["ID"], CDeliverySDEK::getDeliveryId('pickup'))): ?>
+                                <? if (!empty($arResult["ORDER_PROP_ADDRESS_SDEK"]) && $arResult["ORDER_PROP_ADDRESS_SDEK"]["TYPE"] === "STRING"):?>
+                                    <div class="form-group">
+                                        <input class="form-control js-form__control"
+                                               type="text"
+                                               style="display: none"
+                                               id="form-delivery<?= $key ?>-address"
+                                               maxlength="250"
+                                               data-delivery="<?=$delivery["ID"]?>"
+                                               size="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["SIZE1"] ?>"
+                                               name="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["FIELD_NAME"] ?>"
+                                               value="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["VALUE"] ?>"
+                                               data-prop="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["CODE"] ?>"
+                                        >
+                                    </div>
+                                <? endif; ?>
+                                <div class="form-group">
+                                    <div id="cdek-pickup">
+                                        <div class="sdek-loading">
+                                            <span class="spinner-border text-dark" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             <? endif; ?>
                         </div>
                     </div>

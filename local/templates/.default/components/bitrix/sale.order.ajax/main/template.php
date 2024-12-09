@@ -18,6 +18,8 @@ if($USER->IsAuthorized() || $arParams["ALLOW_AUTO_REGISTER"] == "Y")
 	}
 }
 
+$this->addExternalJs($templateFolder . '/order_ajax.js');
+
 use Bitrix\Main\Localization\Loc;
 
 CJSCore::Init(array('fx', 'popup', 'window', 'ajax'));
@@ -31,6 +33,52 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
     <?endif;?>
 
 <?else:?>
+    <?php
+    $signer = new \Bitrix\Main\Security\Sign\Signer();
+    $signedParams = $signer->sign(base64_encode(serialize($arParams)), 'sale.order.ajax');
+    $messages = Loc::loadLanguageFile(__FILE__);
+    ?>
+    <script>
+        BX.message(<?=CUtil::PhpToJSObject($messages)?>);
+        BX.Sale.OrderAjaxComponent.init({
+            result: <?=CUtil::PhpToJSObject($arResult['JS_DATA'])?>,
+            locations: <?=CUtil::PhpToJSObject($arResult['LOCATIONS'])?>,
+            params: <?=CUtil::PhpToJSObject($arParams)?>,
+            signedParamsString: '<?=CUtil::JSEscape($signedParams)?>',
+            siteID: '<?=CUtil::JSEscape($component->getSiteId())?>',
+            ajaxUrl: '<?=CUtil::JSEscape($component->getPath().'/ajax.php')?>',
+            templateFolder: '<?=CUtil::JSEscape($templateFolder)?>',
+            propertyValidation: true,
+            showWarnings: true,
+            pickUpMap: {
+                defaultMapPosition: {
+                    lat: 55.76,
+                    lon: 37.64,
+                    zoom: 7
+                },
+                secureGeoLocation: false,
+                geoLocationMaxTime: 5000,
+                minToShowNearestBlock: 3,
+                nearestPickUpsToShow: 3
+            },
+            propertyMap: {
+                defaultMapPosition: {
+                    lat: 55.76,
+                    lon: 37.64,
+                    zoom: 7
+                }
+            },
+            orderBlockId: 'bx-soa-order',
+            authBlockId: 'bx-soa-auth',
+            basketBlockId: 'bx-soa-basket',
+            regionBlockId: 'bx-soa-region',
+            paySystemBlockId: 'bx-soa-paysystem',
+            deliveryBlockId: 'bx-soa-delivery',
+            pickUpBlockId: 'bx-soa-pickup',
+            propsBlockId: 'bx-soa-properties',
+            totalBlockId: 'bx-soa-total'
+        });
+    </script>
     <script type="text/javascript">
 
         <?if(CSaleLocation::isLocationProEnabled()):?>

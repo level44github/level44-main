@@ -46,6 +46,11 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
         continue;
     }
 
+    if ($prop["CODE"] === "ADDRESS_SDEK") {
+        $arResult["ORDER_PROP_ADDRESS_SDEK"] = $prop;
+        continue;
+    }
+
     if ($prop["CODE"] === "LOCATION") {
         if (empty($prop["VALUE"])) {
             $arResult["DELIVERY"] = [];
