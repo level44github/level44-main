@@ -41,7 +41,7 @@ $MESS["EXIST_QUESTIONS"] = "Have questions?";
 $MESS["SIZE_TABLE"] = "Size table";
 $MESS["CLOSE_MODAL"] = "Close";
 $MESS["SIZE"] = "Size";
-$MESS["CHEST_CIRCUMFERENCE"] = "Chest girth (cm)";
+$MESS["CHEST_CIRCUMFERENCE"] = "Chest girth, cm";
 $MESS["HOIST_GIRTH"] = "Waist circumference";
 $MESS["HIP_GIRTH"] = "Hip girth";
 $MESS["ADD_TO_BASKET"] = "Add to Basket";
@@ -59,5 +59,7 @@ $MESS["SUBSCRIBE_INTERNAL_ERROR"] = "A sending error has occurred. Refresh the p
 $MESS["ALREADY_SUBSCRIBED"] = "You are already subscribed to this item";
 $MESS["BTN_SEND_POPUP_SUBSCRIBED"] = "Subscribe";
 $MESS["SUCCESS_POPUP_SUBSCRIBED"] = "You have successfully subscribed";
+$MESS["SIZE_TABLE_SIZE"] = "Size";
+$MESS["SIZE_TABLE_FOOT_LENGTH"] = "Foot length, cm";
 
 ?>

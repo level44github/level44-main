@@ -284,55 +284,94 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                                         </svg>
                                                     </button>
                                                 </div>
-                                                <div class="modal-body px-0">
-                                                    <div class="d-lg-none">
-                                                        <table class="table">
-                                                            <thead>
-                                                            <tr>
-                                                                <td>XS</td>
-                                                                <td>S</td>
-                                                                <td>M</td>
-                                                            </tr>
-                                                            </thead>
-                                                            <thead>
-                                                            <tr>
-                                                                <th colspan="4"><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr>
-                                                                <td>84–88</td>
-                                                                <td>89–92</td>
-                                                                <td>93–96</td>
-                                                            </tr>
-                                                            </tbody>
-                                                            <thead>
-                                                            <tr>
-                                                                <th colspan="4"><?= Loc::getMessage("HOIST_GIRTH") ?></th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr>
-                                                                <td>60–64</td>
-                                                                <td>65–69</td>
-                                                                <td>70–75</td>
-                                                            </tr>
-                                                            </tbody>
-                                                            <thead>
-                                                            <tr>
-                                                                <th colspan="4"><?= Loc::getMessage("HIP_GIRTH") ?></th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr>
-                                                                <td>89–93</td>
-                                                                <td>94–97</td>
-                                                                <td>98–102</td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
+                                                <? if ($arResult["IS_SHOES"]): ?>
+                                                    <div class="modal-body px-0">
+                                                        <div class="d-lg-none">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <td><?= Loc::getMessage("SIZE_TABLE_SIZE") ?></td>
+                                                                    <td><?= Loc::getMessage("SIZE_TABLE_FOOT_LENGTH") ?></td>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>37</td>
+                                                                    <td>23</td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>38</td>
+                                                                    <td>24</td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>39</td>
+                                                                    <td>25</td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>40</td>
+                                                                    <td>26</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                <? else: ?>
+                                                    <div class="modal-body px-0">
+                                                        <div class="d-lg-none">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <td>XS</td>
+                                                                    <td>S</td>
+                                                                    <td>M</td>
+                                                                </tr>
+                                                                </thead>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th colspan="4"><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>84–88</td>
+                                                                    <td>89–92</td>
+                                                                    <td>93–96</td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th colspan="4"><?= Loc::getMessage("HOIST_GIRTH") ?></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>60–64</td>
+                                                                    <td>65–69</td>
+                                                                    <td>70–75</td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th colspan="4"><?= Loc::getMessage("HIP_GIRTH") ?></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>89–93</td>
+                                                                    <td>94–97</td>
+                                                                    <td>98–102</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                <? endif; ?>
                                             </div>
                                         </div>
                                     </div>
