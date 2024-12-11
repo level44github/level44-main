@@ -121,6 +121,15 @@ if (!empty($arResult['OFFERS'])) {
     $actualItem = $arResult;
 }
 
+$rsSections = \CIBlockElement::GetElementGroups($arResult["ID"]);
+
+$sections = [];
+while ($section = $rsSections->GetNext()) {
+    $sections[] = $section;
+}
+
+$arResult["IS_SHOES"] = !empty(array_filter($sections, fn($section) => $section["CODE"] === 'obuv'));
+
 $arResult["ACTUAL_ITEM"] = $actualItem;
 
 $component->SetResultCacheKeys(["ACTUAL_ITEM"]);

@@ -40,7 +40,7 @@ $MESS["EXIST_QUESTIONS"] = "Есть вопросы?";
 $MESS["SIZE_TABLE"] = "Таблица размеров";
 $MESS["CLOSE_MODAL"] = "Закрыть";
 $MESS["SIZE"] = "Размер";
-$MESS["CHEST_CIRCUMFERENCE"] = "Обхват груди (см)";
+$MESS["CHEST_CIRCUMFERENCE"] = "Обхват груди, см";
 $MESS["HOIST_GIRTH"] = "Обхват талии";
 $MESS["HIP_GIRTH"] = "Обхват бедер";
 $MESS["ADD_TO_BASKET"] = "Добавить в корзину";
@@ -61,5 +61,7 @@ $MESS["SUBSCRIBE_INTERNAL_ERROR"] = "Произошла ошибка отпра�
 $MESS["ALREADY_SUBSCRIBED"] = "Вы уже предзаказали";
 $MESS["BTN_SEND_POPUP_SUBSCRIBED"] = "Подписаться";
 $MESS["SUCCESS_POPUP_SUBSCRIBED"] = "Вы успешно подписались";
+$MESS["SIZE_TABLE_SIZE"] = "Размер";
+$MESS["SIZE_TABLE_FOOT_LENGTH"] = "Длина стопы, см";
 
 ?>
