@@ -34,6 +34,15 @@ $catalogMenu = array_map(fn($item) => [
 [$saleMenu] = array_values(array_filter($catalogMenu, fn($item) => $item["PARAMS"]["IS_SALE"]));
 $catalogMenu = array_filter($catalogMenu, fn($item) => !$item["PARAMS"]["IS_SALE"]);
 
+[$newYearMenu] = array_values(
+    array_filter($catalogMenu, fn($item) => str_contains(strtolower($item["LINK"]), 'novogodnyaya_kollektsiya'))
+);
+
+$catalogMenu = array_filter(
+    $catalogMenu, fn($item) => !str_contains(strtolower($item["LINK"]), 'novogodnyaya_kollektsiya')
+);
+
+
 $aMenuLinksExt = [
     [
         "Home",
@@ -41,6 +50,13 @@ $aMenuLinksExt = [
         [],
         [],
         ""
+    ],
+    [
+        $newYearMenu["TEXT"],
+        $newYearMenu["LINK"],
+        [],
+        [],
+        !empty($newYearMenu["LINK"]) ? 'true' : 'false'
     ],
     [
         "Catalog",
