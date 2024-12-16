@@ -201,18 +201,36 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
     <input type="hidden" name="confirmorder" id="confirmorder" value="Y">
     <input type="hidden" name="profile_change" id="profile_change" value="N">
     <input type="hidden" name="is_ajax_post" id="is_ajax_post" value="Y">
-    <input type="hidden"
-           name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
-           data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
-           id="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>-input"
-           value="">
+        <? if ($arResult["ORDER_PROP_ADDRESS"]): ?>
+            <input type="hidden"
+                   name="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
+                   data-prop="<?= $arResult["ORDER_PROP_ADDRESS"]["CODE"] ?>"
+                   data-address-hidden
+                   id="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>-input"
+                   value="">
+        <? endif; ?>
     <input type="hidden" name="json" value="Y">
     </form>
     <? else:?>
     <script type="text/javascript">
+        var addressPropName = '<?=(string)$arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"]?>';
+        var addressPropCode = '<?=(string)$arResult["ORDER_PROP_ADDRESS"]["CODE"]?>';
         top.BX('confirmorder').value = 'Y';
         top.BX('profile_change').value = 'N';
-    </script>
+
+        if (addressPropName) {
+            top.BX.saleOrderAjax.propAddressFieldName = addressPropName;
+            top.document.querySelector('[data-address-hidden]')?.remove()
+            var input = top.document.createElement("input");
+            input.type = "hidden";
+            input.name = addressPropName;
+            input.dataset.prop = addressPropCode;
+            input.dataset.addressHidden = ''
+            input.id = `${addressPropName}-input`
+            input.value = ''
+            top.document.getElementById('ORDER_FORM')?.append(input);
+        }
+    </script
     <? endif;
     ?>
 <?endif;?>
