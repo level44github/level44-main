@@ -482,7 +482,7 @@
 
   .home__banner.desktop {
     display: block;
-    max-width: 1200px;
+    margin: -7% 0;
   }
 
   .home__banner.mobile {
@@ -497,4 +497,8 @@
 .nav-item .nav.submenu {
     margin-left: 10%;
     display: none;
+}
+
+.home__container {
+    padding-top: 100px;
 }
