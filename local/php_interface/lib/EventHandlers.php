@@ -30,6 +30,7 @@ class EventHandlers
 
         self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
+        self::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -165,10 +166,10 @@ HTML;
 
             while ($product = $resProduct->GetNext()) {
                 $arProductsData[$product["ID"]] = [
-                    "ID" => $product["ID"],
-                    "NAME_EN" => $product["PROPERTY_NAME_EN_VALUE"],
+                    "ID"              => $product["ID"],
+                    "NAME_EN"         => $product["PROPERTY_NAME_EN_VALUE"],
                     "PREVIEW_PICTURE" => $product["PREVIEW_PICTURE"],
-                    "DETAIL_PICTURE" => $product["DETAIL_PICTURE"],
+                    "DETAIL_PICTURE"  => $product["DETAIL_PICTURE"],
                     "DETAIL_PAGE_URL" => $product["DETAIL_PAGE_URL"],
                 ];
             }
@@ -249,15 +250,15 @@ HTML;
             $productUrl = $hostName . $arProductsData[$productIds[$basketProductId]]["DETAIL_PAGE_URL"];
 
             $arReplace = [
-                "#NAME#" => $itemName,
-                "#IMG_SRC#" => $imageSrc,
-                "#PRICE#" => $itemPrice,
-                "#QUANTITY#" => $basketItem->getQuantity(),
-                "#PCS#" => $basketItem->getField("MEASURE_NAME"),
+                "#NAME#"        => $itemName,
+                "#IMG_SRC#"     => $imageSrc,
+                "#PRICE#"       => $itemPrice,
+                "#QUANTITY#"    => $basketItem->getQuantity(),
+                "#PCS#"         => $basketItem->getField("MEASURE_NAME"),
                 "#COLOR_FIELD#" => Base::getMultiLang("Цвет", "Color"),
-                "#SIZE_FIELD#" => Base::getMultiLang("Размер", "Size"),
-                "#COLOR#" => $arProperties["COLOR_REF"],
-                "#SIZE#" => $arProperties["SIZE_REF"],
+                "#SIZE_FIELD#"  => Base::getMultiLang("Размер", "Size"),
+                "#COLOR#"       => $arProperties["COLOR_REF"],
+                "#SIZE#"        => $arProperties["SIZE_REF"],
                 "#PRODUCT_URL#" => $productUrl,
             ];
 
@@ -315,7 +316,7 @@ LAYOUT;
         if (!empty($address)) {
             $arReplace = [
                 "#DELIVERY_ADDRESS_FIELD#" => Base::getMultiLang("Адрес доставки", "Delivery address"),
-                "#DELIVERY_ADDRESS#" => $address,
+                "#DELIVERY_ADDRESS#"       => $address,
             ];
             $deliveryAddress = str_replace(array_keys($arReplace), array_values($arReplace), $deliveryAddressLayout);
         }
@@ -329,7 +330,7 @@ LAYOUT;
         $arFields["ADMIN_LINK"] = "{$hostName}/bitrix/admin/sale_order_view.php?ID={$order->getId()}&lang=ru";
         $arFields["DELIVERY_DATA"] = '<strong style="font-weight: bold;">#DELIVERY_PRICE#</strong> <br>
                       #DELIVERY_NAME#';
-        if ($preOrder){
+        if ($preOrder) {
             $arFields["DELIVERY_DATA"] = "";
             $arFields["ORDER_USER"] = "";
         }
@@ -370,7 +371,7 @@ LAYOUT;
 
     public static function OnOrderNewSendEmailHandler($orderId, &$eventName, $fields)
     {
-        if (PreOrder::isPreOrder($orderId)){
+        if (PreOrder::isPreOrder($orderId)) {
             $eventName = "CUSTOM_NEW_PREORDER";
         }
     }
@@ -388,11 +389,24 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementAddHandler(&$arFields)
     {
-        return Base::checkOldPrices($arFields);
+        Base::checkOldPrices($arFields);
+        Exchange1C::handleAddProduct($arFields);
+
+        return true;
+    }
+
+    public static function OnBeforeIBlockSectionAddHandler(&$arFields)
+    {
+        Exchange1C::handleAddSection($arFields);
+
+        return true;
     }
 
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
-        return Base::checkOldPrices($arFields);
+        Base::checkOldPrices($arFields);
+        Exchange1C::handleUpdateProduct($arFields);
+
+        return true;
     }
 }
