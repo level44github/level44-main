@@ -502,3 +502,27 @@
 .home__container {
     padding-top: 133px;
 }
+
+@media (max-width: 372px) {
+    .row.catalog__items {
+        margin-top: 13%;
+    }
+}
+
+@media (min-width: 373px) {
+    .row.catalog__items {
+        margin-top: 5%;
+    }
+}
+
+@media (min-width: 576px) {
+    .row.catalog__items {
+        margin-top: 4%;
+    }
+}
+
+@media (min-width: 992px) {
+    .row.catalog__items {
+        margin-top: 1%;
+    }
+}
