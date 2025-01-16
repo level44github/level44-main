@@ -11,6 +11,10 @@
         if ($(".js-ya_cashier_link").length) {
             $(".js-ya_cashier_link")[0].click();
         }
+
+        if ($("#payButton").length) {
+            $("#payButton").click();
+        }
     })
 </script>
 <?
