@@ -3,10 +3,10 @@
 \CModule::AddAutoloadClasses(
     "",
     [
-        "\Level44\Base" => "/local/php_interface/lib/Base.php",
+        "\Level44\Base"      => "/local/php_interface/lib/Base.php",
         "\Level44\HLWrapper" => "/local/php_interface/lib/HLWrapper.php",
-        "\Level44\Content" => "/local/php_interface/lib/Content.php",
-        "\Level44\Product" => "/local/php_interface/lib/Product.php",
+        "\Level44\Content"   => "/local/php_interface/lib/Content.php",
+        "\Level44\Product"   => "/local/php_interface/lib/Product.php",
     ]
 );
 
@@ -41,7 +41,7 @@ function ResizeUploadedPhoto($arFields)
                 [
                     "filter" => [
                         "IBLOCK_ID" => $arFields["IBLOCK_ID"],
-                        "ID" => $arFields["ID"]
+                        "ID"        => $arFields["ID"]
                     ]
                 ])->fetch();
 
@@ -53,7 +53,7 @@ function ResizeUploadedPhoto($arFields)
                     if ($imsize[0] > $imageMaxWidth or $imsize[1] > $imageMaxHeight) {
                         // Уменьшаем размер картинки
                         $file = \CFile::ResizeImageGet($elem["DETAIL_PICTURE"], array(
-                            'width' => $imageMaxWidth,
+                            'width'  => $imageMaxWidth,
                             'height' => $imageMaxHeight
                         ), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
                         $elemOb = new \CIBlockElement();
@@ -77,7 +77,7 @@ function ResizeUploadedPhoto($arFields)
                                     [
                                         "filter" => [
                                             "IBLOCK_ID" => $arFields["IBLOCK_ID"],
-                                            "ID" => $arFields["ID"]
+                                            "ID"        => $arFields["ID"]
                                         ],
                                         "select" => [
                                             "ID",
@@ -112,7 +112,7 @@ function ResizeUploadedPhoto($arFields)
                 if ($imsize[0] > $imageMaxWidth or $imsize[1] > $imageMaxHeight) {
                     // Уменьшаем размер картинки
                     $file = \CFile::ResizeImageGet($ob['VALUE'], array(
-                        'width' => $imageMaxWidth,
+                        'width'  => $imageMaxWidth,
                         'height' => $imageMaxHeight
                     ), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
                     // добавляем в массив VALUES новую уменьшенную картинку
@@ -176,4 +176,24 @@ function ResizeUploadedPhoto($arFields)
         unset($VALUES);
         unset($VALUES_OLD);
     }
+}
+
+function retailCrmBeforeOrderSend($order, $arOrder)
+{
+    try {
+        [$deliveryId] = \Bitrix\Sale\Order::load($arOrder["NUMBER"])?->getDeliveryIdList();
+
+        if (in_array($deliveryId, CDeliverySDEK::getDeliveryId('pickup')) && empty($order["delivery"]["address"]["text"])) {
+            $pickupAddress = current(
+                array_filter($arOrder["PROPS"]["properties"], fn($item) => $item["CODE"] === 'ADDRESS_SDEK')
+            );
+
+            if ($pickupAddress["VALUE"][0]) {
+                $order["delivery"]["address"]["text"] = $pickupAddress["VALUE"][0];
+            }
+        }
+    } catch (\Exception $exception) {
+    }
+
+    return $order;
 }
