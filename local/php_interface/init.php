@@ -8,6 +8,7 @@
         "\Level44\Content"   => "/local/php_interface/lib/Content.php",
         "\Level44\Product"   => "/local/php_interface/lib/Product.php",
         "\Level44\Exchange1C" => "/local/php_interface/lib/Exchange1C.php",
+        "\Level44\Menu"      => "/local/php_interface/lib/Menu.php",
     ]
 );
 
