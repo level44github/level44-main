@@ -30,6 +30,7 @@ class EventHandlers
 
         self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
+        self::addEventHandler("iblock", "OnBeforeIBlockUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
     }
 
@@ -406,6 +407,22 @@ LAYOUT;
     {
         Base::checkOldPrices($arFields);
         Exchange1C::handleUpdateProduct($arFields);
+
+        return true;
+    }
+
+    public static function OnBeforeIBlockUpdateHandler(&$arFields)
+    {
+        $iBlocks = [
+            Base::CATALOG_IBLOCK_ID,
+            Base::OFFERS_IBLOCK_ID
+        ];
+
+        if (in_array($arFields["ID"], $iBlocks) && is_array($arFields["LID"]) && array_key_last($arFields["LID"])) {
+            if ($arFields["LID"][array_key_last($arFields["LID"])] !== 's1') {
+                $arFields["LID"] = array_reverse($arFields["LID"]);
+            }
+        }
 
         return true;
     }
