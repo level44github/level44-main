@@ -504,25 +504,43 @@
 }
 
 @media (max-width: 372px) {
-    .row.catalog__items {
+    .row .catalog__item {
         margin-top: 13%;
+    }
+
+    .catalog__container .product__question {
+        margin-top: 16%;
     }
 }
 
 @media (min-width: 373px) {
-    .row.catalog__items {
+    .row .catalog__item {
         margin-top: 5%;
+    }
+
+    .catalog__container .product__question {
+        margin-top: 8%;
     }
 }
 
 @media (min-width: 576px) {
-    .row.catalog__items {
+    .row .catalog__item {
+        margin-top: 4%;
+    }
+
+    .catalog__container .product__question {
+        margin-top: 7%;
+    }
+}
+
+@media (min-width: 768px) {
+    .catalog__container .product__question {
         margin-top: 4%;
     }
 }
 
 @media (min-width: 992px) {
-    .row.catalog__items {
+    .row .catalog__item {
         margin-top: 1%;
     }
 }
