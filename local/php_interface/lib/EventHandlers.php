@@ -31,6 +31,7 @@ class EventHandlers
         self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
         self::addEventHandler("iblock", "OnBeforeIBlockUpdate");
+        self::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -389,12 +390,25 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementAddHandler(&$arFields)
     {
-        return Base::checkOldPrices($arFields);
+        Base::checkOldPrices($arFields);
+        Exchange1C::handleAddProduct($arFields);
+
+        return true;
+    }
+
+    public static function OnBeforeIBlockSectionAddHandler(&$arFields)
+    {
+        Exchange1C::handleAddSection($arFields);
+
+        return true;
     }
 
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
-        return Base::checkOldPrices($arFields);
+        Base::checkOldPrices($arFields);
+        Exchange1C::handleUpdateProduct($arFields);
+
+        return true;
     }
 
     public static function OnBeforeIBlockUpdateHandler(&$arFields)

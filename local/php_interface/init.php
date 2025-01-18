@@ -7,6 +7,7 @@
         "\Level44\HLWrapper" => "/local/php_interface/lib/HLWrapper.php",
         "\Level44\Content"   => "/local/php_interface/lib/Content.php",
         "\Level44\Product"   => "/local/php_interface/lib/Product.php",
+        "\Level44\Exchange1C" => "/local/php_interface/lib/Exchange1C.php",
     ]
 );
 
