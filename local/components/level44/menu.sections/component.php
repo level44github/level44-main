@@ -36,6 +36,7 @@ if($this->StartResultCache())
 			"IBLOCK_ID"=>$arParams["IBLOCK_ID"],
 			"GLOBAL_ACTIVE"=>"Y",
 			"IBLOCK_ACTIVE"=>"Y",
+			"CNT_ACTIVE" => 'Y',
 			"<="."DEPTH_LEVEL" => $arParams["DEPTH_LEVEL"],
 		);
 
@@ -53,7 +54,7 @@ if($this->StartResultCache())
 			"left_margin"=>"asc",
 		);
 
-		$rsSections = CIBlockSection::GetList($arOrder, $arFilter, false, array(
+		$rsSections = CIBlockSection::GetList($arOrder, $arFilter, true, array(
 			"ID",
 			"DEPTH_LEVEL",
 			"NAME",
