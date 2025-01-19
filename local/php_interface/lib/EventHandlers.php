@@ -390,10 +390,9 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementAddHandler(&$arFields)
     {
-        Base::checkOldPrices($arFields);
         Exchange1C::handleAddProduct($arFields);
 
-        return true;
+        return Base::checkOldPrices($arFields);
     }
 
     public static function OnBeforeIBlockSectionAddHandler(&$arFields)
@@ -405,10 +404,9 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
-        Base::checkOldPrices($arFields);
         Exchange1C::handleUpdateProduct($arFields);
 
-        return true;
+        return Base::checkOldPrices($arFields);
     }
 
     public static function OnBeforeIBlockUpdateHandler(&$arFields)

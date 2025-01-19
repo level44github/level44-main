@@ -451,7 +451,7 @@ class Base
                         $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
-                        if ($value > 0) {
+                        if ($value !== 0) {
                             if ($productPriceDollar <= 0) {
                                 $APPLICATION->throwException("Старая цена в валюте должна быть заполнена только вместе с Ценой в валюте");
                                 return false;
@@ -467,7 +467,7 @@ class Base
                         $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
-                        if ($value > 0 && $offerPrice >= $value) {
+                        if ($value !== 0 && $offerPrice >= $value) {
                             $APPLICATION->throwException("Старая цена должна быть больше Текущей цены");
                             return false;
                         }
