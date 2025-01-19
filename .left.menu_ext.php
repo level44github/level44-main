@@ -40,6 +40,14 @@ $aMenuLinksExt = array_merge($aMenuLinksExt,
     $catalogMenuObj->arMenu,
     [
         [
+            "",
+            "",
+            [],
+            [
+            ],
+            !empty($toCustomersMenu) || !empty($contactsMenu["LINK"]) ? 'true' : 'false'
+        ],
+        [
             "Покупателям",
             "",
             [],

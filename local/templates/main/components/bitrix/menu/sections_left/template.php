@@ -11,7 +11,10 @@ use Bitrix\Main\Localization\Loc;
             <li class="nav-item">
                 <a class="nav-link <?= isset($item["PARAMS"]["CHILDREN"]) || !empty($item["PARAMS"]["SUBMENU"]) ? "has-submenu" : "" ?>
                 <?= $item["PARAMS"]["CSS_CLASS"] ?>"
-                   href="<?= !isset($item["PARAMS"]["CHILDREN"]) ? $item["LINK"] : '' ?>"
+                    <?//If it's point of separation, then hide href, because point is empty
+                    if (!empty($item["TEXT"])): ?>
+                        href="<?= !isset($item["PARAMS"]["CHILDREN"]) ? $item["LINK"] : '' ?>"
+                    <? endif; ?>
                 >
                     <?= $item["TEXT"] ?>
                 </a>
