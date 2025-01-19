@@ -41,8 +41,21 @@ class Menu
             return $item;
         }, $tree);
 
-        if (!static::existSaleProducts()) {
-            $tree = array_filter($tree, fn($item) => !$item[3]["IS_SALE"]);
+        $comingSoonIndex = array_search(true, array_map(fn($item) => $item[3]["IS_COMING_SOON"], $tree));
+
+        if (static::existSaleProducts()) {
+            $saleItem = [
+                "Sale",
+                SITE_DIR . "catalog/sale/",
+                [],
+                [
+                    "CSS_CLASS" => "sale-section",
+                    "IS_SALE"   => true
+                ],
+                ""
+            ];
+
+            array_splice($tree, $comingSoonIndex + 1, 0, [$saleItem]);
         }
 
         return $tree;

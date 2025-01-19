@@ -1,6 +1,6 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-$APPLICATION->SetTitle("Catalog");
+$APPLICATION->SetTitle("Sale");
 ?>
 
 
@@ -8,7 +8,7 @@ $APPLICATION->SetTitle("Catalog");
 global $arrFilter;
 
 $arrFilter = [
-    "<=PROPERTY_OLD_PRICE" => 0,
+    ">PROPERTY_OLD_PRICE" => 0,
 ];
 
 $APPLICATION->IncludeComponent(
@@ -201,11 +201,11 @@ $APPLICATION->IncludeComponent(
         ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(
-            "sections" => "",
-            "section" => "#SECTION_CODE#/",
+            "sections" => "sale/",
+            "section" => "sale/#SECTION_CODE#/",
             "element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
             "compare" => "compare/",
-            "smart_filter" => "#SECTION_CODE#/#SMART_FILTER_PATH#/",
+            "smart_filter" => "sale/#SECTION_CODE#/#SMART_FILTER_PATH#/",
         )
 
     )
