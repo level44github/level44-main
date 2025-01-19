@@ -1,4 +1,4 @@
 <?
 $MESS["HEADER_SEARCH_ON_SITE"] = "Find on the site";
-$MESS["HEADER_GO_CATALOG"] = "Go to catalog";
+$MESS["HEADER_GO_CATALOG"] = "Up to 90% off";
 ?>

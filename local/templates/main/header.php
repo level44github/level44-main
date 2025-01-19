@@ -140,7 +140,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             </div>
         </div>
         <? if ($isMain): ?>
-        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
+        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/sale/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
     </div>
 <? endif; ?>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
