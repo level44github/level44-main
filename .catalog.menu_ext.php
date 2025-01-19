@@ -46,5 +46,6 @@ if (CModule::IncludeModule('iblock')) {
 }
 
 $aMenuLinksExt = Menu::prepareMenuSections($aMenuLinksExt);
+$aMenuLinksExt = Menu::addSaleSection($aMenuLinksExt);
 
 $aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);

@@ -75,7 +75,7 @@ if ($isFilter) {
     "bitrix:menu",
     "sections_catalog",
     Array(
-        "ROOT_MENU_TYPE" => "catalog",
+        "ROOT_MENU_TYPE" => $arParams["FILTER_NAME"] === 'saleFilter' ? "catalog_sale" : "catalog",
         "MAX_LEVEL" => "1",
         "CHILD_MENU_TYPE" => "top",
         "USE_EXT" => "Y",

@@ -22,7 +22,7 @@ class Menu
         }
         unset($section);
 
-        $tree = array_map(function ($item) {
+        return array_map(function ($item) {
             switch ($item[3]['CODE']) {
                 case 'skoro_v_prodazhe':
                     $item[3]['IS_COMING_SOON'] = true;
@@ -32,16 +32,15 @@ class Menu
                     $item[3]['IS_NEW'] = true;
                     unset($item[3]['CHILDREN']);
                     break;
-                case 'sale':
-                    $item[3]['CSS_CLASS'] = 'sale-section';
-                    $item[3]['IS_SALE'] = true;
-                    break;
             }
 
             return $item;
         }, $tree);
+    }
 
-        $comingSoonIndex = array_search(true, array_map(fn($item) => $item[3]["IS_COMING_SOON"], $tree));
+    static function addSaleSection($menuSections): array
+    {
+        $comingSoonIndex = array_search(true, array_map(fn($item) => $item[3]["IS_COMING_SOON"], $menuSections));
 
         if (static::existSaleProducts()) {
             $saleItem = [
@@ -50,15 +49,16 @@ class Menu
                 [],
                 [
                     "CSS_CLASS" => "sale-section",
-                    "IS_SALE"   => true
+                    "IS_SALE"   => true,
+                    "CHILDREN"  => static::getSaleChildren()
                 ],
                 ""
             ];
 
-            array_splice($tree, $comingSoonIndex + 1, 0, [$saleItem]);
+            array_splice($menuSections, $comingSoonIndex + 1, 0, [$saleItem]);
         }
 
-        return $tree;
+        return $menuSections;
     }
 
 
@@ -107,5 +107,44 @@ class Menu
             $exist = !empty($result);
         }
         return $exist;
+    }
+
+    public static function getSaleChildren(): array
+    {
+        global $APPLICATION;
+
+        if (\CModule::IncludeModule('iblock')) {
+            $arFilter = [
+                "TYPE"    => "catalog",
+                "SITE_ID" => SITE_ID,
+            ];
+
+            $dbIBlock = \CIBlock::GetList(['SORT' => 'ASC', 'ID' => 'ASC'], $arFilter);
+            $dbIBlock = new \CIBlockResult($dbIBlock);
+
+            if ($arIBlock = $dbIBlock->GetNext()) {
+                if ($arIBlock["ACTIVE"] == "Y") {
+                    $aMenuLinksExt = $APPLICATION->IncludeComponent(
+                        "level44:menu.sections",
+                        "",
+                        [
+                            "IS_SEF"           => "Y",
+                            "SEF_BASE_URL"     => "",
+                            "SECTION_PAGE_URL" => str_replace('/catalog/', '/catalog/sale/', $arIBlock['SECTION_PAGE_URL']),
+                            "DETAIL_PAGE_URL"  => $arIBlock['DETAIL_PAGE_URL'],
+                            "IBLOCK_TYPE"      => $arIBlock['IBLOCK_TYPE_ID'],
+                            "IBLOCK_ID"        => $arIBlock['ID'],
+                            "DEPTH_LEVEL"      => "3",
+                            "CACHE_TYPE"       => "N",
+                            "SALE_FILTER"      => "Y",
+                        ],
+                        false,
+                        ['HIDE_ICONS' => 'Y']
+                    );
+                }
+            }
+        }
+
+        return static::prepareMenuSections($aMenuLinksExt);
     }
 }

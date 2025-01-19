@@ -35,9 +35,29 @@ use Bitrix\Main\Localization\Loc;
                         </li>
                         <? foreach ($item["PARAMS"]["CHILDREN"] as $subItem): ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= $subItem[1] ?>">
-                                    <?= $subItem[0] ?>
-                                </a>
+                                <? if ($subItem[3]["CHILDREN"]): ?>
+                                    <a class="nav-link has-submenu" href>
+                                        <?= $subItem[0] ?>
+                                    </a>
+                                    <ul class="nav flex-column submenu">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= $subItem[1] ?>">
+                                                <?= Loc::getMessage('ALL') ?>
+                                            </a>
+                                        </li>
+                                        <? foreach ($subItem[3]["CHILDREN"] as $subSubItem): ?>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="<?= $subSubItem[1] ?>">
+                                                    <?= $subSubItem[0] ?>
+                                                </a>
+                                            </li>
+                                        <? endforeach; ?>
+                                    </ul>
+                                <? else: ?>
+                                    <a class="nav-link" href="<?= $subItem[1] ?>">
+                                        <?= $subItem[0] ?>
+                                    </a>
+                                <? endif; ?>
                             </li>
                         <? endforeach; ?>
                     </ul>

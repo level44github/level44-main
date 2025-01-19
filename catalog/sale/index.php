@@ -5,9 +5,9 @@ $APPLICATION->SetTitle("Sale");
 
 
 <?
-global $arrFilter;
+global $saleFilter;
 
-$arrFilter = [
+$saleFilter = [
     ">PROPERTY_OLD_PRICE" => 0,
 ];
 
@@ -179,7 +179,7 @@ $APPLICATION->IncludeComponent(
         "USE_REVIEW" => "N",
         "USE_SALE_BESTSELLERS" => "Y",
         "ADD_PICT_PROP" => "MORE_PHOTO",
-        "FILTER_NAME" => "arrFilter",
+        "FILTER_NAME" => "saleFilter",
         "DETAIL_OFFERS_PROPERTY_CODE" => [
             "SIZE_REF",
             "COLOR_REF",
