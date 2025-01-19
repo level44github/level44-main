@@ -9,11 +9,11 @@ use Bitrix\Main\Localization\Loc;
     <ul class="nav flex-column" style="display: block">
         <? foreach ($arResult as $item): ?>
             <li class="nav-item">
-                <a class="nav-link <?= isset($item["PARAMS"]["CHILDREN"]) || !empty($item["PARAMS"]["SUBMENU"]) ? "has-submenu" : "" ?>
+                <a class="nav-link <?= !empty($item["PARAMS"]["CHILDREN"]) || !empty($item["PARAMS"]["SUBMENU"]) ? "has-submenu" : "" ?>
                 <?= $item["PARAMS"]["CSS_CLASS"] ?>"
-                    <?//If it's point of separation, then hide href, because point is empty
+                    <? //If it's point of separation, then hide href, because point is empty
                     if (!empty($item["TEXT"])): ?>
-                        href="<?= !isset($item["PARAMS"]["CHILDREN"]) ? $item["LINK"] : '' ?>"
+                        href="<?= empty($item["PARAMS"]["CHILDREN"]) ? $item["LINK"] : '' ?>"
                     <? endif; ?>
                 >
                     <?= $item["TEXT"] ?>
@@ -29,7 +29,7 @@ use Bitrix\Main\Localization\Loc;
                             </li>
                         <? endforeach; ?>
                     </ul>
-                <? elseif (isset($item["PARAMS"]["CHILDREN"])): ?>
+                <? elseif (!empty($item["PARAMS"]["CHILDREN"])): ?>
                     <ul class="nav flex-column submenu">
                         <li class="nav-item">
                             <a class="nav-link" href="<?= $item["LINK"] ?>">
@@ -38,7 +38,7 @@ use Bitrix\Main\Localization\Loc;
                         </li>
                         <? foreach ($item["PARAMS"]["CHILDREN"] as $subItem): ?>
                             <li class="nav-item">
-                                <? if ($subItem[3]["CHILDREN"]): ?>
+                                <? if (!empty($subItem[3]["CHILDREN"])): ?>
                                     <a class="nav-link has-submenu" href>
                                         <?= $subItem[0] ?>
                                     </a>

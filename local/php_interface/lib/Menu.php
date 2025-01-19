@@ -23,15 +23,8 @@ class Menu
         unset($section);
 
         return array_map(function ($item) {
-            switch ($item[3]['CODE']) {
-                case 'skoro_v_prodazhe':
-                    $item[3]['IS_COMING_SOON'] = true;
-                    unset($item[3]['CHILDREN']);
-                    break;
-                case 'novinki':
-                    $item[3]['IS_NEW'] = true;
-                    unset($item[3]['CHILDREN']);
-                    break;
+            if ($item[3]['CODE'] === 'skoro_v_prodazhe') {
+                $item[3]['IS_COMING_SOON'] = true;
             }
 
             return $item;
