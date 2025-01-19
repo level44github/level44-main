@@ -4,7 +4,14 @@ $APPLICATION->SetTitle("Каталог");
 ?>
 
 
-<? $APPLICATION->IncludeComponent(
+<?
+global $arrFilter;
+
+$arrFilter = [
+    "<=PROPERTY_OLD_PRICE" => 0,
+];
+
+$APPLICATION->IncludeComponent(
     "bitrix:catalog",
     "main",
     Array(
@@ -162,7 +169,7 @@ $APPLICATION->SetTitle("Каталог");
         "USE_COMPARE" => "N",
         "USE_ELEMENT_COUNTER" => "Y",
         "USE_ENHANCED_ECOMMERCE" => "N",
-        "USE_FILTER" => "N",
+        "USE_FILTER" => "Y",
         "USE_GIFTS_DETAIL" => "Y",
         "USE_GIFTS_MAIN_PR_SECTION_LIST" => "Y",
         "USE_GIFTS_SECTION" => "Y",
@@ -172,6 +179,7 @@ $APPLICATION->SetTitle("Каталог");
         "USE_REVIEW" => "N",
         "USE_SALE_BESTSELLERS" => "Y",
         "ADD_PICT_PROP" => "MORE_PHOTO",
+        "FILTER_NAME" => "arrFilter",
         "DETAIL_OFFERS_PROPERTY_CODE" => [
             "SIZE_REF",
             "COLOR_REF",
@@ -198,7 +206,6 @@ $APPLICATION->SetTitle("Каталог");
             "element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
             "compare" => "compare/",
             "smart_filter" => "#SECTION_CODE#/#SMART_FILTER_PATH#/",
-            "sale" => "sale/",
         )
 
     )

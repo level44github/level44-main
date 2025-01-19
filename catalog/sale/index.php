@@ -1,14 +1,14 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-$APPLICATION->SetTitle("Catalog");
+$APPLICATION->SetTitle("Sale");
 ?>
 
 
 <?
-global $arrFilter;
+global $saleFilter;
 
-$arrFilter = [
-    "<=PROPERTY_OLD_PRICE" => 0,
+$saleFilter = [
+    ">PROPERTY_OLD_PRICE" => 0,
 ];
 
 $APPLICATION->IncludeComponent(
@@ -138,7 +138,7 @@ $APPLICATION->IncludeComponent(
         "SECTION_ID_VARIABLE" => "SECTION_ID",
         "SECTION_TOP_DEPTH" => "2",
         "SEF_MODE" => "Y",
-        "SEF_FOLDER" => SITE_DIR . "catalog/",
+        "SEF_FOLDER" => "/catalog/",
         "SET_LAST_MODIFIED" => "N",
         "SET_STATUS_404" => "N",
         "SET_TITLE" => "Y",
@@ -179,7 +179,7 @@ $APPLICATION->IncludeComponent(
         "USE_REVIEW" => "N",
         "USE_SALE_BESTSELLERS" => "Y",
         "ADD_PICT_PROP" => "MORE_PHOTO",
-        "FILTER_NAME" => "arrFilter",
+        "FILTER_NAME" => "saleFilter",
         "DETAIL_OFFERS_PROPERTY_CODE" => [
             "SIZE_REF",
             "COLOR_REF",
@@ -201,11 +201,11 @@ $APPLICATION->IncludeComponent(
         ],
         "USE_STORE" => "N",
         "SEF_URL_TEMPLATES" => array(
-            "sections" => "",
-            "section" => "#SECTION_CODE#/",
+            "sections" => "sale/",
+            "section" => "sale/#SECTION_CODE#/",
             "element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
             "compare" => "compare/",
-            "smart_filter" => "#SECTION_CODE#/#SMART_FILTER_PATH#/",
+            "smart_filter" => "sale/#SECTION_CODE#/#SMART_FILTER_PATH#/",
         )
 
     )

@@ -451,7 +451,7 @@ class Base
                         $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
-                        if ($value > 0) {
+                        if ($value !== 0) {
                             if ($productPriceDollar <= 0) {
                                 $APPLICATION->throwException("Старая цена в валюте должна быть заполнена только вместе с Ценой в валюте");
                                 return false;
@@ -467,7 +467,7 @@ class Base
                         $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
-                        if ($value > 0 && $offerPrice >= $value) {
+                        if ($value !== 0 && $offerPrice >= $value) {
                             $APPLICATION->throwException("Старая цена должна быть больше Текущей цены");
                             return false;
                         }
@@ -477,52 +477,5 @@ class Base
             unset($property);
             return true;
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public static function existSaleProducts(): bool
-    {
-        $productsId = [];
-        $exist = false;
-        $result = \CIBlockElement::GetList(
-            [],
-            [
-                "ACTIVE"             => "Y",
-                "IBLOCK_ID"          => self::CATALOG_IBLOCK_ID,
-                ">PROPERTY_OLD_PRICE" => 0,
-            ],
-            false,
-            false,
-            [
-                "IBLOCK_ID",
-                "ID",
-                "PROPERTY_OLD_PRICE"
-            ]
-        );
-
-        while ($row = $result->GetNext()) {
-            $productsId[] = $row["ID"];
-        }
-
-        if (!empty($productsId)) {
-            $result = \CIBlockElement::GetList(
-                [],
-                [
-                    "ACTIVE"             => "Y",
-                    "CATALOG_AVAILABLE"  => "Y",
-                    "IBLOCK_ID"          => Base::OFFERS_IBLOCK_ID,
-                    "PROPERTY_CML2_LINK" => $productsId,
-                ],
-                false,
-                [
-                    "nTopCount" => 1
-                ]
-            )->GetNext();
-
-            $exist = !empty($result);
-        }
-        return $exist;
     }
 }

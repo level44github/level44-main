@@ -1,33 +1,25 @@
 <?
 
-use Level44\Base;
+use Level44\Menu;
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
 global $APPLICATION;
-$aMenuLinksExt = array();
+$aMenuLinksExt = [];
 
 if (empty($aMenuLinks)) {
     $aMenuLinks = [];
 }
 
-$aMenuLinks[] = [
-    "All",
-    SITE_DIR . "catalog/",
-    Array(),
-    Array(),
-    ""
-];
-
 if (CModule::IncludeModule('iblock')) {
-    $arFilter = array(
-        "TYPE" => "catalog",
+    $arFilter = [
+        "TYPE"    => "catalog",
         "SITE_ID" => SITE_ID,
-    );
+    ];
 
-    $dbIBlock = CIBlock::GetList(array('SORT' => 'ASC', 'ID' => 'ASC'), $arFilter);
+    $dbIBlock = CIBlock::GetList(['SORT' => 'ASC', 'ID' => 'ASC'], $arFilter);
     $dbIBlock = new CIBlockResult($dbIBlock);
 
     if ($arIBlock = $dbIBlock->GetNext()) {
@@ -35,34 +27,25 @@ if (CModule::IncludeModule('iblock')) {
             $aMenuLinksExt = $APPLICATION->IncludeComponent(
                 "level44:menu.sections",
                 "",
-                array(
-                    "IS_SEF" => "Y",
-                    "SEF_BASE_URL" => "",
+                [
+                    "IS_SEF"           => "Y",
+                    "SEF_BASE_URL"     => "",
                     "SECTION_PAGE_URL" => $arIBlock['SECTION_PAGE_URL'],
-                    "DETAIL_PAGE_URL" => $arIBlock['DETAIL_PAGE_URL'],
-                    "IBLOCK_TYPE" => $arIBlock['IBLOCK_TYPE_ID'],
-                    "IBLOCK_ID" => $arIBlock['ID'],
-                    "DEPTH_LEVEL" => "3",
-                    "CACHE_TYPE" => "N",
-                ),
+                    "DETAIL_PAGE_URL"  => $arIBlock['DETAIL_PAGE_URL'],
+                    "IBLOCK_TYPE"      => $arIBlock['IBLOCK_TYPE_ID'],
+                    "IBLOCK_ID"        => $arIBlock['ID'],
+                    "DEPTH_LEVEL"      => "3",
+                    "CACHE_TYPE"       => "N",
+                    "SALE_FILTER"      => "N",
+                ],
                 false,
-                Array('HIDE_ICONS' => 'Y')
+                ['HIDE_ICONS' => 'Y']
             );
         }
     }
 }
 
-$aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);
+$aMenuLinksExt = Menu::prepareMenuSections($aMenuLinksExt);
+$aMenuLinksExt = Menu::addSaleSection($aMenuLinksExt);
 
-if (Base::existSaleProducts()) {
-    $aMenuLinks[] = [
-        "Sale",
-        SITE_DIR . "catalog/sale/",
-        [],
-        [
-            "CSS_CLASS" => "sale-section",
-            "IS_SALE"   => true
-        ],
-        ""
-    ];
-}
+$aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);

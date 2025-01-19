@@ -28,6 +28,14 @@ $arUrlRewrite=array (
   ),
   3 =>
   array (
+      'CONDITION' => '#^' . SITE_DIR . 'catalog/sale/#',
+      'RULE' => '',
+      'ID' => 'bitrix:catalog',
+      'PATH' => SITE_DIR . 'catalog/sale/index.php',
+      'SORT' => 100,
+  ),
+  4 =>
+  array (
       'CONDITION' => '#^' . SITE_DIR . 'catalog/#',
       'RULE' => '',
       'ID' => 'bitrix:catalog',

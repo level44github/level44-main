@@ -38,6 +38,17 @@ if($this->StartResultCache())
 			"IBLOCK_ACTIVE"=>"Y",
 			"<="."DEPTH_LEVEL" => $arParams["DEPTH_LEVEL"],
 		);
+
+        if ($arParams['SALE_FILTER'] === 'Y') {
+            $arFilter['PROPERTY'] = [
+                '>OLD_PRICE' => 0,
+            ];
+        } elseif ($arParams['SALE_FILTER'] === 'N') {
+            $arFilter['PROPERTY'] = [
+                '<=OLD_PRICE' => 0,
+            ];
+        }
+
 		$arOrder = array(
 			"left_margin"=>"asc",
 		);
@@ -48,6 +59,7 @@ if($this->StartResultCache())
 			"NAME",
 			"SECTION_PAGE_URL",
 			"UF_NAME_EN",
+			"CODE",
 		));
 		if($arParams["IS_SEF"] !== "Y")
 			$rsSections->SetUrlTemplates("", $arParams["SECTION_URL"]);
@@ -58,6 +70,7 @@ if($this->StartResultCache())
 			$arResult["SECTIONS"][] = array(
 				"ID" => $arSection["ID"],
 				"DEPTH_LEVEL" => $arSection["DEPTH_LEVEL"],
+				"CODE" => $arSection["CODE"],
 				"~NAME" => $arSection["~NAME"],
 				"~SECTION_PAGE_URL" => $arSection["~SECTION_PAGE_URL"],
 				"~NAME_EN" => $arSection["UF_NAME_EN"],
@@ -136,6 +149,7 @@ foreach($arResult["SECTIONS"] as $arSection)
 			"FROM_IBLOCK" => true,
 			"IS_PARENT" => false,
 			"DEPTH_LEVEL" => $arSection["DEPTH_LEVEL"],
+			"CODE" => $arSection["CODE"],
 		),
 	);
 }

@@ -25,23 +25,6 @@ $toCustomersMenu = array_filter($toCustomersMenu, fn($item) => !$item["PARAMS"][
 $catalogMenuObj = new CMenu("catalog");
 $catalogMenuObj->Init(SITE_DIR, true);
 
-$catalogMenu = array_map(fn($item) => [
-    "TEXT"   => $item[0],
-    "LINK"   => $item[1],
-    "PARAMS" => $item[3],
-], $catalogMenuObj->arMenu);
-
-[$saleMenu] = array_values(array_filter($catalogMenu, fn($item) => $item["PARAMS"]["IS_SALE"]));
-$catalogMenu = array_filter($catalogMenu, fn($item) => !$item["PARAMS"]["IS_SALE"]);
-
-[$newYearMenu] = array_values(
-    array_filter($catalogMenu, fn($item) => str_contains(strtolower($item["LINK"]), 'novogodnyaya_kollektsiya'))
-);
-
-$catalogMenu = array_filter(
-    $catalogMenu, fn($item) => !str_contains(strtolower($item["LINK"]), 'novogodnyaya_kollektsiya')
-);
-
 
 $aMenuLinksExt = [
     [
@@ -51,47 +34,28 @@ $aMenuLinksExt = [
         [],
         ""
     ],
-    [
-        $newYearMenu["TEXT"],
-        $newYearMenu["LINK"],
-        [],
-        [],
-        !empty($newYearMenu["LINK"]) ? 'true' : 'false'
-    ],
-    [
-        "Catalog",
-        "",
-        [],
-        [
-            "SUBMENU" => $catalogMenu,
-        ],
-        ""
-    ],
-    [
-        $saleMenu["TEXT"],
-        $saleMenu["LINK"],
-        [],
-        [
-            "CSS_CLASS" => "sale-section",
-        ],
-        !empty($saleMenu["LINK"]) ? 'true' : 'false'
-    ],
-    [
-        "To buyers",
-        "",
-        [],
-        [
-            "SUBMENU" => $toCustomersMenu
-        ],
-        !empty($toCustomersMenu) ? 'true' : 'false'
-    ],
-    [
-        $contactsMenu["TEXT"],
-        $contactsMenu["LINK"],
-        [],
-        [],
-        !empty($contactsMenu["LINK"]) ? 'true' : 'false'
-    ]
 ];
+
+$aMenuLinksExt = array_merge($aMenuLinksExt,
+    $catalogMenuObj->arMenu,
+    [
+        [
+            "To buyers",
+            "",
+            [],
+            [
+                "SUBMENU" => $toCustomersMenu
+            ],
+            !empty($toCustomersMenu) ? 'true' : 'false'
+        ],
+        [
+            $contactsMenu["TEXT"],
+            $contactsMenu["LINK"],
+            [],
+            [],
+            !empty($contactsMenu["LINK"]) ? 'true' : 'false'
+        ]
+    ]
+);
 
 $aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);
