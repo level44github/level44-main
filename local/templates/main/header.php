@@ -3,10 +3,13 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+global $APPLICATION;
+
 use Bitrix\Main\Localization\Loc;
+use Level44\Base;
 
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
-\Level44\Base::$typePage = $isMain ? "home" : "";
+Base::$typePage = $isMain ? "home" : "";
 $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 	->getRequest()
 	->getQuery("q");
@@ -28,7 +31,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <title><? $APPLICATION->ShowTitle() ?></title>
     <?
     $APPLICATION->ShowHead();
-    \Level44\Base::loadAssets();
+    Base::loadAssets();
     ?>
 </head>
 <body class="layout">
@@ -40,8 +43,26 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <div class="layout__wrapper">
     <? if ($isMain): ?>
     <div class="home">
-        <img src="<?=\Level44\Base::getMainBanner(true)?>" class="home__banner mobile" />
-        <img src="<?=\Level44\Base::getMainBanner()?>" class="home__banner desktop" />
+        <?
+        $mobileBanner = Base::getMainBanner(true);
+        $desktopBanner = Base::getMainBanner();
+        ?>
+
+        <? if ($mobileBanner['isVideo']): ?>
+            <video autoplay muted loop playsinline class="home__banner mobile">
+                <source src="<?= $mobileBanner['src'] ?>"/>
+            </video>
+        <? else: ?>
+            <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
+        <? endif; ?>
+
+        <? if ($desktopBanner['isVideo']): ?>
+            <video autoplay muted loop playsinline class="home__banner desktop">
+                <source src="<?= $desktopBanner['src'] ?>"/>
+            </video>
+        <? else: ?>
+            <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
+        <? endif; ?>
         <? endif; ?>
         <header class="header">
             <div class="container px-lg-1">

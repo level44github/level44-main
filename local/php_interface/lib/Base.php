@@ -113,7 +113,7 @@ class Base
         }
     }
 
-    public static function getMainBanner($mobile = false)
+    public static function getMainBanner($mobile = false): array
     {
         $imageUrl = "";
         if (Loader::includeModule("germen.settings")) {
@@ -128,7 +128,11 @@ class Base
         if (empty($imageUrl)) {
             $imageUrl = $mobile ? self::getAssetsPath() . "/img/home-mobile.jpg" : self::getAssetsPath() . "/img/home.jpg";
         }
-        return $imageUrl;
+
+        return [
+            'src'     => $imageUrl,
+            'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageUrl),
+        ];
     }
 
     public static function setColorOffers(&$linkedElements, &$currentElement = [])
