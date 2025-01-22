@@ -183,7 +183,10 @@ function ResizeUploadedPhoto($arFields)
 function retailCrmBeforeOrderSend($order, $arOrder)
 {
     try {
-        [$deliveryId] = \Bitrix\Sale\Order::load($arOrder["NUMBER"])?->getDeliveryIdList();
+        $bitrixOrder = \Bitrix\Sale\Order::load($arOrder["ID"]);
+        [$deliveryId] = $bitrixOrder?->getDeliveryIdList();
+        /** @var \Bitrix\Sale\BasketItem[] $basketItems */
+        $basketItems = $bitrixOrder->getBasket()->getBasketItems();
 
         if (in_array($deliveryId, CDeliverySDEK::getDeliveryId('pickup')) && empty($order["delivery"]["address"]["text"])) {
             $pickupAddress = current(
@@ -194,6 +197,28 @@ function retailCrmBeforeOrderSend($order, $arOrder)
                 $order["delivery"]["address"]["text"] = $pickupAddress["VALUE"][0];
             }
         }
+
+        $offersSize = [];
+
+        foreach ($basketItems as $basketItem) {
+            /** @var \Bitrix\Sale\BasketPropertiesCollectionBase $propertyCollection */
+            $propertyCollection = $basketItem->getPropertyCollection();
+            $items = array_filter($propertyCollection->toArray(), fn($property) => $property['CODE'] === 'SIZE_REF');
+            $offersSize[$basketItem->getProductId()] = empty($items) ?
+                null : current(array_map(fn($item) => $item["VALUE"], $items));
+        }
+
+        $order['items'] = array_map(function ($item) use ($offersSize) {
+            if (!empty($item["offer"]['externalId']) && $offersSize[$item["offer"]['externalId']]) {
+                $item["properties"][] = [
+                    'code'  => 'size',
+                    'name'  => 'размер',
+                    'value' => $offersSize[$item["offer"]['externalId']]
+                ];
+            }
+
+            return $item;
+        }, $order['items']);
     } catch (\Exception $exception) {
     }
 
