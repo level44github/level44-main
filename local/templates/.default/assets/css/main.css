@@ -544,3 +544,8 @@
         margin-top: 1%;
     }
 }
+
+.btn-outline-light {
+  color: black;
+  border-color: black;
+}
