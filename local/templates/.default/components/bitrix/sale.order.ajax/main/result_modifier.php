@@ -81,7 +81,7 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
         }
     }
 
-    if (in_array($prop["CODE"], ["EMAIL", "PHONE"])) {
+    if (in_array($prop["CODE"], ["EMAIL", "PHONE", "FIRST_NAME", "LAST_NAME", "SECOND_NAME"])) {
         $columns[] = $prop;
     } else {
         $fulls[] = $prop;
@@ -241,9 +241,9 @@ $arResult["OLD_SUM_PRICE"] = CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB");
 $arResult["OLD_SUM_PRICE_DOLLAR"] = Base::formatDollar($oldSumPriceDollar);
 $arResult["SHOW_OLD_SUM_PRICE"] = !empty($oldSumPrice) && $oldSumPrice !== $arResult["ORDER_PRICE"];
 
-if (count($columns) & 1) {
-    array_unshift($fulls, array_pop($columns));
-}
+//if (count($columns) & 1) {
+//    array_unshift($fulls, array_pop($columns));
+//}
 
 $columns = array_chunk($columns, 2);
 

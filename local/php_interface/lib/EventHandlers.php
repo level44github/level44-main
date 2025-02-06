@@ -24,14 +24,16 @@ class EventHandlers
         self::addEventHandler("main", "OnFileDelete");
         self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
         self::addEventHandler("main", "OnEpilog", PreOrder::class);
-        self::addEventHandler("sale", "OnOrderNewSendEmail");
-        self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
-        self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
 
         self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
         self::addEventHandler("iblock", "OnBeforeIBlockUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
+
+        self::addEventHandler("sale", "OnOrderNewSendEmail");
+        self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
+
+        self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
