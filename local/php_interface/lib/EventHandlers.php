@@ -24,14 +24,17 @@ class EventHandlers
         self::addEventHandler("main", "OnFileDelete");
         self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
         self::addEventHandler("main", "OnEpilog", PreOrder::class);
-        self::addEventHandler("sale", "OnOrderNewSendEmail");
-        self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
-        self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
+        self::addEventHandler("main", "OnBeforeUserAdd");
 
         self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
         self::addEventHandler("iblock", "OnBeforeIBlockUpdate");
         self::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
+
+        self::addEventHandler("sale", "OnOrderNewSendEmail");
+        self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
+
+        self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
     }
 
     private static function addEventHandler($moduleId, $eventType, $class = self::class)
@@ -421,6 +424,57 @@ LAYOUT;
                 $arFields["LID"] = array_reverse($arFields["LID"]);
             }
         }
+
+        return true;
+    }
+
+    public static function OnBeforeUserAddHandler(&$arFields)
+    {
+        $postList = \Bitrix\Main\Context::getCurrent()->getRequest()->getPostList()->getValues();
+
+        $existsOrderProps = !empty(
+        array_filter($postList, fn($key) => str_contains($key, 'ORDER_PROP_'), ARRAY_FILTER_USE_KEY)
+        );
+
+        if (!$existsOrderProps || !check_bitrix_sessid()) {
+            return false;
+        }
+
+        $res = \Bitrix\Sale\Internals\OrderPropsTable::getList([
+            'select' => ['*'],
+            'filter' => [
+                [
+                    'CODE' => [
+                        "FIRST_NAME",
+                        "LAST_NAME",
+                        "SECOND_NAME",
+                    ]
+                ],
+            ]
+        ]);
+
+        $properties = [];
+
+        while ($orderProp = $res->fetch()) {
+            $properties[$orderProp['ID']] = $orderProp["CODE"];
+        }
+
+        foreach ($postList as $key => $item) {
+            if (str_contains($key, 'ORDER_PROP_') && !empty($property = $properties[str_replace('ORDER_PROP_', '', $key)])) {
+                switch ($property) {
+                    case 'FIRST_NAME':
+                        $arFields['NAME'] = trim($item);
+                        break;
+                    case 'LAST_NAME':
+                        $arFields['LAST_NAME'] = trim($item);
+                        break;
+                    case 'SECOND_NAME':
+                        $arFields['SECOND_NAME'] = trim($item);
+                        break;
+                }
+            }
+        }
+
 
         return true;
     }

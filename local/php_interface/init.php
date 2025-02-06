@@ -1,5 +1,7 @@
 <?php
 
+use Bitrix\Sale\PropertyValueCollectionBase;
+
 \CModule::AddAutoloadClasses(
     "",
     [
@@ -182,11 +184,38 @@ function ResizeUploadedPhoto($arFields)
 
 function retailCrmBeforeOrderSend($order, $arOrder)
 {
+    //TODO Refactor
     try {
         $bitrixOrder = \Bitrix\Sale\Order::load($arOrder["ID"]);
         [$deliveryId] = $bitrixOrder?->getDeliveryIdList();
         /** @var \Bitrix\Sale\BasketItem[] $basketItems */
         $basketItems = $bitrixOrder->getBasket()->getBasketItems();
+        $propertyCollection = $bitrixOrder->getPropertyCollection();
+
+        $getPropertyValue = function (PropertyValueCollectionBase $collection, string $code): string|null {
+            $properties = $collection->getItemsByOrderPropertyCode($code);
+            $property = empty($properties) ? null : current($properties);
+
+            return $property?->getValue();
+        };
+
+        [$firstName, $lastName, $secondName] = [
+            $getPropertyValue($propertyCollection, 'FIRST_NAME'),
+            $getPropertyValue($propertyCollection, 'LAST_NAME'),
+            $getPropertyValue($propertyCollection, 'SECOND_NAME'),
+        ];
+
+        if (!empty($firstName)) {
+            $order['firstName'] = $firstName;
+        }
+
+        if (!empty($lastName)) {
+            $order['lastName'] = $lastName;
+        }
+
+        if (!empty($secondName)) {
+            $order['patronymic'] = $secondName;
+        }
 
         if (in_array($deliveryId, CDeliverySDEK::getDeliveryId('pickup')) && empty($order["delivery"]["address"]["text"])) {
             $pickupAddress = current(
@@ -223,4 +252,38 @@ function retailCrmBeforeOrderSend($order, $arOrder)
     }
 
     return $order;
+}
+
+function retailCrmAfterOrderSave($order)
+{
+    try {
+
+        $bitrixOrder = \Bitrix\Sale\Order::load($order['externalId']);
+        $propertyCollection = $bitrixOrder->getPropertyCollection();
+        $changed = false;
+
+        /** @var \Level44\Sale\PropertyValue $property */
+        foreach ($propertyCollection as $property) {
+            if (!empty($order['firstName']) && $property->getField('CODE') === 'FIRST_NAME') {
+                $property->setValue($order['firstName']);
+                $changed = true;
+            }
+
+            if (!empty($order['lastName']) && $property->getField('CODE') === 'LAST_NAME') {
+                $property->setValue($order['lastName']);
+                $changed = true;
+            }
+
+            if (!empty($order['patronymic']) && $property->getField('CODE') === 'SECOND_NAME') {
+                $property->setValue($order['patronymic']);
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            $propertyCollection->save();
+        }
+
+    } catch (\Exception $e) {
+    }
 }
