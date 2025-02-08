@@ -232,21 +232,21 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                     </div>
                     <?endif;?>
                 </div>
-                <?
-                if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>
-                    <div id="<?= $itemIds['TREE_ID'] ?>">
+                <div id="<?= $itemIds['TREE_ID'] ?>">
+                    <?
+                    if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>
                         <?
                         foreach ($arResult['SKU_PROPS'] as $skuProperty): ?>
                             <? if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']])):
                                 continue;
                                 ?>
                             <?endif;
-                            $skuProps[] = array(
-                                'ID' => $skuProperty['ID'],
-                                'SHOW_MODE' => $skuProperty['SHOW_MODE'],
-                                'VALUES' => $skuProperty['VALUES'],
+                            $skuProps[] = [
+                                'ID'           => $skuProperty['ID'],
+                                'SHOW_MODE'    => $skuProperty['SHOW_MODE'],
+                                'VALUES'       => $skuProperty['VALUES'],
                                 'VALUES_COUNT' => $skuProperty['VALUES_COUNT']
-                            );
+                            ];
                             ?>
                             <?
                             if ($skuProperty['CODE'] === "SIZE_REF"): ?>
@@ -378,44 +378,44 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 </div>
                             <? endif; ?>
                         <? endforeach; ?>
+                    <? endif; ?>
 
-                        <? if (!empty($arResult["COLORS"])): ?>
-                            <div class="color" data-entity="sku-line-block">
-                                <? if (!empty($arResult["COLOR_NAME"])): ?>
-                                    <div class="color__title">
-                                        <?= Loc::getMessage("CURRENT_COLOR") ?>: <?= $arResult["COLOR_NAME"] ?>
-                                        <span class="js-color__text"></span>
-                                    </div>
-                                <? endif; ?>
-                                <div class="color__group btn-group-toggle">
-                                    <? foreach ($arResult["COLORS"] as $item): ?>
-                                        <? if ($item["ACTIVE"]): ?>
-                                            <label class="btn color__btn js-color__btn active"
-                                                   title="<?= $item["COLOR_NAME"] ?>"
-                                                   style="box-shadow: none"
-                                            >
+                    <? if (!empty($arResult["COLORS"])): ?>
+                        <div class="color" data-entity="sku-line-block">
+                            <? if (!empty($arResult["COLOR_NAME"])): ?>
+                                <div class="color__title">
+                                    <?= Loc::getMessage("CURRENT_COLOR") ?>: <?= $arResult["COLOR_NAME"] ?>
+                                    <span class="js-color__text"></span>
+                                </div>
+                            <? endif; ?>
+                            <div class="color__group btn-group-toggle">
+                                <? foreach ($arResult["COLORS"] as $item): ?>
+                                    <? if ($item["ACTIVE"]): ?>
+                                        <label class="btn color__btn js-color__btn active"
+                                               title="<?= $item["COLOR_NAME"] ?>"
+                                               style="box-shadow: none"
+                                        >
                                             <span class="color__value"
                                                   style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');"
                                             ></span>
-                                            </label>
-                                        <? else: ?>
-                                            <label class="btn color__btn js-color__btn"
-                                                   title="<?= $item["COLOR_NAME"] ?>"
-                                                   style="box-shadow: none"
-                                            >
-                                                <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
+                                        </label>
+                                    <? else: ?>
+                                        <label class="btn color__btn js-color__btn"
+                                               title="<?= $item["COLOR_NAME"] ?>"
+                                               style="box-shadow: none"
+                                        >
+                                            <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
                                         <span class="color__value"
                                               style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');"
                                         ></span>
-                                                </a>
-                                            </label>
-                                        <? endif; ?>
-                                    <? endforeach; ?>
-                                </div>
+                                            </a>
+                                        </label>
+                                    <? endif; ?>
+                                <? endforeach; ?>
                             </div>
-                        <? endif; ?>
-                    </div>
-                <? endif; ?>
+                        </div>
+                    <? endif; ?>
+                </div>
                 <div id="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
                      style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
                     <button class="btn btn-dark btn-block mb-4 js-btn__add-basket"
