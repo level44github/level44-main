@@ -153,10 +153,6 @@
   .mobile-only {
     display: block;
   }
-
-  .home__images-wrapper-viewport {
-    height: 100vh;
-  }
 }
 
 .dimension__btn {
@@ -472,6 +468,7 @@
 .home__images-wrapper-viewport {
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .home {
