@@ -467,7 +467,7 @@
 }
 
 .home__images-wrapper-viewport {
-  display: flex !important;
+  display: flex;
   justify-content: center;
   overflow: hidden;
 }
@@ -512,7 +512,7 @@
 @media (min-width: 768px) {
 
   .home__banner.desktop {
-    /*display: block;*/
+    display: flex;
     margin: 0;
     /*margin: -7% 0;*/
   }
