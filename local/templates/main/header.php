@@ -71,8 +71,6 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
-
-                <div class="swiper-pagination"></div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
             </div>
@@ -211,13 +209,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
         document.addEventListener('DOMContentLoaded', function () {
             var mySwiper = new Swiper('.swiper-container', {
                 loop: true,
-                autoplay: {
-                    delay: 5000,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
+                autoplay: false,
+                pagination: false,
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',

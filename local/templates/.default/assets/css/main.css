@@ -448,6 +448,7 @@
 
 .header {
   background-color: transparent !important;
+  z-index: 100;
 }
 
 .home .header button {
