@@ -227,9 +227,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var mySwiper = new Swiper('.swiper-container', {
-                loop: true,
-                loopPreventsSliding: false,
-                loopAdditionalSlides: 2,
+                loop: false,
                 autoplay: {
                     delay: 5000
                 },
@@ -238,7 +236,32 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
                 },
+                on: {
+                    init: function () {
+                        toggleNavButtons(this);
+                    },
+                    slideChange: function () {
+                        toggleNavButtons(this);
+                    }
+                }
             });
         });
+
+        function toggleNavButtons(swiper) {
+            const nextBtn = document.querySelector('.swiper-button-next');
+            const prevBtn = document.querySelector('.swiper-button-prev');
+
+            if (swiper.isBeginning) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = '';
+            }
+
+            if (swiper.isEnd) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = '';
+            }
+        }
     </script>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
