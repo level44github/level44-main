@@ -153,6 +153,10 @@
   .mobile-only {
     display: block;
   }
+
+  .home__images-wrapper-viewport {
+    height: 100vh;
+  }
 }
 
 .dimension__btn {
@@ -450,11 +454,11 @@
   background-color: transparent !important;
 }
 
-.header button {
+.home .header button {
   color: white !important;
 }
 
-.header a {
+.home .header a {
   color: white !important;
 }
 
