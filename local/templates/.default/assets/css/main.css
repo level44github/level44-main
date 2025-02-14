@@ -467,6 +467,7 @@
 
 .home__images-wrapper-viewport {
   display: flex;
+  justify-content: center;
 }
 
 .home {
@@ -491,6 +492,7 @@
   max-width: 100%;
   height: auto;
   margin: 0 auto;
+  flex: 1;
 }
 
 .home__banner.mobile {
