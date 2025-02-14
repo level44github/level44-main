@@ -511,7 +511,7 @@
 }
 
 .home__banner.mobile {
-  display: block;
+  display: flex;
 }
 
 .home__banner.desktop {
