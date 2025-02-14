@@ -466,10 +466,15 @@
   padding: 0;
 }
 
-.home__images-wrapper-viewport {
+.home__images-wrapper-viewport  {
+  width: 100%;
   display: flex;
   justify-content: center;
   overflow: hidden;
+}
+
+.home__images-wrapper-viewport * {
+  flex: 1;
 }
 
 .home {
