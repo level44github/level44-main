@@ -446,6 +446,16 @@
   align-items: center;
 }
 
+.home__images-wrapper {
+  top: 0;
+  position: relative;
+  display: flex;
+}
+
+.home__images-wrapper-viewport {
+  overflow: hidden;
+}
+
 .home {
   height: auto !important;
   padding-top: 0 !important;

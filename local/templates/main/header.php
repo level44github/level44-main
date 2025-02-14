@@ -43,33 +43,37 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <div class="layout__wrapper">
     <? if ($isMain): ?>
     <div class="home">
-        <?
-        $mobileBanner = Base::getMainBanner(true);
-        $desktopBanner = Base::getMainBanner();
-        ?>
+        <div class="home__images-wrapper">
+            <div class="home__images-wrapper-viewport">
+                <?
+                $mobileBanner = Base::getMainBanner(true);
+                $desktopBanner = Base::getMainBanner();
+                ?>
 
-        <? if ($mobileBanner['isVideo']): ?>
-            <video autoplay muted loop playsinline class="home__banner mobile">
-                <source src="<?= $mobileBanner['src'] ?>"/>
-            </video>
-        <? else: ?>
-            <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
-            <? if (!empty($desktopBanner['additionalSrc'])): ?>
-                <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner mobile"/>
-            <? endif; ?>
-        <? endif; ?>
+                <? if ($mobileBanner['isVideo']): ?>
+                    <video autoplay muted loop playsinline class="home__banner mobile">
+                        <source src="<?= $mobileBanner['src'] ?>"/>
+                    </video>
+                <? else: ?>
+                    <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
+                    <? if (!empty($desktopBanner['additionalSrc'])): ?>
+                        <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner mobile"/>
+                    <? endif; ?>
+                <? endif; ?>
 
-        <? if ($desktopBanner['isVideo']): ?>
-            <video autoplay muted loop playsinline class="home__banner desktop">
-                <source src="<?= $desktopBanner['src'] ?>"/>
-            </video>
-        <? else: ?>
-            <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
-            <? if (!empty($desktopBanner['additionalSrc'])): ?>
-                <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner desktop"/>
-            <? endif; ?>
-        <? endif; ?>
-        <? endif; ?>
+                <? if ($desktopBanner['isVideo']): ?>
+                    <video autoplay muted loop playsinline class="home__banner desktop">
+                        <source src="<?= $desktopBanner['src'] ?>"/>
+                    </video>
+                <? else: ?>
+                    <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
+                    <? if (!empty($desktopBanner['additionalSrc'])): ?>
+                        <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner desktop"/>
+                    <? endif; ?>
+                <? endif; ?>
+                <? endif; ?>
+            </div>
+        </div>
         <header class="header">
             <div class="container px-lg-1">
                 <nav class="navbar layout__navbar navbar-light">
