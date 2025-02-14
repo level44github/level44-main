@@ -101,7 +101,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <!--                        <img src="--><?php //= $desktopBanner['additionalSrc'] ?><!--" class="home__banner desktop"/>-->
 <!--                    --><?// endif; ?>
 <!--                --><?// endif; ?>
-<!--                --><?// endif; ?>
+                <? endif; ?>
 <!--            </div>-->
         </div>
         <header class="header">
