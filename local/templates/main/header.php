@@ -53,25 +53,19 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     <?php foreach ($desktopBannerSlides as $desktopSlide): ?>
-
                         <?php if ($desktopSlide['isVideo']): ?>
                             <video autoplay muted loop playsinline class="home__banner desktop swiper-slide">
                                 <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
                             </video>
                         <?php else: ?>
-
-                            <?php if (!empty($desktopSlide['src'])): ?>
-                                <div class="home__images-wrapper-viewport swiper-slide">
+                            <div class="home__images-wrapper-viewport swiper-slide">
+                                <?php if (!empty($desktopSlide['src'])): ?>
                                     <img src="<?= $desktopSlide['src'] ?>" class="home__banner desktop">
-                                </div>
-
-                            <?php else: ?>
-                                <div class="home__images-wrapper-viewport swiper-slide">
+                                <?php elseif (!empty($desktopSlide['splitSrc']) && !empty($desktopSlide['splitSrc2'])): ?>
                                     <img src="<?= $desktopSlide['splitSrc'] ?>" class="home__banner desktop" alt="Banner part 1">
                                     <img src="<?= $desktopSlide['splitSrc2'] ?>" class="home__banner desktop" alt="Banner part 2">
-                                </div>
-                            <?php endif; ?>
-
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
