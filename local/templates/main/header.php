@@ -94,6 +94,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 <div class="swiper-button-next"></div>
                 <div class="swiper-pagination"></div>
             </div>
+            <? endif; ?>
         </div>
         <header class="header">
             <div class="container px-lg-1">
