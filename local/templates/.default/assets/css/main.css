@@ -446,14 +446,18 @@
   align-items: center;
 }
 
+.header {
+  background-color: transparent !important;
+}
+
 .home__images-wrapper {
   top: 0;
   position: relative;
-  display: flex;
+  width: 100%;
 }
 
 .home__images-wrapper-viewport {
-  overflow: hidden;
+  display: flex;
 }
 
 .home {
