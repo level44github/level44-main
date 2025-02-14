@@ -481,6 +481,10 @@
     width: 100%;
 }
 
+.swiper-button-next, .swiper-button-prev {
+  color: white;
+}
+
 .home {
   height: auto !important;
   padding-top: 0 !important;
