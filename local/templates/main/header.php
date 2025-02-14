@@ -228,6 +228,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
         document.addEventListener('DOMContentLoaded', function () {
             var mySwiper = new Swiper('.swiper-container', {
                 loop: true,
+                loopPreventsSliding: false,
+                loopAdditionalSlides: 2,
                 autoplay: {
                     delay: 5000
                 },
