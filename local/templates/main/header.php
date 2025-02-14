@@ -92,36 +92,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 </div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
+                <div class="swiper-pagination"></div>
             </div>
-<!--            <div class="home__images-wrapper-viewport">-->
-<!--                --><?//
-//                $mobileBanner = Base::getMainBanner(true);
-//                $desktopBanner = Base::getMainBanner();
-//                ?>
-<!---->
-<!--                --><?// if ($mobileBanner['isVideo']): ?>
-<!--                    <video autoplay muted loop playsinline class="home__banner mobile">-->
-<!--                        <source src="--><?php //= $mobileBanner['src'] ?><!--"/>-->
-<!--                    </video>-->
-<!--                --><?// else: ?>
-<!--                    <img src="--><?php //= $mobileBanner['src'] ?><!--" class="home__banner mobile"/>-->
-<!--                    --><?// if (!empty($desktopBanner['additionalSrc'])): ?>
-<!--                        <img src="--><?php //= $desktopBanner['additionalSrc'] ?><!--" class="home__banner mobile"/>-->
-<!--                    --><?// endif; ?>
-<!--                --><?// endif; ?>
-<!---->
-<!--                --><?// if ($desktopBanner['isVideo']): ?>
-<!--                    <video autoplay muted loop playsinline class="home__banner desktop">-->
-<!--                        <source src="--><?php //= $desktopBanner['src'] ?><!--"/>-->
-<!--                    </video>-->
-<!--                --><?// else: ?>
-<!--                    <img src="--><?php //= $desktopBanner['src'] ?><!--" class="home__banner desktop"/>-->
-<!--                    --><?// if (!empty($desktopBanner['additionalSrc'])): ?>
-<!--                        <img src="--><?php //= $desktopBanner['additionalSrc'] ?><!--" class="home__banner desktop"/>-->
-<!--                    --><?// endif; ?>
-<!--                --><?// endif; ?>
-                <? endif; ?>
-<!--            </div>-->
         </div>
         <header class="header">
             <div class="container px-lg-1">
@@ -220,7 +192,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             </div>
         </div>
         <? if ($isMain): ?>
-        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/novinki/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
+<!--        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="--><?php //= SITE_DIR ?><!--catalog/novinki/">--><?php //=Loc::getMessage("HEADER_GO_CATALOG")?><!--</a>-->
     </div>
 <? endif; ?>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -235,6 +207,10 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'progressbar',
                 },
                 on: {
                     init: function () {

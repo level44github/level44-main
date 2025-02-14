@@ -489,6 +489,18 @@
   color: white !important;
 }
 
+.swiper-pagination-progressbar-fill {
+  background: #fff;
+  transition: width 0.25s ease;
+}
+
+.swiper-pagination-progressbar {
+  background: rgba(255, 255, 255, 0.3);
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
 .home {
   height: auto !important;
   padding-top: 0 !important;
