@@ -252,15 +252,15 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             const prevBtn = document.querySelector('.swiper-button-prev');
 
             if (swiper.isBeginning) {
-                prevBtn.style.display = 'none';
+                prevBtn.style.opacity = '60';
             } else {
-                prevBtn.style.display = '';
+                prevBtn.style.opacity = '';
             }
 
             if (swiper.isEnd) {
-                nextBtn.style.display = 'none';
+                nextBtn.style.opacity = '60';
             } else {
-                nextBtn.style.display = '';
+                nextBtn.style.opacity = '';
             }
         }
     </script>
