@@ -58,13 +58,13 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                 <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
                             </video>
                         <?php else: ?>
-                            <div class="swiper-slide">
+                            <div class="swiper-slide home__banner desktop">
                                 <?php if (!empty($desktopSlide['src'])): ?>
-                                    <img src="<?= $desktopSlide['src'] ?>" class="home__banner desktop">
+                                    <img src="<?= $desktopSlide['src'] ?>">
                                 <?php elseif (!empty($desktopSlide['splitSrc']) && !empty($desktopSlide['splitSrc2'])): ?>
-                                    <div class="home__images-wrapper-viewport">
-                                        <img src="<?= $desktopSlide['splitSrc'] ?>" class="home__banner desktop" alt="Banner part 1">
-                                        <img src="<?= $desktopSlide['splitSrc2'] ?>" class="home__banner desktop" alt="Banner part 2">
+                                    <div class="home__images-wrapper-viewport home__banner desktop">
+                                        <img src="<?= $desktopSlide['splitSrc'] ?>" alt="Banner part 1">
+                                        <img src="<?= $desktopSlide['splitSrc2'] ?>" alt="Banner part 2">
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -211,6 +211,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 loop: true,
                 autoplay: false,
                 pagination: false,
+                speed: 800,
                 navigation: {
                     nextEl: '.swiper-button-next',
                     prevEl: '.swiper-button-prev',
