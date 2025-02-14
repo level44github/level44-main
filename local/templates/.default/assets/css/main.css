@@ -465,18 +465,19 @@
 }
 
 .home__images-wrapper-viewport {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 }
 
 .home {
   height: auto !important;
   padding-top: 0 !important;
-  margin-top: 50px;
+  /*margin-top: 50px;*/
 }
 
 @media (min-width: 991px) {
   .home {
-    margin-top: 80px;
+    /*margin-top: 80px;*/
   }
 }
 
@@ -504,7 +505,7 @@
 
   .home__banner.desktop {
     display: block;
-    margin: -7% 0;
+    /*margin: -7% 0;*/
   }
 
   .home__banner.mobile {
