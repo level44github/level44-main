@@ -489,16 +489,23 @@
   color: white !important;
 }
 
-.swiper-pagination-progressbar-fill {
-  background: #fff;
-  transition: width 0.25s ease;
+.swiper-button-next[aria-disabled="true"], .swiper-button-prev[aria-disabled="true"] {
+  opacity: 60%;
 }
 
-.swiper-pagination-progressbar {
-  background: rgba(255, 255, 255, 0.3);
-  height: 4px;
+.swiper-pagination.swiper-pagination-progressbar {
+  width: 96px !important;
+  height: 2px;
   border-radius: 2px;
-  overflow: hidden;
+  background-color: #FFFFFF47;
+  bottom: 100px;
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swiper-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+  background: #ffffff;
 }
 
 .home {

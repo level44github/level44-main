@@ -213,32 +213,32 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     el: '.swiper-pagination',
                     type: 'progressbar',
                 },
-                on: {
-                    init: function () {
-                        toggleNavButtons(this);
-                    },
-                    slideChange: function () {
-                        toggleNavButtons(this);
-                    }
-                }
+                // on: {
+                //     init: function () {
+                //         toggleNavButtons(this);
+                //     },
+                //     slideChange: function () {
+                //         toggleNavButtons(this);
+                //     }
+                // }
             });
         });
 
-        function toggleNavButtons(swiper) {
-            const nextBtn = document.querySelector('.swiper-button-next');
-            const prevBtn = document.querySelector('.swiper-button-prev');
-
-            if (swiper.isBeginning) {
-                prevBtn.style.opacity = '60';
-            } else {
-                prevBtn.style.opacity = '';
-            }
-
-            if (swiper.isEnd) {
-                nextBtn.style.opacity = '60';
-            } else {
-                nextBtn.style.opacity = '';
-            }
-        }
+        // function toggleNavButtons(swiper) {
+        //     const nextBtn = document.querySelector('.swiper-button-next');
+        //     const prevBtn = document.querySelector('.swiper-button-prev');
+        //
+        //     if (swiper.isBeginning) {
+        //         prevBtn.style.opacity = '60';
+        //     } else {
+        //         prevBtn.style.opacity = '';
+        //     }
+        //
+        //     if (swiper.isEnd) {
+        //         nextBtn.style.opacity = '60';
+        //     } else {
+        //         nextBtn.style.opacity = '';
+        //     }
+        // }
     </script>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
