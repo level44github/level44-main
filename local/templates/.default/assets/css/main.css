@@ -448,6 +448,13 @@
 
 .header {
   background-color: transparent !important;
+}
+
+.header button {
+  color: white !important;
+}
+
+.header a {
   color: white !important;
 }
 
