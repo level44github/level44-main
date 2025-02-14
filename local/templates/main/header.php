@@ -84,7 +84,6 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                 <?php elseif (!empty($mobileSlide['splitSrc']) && !empty($mobileSlide['splitSrc2'])): ?>
                                     <div class="home__banner mobile home__images-wrapper-viewport">
                                         <img src="<?= $mobileSlide['splitSrc'] ?>" alt="Banner part 1">
-                                        <img src="<?= $mobileSlide['splitSrc2'] ?>" alt="Banner part 2">
                                     </div>
                                 <?php endif; ?>
                             </div>

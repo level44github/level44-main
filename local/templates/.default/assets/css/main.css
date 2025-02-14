@@ -477,6 +477,10 @@
   width: 50%;
 }
 
+.home__images-wrapper-viewport.home__banner.mobile > * {
+    width: 100%;
+}
+
 .home {
   height: auto !important;
   padding-top: 0 !important;
