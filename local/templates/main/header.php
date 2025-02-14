@@ -43,7 +43,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <div class="layout__wrapper">
     <? if ($isMain): ?>
     <div class="home">
-        <div class="container home__images-wrapper">
+        <div class="home__images-wrapper">
             <div class="home__images-wrapper-viewport">
                 <?
                 $mobileBanner = Base::getMainBanner(true);
