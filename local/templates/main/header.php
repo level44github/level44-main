@@ -62,7 +62,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                 <?php if (!empty($desktopSlide['src'])): ?>
                                     <img src="<?= $desktopSlide['src'] ?>">
                                 <?php elseif (!empty($desktopSlide['splitSrc']) && !empty($desktopSlide['splitSrc2'])): ?>
-                                    <div class="home__images-wrapper-viewport home__banner desktop">
+                                    <div class="home__banner desktop home__images-wrapper-viewport ">
                                         <img src="<?= $desktopSlide['splitSrc'] ?>" alt="Banner part 1">
                                         <img src="<?= $desktopSlide['splitSrc2'] ?>" alt="Banner part 2">
                                     </div>

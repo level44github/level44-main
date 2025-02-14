@@ -467,7 +467,7 @@
 }
 
 .home__images-wrapper-viewport {
-  display: flex;
+  display: flex !important;
   justify-content: center;
   overflow: hidden;
 }
