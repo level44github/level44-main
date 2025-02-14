@@ -495,12 +495,12 @@
 
 .swiper-pagination.swiper-pagination-progressbar {
   width: 96px !important;
-  height: 2px;
+  height: 2px !important;
   border-radius: 2px;
   background-color: #FFFFFF47;
   bottom: 100px;
-  top: auto;
-  left: 50%;
+  top: auto !important;
+  left: 50% !important;
   transform: translateX(-50%);
 }
 
