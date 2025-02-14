@@ -52,7 +52,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             ?>
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    <?php foreach ($desktopBannerSlides as $desktopSlide): ?>
+                    <?php foreach ($desktopBannerSlides as $index => $desktopSlide): ?>
                         <?php if ($desktopSlide['isVideo']): ?>
                             <video autoplay muted loop playsinline class="home__banner desktop swiper-slide">
                                 <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
@@ -67,12 +67,18 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                         <img src="<?= $desktopSlide['splitSrc2'] ?>" alt="Banner part 2">
                                     </div>
                                 <?php endif; ?>
+                                <div class="swiper-pagination-wrapper">
+                                    <div class="swiper-pagination-wrapper-block">
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                    </div>
+                                </div>
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
 
 
-                    <?php foreach ($mobileBannerSlides as $mobileSlide): ?>
+                    <?php foreach ($mobileBannerSlides as $index => $mobileSlide): ?>
                         <?php if ($mobileSlide['isVideo']): ?>
                             <video autoplay muted loop playsinline class="home__banner mobile swiper-slide">
                                 <source src="<?= $mobileSlide['src'] ?>" type="video/mp4">
@@ -86,6 +92,12 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                         <img src="<?= $mobileSlide['splitSrc'] ?>" alt="Banner part 1">
                                     </div>
                                 <?php endif; ?>
+                                <div class="swiper-pagination-wrapper">
+                                    <div class="swiper-pagination-wrapper-block">
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                    </div>
+                                </div>
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -213,32 +225,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     el: '.swiper-pagination',
                     type: 'progressbar',
                 },
-                // on: {
-                //     init: function () {
-                //         toggleNavButtons(this);
-                //     },
-                //     slideChange: function () {
-                //         toggleNavButtons(this);
-                //     }
-                // }
             });
         });
-
-        // function toggleNavButtons(swiper) {
-        //     const nextBtn = document.querySelector('.swiper-button-next');
-        //     const prevBtn = document.querySelector('.swiper-button-prev');
-        //
-        //     if (swiper.isBeginning) {
-        //         prevBtn.style.opacity = '60';
-        //     } else {
-        //         prevBtn.style.opacity = '';
-        //     }
-        //
-        //     if (swiper.isEnd) {
-        //         nextBtn.style.opacity = '60';
-        //     } else {
-        //         nextBtn.style.opacity = '';
-        //     }
-        // }
     </script>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">

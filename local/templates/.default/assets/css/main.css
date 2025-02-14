@@ -504,6 +504,21 @@
   transform: translateX(-50%);
 }
 
+.swiper-pagination-wrapper {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swiper-pagination-wrapper-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .swiper-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
   background: #ffffff;
 }
