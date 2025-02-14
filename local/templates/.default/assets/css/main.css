@@ -466,8 +466,7 @@
 }
 
 .home__images-wrapper-viewport {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  display: flex;
 }
 
 .home {
