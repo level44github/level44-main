@@ -517,6 +517,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  color: white;
 }
 
 .swiper-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
