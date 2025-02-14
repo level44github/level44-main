@@ -473,8 +473,8 @@
   overflow: hidden;
 }
 
-.home__images-wrapper-viewport * {
-  flex: 1;
+.home__images-wrapper-viewport > * {
+  width: 50%;
 }
 
 .home {
