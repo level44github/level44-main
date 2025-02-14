@@ -512,7 +512,7 @@
 @media (min-width: 768px) {
 
   .home__banner.desktop {
-    display: block;
+    /*display: block;*/
     margin: 0;
     /*margin: -7% 0;*/
   }
