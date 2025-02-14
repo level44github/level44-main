@@ -482,7 +482,7 @@
 }
 
 .swiper-button-next, .swiper-button-prev {
-  color: white;
+  color: white !important;
 }
 
 .home {
