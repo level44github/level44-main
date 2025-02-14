@@ -119,10 +119,13 @@ class Base
         if (Loader::includeModule("germen.settings")) {
             if ($mobile) {
                 $imageId = (int)Settings::get("MAIN_BANNER_MOBILE");
+                $additionalImageId = (int)Settings::get("MAIN_BANNER_MOBILE_1");
             } else {
                 $imageId = (int)Settings::get("MAIN_BANNER");
+                $additionalImageId = (int)Settings::get("MAIN_BANNER_1");
             }
             $imageUrl = (string)\CFile::GetFileArray($imageId)["SRC"];
+            $additionalImageUrl = (string)\CFile::GetFileArray($additionalImageId)["SRC"];
         }
 
         if (empty($imageUrl)) {
@@ -131,6 +134,7 @@ class Base
 
         return [
             'src'     => $imageUrl,
+            'additionalSrc' => $additionalImageUrl,
             'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageUrl),
         ];
     }

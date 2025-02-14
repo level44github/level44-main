@@ -54,6 +54,9 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             </video>
         <? else: ?>
             <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
+            <? if (!empty($desktopBanner['additionalSrc'])): ?>
+                <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner mobile"/>
+            <? endif; ?>
         <? endif; ?>
 
         <? if ($desktopBanner['isVideo']): ?>
@@ -62,6 +65,9 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             </video>
         <? else: ?>
             <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
+            <? if (!empty($desktopBanner['additionalSrc'])): ?>
+                <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner desktop"/>
+            <? endif; ?>
         <? endif; ?>
         <? endif; ?>
         <header class="header">
