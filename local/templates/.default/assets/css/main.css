@@ -462,6 +462,7 @@
   top: 0;
   position: relative;
   width: 100%;
+  padding: 0;
 }
 
 .home__images-wrapper-viewport {
