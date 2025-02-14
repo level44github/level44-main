@@ -118,14 +118,17 @@ class Base
         $imageUrl = "";
         if (Loader::includeModule("germen.settings")) {
             if ($mobile) {
-                $imageId = (int)Settings::get("MAIN_BANNER_MOBILE");
-                $additionalImageId = (int)Settings::get("MAIN_BANNER_MOBILE_1");
+                $imageSplitId = (int)Settings::get("MAIN_BANNER_MOBILE");
+                $imageSplitId2 = (int)Settings::get("MAIN_BANNER_MOBILE_1");
+                $imageId = (int)Settings::get("MAIN_BANNER_MOBILE_SINGLE");
             } else {
-                $imageId = (int)Settings::get("MAIN_BANNER");
-                $additionalImageId = (int)Settings::get("MAIN_BANNER_1");
+                $imageSplitId = (int)Settings::get("MAIN_BANNER");
+                $imageSplitId2 = (int)Settings::get("MAIN_BANNER_1");
+                $imageId = (int)Settings::get("MAIN_BANNER_SINGLE");
             }
             $imageUrl = (string)\CFile::GetFileArray($imageId)["SRC"];
-            $additionalImageUrl = (string)\CFile::GetFileArray($additionalImageId)["SRC"];
+            $imageSplitUrl = (string)\CFile::GetFileArray($imageSplitId)["SRC"];
+            $imageSplitUrl2 = (string)\CFile::GetFileArray($imageSplitId2)["SRC"];
         }
 
         if (empty($imageUrl)) {
@@ -133,9 +136,15 @@ class Base
         }
 
         return [
-            'src'     => $imageUrl,
-            'additionalSrc' => $additionalImageUrl,
-            'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageUrl),
+            [
+                'splitSrc' => $imageSplitUrl,
+                'splitSrc2' => $imageSplitUrl2,
+                'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageSplitUrl),
+            ],
+            [
+                'src'     => $imageUrl,
+                'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageUrl),
+            ]
         ];
     }
 

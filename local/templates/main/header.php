@@ -33,6 +33,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     $APPLICATION->ShowHead();
     Base::loadAssets();
     ?>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body class="layout">
 <!-- Google Tag Manager (noscript) -->
@@ -44,35 +45,70 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     <? if ($isMain): ?>
     <div class="home">
         <div class="home__images-wrapper">
-            <div class="home__images-wrapper-viewport">
-                <?
-                $mobileBanner = Base::getMainBanner(true);
-                $desktopBanner = Base::getMainBanner();
-                ?>
+            <?php
+            // Получаем данные баннера
+            $mobileBannerSlides = Base::getMainBanner(true);
+            $desktopBannerSlides = Base::getMainBanner();
+            ?>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <?php foreach ($desktopBannerSlides as $desktopSlide): ?>
 
-                <? if ($mobileBanner['isVideo']): ?>
-                    <video autoplay muted loop playsinline class="home__banner mobile">
-                        <source src="<?= $mobileBanner['src'] ?>"/>
-                    </video>
-                <? else: ?>
-                    <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
-                    <? if (!empty($desktopBanner['additionalSrc'])): ?>
-                        <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner mobile"/>
-                    <? endif; ?>
-                <? endif; ?>
+                        <?php if ($desktopSlide['isVideo']): ?>
+                            <video autoplay muted loop playsinline class="home__banner desktop swiper-slide">
+                                <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
+                            </video>
+                        <?php else: ?>
 
-                <? if ($desktopBanner['isVideo']): ?>
-                    <video autoplay muted loop playsinline class="home__banner desktop">
-                        <source src="<?= $desktopBanner['src'] ?>"/>
-                    </video>
-                <? else: ?>
-                    <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
-                    <? if (!empty($desktopBanner['additionalSrc'])): ?>
-                        <img src="<?= $desktopBanner['additionalSrc'] ?>" class="home__banner desktop"/>
-                    <? endif; ?>
-                <? endif; ?>
-                <? endif; ?>
+                            <?php if (!empty($desktopSlide['src'])): ?>
+                                <div class="home__images-wrapper-viewport swiper-slide">
+                                    <img src="<?= $desktopSlide['src'] ?>" class="home__banner desktop">
+                                </div>
+
+                            <?php else: ?>
+                                <div class="home__images-wrapper-viewport swiper-slide">
+                                    <img src="<?= $desktopSlide['splitSrc'] ?>" class="home__banner desktop" alt="Banner part 1">
+                                    <img src="<?= $desktopSlide['splitSrc2'] ?>" class="home__banner desktop" alt="Banner part 2">
+                                </div>
+                            <?php endif; ?>
+
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
+<!--            <div class="home__images-wrapper-viewport">-->
+<!--                --><?//
+//                $mobileBanner = Base::getMainBanner(true);
+//                $desktopBanner = Base::getMainBanner();
+//                ?>
+<!---->
+<!--                --><?// if ($mobileBanner['isVideo']): ?>
+<!--                    <video autoplay muted loop playsinline class="home__banner mobile">-->
+<!--                        <source src="--><?php //= $mobileBanner['src'] ?><!--"/>-->
+<!--                    </video>-->
+<!--                --><?// else: ?>
+<!--                    <img src="--><?php //= $mobileBanner['src'] ?><!--" class="home__banner mobile"/>-->
+<!--                    --><?// if (!empty($desktopBanner['additionalSrc'])): ?>
+<!--                        <img src="--><?php //= $desktopBanner['additionalSrc'] ?><!--" class="home__banner mobile"/>-->
+<!--                    --><?// endif; ?>
+<!--                --><?// endif; ?>
+<!---->
+<!--                --><?// if ($desktopBanner['isVideo']): ?>
+<!--                    <video autoplay muted loop playsinline class="home__banner desktop">-->
+<!--                        <source src="--><?php //= $desktopBanner['src'] ?><!--"/>-->
+<!--                    </video>-->
+<!--                --><?// else: ?>
+<!--                    <img src="--><?php //= $desktopBanner['src'] ?><!--" class="home__banner desktop"/>-->
+<!--                    --><?// if (!empty($desktopBanner['additionalSrc'])): ?>
+<!--                        <img src="--><?php //= $desktopBanner['additionalSrc'] ?><!--" class="home__banner desktop"/>-->
+<!--                    --><?// endif; ?>
+<!--                --><?// endif; ?>
+<!--                --><?// endif; ?>
+<!--            </div>-->
         </div>
         <header class="header">
             <div class="container px-lg-1">
@@ -174,4 +210,23 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
         <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/novinki/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
     </div>
 <? endif; ?>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var mySwiper = new Swiper('.swiper-container', {
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        });
+    </script>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
