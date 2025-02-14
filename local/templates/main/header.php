@@ -58,12 +58,14 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                 <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
                             </video>
                         <?php else: ?>
-                            <div class="home__images-wrapper-viewport swiper-slide">
+                            <div class="swiper-slide">
                                 <?php if (!empty($desktopSlide['src'])): ?>
                                     <img src="<?= $desktopSlide['src'] ?>" class="home__banner desktop">
                                 <?php elseif (!empty($desktopSlide['splitSrc']) && !empty($desktopSlide['splitSrc2'])): ?>
-                                    <img src="<?= $desktopSlide['splitSrc'] ?>" class="home__banner desktop" alt="Banner part 1">
-                                    <img src="<?= $desktopSlide['splitSrc2'] ?>" class="home__banner desktop" alt="Banner part 2">
+                                    <div class="home__images-wrapper-viewport">
+                                        <img src="<?= $desktopSlide['splitSrc'] ?>" class="home__banner desktop" alt="Banner part 1">
+                                        <img src="<?= $desktopSlide['splitSrc2'] ?>" class="home__banner desktop" alt="Banner part 2">
+                                    </div>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
