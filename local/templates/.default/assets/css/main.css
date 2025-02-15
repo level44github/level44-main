@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'BasisGrotesquePro';
+  src: url('./../fonts/BasisGrotesquePro-Regular.woff2') format('woff2'),
+  url('./../fonts/BasisGrotesquePro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
 .modal-content {
   width: 448px;
   margin: 0 auto;
@@ -468,6 +476,7 @@
   position: relative;
   width: 100%;
   padding: 0;
+  font-family: 'BasisGrotesquePro', sans-serif;
 }
 
 .home__images-wrapper-viewport  {
@@ -498,26 +507,38 @@
   height: 2px !important;
   border-radius: 2px;
   background-color: #FFFFFF47;
-  bottom: 100px;
+  bottom: 50px;
   top: auto !important;
   left: 50% !important;
   transform: translateX(-50%);
 }
 
-.swiper-pagination-wrapper {
+.swiper-about-wrapper {
   position: absolute;
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.swiper-pagination-wrapper-block {
+.swiper-about-wrapper-block {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   color: white;
+}
+
+.swiper-about-wrapper-block h1 {
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.swiper-about-wrapper-block a {
+  padding: 3px 5px;
+  color: white;
+  text-decoration: underline;
+  text-decoration-color: white;
 }
 
 .swiper-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
