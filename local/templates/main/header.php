@@ -69,8 +69,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                 <?php endif; ?>
                                 <div class="swiper-about-wrapper">
                                     <div class="swiper-about-wrapper-block">
-                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
                                         <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
                                         <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
                                     </div>
                                 </div>
@@ -95,8 +95,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                 <?php endif; ?>
                                 <div class="swiper-about-wrapper">
                                     <div class="swiper-about-wrapper-block">
-                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
                                         <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
                                         <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
                                     </div>
                                 </div>
