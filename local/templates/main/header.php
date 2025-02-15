@@ -33,6 +33,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     $APPLICATION->ShowHead();
     Base::loadAssets();
     ?>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body class="layout">
 <!-- Google Tag Manager (noscript) -->
@@ -43,27 +44,72 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <div class="layout__wrapper">
     <? if ($isMain): ?>
     <div class="home">
-        <?
-        $mobileBanner = Base::getMainBanner(true);
-        $desktopBanner = Base::getMainBanner();
-        ?>
+        <div class="home__images-wrapper">
+            <?php
+            // Получаем данные баннера
+            $mobileBannerSlides = Base::getMainBanner(true);
+            $desktopBannerSlides = Base::getMainBanner();
+            ?>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <?php foreach ($desktopBannerSlides as $index => $desktopSlide): ?>
+                        <?php if ($desktopSlide['isVideo']): ?>
+                            <video autoplay muted loop playsinline class="home__banner desktop swiper-slide">
+                                <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
+                            </video>
+                        <?php else: ?>
+                            <div class="swiper-slide home__banner desktop">
+                                <?php if (!empty($desktopSlide['src'])): ?>
+                                    <img src="<?= $desktopSlide['src'] ?>">
+                                <?php elseif (!empty($desktopSlide['splitSrc']) && !empty($desktopSlide['splitSrc2'])): ?>
+                                    <div class="home__banner desktop home__images-wrapper-viewport">
+                                        <img src="<?= $desktopSlide['splitSrc'] ?>" alt="Banner part 1">
+                                        <img src="<?= $desktopSlide['splitSrc2'] ?>" alt="Banner part 2">
+                                    </div>
+                                <?php endif; ?>
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
 
-        <? if ($mobileBanner['isVideo']): ?>
-            <video autoplay muted loop playsinline class="home__banner mobile">
-                <source src="<?= $mobileBanner['src'] ?>"/>
-            </video>
-        <? else: ?>
-            <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
-        <? endif; ?>
 
-        <? if ($desktopBanner['isVideo']): ?>
-            <video autoplay muted loop playsinline class="home__banner desktop">
-                <source src="<?= $desktopBanner['src'] ?>"/>
-            </video>
-        <? else: ?>
-            <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
-        <? endif; ?>
-        <? endif; ?>
+                    <?php foreach ($mobileBannerSlides as $index => $mobileSlide): ?>
+                        <?php if ($mobileSlide['isVideo']): ?>
+                            <video autoplay muted loop playsinline class="home__banner mobile swiper-slide">
+                                <source src="<?= $mobileSlide['src'] ?>" type="video/mp4">
+                            </video>
+                        <?php else: ?>
+                            <div class="swiper-slide home__banner mobile">
+                                <?php if (!empty($mobileSlide['src'])): ?>
+                                    <img src="<?= $mobileSlide['src'] ?>">
+                                <?php elseif (!empty($mobileSlide['splitSrc']) && !empty($mobileSlide['splitSrc2'])): ?>
+                                    <div class="home__banner mobile home__images-wrapper-viewport">
+                                        <img src="<?= $mobileSlide['splitSrc'] ?>" alt="Banner part 1">
+                                    </div>
+                                <?php endif; ?>
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <? endif; ?>
+        </div>
         <header class="header">
             <div class="container px-lg-1">
                 <nav class="navbar layout__navbar navbar-light">
@@ -161,7 +207,27 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             </div>
         </div>
         <? if ($isMain): ?>
-        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/novinki/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
+<!--        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="--><?php //= SITE_DIR ?><!--catalog/novinki/">--><?php //=Loc::getMessage("HEADER_GO_CATALOG")?><!--</a>-->
     </div>
 <? endif; ?>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var mySwiper = new Swiper('.swiper-container', {
+                loop: false,
+                autoplay: {
+                    delay: 5000
+                },
+                speed: 800,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'progressbar',
+                },
+            });
+        });
+    </script>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">

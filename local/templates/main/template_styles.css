@@ -26,4 +26,17 @@
     color: #989690;
 }
 
+/*.catalog__container {*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(8, 1fr);*/
+/*}*/
+
+/*.catalog__container div {*/
+/*    grid-column: span 6;*/
+/*}*/
+
+/*.catalog__nav {*/
+/*    grid-column: span 2;*/
+/*}*/
+
 
