@@ -44,6 +44,9 @@ class Base
         $asset->addString('<meta  name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">');
         $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/app.css") . '">');
         $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/main.css") . '">');
+        if (SITE_TEMPLATE_ID === "checkout") {
+            $asset->addCss('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css');
+        }
     }
 
     public static function cssAutoVersion($file)
@@ -65,6 +68,7 @@ class Base
         $asset->addJs(self::getAssetsPath() . "/js/app.js");
         if (SITE_TEMPLATE_ID === "checkout") {
             $asset->addJs(self::getAssetsPath() . "/js/form.js");
+            $asset->addJs('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js', true);
         }
     }
 
