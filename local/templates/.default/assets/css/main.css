@@ -534,6 +534,10 @@
   font-weight: 400;
 }
 
+.swiper-about-wrapper-block p, .swiper-about-wrapper-block h1 {
+  margin: 0;
+}
+
 .swiper-about-wrapper-block a {
   margin-top: 6px;
   padding: 3px 5px;
