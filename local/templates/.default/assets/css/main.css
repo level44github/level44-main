@@ -558,19 +558,21 @@
   /*margin-top: 50px;*/
 }
 
-@media (min-width: 991px) {
-  .home {
-    /*margin-top: 80px;*/
-  }
-}
-
-@media (min-width: 768px) {
-  .home {
-    margin-bottom: 24px;
-  }
-
+@media (min-width: 1280px) {
   .swiper-about-wrapper-block h1 {
-    font-size: 28px;
+    font-size: 32px;
+  }
+
+  .swiper-about-wrapper-block p, .swiper-about-wrapper-block a {
+    font-size: 18px;
+  }
+
+  .swiper-about-wrapper {
+    bottom: 150px
+  }
+
+  .swiper-pagination.swiper-pagination-progressbar {
+    bottom: 100px;
   }
 }
 
@@ -594,11 +596,17 @@
 }
 
 @media (min-width: 768px) {
+  .home {
+    margin-bottom: 24px;
+  }
+
+  .swiper-about-wrapper-block h1 {
+    font-size: 28px;
+  }
 
   .home__banner.desktop {
     display: flex;
     margin: 0;
-    /*margin: -7% 0;*/
   }
 
   .home__banner.mobile {
