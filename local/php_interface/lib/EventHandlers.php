@@ -436,8 +436,8 @@ LAYOUT;
         array_filter($postList, fn($key) => str_contains($key, 'ORDER_PROP_'), ARRAY_FILTER_USE_KEY)
         );
 
-        if (!$existsOrderProps || !check_bitrix_sessid()) {
-            return false;
+        if (!$existsOrderProps) {
+            return true;
         }
 
         $res = \Bitrix\Sale\Internals\OrderPropsTable::getList([
