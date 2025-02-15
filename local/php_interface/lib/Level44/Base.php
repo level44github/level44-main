@@ -95,17 +95,6 @@ class Base
     public static function customRegistry()
     {
         try {
-            \Bitrix\Main\Loader::registerAutoLoadClasses(
-                null,
-                [
-                    "\Level44\Sale\Basket" => "/local/php_interface/lib/Sale/Basket.php",
-                    "\Level44\Sale\PropertyValue" => "/local/php_interface/lib/Sale/PropertyValue.php",
-                    "\Level44\Sale\Helpers\ReservedProductCleaner" => "/local/php_interface/lib/Sale/Helpers/ReservedProductCleaner.php",
-                    "\Level44\EventHandlers" => "/local/php_interface/lib/EventHandlers.php",
-                    "\Level44\PreOrder" => "/local/php_interface/lib/PreOrder.php",
-                ]
-            );
-
             if (Loader::includeModule('sale')) {
                 Registry::getInstance(Registry::REGISTRY_TYPE_ORDER)
                     ->set(Registry::ENTITY_BASKET, Basket::class);
