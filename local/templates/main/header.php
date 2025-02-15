@@ -67,10 +67,11 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                         <img src="<?= $desktopSlide['splitSrc2'] ?>" alt="Banner part 2">
                                     </div>
                                 <?php endif; ?>
-                                <div class="swiper-pagination-wrapper">
-                                    <div class="swiper-pagination-wrapper-block">
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
                                         <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
                                         <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
                                     </div>
                                 </div>
                             </div>
