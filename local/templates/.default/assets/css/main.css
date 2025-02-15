@@ -507,7 +507,7 @@
   height: 2px !important;
   border-radius: 2px;
   background-color: #FFFFFF47;
-  bottom: 70px;
+  bottom: 85px;
   top: auto !important;
   left: 50% !important;
   transform: translateX(-50%);
@@ -515,7 +515,7 @@
 
 .swiper-about-wrapper {
   position: absolute;
-  bottom: 100px;
+  bottom: 130px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -533,6 +533,7 @@
 .swiper-about-wrapper-block h1 {
   font-size: 22px;
   font-weight: 400;
+  text-transform: uppercase;
 }
 
 .swiper-about-wrapper-block p, .swiper-about-wrapper-block h1 {
