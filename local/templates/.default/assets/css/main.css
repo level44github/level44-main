@@ -530,7 +530,7 @@
 }
 
 .swiper-about-wrapper-block h1 {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 400;
 }
 
@@ -565,6 +565,10 @@
 @media (min-width: 768px) {
   .home {
     margin-bottom: 24px;
+  }
+
+  .swiper-about-wrapper-block h1 {
+    font-size: 28px;
   }
 }
 
