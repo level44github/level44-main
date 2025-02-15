@@ -299,9 +299,9 @@ class Base
         while ($file = $rsFiles->GetNext()) {
             $file["PATH"] = \CFile::GetPath($file["ID"]);
             $origFiles[$file["ID"]] = [
-                "ID" => (int)$file["ID"],
-                "SRC" => $file["PATH"],
-                "WIDTH" => (int)$file["WIDTH"],
+                "ID"     => (int)$file["ID"],
+                "SRC"    => $file["PATH"],
+                "WIDTH"  => (int)$file["WIDTH"],
                 "HEIGHT" => (int)$file["HEIGHT"],
             ];
         }
@@ -326,18 +326,18 @@ class Base
         if (empty(self::$sngCountriesId)) {
             Loader::includeModule("sale");
             $countries = LocationTable::getList([
-                'filter' => array(
+                'filter' => [
                     '=NAME.LANGUAGE_ID' => "ru",
-                    '=NAME.NAME' => [
+                    '=NAME.NAME'        => [
                         "Россия",
                         "Беларусь",
                         "Казахстан",
                     ],
-                    '=TYPE.CODE' => 'COUNTRY'
-                ),
-                'select' => array(
+                    '=TYPE.CODE'        => 'COUNTRY'
+                ],
+                'select' => [
                     'ID'
-                )
+                ]
             ])->fetchAll();
 
             foreach ($countries as $country) {
@@ -413,7 +413,7 @@ class Base
         } else {
             $savedPriceDollar = $arFields["PROPERTY_VALUES"][$properties["PRICE_DOLLAR"]];
 
-            if (!is_array($savedPriceDollar)){
+            if (!is_array($savedPriceDollar)) {
                 $savedPriceDollar = [];
             }
 
@@ -421,12 +421,12 @@ class Base
             $productPriceDollar = $savedPriceDollar;
 
             $offerIds = \CCatalogSku::getOffersList($arFields["ID"]);
-            
+
             $offerIds = $offerIds[$arFields["ID"]];
-            if (!is_array($offerIds)){
+            if (!is_array($offerIds)) {
                 $offerIds = [];
             }
-            
+
             $offerIds = array_keys($offerIds);
             $offerData = [];
             if (!empty($offerIds)) {
