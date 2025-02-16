@@ -23,7 +23,7 @@ class Base
     const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
-    const BANNERS_IBLOCK_ID = 5;
+    const BANNER_SLIDES_IBLOCK_ID = 5;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
     const IMAGES_ORIGINAL_HL_TBL_NAME = "images_original";
     const SIZE_HL_TBL_NAME = "size_reference";
@@ -492,26 +492,5 @@ class Base
             unset($property);
             return true;
         }
-    }
-
-    /**
-     * @return bool
-     * @throws ArgumentException
-     * @throws ObjectPropertyException
-     * @throws SystemException
-     */
-    public static function checkCountOfBanners(): bool
-    {
-        global $APPLICATION;
-        Loader::includeModule("iblock");
-
-        $count = ElementTable::getCount(['IBLOCK_ID' => Base::BANNERS_IBLOCK_ID]);
-
-        if ($count >= 5) {
-            $APPLICATION->throwException("Максимальное количество баннеров: 5");
-            return false;
-        }
-
-        return true;
     }
 }

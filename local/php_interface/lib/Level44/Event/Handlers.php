@@ -31,6 +31,8 @@ class Handlers extends HandlerBase
         static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
 
         static::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
+
+        BannerHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
@@ -378,8 +380,6 @@ LAYOUT;
             Exchange1C::handleAddProduct($arFields);
 
             return Base::checkOldPrices($arFields);
-        } elseif ($arFields["IBLOCK_ID"] === Base::BANNERS_IBLOCK_ID) {
-            return Base::checkCountOfBanners();
         }
 
         return true;
