@@ -1,55 +1,36 @@
 <?php
 
-namespace Level44;
+namespace Level44\Event;
 
 
 use Bitrix\Main\EventManager;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Delivery\CalculationResult;
+use Level44\Base;
+use Level44\Exchange1C;
+use Level44\PreOrder;
 use UniPlug\Settings;
 
-class EventHandlers
+class Handlers extends HandlerBase
 {
-    /** @var $instance  EventManager */
-    private static $instance = null;
-
     public static function register()
     {
-        if (!self::$instance) {
-            self::$instance = EventManager::getInstance();
-        }
+        static::addEventHandler("main", "OnBeforeEventSend");
+        static::addEventHandler("main", "OnFileDelete");
+        static::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
+        static::addEventHandler("main", "OnEpilog", PreOrder::class);
+        static::addEventHandler("main", "OnBeforeUserAdd");
 
-        self::addEventHandler("main", "OnBeforeEventSend");
-        self::addEventHandler("main", "OnFileDelete");
-        self::addEventHandler("main", "OnAdminIBlockElementEdit", PreOrder::class);
-        self::addEventHandler("main", "OnEpilog", PreOrder::class);
-        self::addEventHandler("main", "OnBeforeUserAdd");
+        static::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
+        static::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
+        static::addEventHandler("iblock", "OnBeforeIBlockUpdate");
+        static::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
 
-        self::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
-        self::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
-        self::addEventHandler("iblock", "OnBeforeIBlockUpdate");
-        self::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
+        static::addEventHandler("sale", "OnOrderNewSendEmail");
+        static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
 
-        self::addEventHandler("sale", "OnOrderNewSendEmail");
-        self::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
-
-        self::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
-    }
-
-    private static function addEventHandler($moduleId, $eventType, $class = self::class)
-    {
-        if (!$moduleId || !$eventType || !self::$instance) {
-            return false;
-        }
-        return self::$instance->addEventHandler(
-            $moduleId,
-            $eventType,
-            [
-                $class,
-                $eventType . "Handler"
-            ]
-        );
+        static::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)

@@ -1,18 +1,9 @@
 <?php
 
 use Bitrix\Sale\PropertyValueCollectionBase;
+use Level44\Event;
 
-\CModule::AddAutoloadClasses(
-    "",
-    [
-        "\Level44\Base"      => "/local/php_interface/lib/Base.php",
-        "\Level44\HLWrapper" => "/local/php_interface/lib/HLWrapper.php",
-        "\Level44\Content"   => "/local/php_interface/lib/Content.php",
-        "\Level44\Product"   => "/local/php_interface/lib/Product.php",
-        "\Level44\Exchange1C" => "/local/php_interface/lib/Exchange1C.php",
-        "\Level44\Menu"      => "/local/php_interface/lib/Menu.php",
-    ]
-);
+require_once __DIR__ . '/autoload.php';
 
 if (\Level44\Base::isEnLang()) {
     global $MESS;
@@ -22,7 +13,7 @@ if (\Level44\Base::isEnLang()) {
 }
 
 \Level44\Base::customRegistry();
-\Level44\EventHandlers::register();
+Event\Handlers::register();
 
 // События которые срабатывают при создании или изменении элемента инфоблока
 AddEventHandler("iblock", "OnAfterIBlockElementAdd", "ResizeUploadedPhoto");
@@ -56,10 +47,10 @@ function ResizeUploadedPhoto($arFields)
                     // Если размер больше установленного максимума
                     if ($imsize[0] > $imageMaxWidth or $imsize[1] > $imageMaxHeight) {
                         // Уменьшаем размер картинки
-                        $file = \CFile::ResizeImageGet($elem["DETAIL_PICTURE"], array(
+                        $file = \CFile::ResizeImageGet($elem["DETAIL_PICTURE"], [
                             'width'  => $imageMaxWidth,
                             'height' => $imageMaxHeight
-                        ), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
+                        ], BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
                         $elemOb = new \CIBlockElement();
 
                         $hlResult = $HLImagesOriginal->add(
@@ -107,7 +98,7 @@ function ResizeUploadedPhoto($arFields)
             }
         }
         //Получаем свойство значение сво-ва $PROPERTY_CODE
-        $res = \CIBlockElement::GetProperty($arFields["IBLOCK_ID"], $arFields["ID"], "sort", "asc", array("CODE" => $PROPERTY_CODE));
+        $res = \CIBlockElement::GetProperty($arFields["IBLOCK_ID"], $arFields["ID"], "sort", "asc", ["CODE" => $PROPERTY_CODE]);
         while ($ob = $res->GetNext()) {
             $file_path = \CFile::GetPath($ob['VALUE']); // Получаем путь к файлу
             if ($file_path) {
@@ -115,10 +106,10 @@ function ResizeUploadedPhoto($arFields)
                 // Если размер больше установленного максимума
                 if ($imsize[0] > $imageMaxWidth or $imsize[1] > $imageMaxHeight) {
                     // Уменьшаем размер картинки
-                    $file = \CFile::ResizeImageGet($ob['VALUE'], array(
+                    $file = \CFile::ResizeImageGet($ob['VALUE'], [
                         'width'  => $imageMaxWidth,
                         'height' => $imageMaxHeight
-                    ), BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
+                    ], BX_RESIZE_IMAGE_PROPORTIONAL_ALT, true);
                     // добавляем в массив VALUES новую уменьшенную картинку
                     $resizedFileArray = \CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . $file["src"]);
                     $VALUES[] = $resizedFileArray;
@@ -147,7 +138,7 @@ function ResizeUploadedPhoto($arFields)
         if (count($VALUES) > 0) {
             $PROPERTY_VALUE = $VALUES;  // значение свойства
             // Установим новое значение для данного свойства данного элемента
-            \CIBlockElement::SetPropertyValuesEx($arFields["ID"], $arFields["IBLOCK_ID"], array($PROPERTY_CODE => $PROPERTY_VALUE));
+            \CIBlockElement::SetPropertyValuesEx($arFields["ID"], $arFields["IBLOCK_ID"], [$PROPERTY_CODE => $PROPERTY_VALUE]);
 
             if (!empty($resizedFiles)) {
                 $rsMorePhoto = \CIBlockElement::GetProperty($arFields["IBLOCK_ID"], $arFields["ID"], "sort", "asc", ["CODE" => "MORE_PHOTO"]);
