@@ -95,17 +95,6 @@ class Base
     public static function customRegistry()
     {
         try {
-            \Bitrix\Main\Loader::registerAutoLoadClasses(
-                null,
-                [
-                    "\Level44\Sale\Basket" => "/local/php_interface/lib/Sale/Basket.php",
-                    "\Level44\Sale\PropertyValue" => "/local/php_interface/lib/Sale/PropertyValue.php",
-                    "\Level44\Sale\Helpers\ReservedProductCleaner" => "/local/php_interface/lib/Sale/Helpers/ReservedProductCleaner.php",
-                    "\Level44\EventHandlers" => "/local/php_interface/lib/EventHandlers.php",
-                    "\Level44\PreOrder" => "/local/php_interface/lib/PreOrder.php",
-                ]
-            );
-
             if (Loader::includeModule('sale')) {
                 Registry::getInstance(Registry::REGISTRY_TYPE_ORDER)
                     ->set(Registry::ENTITY_BASKET, Basket::class);
@@ -310,9 +299,9 @@ class Base
         while ($file = $rsFiles->GetNext()) {
             $file["PATH"] = \CFile::GetPath($file["ID"]);
             $origFiles[$file["ID"]] = [
-                "ID" => (int)$file["ID"],
-                "SRC" => $file["PATH"],
-                "WIDTH" => (int)$file["WIDTH"],
+                "ID"     => (int)$file["ID"],
+                "SRC"    => $file["PATH"],
+                "WIDTH"  => (int)$file["WIDTH"],
                 "HEIGHT" => (int)$file["HEIGHT"],
             ];
         }
@@ -337,18 +326,18 @@ class Base
         if (empty(self::$sngCountriesId)) {
             Loader::includeModule("sale");
             $countries = LocationTable::getList([
-                'filter' => array(
+                'filter' => [
                     '=NAME.LANGUAGE_ID' => "ru",
-                    '=NAME.NAME' => [
+                    '=NAME.NAME'        => [
                         "Россия",
                         "Беларусь",
                         "Казахстан",
                     ],
-                    '=TYPE.CODE' => 'COUNTRY'
-                ),
-                'select' => array(
+                    '=TYPE.CODE'        => 'COUNTRY'
+                ],
+                'select' => [
                     'ID'
-                )
+                ]
             ])->fetchAll();
 
             foreach ($countries as $country) {
@@ -424,7 +413,7 @@ class Base
         } else {
             $savedPriceDollar = $arFields["PROPERTY_VALUES"][$properties["PRICE_DOLLAR"]];
 
-            if (!is_array($savedPriceDollar)){
+            if (!is_array($savedPriceDollar)) {
                 $savedPriceDollar = [];
             }
 
@@ -432,12 +421,12 @@ class Base
             $productPriceDollar = $savedPriceDollar;
 
             $offerIds = \CCatalogSku::getOffersList($arFields["ID"]);
-            
+
             $offerIds = $offerIds[$arFields["ID"]];
-            if (!is_array($offerIds)){
+            if (!is_array($offerIds)) {
                 $offerIds = [];
             }
-            
+
             $offerIds = array_keys($offerIds);
             $offerData = [];
             if (!empty($offerIds)) {
