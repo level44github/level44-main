@@ -237,36 +237,7 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
                 },
                 pagination: {
                     el: '.swiper-pagination',
-                    type: 'custom',
-                    renderCustom: function (swiper, current, total) {
-                        let progressPercent = 0;
-                        if (total > 1) {
-                            progressPercent = ((current - 1) / (total - 1)) * 100;
-                        }
-
-                        let bulletsHTML = '';
-                        for (let i = 1; i <= total; i++) {
-                            bulletsHTML += `
-          <span
-            class="my-bullet ${i === current ? 'active' : ''}"
-            style="left: ${(i - 1) / (total - 1) * 100}%;">
-          </span>`;
-                        }
-
-                        return `
-        <div class="my-custom-progressbar">
-          <div class="my-custom-progressbar-line">
-            <div
-              class="my-custom-progressbar-fill"
-              style="width: ${progressPercent}%;"
-            ></div>
-          </div>
-          <div class="my-custom-bullets">
-            ${bulletsHTML}
-          </div>
-        </div>
-      `;
-                    }
+                    type: 'progressbar',
                 },
             });
         });
