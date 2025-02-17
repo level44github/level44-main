@@ -580,7 +580,7 @@
   overflow: hidden;
 }
 
-.home__banner img {
+.home__banner img, .home__banner video {
   max-width: 100%;
   height: auto;
   margin: 0 auto;
