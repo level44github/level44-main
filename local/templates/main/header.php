@@ -118,8 +118,8 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
                         </div>
                     <?php endforeach; ?>
                 </div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
+                <div style="width: 10px; height: 22px" class="swiper-button-prev"></div>
+                <div style="width: 10px; height: 22px" class="swiper-button-next"></div>
                 <div class="swiper-pagination swiper-pagination-progressbar swiper-pagination-horizontal"></div>
             </div>
             <? endif; ?>
