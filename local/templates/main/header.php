@@ -57,9 +57,25 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                         <? $file = $desktopSlide['files']['desktop']; ?>
 
                         <? if (!empty($file['video'])): ?>
-                            <video autoplay muted loop playsinline class="home__banner desktop swiper-slide">
-                                <source src="<?= $file['video']['src'] ?>" type="video/mp4">
-                            </video>
+                            <div class="home__banner desktop swiper-slide">
+                                <video autoplay muted loop playsinline>
+                                    <source src="<?= $file['video']['src'] ?>" type="video/mp4">
+                                </video>
+
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
+                                        <? if (!empty($desktopSlide['text'])): ?>
+                                            <p><?= $desktopSlide['text'] ?></p>
+                                        <? endif; ?>
+                                        <? if (!empty($desktopSlide['title'])): ?>
+                                            <h1><?= $desktopSlide['title'] ?></h1>
+                                        <? endif; ?>
+                                        <? if (!empty($desktopSlide['link']['text']) && !empty($desktopSlide['link']['address'])): ?>
+                                            <a href='<?= $desktopSlide['link']['address'] ?>'><?= $desktopSlide['link']['text'] ?></a>
+                                        <? endif; ?>
+                                    </div>
+                                </div>
+                            </div>
                         <?php else: ?>
                             <div class="swiper-slide home__banner desktop">
                                 <?php if (!empty($file['single'])): ?>
@@ -93,9 +109,25 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                         <? $file = $mobileSlide['files']['mobile']; ?>
 
                         <?php if (!empty($file['video'])): ?>
-                            <video autoplay muted loop playsinline class="home__banner mobile swiper-slide">
-                                <source src="<?= $file['video']['src'] ?>" type="video/mp4">
-                            </video>
+                            <div class="home__banner mobile swiper-slide">
+                                <video autoplay muted loop playsinline>
+                                    <source src="<?= $file['video']['src'] ?>" type="video/mp4">
+                                </video>
+
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
+                                        <? if (!empty($mobileSlide['text'])): ?>
+                                            <p><?= $mobileSlide['text'] ?></p>
+                                        <? endif; ?>
+                                        <? if (!empty($mobileSlide['title'])): ?>
+                                            <h1><?= $mobileSlide['title'] ?></h1>
+                                        <? endif; ?>
+                                        <? if (!empty($mobileSlide['link']['text']) && !empty($mobileSlide['link']['address'])): ?>
+                                            <a href='<?= $mobileSlide['link']['address'] ?>'><?= $mobileSlide['link']['text'] ?></a>
+                                        <? endif; ?>
+                                    </div>
+                                </div>
+                            </div>
                         <?php else: ?>
                             <div class="swiper-slide home__banner mobile">
                                 <?php if (!empty($file['single'])): ?>
