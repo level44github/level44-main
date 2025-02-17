@@ -74,12 +74,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                             <?php endif; ?>
                             <div class="swiper-about-wrapper">
                                 <div class="swiper-about-wrapper-block">
-                                    <? if (!empty($desktopSlide['text'])): ?>
-                                        <p><?= $desktopSlide['text'] ?></p>
-                                    <? endif; ?>
-                                    <? if (!empty($desktopSlide['title'])): ?>
-                                        <h1><?= $desktopSlide['title'] ?></h1>
-                                    <? endif; ?>
+                                    <p><?= $desktopSlide['text'] ?></p>
+                                    <h1><?= $desktopSlide['title'] ?></h1>
                                     <? if (!empty($desktopSlide['link']['text']) && !empty($desktopSlide['link']['address'])): ?>
                                         <a href='<?= $desktopSlide['link']['address'] ?>'><?= $desktopSlide['link']['text'] ?></a>
                                     <? endif; ?>
@@ -102,12 +98,8 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                             <?php endif; ?>
                             <div class="swiper-about-wrapper">
                                 <div class="swiper-about-wrapper-block">
-                                    <? if (!empty($mobileSlide['text'])): ?>
-                                        <p><?= $mobileSlide['text'] ?></p>
-                                    <? endif; ?>
-                                    <? if (!empty($mobileSlide['title'])): ?>
-                                        <h1><?= $mobileSlide['title'] ?></h1>
-                                    <? endif; ?>
+                                    <p><?= $mobileSlide['text'] ?></p>
+                                    <h1><?= $mobileSlide['title'] ?></h1>
                                     <? if (!empty($mobileSlide['link']['text']) && !empty($mobileSlide['link']['address'])): ?>
                                         <a href='<?= $mobileSlide['link']['address'] ?>'><?= $mobileSlide['link']['text'] ?></a>
                                     <? endif; ?>
