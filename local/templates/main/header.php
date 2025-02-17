@@ -238,10 +238,16 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
                 pagination: {
                     el: '.swiper-pagination',
                     type: 'custom',
-                    renderCustom: (swiper, current, total) => {
+                    renderCustom: (_, current, total) => {
                         const fillScale = 100 / total;
                         const start = fillScale * (current - 1);
-                        return <span class="swiper-pagination-progressbar-fill" style={`transform: translate3d(${start}%, 0px, 0px) scaleX(${fillScale}) scaleY(1); transition-duration: 800ms;`}></span>
+
+                        const span = document.createElement('span');
+                        span.classList.add('swiper-pagination-progressbar-fill');
+                        span.style.transform = `translate3d(${start}%, 0px, 0px) scaleX(${fillScale}) scaleY(1)`;
+                        span.style.transitionDuration = '800ms';
+
+                        return span.outerHTML;
                     }
                 },
             });
