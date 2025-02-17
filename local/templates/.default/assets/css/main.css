@@ -500,6 +500,7 @@
 
 .swiper-button-next, .swiper-button-prev {
   color: white !important;
+  margin: 0;
 }
 
 .swiper-button-next[aria-disabled="true"], .swiper-button-prev[aria-disabled="true"] {
@@ -611,6 +612,10 @@
 
   .home__banner.mobile {
     display: none;
+  }
+
+  .swiper-button-next, .swiper-button-prev {
+    margin: 0 30px;
   }
 }
 
