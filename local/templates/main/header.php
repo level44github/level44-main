@@ -239,8 +239,8 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
                     el: '.swiper-pagination',
                     type: 'custom',
                     renderCustom: (_, current, total) => {
-                        const fillScale = 100 / total;
-                        const start = fillScale * (current - 1);
+                        const fillScale = 1 / total;
+                        const start = fillScale * 100 * (current - 1);
 
                         const span = document.createElement('span');
                         span.classList.add('swiper-pagination-progressbar-fill');
