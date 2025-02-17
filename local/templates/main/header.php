@@ -120,7 +120,7 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
                 </div>
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination swiper-pagination-progressbar swiper-pagination-horizontal"></div>
             </div>
             <? endif; ?>
         </div>
@@ -237,7 +237,12 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
                 },
                 pagination: {
                     el: '.swiper-pagination',
-                    type: 'progressbar',
+                    type: 'custom',
+                    renderCustom: (swiper, current, total) => {
+                        const fillScale = 100 / total;
+                        const start = fillScale * (current - 1);
+                        return <span class="swiper-pagination-progressbar-fill" style={`transform: translate3d(${start}%, 0px, 0px) scaleX(${fillScale}) scaleY(1); transition-duration: 800ms;`}></span>
+                    }
                 },
             });
         });
