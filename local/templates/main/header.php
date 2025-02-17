@@ -54,9 +54,18 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 <div class="swiper-wrapper">
                     <?php foreach ($desktopBannerSlides as $index => $desktopSlide): ?>
                         <?php if ($desktopSlide['isVideo']): ?>
-                            <video autoplay muted loop playsinline class="home__banner desktop swiper-slide">
-                                <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
-                            </video>
+                            <div class="home__banner mobile swiper-slide">
+                                <video autoplay muted loop playsinline class="">
+                                    <source src="<?= $desktopSlide['src'] ?>" type="video/mp4">
+                                </video>
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
+                                    </div>
+                                </div>
+                            </div>
                         <?php else: ?>
                             <div class="swiper-slide home__banner desktop">
                                 <?php if (!empty($desktopSlide['src'])): ?>
@@ -81,9 +90,18 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 
                     <?php foreach ($mobileBannerSlides as $index => $mobileSlide): ?>
                         <?php if ($mobileSlide['isVideo']): ?>
-                            <video autoplay muted loop playsinline class="home__banner mobile swiper-slide">
-                                <source src="<?= $mobileSlide['src'] ?>" type="video/mp4">
-                            </video>
+                            <div class="home__banner mobile swiper-slide">
+                                <video autoplay muted loop playsinline class="">
+                                    <source src="<?= $mobileSlide['src'] ?>" type="video/mp4">
+                                </video>
+                                <div class="swiper-about-wrapper">
+                                    <div class="swiper-about-wrapper-block">
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TEXT")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_TITLE")?>
+                                        <?=Loc::getMessage("HEADER_BANNER_{$index}_LINK")?>
+                                    </div>
+                                </div>
+                            </div>
                         <?php else: ?>
                             <div class="swiper-slide home__banner mobile">
                                 <?php if (!empty($mobileSlide['src'])): ?>
