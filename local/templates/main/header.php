@@ -12,19 +12,27 @@ use Level44\Content;
 
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
 Base::$typePage = $isMain ? "home" : "";
-$searchQuery = (string) \Bitrix\Main\Context::getCurrent()
-	->getRequest()
-	->getQuery("q");
+$searchQuery = (string)\Bitrix\Main\Context::getCurrent()
+    ->getRequest()
+    ->getQuery("q");
 ?>
 <!DOCTYPE html>
 <html lang="ru-RU">
 <head>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-59KMXKQ');</script>
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-59KMXKQ');</script>
     <!-- End Google Tag Manager -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,12 +43,14 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
     $APPLICATION->ShowHead();
     Base::loadAssets();
     ?>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 </head>
 <body class="layout">
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-59KMXKQ"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-59KMXKQ"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
 <!-- End Google Tag Manager (noscript) -->
 <? $APPLICATION->ShowPanel(); ?>
 <div class="layout__wrapper">
@@ -122,42 +132,42 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     </button>
                     <a class="navbar-brand" href="<?= SITE_DIR ?>">LEVEL44</a>
                     <ul class="nav menu ml-auto">
-	                    <? $APPLICATION->IncludeComponent(
-		                    "bitrix:main.site.selector",
-		                    "main",
-		                    [
-			                    "SITE_LIST"  => ["*all*"],
-			                    "CACHE_TYPE" => "A",
-			                    "CACHE_TIME" => "3600",
-		                    ]
-	                    ); ?>
-	                    <li class="nav-item m-search js-m-search">
-		                    <div class="m-search__container">
-			                    <form action="<?= SITE_DIR ?>search" class="js-search__line">
-				                    <div class="input-group m-search__group">
-					                    <input class="form-control m-search__control js-m-search__control"
-					                           type="text"
-					                           placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
-					                           name="q"
-					                           value="<?= $searchQuery ?>"
-					                           autocomplete="off"
-					                    >
-					                    <div class="input-group-append">
-						                    <button class="btn btn-outline-secondary m-search__btn" type="submit">
-							                    <svg class="icon icon-search menu__icon">
-								                    <use xlink:href="#search"></use>
-							                    </svg>
-						                    </button>
-					                    </div>
-				                    </div>
-			                    </form>
-		                    </div>
-	                    </li>
+                        <? $APPLICATION->IncludeComponent(
+                            "bitrix:main.site.selector",
+                            "main",
+                            [
+                                "SITE_LIST" => ["*all*"],
+                                "CACHE_TYPE" => "A",
+                                "CACHE_TIME" => "3600",
+                            ]
+                        ); ?>
+                        <li class="nav-item m-search js-m-search">
+                            <div class="m-search__container">
+                                <form action="<?= SITE_DIR ?>search" class="js-search__line">
+                                    <div class="input-group m-search__group">
+                                        <input class="form-control m-search__control js-m-search__control"
+                                               type="text"
+                                               placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
+                                               name="q"
+                                               value="<?= $searchQuery ?>"
+                                               autocomplete="off"
+                                        >
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary m-search__btn" type="submit">
+                                                <svg class="icon icon-search menu__icon">
+                                                    <use xlink:href="#search"></use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
                         <li class="nav-item dropdown m-basket">
                             <? $APPLICATION->IncludeComponent(
                                 "bitrix:sale.basket.basket.line",
                                 "top_basket",
-                                Array(
+                                array(
                                     "HIDE_ON_BASKET_PAGES" => "Y",
                                     "PATH_TO_BASKET" => SITE_DIR . "cart/",
                                     "PATH_TO_ORDER" => SITE_DIR . "checkout/",
@@ -195,7 +205,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:menu",
                     "sections_left",
-                    Array(
+                    array(
                         "ROOT_MENU_TYPE" => "left",
                         "MAX_LEVEL" => "1",
                         "CHILD_MENU_TYPE" => "top",
@@ -227,9 +237,37 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 },
                 pagination: {
                     el: '.swiper-pagination',
-                    type: 'bullets',
+                    type: 'custom',
+                    renderCustom: function (swiper, current, total) {
+                        let progressPercent = 0;
+                        if (total > 1) {
+                            progressPercent = ((current - 1) / (total - 1)) * 100;
+                        }
+
+                        let bulletsHTML = '';
+                        for (let i = 1; i <= total; i++) {
+                            bulletsHTML += `
+          <span
+            class="my-bullet ${i === current ? 'active' : ''}"
+            style="left: ${(i - 1) / (total - 1) * 100}%;">
+          </span>`;
+                        }
+
+                        return `
+        <div class="my-custom-progressbar">
+          <div class="my-custom-progressbar-line">
+            <div
+              class="my-custom-progressbar-fill"
+              style="width: ${progressPercent}%;"
+            ></div>
+          </div>
+          <div class="my-custom-bullets">
+            ${bulletsHTML}
+          </div>
+        </div>
+      `;
+                    }
                 },
-                watchSlidesProgress: true
             });
         });
     </script>
