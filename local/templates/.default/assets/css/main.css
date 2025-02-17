@@ -1,3 +1,7 @@
+:root {
+  --swiper-navigation-size: 24px;
+}
+
 @font-face {
   font-family: 'BasisGrotesquePro';
   src: url('./../fonts/BasisGrotesquePro-Regular.woff2') format('woff2'),
@@ -507,7 +511,7 @@
   height: 2px !important;
   border-radius: 2px;
   background-color: #FFFFFF47;
-  bottom: 85px;
+  bottom: 90px;
   top: auto !important;
   left: 50% !important;
   transform: translateX(-50%);
@@ -565,10 +569,6 @@
 
   .swiper-about-wrapper-block p, .swiper-about-wrapper-block a {
     font-size: 18px;
-  }
-
-  .swiper-about-wrapper {
-    bottom: 150px
   }
 
   .swiper-pagination.swiper-pagination-progressbar {
