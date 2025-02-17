@@ -238,34 +238,19 @@ class Content
             $split1fileDesktopSrc = \CFile::GetPath($item["PROPERTY_SPLIT_FILE_1_VALUE"]);
             $split2fileDesktopSrc = \CFile::GetPath($item["PROPERTY_SPLIT_FILE_2_VALUE"]);
 
-            $mobileFile = [];
+            $mobileFile = [
+                'src'     => $fileMobileSrc,
+                'isVideo' => (bool)preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileMobileSrc),
 
-            if (!empty($fileMobileSrc)) {
-                if (preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileMobileSrc)) {
-                    $mobileFile['video'] = [
-                        'src' => $fileMobileSrc,
-                    ];
-                } else {
-                    $mobileFile['single'] = [
-                        'src' => $fileMobileSrc,
-                    ];
-                }
-
-            }
+            ];
 
             $desktopFile = [];
 
             if (!empty($fileDesktopSrc)) {
-                if (preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileDesktopSrc)) {
-                    $desktopFile['video'] = [
-                        'src' => $fileDesktopSrc,
-                    ];
-                } else {
-                    $desktopFile['single'] = [
-                        'src' => $fileDesktopSrc,
-                    ];
-                }
-
+                $desktopFile['single'] = [
+                    'src'     => $fileDesktopSrc,
+                    'isVideo' => (bool)preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileDesktopSrc),
+                ];
             }
 
             if (!empty($split1fileDesktopSrc) && !empty($split2fileDesktopSrc)) {
