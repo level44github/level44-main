@@ -221,6 +221,8 @@ class Content
                 "PROPERTY_TEXT_EN",
                 "PROPERTY_LINK_TEXT_EN",
                 "PROPERTY_LINK_ADDRESS",
+                "PROPERTY_SPLIT_FILE_1",
+                "PROPERTY_SPLIT_FILE_2",
             ]
         );
 
@@ -233,18 +235,49 @@ class Content
         foreach ($items as $item) {
             $fileMobileSrc = \CFile::GetPath($item["PROPERTY_FILE_MOBILE_VALUE"]);
             $fileDesktopSrc = \CFile::GetPath($item["PROPERTY_FILE_DESKTOP_VALUE"]);
+            $split1fileDesktopSrc = \CFile::GetPath($item["PROPERTY_SPLIT_FILE_1_VALUE"]);
+            $split2fileDesktopSrc = \CFile::GetPath($item["PROPERTY_SPLIT_FILE_2_VALUE"]);
 
-            $mobileFile = [
-                'src'     => $fileMobileSrc,
-                'isVideo' => (bool)preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileMobileSrc),
+            $mobileFile = [];
 
-            ];
+            if (!empty($fileMobileSrc)) {
+                if (preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileMobileSrc)) {
+                    $mobileFile['video'] = [
+                        'src' => $fileMobileSrc,
+                    ];
+                } else {
+                    $mobileFile['single'] = [
+                        'src' => $fileMobileSrc,
+                    ];
+                }
 
-            $desktopFile = [
-                'src'     => $fileDesktopSrc,
-                'isVideo' => (bool)preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileDesktopSrc),
+            }
 
-            ];
+            $desktopFile = [];
+
+            if (!empty($fileDesktopSrc)) {
+                if (preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $fileDesktopSrc)) {
+                    $desktopFile['video'] = [
+                        'src' => $fileDesktopSrc,
+                    ];
+                } else {
+                    $desktopFile['single'] = [
+                        'src' => $fileDesktopSrc,
+                    ];
+                }
+
+            }
+
+            if (!empty($split1fileDesktopSrc) && !empty($split2fileDesktopSrc)) {
+                $desktopFile['split'] = [
+                    [
+                        'src' => $split1fileDesktopSrc,
+                    ],
+                    [
+                        'src' => $split2fileDesktopSrc,
+                    ],
+                ];
+            }
 
             $link = '';
 

@@ -111,41 +111,6 @@ class Base
         }
     }
 
-    public static function getMainBanner($mobile = false): array
-    {
-        $imageUrl = "";
-        if (Loader::includeModule("germen.settings")) {
-            if ($mobile) {
-                $imageSplitId = (int)Settings::get("MAIN_BANNER_MOBILE");
-                $imageSplitId2 = (int)Settings::get("MAIN_BANNER_MOBILE_1");
-                $imageId = (int)Settings::get("MAIN_BANNER_MOBILE_SINGLE");
-            } else {
-                $imageSplitId = (int)Settings::get("MAIN_BANNER");
-                $imageSplitId2 = (int)Settings::get("MAIN_BANNER_1");
-                $imageId = (int)Settings::get("MAIN_BANNER_SINGLE");
-            }
-            $imageUrl = (string)\CFile::GetFileArray($imageId)["SRC"];
-            $imageSplitUrl = (string)\CFile::GetFileArray($imageSplitId)["SRC"];
-            $imageSplitUrl2 = (string)\CFile::GetFileArray($imageSplitId2)["SRC"];
-        }
-
-        if (empty($imageUrl)) {
-            $imageUrl = $mobile ? self::getAssetsPath() . "/img/home-mobile.jpg" : self::getAssetsPath() . "/img/home.jpg";
-        }
-
-        return [
-            [
-                'splitSrc' => $imageSplitUrl,
-                'splitSrc2' => $imageSplitUrl2,
-                'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageSplitUrl),
-            ],
-            [
-                'src'     => $imageUrl,
-                'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageUrl),
-            ]
-        ];
-    }
-
     public static function setColorOffers(&$linkedElements, &$currentElement = [])
     {
         $linkedElements = is_array($linkedElements) ? $linkedElements : [];
