@@ -227,8 +227,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                 },
                 pagination: {
                     el: '.swiper-pagination',
-                    type: 'progressbar',
-                    clickable: true,
+                    type: 'bullets',
                 },
                 watchSlidesProgress: true
             });
