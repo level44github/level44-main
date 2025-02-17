@@ -10,7 +10,24 @@ BX.saleOrderAjax = {
     properties: {},
     BXFormPosting: false,
     isLocationProEnabled: false,
-    propAddressFieldName: "",
+    address: {
+        fieldName: '',
+        errors: {},
+        selected: null,
+        //Use for clear address if location type is change
+        lastAddressOutRussia: null,
+        previousValue: '',
+        getInput: () => {
+            var currentDeliveryId = $(BX('ORDER_FORM')).find(".js-delivery-input:checked").val();
+            const addressField = $(BX('ORDER_FORM')).find(`.js-address-field[data-delivery="${currentDeliveryId}"]`);
+
+            if ($(addressField).length <= 0) {
+                return null;
+            }
+
+            return $(addressField);
+        }
+    },
 
     // called once, on component load
     init: function (options) {
@@ -497,18 +514,16 @@ BX.saleOrderAjax = {
                 .not(".js-form__location")
                 .blur();
 
-            if ($(".is-invalid").length) {
+            if ($(".is-invalid:not(.is-invalid-soft)").length) {
                 this.BXFormPosting = false;
                 $(".checkout-loading-overlay").hide();
                 return;
             }
         }
 
-        var currentDeliveryId = $(orderForm).find(".js-delivery-input:checked").val();
-        var addressField = $(orderForm)
-            .find("[name='" + this.propAddressFieldName + "-fake'][data-delivery='" + currentDeliveryId + "']");
-        if (addressField.length) {
-            $("[name='" + this.propAddressFieldName + "']").val(addressField.val())
+        var addressField = BX.saleOrderAjax.address.getInput();
+        if ($(addressField).length) {
+            $("[name='" + this.address.fieldName + "']").val(addressField.val())
         }
 
         window.spinnerCity(true);
@@ -603,6 +618,7 @@ BX.saleOrderAjax = {
         $(".checkout-loading-overlay").hide();
         $(document).trigger("set_validators");
         BX.onCustomEvent(orderForm, 'onAjaxSuccess');
+        this.setAddressSuggestions();
     },
     setErrorForCountryField: function () {
         if (!$.isReady) {
@@ -618,6 +634,81 @@ BX.saleOrderAjax = {
             }
         }
     },
+    addressValidate: function () {
+        const addressField = this.address.getInput();
+        const selectedAddress = this.address.selected?.data;
+        const isSng = $('.region-select--russia').hasClass('region-selected');
+
+        if (!isSng) {
+            return;
+        }
+
+        if (!selectedAddress) {
+            if (!addressField.val()?.trim()) {
+                $(addressField).siblings('.invalid-feedback').text(this.address.errors.EMPTY);
+                $(addressField).addClass('is-invalid');
+            } else {
+                const [previousValue, currentValue] = [
+                    this.address.previousValue,
+                    addressField.val()
+                ];
+
+                const isPreviousValue = previousValue && currentValue?.trim() === previousValue?.trim();
+                if (!isPreviousValue) {
+                    $(addressField).siblings('.invalid-feedback').text(this.address.errors.NOT_SELECTED);
+                    $(addressField).addClass('is-invalid');
+                }
+            }
+
+        } else {
+            if (!selectedAddress?.house) {
+                $(addressField).siblings('.invalid-feedback').text(this.address.errors.MISSED_HOUSE);
+                $(addressField).addClass('is-invalid');
+            } else if (!selectedAddress?.flat) {
+                $(addressField).siblings('.invalid-feedback').text(this.address.errors.MISSED_FLAT);
+                $(addressField).addClass('is-invalid').addClass('is-invalid-soft');
+            } else {
+                $(addressField).remove('is-invalid');
+                $(addressField).remove('is-invalid-soft');
+            }
+        }
+    },
+    setAddressSuggestions: function () {
+        const addressField = this.address.getInput();
+        const that = this;
+        const isSng = $('.region-select--russia').hasClass('region-selected');
+
+        if ($(addressField).length && isSng) {
+            $(addressField).on('blur', () => BX.saleOrderAjax.addressValidate())
+
+            $(addressField).suggestions({
+                token: "5c06d83d97114db05fb5b63f3d767b6a0b857edf",
+                type: "ADDRESS",
+                language: BX.Sale.OrderAjaxComponent.siteId === 'en' ? 'en' : 'ru',
+                constraints: {
+                    locations: [
+                        {country_iso_code: "BY"},
+                        {country_iso_code: "KZ"},
+                        {country_iso_code: "RU"},
+                    ]
+                },
+                onSelect: function (suggestion) {
+                    that.address.selected = suggestion;
+                },
+                onSelectNothing: function () {
+                    that.address.selected = null;
+                    that.addressValidate();
+                },
+                onSearchStart: function (params) {
+                    let city = document.querySelector('.js-form__location').value;
+
+                    if (city && params.query) {
+                        params.query = `${city} ${params.query}`;
+                    }
+                }
+            });
+        }
+    }
 };
 
 $(function () {
@@ -737,4 +828,10 @@ $(function () {
             }
         });
     })
+
+
+    BX.saleOrderAjax.setAddressSuggestions();
+    $(document).on('set_validators', function () {
+        $(BX.saleOrderAjax.address.getInput()).on('blur', () => BX.saleOrderAjax.addressValidate())
+    });
 });
