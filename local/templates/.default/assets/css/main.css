@@ -586,6 +586,13 @@
   /*margin-top: 50px;*/
 }
 
+@media (min-width: 1500px) {
+  .swiper-button-prev, .swiper-button-next {
+    height: 80px;
+    width: 30px;
+  }
+}
+
 @media (min-width: 1280px) {
   .swiper-about-wrapper-block h1 {
     font-size: 32px;
