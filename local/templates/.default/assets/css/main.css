@@ -573,7 +573,7 @@
   color: white;
   text-decoration: underline;
   text-decoration-color: white;
-  text-underline-offset: 3px;
+  text-underline-offset: 4px;
 }
 
 .swiper-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
