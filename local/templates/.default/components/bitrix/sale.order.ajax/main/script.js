@@ -18,8 +18,7 @@ BX.saleOrderAjax = {
         lastAddressOutRussia: null,
         previousValue: '',
         getInput: () => {
-            var currentDeliveryId = $(BX('ORDER_FORM')).find(".js-delivery-input:checked").val();
-            const addressField = $(BX('ORDER_FORM')).find(`.js-address-field[data-delivery="${currentDeliveryId}"]`);
+            const addressField = $(BX('ORDER_FORM')).find(`.js-address-field`);
 
             if ($(addressField).length <= 0) {
                 return null;
@@ -48,7 +47,7 @@ BX.saleOrderAjax = {
         this.controls.scope = BX('order_form_div');
 
         // user presses "add location" when he cannot find location in popup mode
-        BX.bindDelegate(this.controls.scope, 'click', { className: '-bx-popup-set-mode-add-loc' }, function () {
+        BX.bindDelegate(this.controls.scope, 'click', {className: '-bx-popup-set-mode-add-loc'}, function () {
 
             var input = BX.create('input', {
                 attrs: {
@@ -460,7 +459,7 @@ BX.saleOrderAjax = {
             processData: true,
             emulateOnload: true,
             start: true,
-            data: { 'ACT': 'GET_LOC_BY_ZIP', 'ZIP': value },
+            data: {'ACT': 'GET_LOC_BY_ZIP', 'ZIP': value},
             //cache: true,
             onsuccess: function (result) {
 
@@ -488,14 +487,16 @@ BX.saleOrderAjax = {
         });
     },
     submitForm: function (val) {
-        setTimeout(function(){BX.Sale.OrderAjaxComponent.sendRequest()}, 20);
+        setTimeout(function () {
+            BX.Sale.OrderAjaxComponent.sendRequest()
+        }, 20);
 
         if (this.BXFormPosting === true)
             return true;
 
         this.BXFormPosting = true;
 
-        if (!IPOLSDEK_pvz?.pvzId){
+        if (!IPOLSDEK_pvz?.pvzId) {
             $(".js-form__control[data-prop='ADDRESS_SDEK']").val("")
         }
 
@@ -593,12 +594,10 @@ BX.saleOrderAjax = {
             if (json.error) {
                 this.BXFormPosting = false;
                 return;
-            }
-            else if (json.redirect) {
+            } else if (json.redirect) {
                 window.top.location.href = json.redirect;
             }
-        }
-        catch (e) {
+        } catch (e) {
             // json parse failed, so it is a simple chunk of html
 
             this.BXFormPosting = false;
@@ -607,10 +606,13 @@ BX.saleOrderAjax = {
                 $(".js-form_block").html($obContent.find(".js-form_block").html());
                 $(".js-basket_block").html($obContent.find(".js-basket_block").html());
                 BX.saleOrderAjax.setErrorForCountryField();
-            }
 
-            if (this.isLocationProEnabled) {
-                BX.saleOrderAjax.initDeferredControl();
+                if (this.isLocationProEnabled) {
+                    BX.saleOrderAjax.initDeferredControl();
+                }
+
+                this.setAddressSuggestions();
+                this.addressValidate(true);
             }
         }
 
@@ -618,7 +620,6 @@ BX.saleOrderAjax = {
         $(".checkout-loading-overlay").hide();
         $(document).trigger("set_validators");
         BX.onCustomEvent(orderForm, 'onAjaxSuccess');
-        this.setAddressSuggestions();
     },
     setErrorForCountryField: function () {
         if (!$.isReady) {
@@ -634,27 +635,34 @@ BX.saleOrderAjax = {
             }
         }
     },
-    addressValidate: function () {
+    addressValidate: function (skipEmptyCheck = false) {
         const addressField = this.address.getInput();
         const selectedAddress = this.address.selected?.data;
         const isSng = $('.region-select--russia').hasClass('region-selected');
 
-        if (!isSng) {
+        if (!isSng || !addressField?.length) {
             return;
         }
 
-        if (!selectedAddress) {
-            if (!addressField.val()?.trim()) {
-                $(addressField).siblings('.invalid-feedback').text(this.address.errors.EMPTY);
-                $(addressField).addClass('is-invalid');
-            } else {
-                const [previousValue, currentValue] = [
-                    this.address.previousValue,
-                    addressField.val()
-                ];
+        const addressFieldValue = addressField.val()?.trim();
 
-                const isPreviousValue = previousValue && currentValue?.trim() === previousValue?.trim();
-                if (!isPreviousValue) {
+        if (!selectedAddress) {
+            if (!addressFieldValue) {
+                if (!skipEmptyCheck) {
+                    $(addressField).siblings('.invalid-feedback').text(this.address.errors.EMPTY);
+                    $(addressField).addClass('is-invalid');
+                }
+            } else {
+                const previousValue = this.address.previousValue?.trim();
+
+                if (previousValue && addressFieldValue === previousValue) {
+                    addressField.suggestions().getSuggestions(addressFieldValue)
+                        .done(function (suggestions) {
+                            if (!suggestions?.length) {
+                                addressField.val('');
+                            }
+                        });
+                } else {
                     $(addressField).siblings('.invalid-feedback').text(this.address.errors.NOT_SELECTED);
                     $(addressField).addClass('is-invalid');
                 }
@@ -668,8 +676,8 @@ BX.saleOrderAjax = {
                 $(addressField).siblings('.invalid-feedback').text(this.address.errors.MISSED_FLAT);
                 $(addressField).addClass('is-invalid').addClass('is-invalid-soft');
             } else {
-                $(addressField).remove('is-invalid');
-                $(addressField).remove('is-invalid-soft');
+                $(addressField).removeClass('is-invalid');
+                $(addressField).removeClass('is-invalid-soft');
             }
         }
     },
@@ -694,6 +702,7 @@ BX.saleOrderAjax = {
                 },
                 onSelect: function (suggestion) {
                     that.address.selected = suggestion;
+                    that.addressValidate();
                 },
                 onSelectNothing: function () {
                     that.address.selected = null;
@@ -831,7 +840,4 @@ $(function () {
 
 
     BX.saleOrderAjax.setAddressSuggestions();
-    $(document).on('set_validators', function () {
-        $(BX.saleOrderAjax.address.getInput()).on('blur', () => BX.saleOrderAjax.addressValidate())
-    });
 });
