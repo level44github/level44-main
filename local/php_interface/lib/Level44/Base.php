@@ -17,7 +17,6 @@ use UniPlug\Settings;
 
 class Base
 {
-    const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
     const CATALOG_VAT_ID = 3;

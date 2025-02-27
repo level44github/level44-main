@@ -15,8 +15,8 @@ use Bitrix\Sale\PersonType;
 use Bitrix\Sale\PaySystem\Manager as PaySystemManager;
 use Bitrix\Sale\PropertyValueCollection;
 
+//Important, depends on the language file local/php_interface/lang/*/lib/Level44/PreOrder.php
 Loc::loadMessages(__FILE__);
-
 
 class PreOrder
 {
