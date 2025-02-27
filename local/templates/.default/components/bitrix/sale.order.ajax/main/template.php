@@ -21,7 +21,6 @@ if($USER->IsAuthorized() || $arParams["ALLOW_AUTO_REGISTER"] == "Y")
 $this->addExternalJs($templateFolder . '/order_ajax.js');
 
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Main\Web\Json;
 
 CJSCore::Init(array('fx', 'popup', 'window', 'ajax'));
 ?>
@@ -122,8 +121,6 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         BX.saleOrderAjax.BXFormPosting = false;
         <?if(CSaleLocation::isLocationProEnabled()):?>
         BX.saleOrderAjax.isLocationProEnabled = true;
-        BX.saleOrderAjax.address.fieldName = '<?=(string)$arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"]?>';
-        BX.saleOrderAjax.address.lastAddressOutRussia = <?=Json::encode($arResult["OUT_RUSSIA"])?>;
         <?endif;?>
 
         function submitForm(val) {

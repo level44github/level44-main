@@ -16,7 +16,6 @@ use UniPlug\Settings;
 
 class Base
 {
-    const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";

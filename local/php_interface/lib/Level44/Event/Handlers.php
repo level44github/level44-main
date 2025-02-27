@@ -28,9 +28,10 @@ class Handlers extends HandlerBase
         static::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
 
         static::addEventHandler("sale", "OnOrderNewSendEmail");
-        static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
 
         static::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
+
+        CheckoutHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
@@ -359,17 +360,6 @@ LAYOUT;
         if (PreOrder::isPreOrder($orderId)) {
             $eventName = "CUSTOM_NEW_PREORDER";
         }
-    }
-
-    public static function onSaleDeliveryServiceCalculateHandler($event)
-    {
-        /** @var CalculationResult $result */
-        $result = $event->getParameter("RESULT");
-        $result->setDeliveryPrice(floor($result->getDeliveryPrice()));
-        $parameters = [
-            "RESULT" => $result,
-        ];
-        return new EventResult(EventResult::SUCCESS, $parameters);
     }
 
     public static function OnBeforeIBlockElementAddHandler(&$arFields)
