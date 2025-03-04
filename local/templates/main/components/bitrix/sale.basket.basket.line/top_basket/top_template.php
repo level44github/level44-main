@@ -8,15 +8,12 @@
  * @global string $cartId
  */
 ?>
-<a class="menu__link" href="<?= $arParams["PATH_TO_BASKET"] ?>" role="button"
-   aria-haspopup="true"
-   aria-expanded="false">
-    <div class="menu__basket">
-        <svg class="icon icon-basket menu__icon">
-            <use xlink:href="#basket"></use>
-        </svg>
-        <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
-            <div class="menu__basket-count menu__basket-count-new"><?= $arResult['NUM_PRODUCTS'] ?></div>
-        <? endif; ?>
-    </div>
+<a class="btn btn-link menu__link m-basket-link" href="<?= $arParams["PATH_TO_BASKET"] ?>" role="button"
+   data-toggle="dropdown">
+    <svg class="icon icon-basket menu__icon">
+        <use xlink:href="#basket"></use>
+    </svg>
+    <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
+        <div class="menu__basket-count"><?= $arResult['NUM_PRODUCTS'] ?></div>
+    <? endif; ?>
 </a>
