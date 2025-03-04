@@ -3,10 +3,14 @@
 namespace Level44;
 
 use Bitrix\Catalog\PriceTable;
+use Bitrix\Iblock\ElementTable;
 use Bitrix\Iblock\PropertyTable;
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Context;
+use Bitrix\Main\ObjectPropertyException;
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
+use Bitrix\Main\SystemException;
 use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Registry;
 use Level44\Sale\Basket;
@@ -19,6 +23,7 @@ class Base
     const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
+    const BANNER_SLIDES_IBLOCK_ID = 5;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
     const IMAGES_ORIGINAL_HL_TBL_NAME = "images_original";
     const SIZE_HL_TBL_NAME = "size_reference";
@@ -104,28 +109,6 @@ class Base
             }
         } catch (\Exception $e) {
         }
-    }
-
-    public static function getMainBanner($mobile = false): array
-    {
-        $imageUrl = "";
-        if (Loader::includeModule("germen.settings")) {
-            if ($mobile) {
-                $imageId = (int)Settings::get("MAIN_BANNER_MOBILE");
-            } else {
-                $imageId = (int)Settings::get("MAIN_BANNER");
-            }
-            $imageUrl = (string)\CFile::GetFileArray($imageId)["SRC"];
-        }
-
-        if (empty($imageUrl)) {
-            $imageUrl = $mobile ? self::getAssetsPath() . "/img/home-mobile.jpg" : self::getAssetsPath() . "/img/home.jpg";
-        }
-
-        return [
-            'src'     => $imageUrl,
-            'isVideo' => preg_match('/\.(mpg|avi|wmv|mpeg|mpe|flv|mp4)$/i', $imageUrl),
-        ];
     }
 
     public static function setColorOffers(&$linkedElements, &$currentElement = [])
