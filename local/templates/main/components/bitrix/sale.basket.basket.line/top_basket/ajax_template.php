@@ -12,9 +12,7 @@ use Bitrix\Main\Localization\Loc;
 
 ?>
 <? if ((int)$arResult['NUM_PRODUCTS'] > 0): ?>
-    <div id="<?= $cartId ?>products"
-         class="dropdown-menu dropdown-menu-right m-basket__dropdown js-m-basket__dropdown"
-    >
+    <div id="<?= $cartId ?>products" class="m-basket__dropdown js-m-basket__dropdown">
         <div class="m-basket__title"><?= Loc::getMessage("BASKET") ?></div>
         <div class="m-basket__items">
             <? foreach ($arResult["CATEGORIES"] as $category => $items): ?>
