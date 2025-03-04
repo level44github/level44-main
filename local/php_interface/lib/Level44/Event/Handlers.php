@@ -33,6 +33,8 @@ class Handlers extends HandlerBase
         Exchange1cHandlers::register();
 
         CheckoutHandlers::register();
+
+        BannerHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
