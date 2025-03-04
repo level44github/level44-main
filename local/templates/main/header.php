@@ -6,33 +6,23 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 global $APPLICATION;
 
 use Bitrix\Main\Localization\Loc;
-use Bitrix\Main\Page\Asset;
 use Level44\Base;
-use Level44\Content;
 
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
 Base::$typePage = $isMain ? "home" : "";
-$searchQuery = (string)\Bitrix\Main\Context::getCurrent()
-    ->getRequest()
-    ->getQuery("q");
+$searchQuery = (string) \Bitrix\Main\Context::getCurrent()
+	->getRequest()
+	->getQuery("q");
 ?>
 <!DOCTYPE html>
 <html lang="ru-RU">
 <head>
     <!-- Google Tag Manager -->
-    <script>(function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-59KMXKQ');</script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-59KMXKQ');</script>
     <!-- End Google Tag Manager -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -43,215 +33,131 @@ $searchQuery = (string)\Bitrix\Main\Context::getCurrent()
     $APPLICATION->ShowHead();
     Base::loadAssets();
     ?>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
 </head>
 <body class="layout">
 <!-- Google Tag Manager (noscript) -->
-<noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-59KMXKQ"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-59KMXKQ"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <? $APPLICATION->ShowPanel(); ?>
 <div class="layout__wrapper">
+    <header class="header transparent">
+        <nav class="header__container">
+            <div class="header__column">
+                <button class="btn btn-link menu__link nav-trigger__btn" type="button" aria-label="Toggle navigation">
+                    <svg class="icon icon-burger menu__icon">
+                        <use xlink:href="#burger"></use>
+                    </svg>
+                </button>
+            </div><a class="header__logo" href="<?= SITE_DIR ?>">LEVEL44</a>
+            <div class="header__column right">
+                <ul class="menu">
+	                    <? $APPLICATION->IncludeComponent(
+		                    "bitrix:main.site.selector",
+		                    "main",
+		                    [
+			                    "SITE_LIST"  => ["*all*"],
+			                    "CACHE_TYPE" => "A",
+			                    "CACHE_TIME" => "3600",
+		                    ]
+	                    ); ?>
+                    <li class="m-search js-m-search">
+		                    <div class="m-search__container">
+                            <form>
+				                    <div class="input-group m-search__group">
+					                    <input class="form-control m-search__control js-m-search__control"
+					                           type="text"
+					                           placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
+                                           autocomplete="off"
+					                           name="q"
+					                           value="<?= $searchQuery ?>"
+					                    >
+					                    <div class="input-group-append">
+                                        <button class="btn btn-link menu__link m-search__btn" type="button">
+							                    <svg class="icon icon-search menu__icon">
+								                    <use xlink:href="#search"></use>
+							                    </svg>
+						                    </button>
+					                    </div>
+				                    </div>
+			                    </form>
+		                    </div>
+	                    </li>
+                    <li class="m-basket">
+                        <? $APPLICATION->IncludeComponent(
+                            "bitrix:sale.basket.basket.line",
+                            "top_basket",
+                                Array(
+                                "HIDE_ON_BASKET_PAGES" => "Y",
+                                "PATH_TO_BASKET" => SITE_DIR . "cart/",
+                                "PATH_TO_ORDER" => SITE_DIR . "checkout/",
+                                "PATH_TO_PERSONAL" => SITE_DIR . "personal/",
+                                "PATH_TO_PROFILE" => SITE_DIR . "personal/",
+                                "PATH_TO_REGISTER" => SITE_DIR . "login/",
+                                "POSITION_FIXED" => "Y",
+                                "POSITION_HORIZONTAL" => "right",
+                                "POSITION_VERTICAL" => "top",
+                                "SHOW_AUTHOR" => "Y",
+                                "SHOW_DELAY" => "N",
+                                "SHOW_EMPTY_VALUES" => "Y",
+                                "SHOW_IMAGE" => "Y",
+                                "SHOW_NOTAVAIL" => "N",
+                                "SHOW_NUM_PRODUCTS" => "Y",
+                                "SHOW_PERSONAL_LINK" => "N",
+                                "SHOW_PRICE" => "Y",
+                                "SHOW_PRODUCTS" => "Y",
+                                "SHOW_SUMMARY" => "Y",
+                                "SHOW_TOTAL_PRICE" => "Y"
+                            )
+                        ); ?>
+                    </li>
+                </ul>
+            </div>
+                </nav>
+        </nav>
+        </header>
+    </header>
+    <? $APPLICATION->IncludeComponent(
+        "bitrix:menu",
+        "sections_left",
+                    Array(
+            "ROOT_MENU_TYPE" => "left",
+            "MAX_LEVEL" => "1",
+            "CHILD_MENU_TYPE" => "top",
+            "USE_EXT" => "Y",
+            "DELAY" => "N",
+            "ALLOW_MULTI_SELECT" => "Y",
+            "MENU_CACHE_TYPE" => "N",
+            "MENU_CACHE_TIME" => "3600",
+            "MENU_CACHE_USE_GROUPS" => "Y",
+            "MENU_CACHE_GET_VARS" => ""
+        )
+    ); ?>
     <? if ($isMain): ?>
     <div class="home">
-        <div class="home__images-wrapper">
-            <?php
-            // Получаем данные баннера
-            $slides = Content::getBannerSlides();
-            ?>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <?php foreach ($slides as $desktopSlide): ?>
-                        <? $file = $desktopSlide['files']['desktop']; ?>
+        <?
+        $mobileBanner = Base::getMainBanner(true);
+        $desktopBanner = Base::getMainBanner();
+        ?>
 
-                        <div class="swiper-slide home__banner desktop">
-                            <?php if (!empty($file['single'])): ?>
-                                <? if ($file['single']['isVideo']): ?>
-                                    <video autoplay muted loop playsinline>
-                                        <source src="<?= $file['single']['src'] ?>" type="video/mp4">
-                                    </video>
-                                <? else: ?>
-                                    <img src="<?= $file['single']['src'] ?>">
-                                <? endif; ?>
-                            <?php elseif (!empty($file['split'])): ?>
-                                <? foreach ($file['split'] as $key => $part): ?>
-                                    <div class="home__banner desktop home__images-wrapper-viewport">
-                                        <img src="<?= $part['src'] ?>" alt="Banner part <?= $key + 1 ?>">
-                                    </div>
-                                <? endforeach; ?>
-                            <?php endif; ?>
-                            <div class="swiper-about-wrapper">
-                                <div class="swiper-about-wrapper-block">
-                                    <p><?= $desktopSlide['text'] ?></p>
-                                    <h1><?= $desktopSlide['title'] ?></h1>
-                                    <? if (!empty($desktopSlide['link']['text']) && !empty($desktopSlide['link']['address'])): ?>
-                                        <a href='<?= $desktopSlide['link']['address'] ?>'><?= $desktopSlide['link']['text'] ?></a>
-                                    <? endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+        <? if ($mobileBanner['isVideo']): ?>
+            <video autoplay muted loop playsinline class="home__banner mobile">
+                <source src="<?= $mobileBanner['src'] ?>"/>
+            </video>
+        <? else: ?>
+            <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
+        <? endif; ?>
 
-
-                    <?php foreach ($slides as $mobileSlide): ?>
-                        <? $file = $mobileSlide['files']['mobile']; ?>
-
-                        <div class="swiper-slide home__banner mobile">
-                            <?php if ($file['isVideo']): ?>
-                                <video autoplay muted loop playsinline>
-                                    <source src="<?= $file['src'] ?>" type="video/mp4">
-                                </video>
-                            <?php else: ?>
-                                <img src="<?= $file['src'] ?>">
-                            <?php endif; ?>
-                            <div class="swiper-about-wrapper">
-                                <div class="swiper-about-wrapper-block">
-                                    <p><?= $mobileSlide['text'] ?></p>
-                                    <h1><?= $mobileSlide['title'] ?></h1>
-                                    <? if (!empty($mobileSlide['link']['text']) && !empty($mobileSlide['link']['address'])): ?>
-                                        <a href='<?= $mobileSlide['link']['address'] ?>'><?= $mobileSlide['link']['text'] ?></a>
-                                    <? endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <div style="width: 10px; height: 22px" class="swiper-button-prev"></div>
-                <div style="width: 10px; height: 22px" class="swiper-button-next"></div>
-                <div class="swiper-pagination swiper-pagination-progressbar swiper-pagination-horizontal"></div>
-            </div>
-            <? endif; ?>
-        </div>
-        <header class="header">
-            <div class="container px-lg-1">
-                <nav class="navbar layout__navbar navbar-light">
-                    <button class="nav-trigger__btn" type="button" aria-label="Toggle navigation">
-                        <span class="nav-trigger__icon"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?= SITE_DIR ?>">LEVEL44</a>
-                    <ul class="nav menu ml-auto">
-                        <? $APPLICATION->IncludeComponent(
-                            "bitrix:main.site.selector",
-                            "main",
-                            [
-                                "SITE_LIST" => ["*all*"],
-                                "CACHE_TYPE" => "A",
-                                "CACHE_TIME" => "3600",
-                            ]
-                        ); ?>
-                        <li class="nav-item m-search js-m-search">
-                            <div class="m-search__container">
-                                <form action="<?= SITE_DIR ?>search" class="js-search__line">
-                                    <div class="input-group m-search__group">
-                                        <input class="form-control m-search__control js-m-search__control"
-                                               type="text"
-                                               placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
-                                               name="q"
-                                               value="<?= $searchQuery ?>"
-                                               autocomplete="off"
-                                        >
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary m-search__btn" type="submit">
-                                                <svg class="icon icon-search menu__icon">
-                                                    <use xlink:href="#search"></use>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown m-basket">
-                            <? $APPLICATION->IncludeComponent(
-                                "bitrix:sale.basket.basket.line",
-                                "top_basket",
-                                array(
-                                    "HIDE_ON_BASKET_PAGES" => "Y",
-                                    "PATH_TO_BASKET" => SITE_DIR . "cart/",
-                                    "PATH_TO_ORDER" => SITE_DIR . "checkout/",
-                                    "PATH_TO_PERSONAL" => SITE_DIR . "personal/",
-                                    "PATH_TO_PROFILE" => SITE_DIR . "personal/",
-                                    "PATH_TO_REGISTER" => SITE_DIR . "login/",
-                                    "POSITION_FIXED" => "Y",
-                                    "POSITION_HORIZONTAL" => "right",
-                                    "POSITION_VERTICAL" => "top",
-                                    "SHOW_AUTHOR" => "Y",
-                                    "SHOW_DELAY" => "N",
-                                    "SHOW_EMPTY_VALUES" => "Y",
-                                    "SHOW_IMAGE" => "Y",
-                                    "SHOW_NOTAVAIL" => "N",
-                                    "SHOW_NUM_PRODUCTS" => "Y",
-                                    "SHOW_PERSONAL_LINK" => "N",
-                                    "SHOW_PRICE" => "Y",
-                                    "SHOW_PRODUCTS" => "Y",
-                                    "SHOW_SUMMARY" => "Y",
-                                    "SHOW_TOTAL_PRICE" => "Y"
-                                )
-                            ); ?>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-        <div class="nav-trigger__body">
-            <div class="nav-trigger__header">
-                <button class="nav-trigger__btn nav-trigger_body" type="button" aria-label="Toggle navigation">
-                    <span class="nav-trigger__icon"></span>
-                </button>
-            </div>
-            <div class="nav-trigger__scroll">
-                <? $APPLICATION->IncludeComponent(
-                    "bitrix:menu",
-                    "sections_left",
-                    array(
-                        "ROOT_MENU_TYPE" => "left",
-                        "MAX_LEVEL" => "1",
-                        "CHILD_MENU_TYPE" => "top",
-                        "USE_EXT" => "Y",
-                        "DELAY" => "N",
-                        "ALLOW_MULTI_SELECT" => "Y",
-                        "MENU_CACHE_TYPE" => "N",
-                        "MENU_CACHE_TIME" => "3600",
-                        "MENU_CACHE_USE_GROUPS" => "Y",
-                        "MENU_CACHE_GET_VARS" => ""
-                    )
-                ); ?>
-            </div>
-        </div>
+        <? if ($desktopBanner['isVideo']): ?>
+            <video autoplay muted loop playsinline class="home__banner desktop">
+                <source src="<?= $desktopBanner['src'] ?>"/>
+            </video>
+        <? else: ?>
+            <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
+        <? endif; ?>
+    <? endif; ?>
         <? if ($isMain): ?>
+        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/novinki/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
     </div>
-<? Asset::getInstance()->addJs('https://unpkg.com/swiper/swiper-bundle.min.js') ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var mySwiper = new Swiper('.swiper-container', {
-                loop: false,
-                autoplay: {
-                    delay: 5000
-                },
-                speed: 800,
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    type: 'custom',
-                    renderCustom: (_, current, total) => {
-                        const fillScale = 1 / total;
-                        const start = fillScale * 100 * (current - 1);
-
-                        const span = document.createElement('span');
-                        span.classList.add('swiper-pagination-progressbar-fill');
-                        span.style.transform = `translate3d(${start}%, 0px, 0px) scaleX(${fillScale}) scaleY(1)`;
-                        span.style.transitionDuration = '800ms';
-
-                        return span.outerHTML;
-                    }
-                },
-            });
-        });
-    </script>
 <? endif; ?>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
