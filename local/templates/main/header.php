@@ -41,6 +41,96 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <!-- End Google Tag Manager (noscript) -->
 <? $APPLICATION->ShowPanel(); ?>
 <div class="layout__wrapper">
+    <header class="header transparent">
+        <nav class="header__container">
+            <div class="header__column">
+                <button class="btn btn-link menu__link nav-trigger__btn" type="button" aria-label="Toggle navigation">
+                    <svg class="icon icon-burger menu__icon">
+                        <use xlink:href="#burger"></use>
+                    </svg>
+                </button>
+            </div><a class="header__logo" href="<?= SITE_DIR ?>">LEVEL44</a>
+            <div class="header__column right">
+                <ul class="menu">
+                    <? $APPLICATION->IncludeComponent(
+                        "bitrix:main.site.selector",
+                        "main",
+                        [
+                            "SITE_LIST"  => ["*all*"],
+                            "CACHE_TYPE" => "A",
+                            "CACHE_TIME" => "3600",
+                        ]
+                    ); ?>
+                    <li class="m-search js-m-search">
+                        <div class="m-search__container">
+                            <form>
+                                <div class="input-group m-search__group">
+                                    <input class="form-control m-search__control js-m-search__control"
+                                           type="text"
+                                           placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
+                                           autocomplete="off"
+                                           name="q"
+                                           value="<?= $searchQuery ?>"
+                                    >
+                                    <div class="input-group-append">
+                                        <button class="btn btn-link menu__link m-search__btn" type="button">
+                                            <svg class="icon icon-search menu__icon">
+                                                <use xlink:href="#search"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="m-basket">
+                        <? $APPLICATION->IncludeComponent(
+                            "bitrix:sale.basket.basket.line",
+                            "top_basket",
+                            Array(
+                                "HIDE_ON_BASKET_PAGES" => "Y",
+                                "PATH_TO_BASKET" => SITE_DIR . "cart/",
+                                "PATH_TO_ORDER" => SITE_DIR . "checkout/",
+                                "PATH_TO_PERSONAL" => SITE_DIR . "personal/",
+                                "PATH_TO_PROFILE" => SITE_DIR . "personal/",
+                                "PATH_TO_REGISTER" => SITE_DIR . "login/",
+                                "POSITION_FIXED" => "Y",
+                                "POSITION_HORIZONTAL" => "right",
+                                "POSITION_VERTICAL" => "top",
+                                "SHOW_AUTHOR" => "Y",
+                                "SHOW_DELAY" => "N",
+                                "SHOW_EMPTY_VALUES" => "Y",
+                                "SHOW_IMAGE" => "Y",
+                                "SHOW_NOTAVAIL" => "N",
+                                "SHOW_NUM_PRODUCTS" => "Y",
+                                "SHOW_PERSONAL_LINK" => "N",
+                                "SHOW_PRICE" => "Y",
+                                "SHOW_PRODUCTS" => "Y",
+                                "SHOW_SUMMARY" => "Y",
+                                "SHOW_TOTAL_PRICE" => "Y"
+                            )
+                        ); ?>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <? $APPLICATION->IncludeComponent(
+        "bitrix:menu",
+        "sections_left",
+        Array(
+            "ROOT_MENU_TYPE" => "left",
+            "MAX_LEVEL" => "1",
+            "CHILD_MENU_TYPE" => "top",
+            "USE_EXT" => "Y",
+            "DELAY" => "N",
+            "ALLOW_MULTI_SELECT" => "Y",
+            "MENU_CACHE_TYPE" => "N",
+            "MENU_CACHE_TIME" => "3600",
+            "MENU_CACHE_USE_GROUPS" => "Y",
+            "MENU_CACHE_GET_VARS" => ""
+        )
+    ); ?>
     <? if ($isMain): ?>
     <div class="home">
         <?
@@ -63,103 +153,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
         <? else: ?>
             <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
         <? endif; ?>
-        <? endif; ?>
-        <header class="header">
-            <div class="container px-lg-1">
-                <nav class="navbar layout__navbar navbar-light">
-                    <button class="nav-trigger__btn" type="button" aria-label="Toggle navigation">
-                        <span class="nav-trigger__icon"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?= SITE_DIR ?>">LEVEL44</a>
-                    <ul class="nav menu ml-auto">
-	                    <? $APPLICATION->IncludeComponent(
-		                    "bitrix:main.site.selector",
-		                    "main",
-		                    [
-			                    "SITE_LIST"  => ["*all*"],
-			                    "CACHE_TYPE" => "A",
-			                    "CACHE_TIME" => "3600",
-		                    ]
-	                    ); ?>
-	                    <li class="nav-item m-search js-m-search">
-		                    <div class="m-search__container">
-			                    <form action="<?= SITE_DIR ?>search" class="js-search__line">
-				                    <div class="input-group m-search__group">
-					                    <input class="form-control m-search__control js-m-search__control"
-					                           type="text"
-					                           placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
-					                           name="q"
-					                           value="<?= $searchQuery ?>"
-					                           autocomplete="off"
-					                    >
-					                    <div class="input-group-append">
-						                    <button class="btn btn-outline-secondary m-search__btn" type="submit">
-							                    <svg class="icon icon-search menu__icon">
-								                    <use xlink:href="#search"></use>
-							                    </svg>
-						                    </button>
-					                    </div>
-				                    </div>
-			                    </form>
-		                    </div>
-	                    </li>
-                        <li class="nav-item dropdown m-basket">
-                            <? $APPLICATION->IncludeComponent(
-                                "bitrix:sale.basket.basket.line",
-                                "top_basket",
-                                Array(
-                                    "HIDE_ON_BASKET_PAGES" => "Y",
-                                    "PATH_TO_BASKET" => SITE_DIR . "cart/",
-                                    "PATH_TO_ORDER" => SITE_DIR . "checkout/",
-                                    "PATH_TO_PERSONAL" => SITE_DIR . "personal/",
-                                    "PATH_TO_PROFILE" => SITE_DIR . "personal/",
-                                    "PATH_TO_REGISTER" => SITE_DIR . "login/",
-                                    "POSITION_FIXED" => "Y",
-                                    "POSITION_HORIZONTAL" => "right",
-                                    "POSITION_VERTICAL" => "top",
-                                    "SHOW_AUTHOR" => "Y",
-                                    "SHOW_DELAY" => "N",
-                                    "SHOW_EMPTY_VALUES" => "Y",
-                                    "SHOW_IMAGE" => "Y",
-                                    "SHOW_NOTAVAIL" => "N",
-                                    "SHOW_NUM_PRODUCTS" => "Y",
-                                    "SHOW_PERSONAL_LINK" => "N",
-                                    "SHOW_PRICE" => "Y",
-                                    "SHOW_PRODUCTS" => "Y",
-                                    "SHOW_SUMMARY" => "Y",
-                                    "SHOW_TOTAL_PRICE" => "Y"
-                                )
-                            ); ?>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-        <div class="nav-trigger__body">
-            <div class="nav-trigger__header">
-                <button class="nav-trigger__btn nav-trigger_body" type="button" aria-label="Toggle navigation">
-                    <span class="nav-trigger__icon"></span>
-                </button>
-            </div>
-            <div class="nav-trigger__scroll">
-                <? $APPLICATION->IncludeComponent(
-                    "bitrix:menu",
-                    "sections_left",
-                    Array(
-                        "ROOT_MENU_TYPE" => "left",
-                        "MAX_LEVEL" => "1",
-                        "CHILD_MENU_TYPE" => "top",
-                        "USE_EXT" => "Y",
-                        "DELAY" => "N",
-                        "ALLOW_MULTI_SELECT" => "Y",
-                        "MENU_CACHE_TYPE" => "N",
-                        "MENU_CACHE_TIME" => "3600",
-                        "MENU_CACHE_USE_GROUPS" => "Y",
-                        "MENU_CACHE_GET_VARS" => ""
-                    )
-                ); ?>
-            </div>
-        </div>
+    <? endif; ?>
         <? if ($isMain): ?>
         <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/novinki/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
     </div>
