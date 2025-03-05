@@ -63,14 +63,14 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     ); ?>
                     <li class="m-search js-m-search">
                         <div class="m-search__container">
-                            <form>
+                            <form action="<?= SITE_DIR ?>search" class="js-search__line">
                                 <div class="input-group m-search__group">
                                     <input class="form-control m-search__control js-m-search__control"
                                            type="text"
                                            placeholder="<?= Loc::getMessage("HEADER_SEARCH_ON_SITE") ?>"
-                                           autocomplete="off"
                                            name="q"
                                            value="<?= $searchQuery ?>"
+                                           autocomplete="off"
                                     >
                                     <div class="input-group-append">
                                         <button class="btn btn-link menu__link m-search__btn" type="button">
@@ -131,31 +131,5 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             "MENU_CACHE_GET_VARS" => ""
         )
     ); ?>
-    <? if ($isMain): ?>
-    <div class="home">
-        <?
-        $mobileBanner = Base::getMainBanner(true);
-        $desktopBanner = Base::getMainBanner();
-        ?>
-
-        <? if ($mobileBanner['isVideo']): ?>
-            <video autoplay muted loop playsinline class="home__banner mobile">
-                <source src="<?= $mobileBanner['src'] ?>"/>
-            </video>
-        <? else: ?>
-            <img src="<?= $mobileBanner['src'] ?>" class="home__banner mobile"/>
-        <? endif; ?>
-
-        <? if ($desktopBanner['isVideo']): ?>
-            <video autoplay muted loop playsinline class="home__banner desktop">
-                <source src="<?= $desktopBanner['src'] ?>"/>
-            </video>
-        <? else: ?>
-            <img src="<?= $desktopBanner['src'] ?>" class="home__banner desktop"/>
-        <? endif; ?>
-    <? endif; ?>
-        <? if ($isMain): ?>
-        <a class="btn btn-outline-light btn__fix-width btn-catalog" href="<?= SITE_DIR ?>catalog/novinki/"><?=Loc::getMessage("HEADER_GO_CATALOG")?></a>
-    </div>
-<? endif; ?>
+    <?php $APPLICATION->ShowViewContent("main_banner"); ?>
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
