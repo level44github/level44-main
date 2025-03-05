@@ -6,7 +6,7 @@ use Bitrix\Main\Localization\Loc;
 
 ?>
 <? if (!empty($arResult)): ?>
-    <ul class="nav flex-column" style="display: block">
+    <ul class="nav flex-column" style="display: none">
         <? foreach ($arResult as $item): ?>
             <li class="nav-item">
                 <a class="nav-link <?= !empty($item["PARAMS"]["CHILDREN"]) || !empty($item["PARAMS"]["SUBMENU"]) ? "has-submenu" : "" ?>

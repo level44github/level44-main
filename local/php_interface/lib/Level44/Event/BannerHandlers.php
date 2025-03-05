@@ -31,53 +31,27 @@ class BannerHandlers extends HandlerBase
      */
     public static function OnBeforeIBlockElementAddHandler(&$arFields): bool
     {
-        if ($arFields["IBLOCK_ID"] !== Base::BANNER_SLIDES_IBLOCK_ID) {
-            return true;
-        }
-
-        global $APPLICATION;
-
-        $count = ElementTable::getCount(['IBLOCK_ID' => Base::BANNER_SLIDES_IBLOCK_ID]);
-
-        if ($count >= 5) {
-            $APPLICATION->throwException("Максимальное количество слайдов: 5");
-            return false;
-        }
-
-        $properties = static::getProperties();
-
-        $link = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]]);
-
-        if (!empty($link)) {
-            mb_substr($link, -1) === '/' ?: ($link .= '/');
-            $link = ltrim($link, '/');
-            $link = preg_replace('/\/{2,}/', '/', $link);
-
-            static::setPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]], $link);
-        }
-
-        $fileDesktop = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["FILE_DESKTOP"]]);
-        $splitFile1 = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["SPLIT_FILE_1"]]);
-        $splitFile2 = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["SPLIT_FILE_2"]]);
-
-        if (!$fileDesktop && !$splitFile1 && !$splitFile2) {
-            $APPLICATION->throwException("Необходимо загрузить Цельное изображение/видео (Desktop) или Раздельное изображение (Desktop)");
-            return false;
-        }
-
-        if ($splitFile1 xor $splitFile2) {
-            $APPLICATION->throwException("Необходимо загрузить две части раздельноого изображения");
-            return false;
-        }
-
-        return true;
+        return static::iBlockElementSaveHandler($arFields);
     }
 
     /**
      * @param $arFields
      * @return bool
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields): bool
+    {
+        return static::iBlockElementSaveHandler($arFields);
+    }
+
+    /**
+     * @param $arFields
+     * @return bool
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public static function iBlockElementSaveHandler(&$arFields): bool
     {
         if ($arFields["IBLOCK_ID"] !== Base::BANNER_SLIDES_IBLOCK_ID) {
             return true;
@@ -85,16 +59,32 @@ class BannerHandlers extends HandlerBase
 
         global $APPLICATION;
 
+        if (empty($arFields['ID'])) {
+            $count = ElementTable::getCount(['IBLOCK_ID' => Base::BANNER_SLIDES_IBLOCK_ID]);
+
+            if ($count >= 5) {
+                $APPLICATION->throwException("Максимальное количество слайдов: 5");
+                return false;
+            }
+        }
+
         $properties = static::getProperties();
 
-        $link = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]]);
+        $linkAddress = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]]);
 
-        if (!empty($link)) {
-            mb_substr($link, -1) === '/' ?: ($link .= '/');
-            $link = ltrim($link, '/');
-            $link = preg_replace('/\/{2,}/', '/', $link);
+        if (!empty($linkAddress)) {
+            mb_substr($linkAddress, -1) === '/' ?: ($linkAddress .= '/');
+            $linkAddress = ltrim($linkAddress, '/');
+            $linkAddress = preg_replace('/\/{2,}/', '/', $linkAddress);
 
-            static::setPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]], $link);
+            static::setPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]], $linkAddress);
+        }
+
+        $linkSection = static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_SECTION"]]);
+
+        if (empty($linkSection) && empty($linkAddress)) {
+            $APPLICATION->throwException("Необходимо выбрать раздел ссылки или указать адрес ссылки");
+            return false;
         }
 
         $fileDesktop = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["FILE_DESKTOP"]]);
