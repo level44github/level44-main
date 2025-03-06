@@ -4,68 +4,101 @@
 
 use Bitrix\Main\Localization\Loc;
 
+function getContainerClass($params): string
+{
+    return !empty($params['EXPANDED']) && $params['EXPANDED'] === true ? 'active' : '';
+}
+
+function getLinkClass($params): string
+{
+    return !empty($params['SELECTED']) && $params['SELECTED'] === true ? 'selected' : '';
+}
+
+function getSaleClass($params): string
+{
+    return !empty($params['IS_SALE']) && $params['IS_SALE'] === true ? 'featured' : '';
+}
+
 ?>
 <? if (!empty($arResult)): ?>
-    <ul class="nav flex-column" style="display: none">
+    <ul class="nav-menu">
         <? foreach ($arResult as $item): ?>
-            <li class="nav-item">
-                <a class="nav-link <?= !empty($item["PARAMS"]["CHILDREN"]) || !empty($item["PARAMS"]["SUBMENU"]) ? "has-submenu" : "" ?>
-                <?= $item["PARAMS"]["CSS_CLASS"] ?>"
-                    <? //If it's point of separation, then hide href, because point is empty
-                    if (!empty($item["TEXT"])): ?>
-                        href="<?= empty($item["PARAMS"]["CHILDREN"]) ? $item["LINK"] : '' ?>"
-                    <? endif; ?>
-                >
-                    <?= $item["TEXT"] ?>
-                </a>
-                <? if (!empty($item["PARAMS"]["SUBMENU"])): ?>
-                    <ul class="nav flex-column submenu">
-                        <? foreach ($item["PARAMS"]["SUBMENU"] as $subItem): ?>
-                            <li class="nav-item">
-                                <a class="nav-link <?= $subItem["PARAMS"]["CSS_CLASS"] ?>"
-                                   href="<?= $subItem["LINK"] ?>">
-                                    <?= $subItem["TEXT"] ?>
-                                </a>
-                            </li>
-                        <? endforeach; ?>
-                    </ul>
-                <? elseif (!empty($item["PARAMS"]["CHILDREN"])): ?>
-                    <ul class="nav flex-column submenu">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= $item["LINK"] ?>">
-                                <?= Loc::getMessage('ALL') ?>
-                            </a>
-                        </li>
-                        <? foreach ($item["PARAMS"]["CHILDREN"] as $subItem): ?>
-                            <li class="nav-item">
-                                <? if (!empty($subItem[3]["CHILDREN"])): ?>
-                                    <a class="nav-link has-submenu" href>
-                                        <?= $subItem[0] ?>
+            <? if (!empty($item["PARAMS"]["CHILDREN"])): ?>
+                <li class="nav-menu__item">
+                    <div class="nav-menu__link-container <?= getContainerClass($item["PARAMS"]) ?>" role="button"
+                         tabindex="0">
+                        <span class="nav-menu__link first-level <?= getSaleClass($item["PARAMS"]) ?>">
+                            <?= $item["TEXT"] ?>
+                        </span>
+                        <svg class="icon icon-arrow-down nav-menu__icon">
+                            <use xlink:href="#arrow-down"></use>
+                        </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list second-level <?= getContainerClass($item["PARAMS"]) ?>">
+                        <? if (!$item['PARAMS']['IS_TO_CUSTOMERS']): ?>
+                            <li class="nav-menu__submenu-item">
+                                <div class="nav-menu__link-container">
+                                    <a class="nav-menu__link second-level <?= getLinkClass($item["PARAMS"]) ?>"
+                                       href="<?= $item["LINK"] ?>">
+                                        <?= Loc::getMessage('ALL') ?>
                                     </a>
-                                    <ul class="nav flex-column submenu">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="<?= $subItem[1] ?>">
-                                                <?= Loc::getMessage('ALL') ?>
-                                            </a>
-                                        </li>
-                                        <? foreach ($subItem[3]["CHILDREN"] as $subSubItem): ?>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="<?= $subSubItem[1] ?>">
-                                                    <?= $subSubItem[0] ?>
+                                </div>
+                            </li>
+                        <? endif; ?>
+                        <? foreach ($item["PARAMS"]["CHILDREN"] as $child): ?>
+                            <? if (!empty($child[3]['CHILDREN'])): ?>
+                                <li class="nav-menu__submenu-item">
+                                    <div class="nav-menu__link-container <?= getContainerClass($child[3]) ?>"
+                                         role="button" tabindex="0">
+                                        <span class="nav-menu__link second-level"><?= $child[0] ?></span>
+                                        <svg class="icon icon-arrow-down nav-menu__icon">
+                                            <use xlink:href="#arrow-down"></use>
+                                        </svg>
+                                    </div>
+                                    <ul class="nav-menu__submenu-list <?= getContainerClass($child[3]) ?>">
+                                        <li class="nav-menu__submenu-item">
+                                            <div class="nav-menu__link-container">
+                                                <a class="nav-menu__link third-level  <?= getLinkClass($child[3]) ?>"
+                                                   href="<?= $child[1] ?>">
+                                                    <?= Loc::getMessage('ALL') ?>
                                                 </a>
+                                            </div>
+                                        </li>
+                                        <? foreach ($child[3]['CHILDREN'] as $subChild): ?>
+                                            <li class="nav-menu__submenu-item">
+                                                <div class="nav-menu__link-container">
+                                                    <a class="nav-menu__link third-level <?= getLinkClass($subChild[3]) ?>"
+                                                       href="<?= $subChild[1] ?>">
+                                                        <?= $subChild[0] ?>
+                                                    </a>
+                                                </div>
                                             </li>
                                         <? endforeach; ?>
                                     </ul>
-                                <? else: ?>
-                                    <a class="nav-link" href="<?= $subItem[1] ?>">
-                                        <?= $subItem[0] ?>
-                                    </a>
-                                <? endif; ?>
-                            </li>
+                                </li>
+                            <? else: ?>
+                                <li class="nav-menu__submenu-item">
+                                    <div class="nav-menu__link-container">
+                                        <a class="nav-menu__link second-level <?= getLinkClass($child[3]) ?>"
+                                           href="<?= $child[1] ?>">
+                                            <?= $child[0] ?>
+                                        </a>
+                                    </div>
+                                </li>
+                            <? endif; ?>
                         <? endforeach; ?>
                     </ul>
-                <? endif; ?>
-            </li>
+                </li>
+            <? else: ?>
+                <li class="nav-menu__item">
+                    <div class="nav-menu__link-container">
+                        <a class="nav-menu__link first-level <?= getLinkClass($item["PARAMS"]) ?>"
+                           href="<?= $item["LINK"] ?>">
+                            <?= $item["TEXT"] ?>
+                        </a>
+                    </div>
+                </li>
+            <? endif; ?>
         <? endforeach; ?>
     </ul>
 <? endif; ?>
