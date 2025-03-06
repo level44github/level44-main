@@ -41,7 +41,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <!-- End Google Tag Manager (noscript) -->
 <? $APPLICATION->ShowPanel(); ?>
 <div class="layout__wrapper">
-    <header class="header transparent">
+    <header class="header <?= $isMain ? 'transparent' : 'navbar-light' ?>">
         <nav class="header__container">
             <div class="header__column">
                 <button class="btn btn-link menu__link nav-trigger__btn" type="button" aria-label="Toggle navigation">
@@ -115,21 +115,37 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
             </div>
         </nav>
     </header>
-    <? $APPLICATION->IncludeComponent(
-        "bitrix:menu",
-        "sections_left",
-        Array(
-            "ROOT_MENU_TYPE" => "left",
-            "MAX_LEVEL" => "1",
-            "CHILD_MENU_TYPE" => "top",
-            "USE_EXT" => "Y",
-            "DELAY" => "N",
-            "ALLOW_MULTI_SELECT" => "Y",
-            "MENU_CACHE_TYPE" => "N",
-            "MENU_CACHE_TIME" => "3600",
-            "MENU_CACHE_USE_GROUPS" => "Y",
-            "MENU_CACHE_GET_VARS" => ""
-        )
-    ); ?>
+    <div class="nav-trigger__body">
+        <div class="nav-trigger__header">
+            <button class="btn btn-link nav-trigger__close" type="button" aria-label="Toggle navigation">
+                <svg class="icon icon-close nav-trigger__icon">
+                    <use xlink:href="#close"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="nav-trigger__scroll">
+            <? $APPLICATION->IncludeComponent(
+                "bitrix:menu",
+                "sections_left",
+                [
+                    "ROOT_MENU_TYPE"        => "left",
+                    "MAX_LEVEL"             => "1",
+                    "CHILD_MENU_TYPE"       => "top",
+                    "USE_EXT"               => "Y",
+                    "DELAY"                 => "N",
+                    "ALLOW_MULTI_SELECT"    => "Y",
+                    "MENU_CACHE_TYPE"       => "N",
+                    "MENU_CACHE_TIME"       => "3600",
+                    "MENU_CACHE_USE_GROUPS" => "Y",
+                    "MENU_CACHE_GET_VARS"   => ""
+                ]
+            ); ?>
+        </div>
+        <div class="nav-trigger__footer">
+            <button class="btn btn-dark" type="button">Личный кабинет</button>
+        </div>
+    </div>
+    <div class="nav-trigger__overlay"></div>
+
     <?php $APPLICATION->ShowViewContent("main_banner"); ?>
-    <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
+    <div class="content-container <? $APPLICATION->ShowViewContent("type-page"); ?>-container">
