@@ -4,6 +4,7 @@
 
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Web\Json;
+use Level44\Delivery;
 
 ?>
 
@@ -96,6 +97,10 @@ if (!function_exists("PrintDelivery")) {
                 ];
 
                 PrintDelivery($deliveryTypes["PICKUP"], $data);
+            }
+
+            if (!empty($deliveryTypes["COURIER"]) || !empty($deliveryTypes["COURIER_FITTING"])) {
+                echo  Delivery::$printLog;
             }
 
             if (!empty($deliveryTypes["COURIER"])) {

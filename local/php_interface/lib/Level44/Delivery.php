@@ -27,6 +27,7 @@ class Delivery
     static $paysystems = null;
     /** @var array|null */
     static $deliveries = null;
+    static $printLog = '';
 
     /**
      * @throws ArgumentException
@@ -155,6 +156,24 @@ class Delivery
         $service = $courierList[0];
 
         if (!empty($service)) {
+            if (empty(static::$printLog)) {
+                ob_start();
+                $deliveries = static::getDeliveries();
+
+                foreach ($courierList as $courier) {
+                    $delivery = !empty($deliveries[$courier["ID"]]['PARENT_ID']) ?
+                        $deliveries[$deliveries[$courier["ID"]]['PARENT_ID']]['NAME'] : $deliveries[$courier["ID"]]['NAME'];
+
+                    echo "Рассчитанная стоимость " . $delivery . " - " . $courier["PRICE_FORMATED"] . "<br>";
+                }
+
+                $delivery = !empty($deliveries[$service["ID"]]['PARENT_ID']) ?
+                    $deliveries[$deliveries[$service["ID"]]['PARENT_ID']]['NAME'] : $deliveries[$service["ID"]]['NAME'];
+
+                echo "Выбрана служба: " . $delivery . "<br>";
+                static::$printLog = ob_get_clean();
+            }
+
             [$initialPrice, $deliveryId] = [(int)$service['PRICE'], (int)$service['ID']];
 
             [$price, $priceFormated] = static::reCalcPrice($initialPrice, $location, $deliveryId, $service['CURRENCY']);
