@@ -9,7 +9,9 @@ use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
 use Bitrix\Sale\Delivery\Restrictions\ByPaySystem;
 use Bitrix\Sale\Delivery\Services\Table;
+use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\PaySystem\Manager;
+use Bitrix\Sale\PriceMaths;
 use Level44\Enums\DeliveryType;
 
 //Important, depends on the language file local/php_interface/lang/*/lib/Level44/Delivery.php
@@ -17,6 +19,10 @@ Loc::loadMessages(__FILE__);
 
 class Delivery
 {
+    const MSK_LOCATION_CODE = '0000073738';
+    const MO_LOCATION_CODE = '0000028025';
+    const SPB_LOCATION_CODE = '0000103664';
+
     /** @var array|null */
     static $paysystems = null;
     /** @var array|null */
@@ -120,7 +126,6 @@ class Delivery
             }
         }
 
-        $delivery['ORIGINAL_PRICE'] = $delivery['PRICE'];
         $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
 
         $delivery["DOLLAR_PRICE"] = Base::getDollarPrice($delivery["PRICE"]);
@@ -138,10 +143,73 @@ class Delivery
 
     /**
      * @param array $courierList
+     * @param string $location
      * @return array
+     * @throws ArgumentException
+     * @throws NotImplementedException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
-    public static function getSuitableCourier(array $courierList): array
+    public static function getSuitableCourier(array $courierList, string $location): array
     {
-        return $courierList[0];
+        $service = $courierList[0];
+
+        if (!empty($service)) {
+            [$initialPrice, $deliveryId] = [(int)$service['PRICE'], (int)$service['ID']];
+
+            [$price, $priceFormated] = static::reCalcPrice($initialPrice, $location, $deliveryId, $service['CURRENCY']);
+
+            $service['PRICE'] = $price;
+            $service['PRICE_FORMATED'] = $priceFormated;
+
+            return $service;
+        }
+
+        return [];
+    }
+
+    /**
+     * @param int $price
+     * @param string $location
+     * @param int $deliveryId
+     * @param string $currency
+     * @return array
+     * @throws ArgumentException
+     * @throws NotImplementedException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public static function reCalcPrice(int $price, string $location, int $deliveryId, string $currency = ''): array
+    {
+        $deliveryType = static::getType($deliveryId);
+        $calculated = $price;
+
+        if (in_array($deliveryType, [DeliveryType::Courier, DeliveryType::CourierFitting])) {
+            $isMoscow = in_array($location, [static::MSK_LOCATION_CODE, static::MO_LOCATION_CODE], true)
+                || LocationTable::checkNodeIsParentOfNode(static::MSK_LOCATION_CODE, $location, ['ACCEPT_CODE' => true])
+                || LocationTable::checkNodeIsParentOfNode(static::MO_LOCATION_CODE, $location, ['ACCEPT_CODE' => true]);
+
+            $isSpb = $location === static::SPB_LOCATION_CODE
+                || LocationTable::checkNodeIsParentOfNode(static::SPB_LOCATION_CODE, $location, ['ACCEPT_CODE' => true]);
+
+
+            if ($isMoscow) {
+                $calculated = 590;
+            } elseif ($isSpb) {
+                $calculated = 690;
+            } else {
+                if ($price <= 690) {
+                    $calculated = 690;
+                } elseif ($price <= 1000) {
+                    $calculated = 790;
+                } else {
+                    $calculated = 890;
+                }
+            }
+        } elseif ($deliveryType === DeliveryType::Pickup) {
+            $calculated = 290;
+        }
+
+        return [PriceMaths::roundPrecision($calculated), SaleFormatCurrency($calculated, $currency)];
     }
 }
