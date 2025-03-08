@@ -4,10 +4,12 @@ namespace Level44\Event;
 
 use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Context;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\NotImplementedException;
+use Bitrix\Main\NotSupportedException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\Web\Json;
@@ -66,8 +68,9 @@ class CheckoutHandlers extends HandlerBase
         $items = array_map(fn($delivery) => [
             'DELIVERY' => $delivery,
             'TYPE'     => Delivery::getType($delivery['ID'])
-        ], array_map(Delivery::prepareService(...), $arResult["DELIVERY"]));
+        ], $arResult["DELIVERY"]);
 
+        $location = $arUserResult['DELIVERY_LOCATION_BCODE'];
         $typesDelivery = [];
         $courierFittingList = [];
         $courierList = [];
@@ -92,34 +95,54 @@ class CheckoutHandlers extends HandlerBase
         }
 
         if (!empty($courierFittingList)) {
-            $typesDelivery["COURIER_FITTING"] = Delivery::getSuitableCourier($courierFittingList);
+            $typesDelivery["COURIER_FITTING"] = Delivery::getSuitableCourier($courierFittingList, $location);
         }
 
         if (!empty($courierList)) {
-            $typesDelivery["COURIER"] = Delivery::getSuitableCourier($courierList);
+            $typesDelivery["COURIER"] = Delivery::getSuitableCourier($courierList, $location);
         }
 
+        if (!empty($pickup = $typesDelivery['PICKUP'])) {
+            [
+                $pickup['PRICE'],
+                $pickup['PRICE_FORMATED']
+            ] = Delivery::reCalcPrice((int)$pickup['PRICE'], $location, (int)$pickup['ID'], $pickup['CURRENCY']);
 
-        $arResult["DELIVERY"] = $typesDelivery;
+            $typesDelivery['PICKUP'] = $pickup;
+        }
+
+        $arResult["DELIVERY"] = array_map(Delivery::prepareService(...), $typesDelivery);
     }
 
-//    public static function OnSaleOrderBeforeSavedHandler(Event $event)
-//    {
-//        $order = $event->getParameter("ENTITY");
-//
-//        $shipmentCollection = $order->getShipmentCollection();
-//
-//        /** @var Shipment $shipment */
-//        foreach ($shipmentCollection as $shipment) {
-//            if (!$shipment->isSystem()) {
-//                $shipment->setBasePriceDelivery(100);
-//            }
-//        }
-//
-//        $parameters = [
-//            "ENTITY" => $order,
-//        ];
-//
-//        return new EventResult(EventResult::SUCCESS, $parameters);
-//    }
+    /**
+     * @throws ArgumentOutOfRangeException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws NotSupportedException
+     * @throws SystemException
+     * @throws NotImplementedException
+     */
+    public static function OnSaleOrderBeforeSavedHandler(Event $event)
+    {
+        $order = $event->getParameter("ENTITY");
+
+        $shipmentCollection = $order->getShipmentCollection();
+
+        /** @var Shipment $shipment */
+        foreach ($shipmentCollection as $shipment) {
+            if (!$shipment->isSystem()) {
+                if ($location = $order->getPropertyCollection()->getDeliveryLocation()) {
+                    [$price] = Delivery::reCalcPrice($shipment->getPrice(), $location->getValue(), $shipment->getDeliveryId());
+                }
+
+                $shipment->setBasePriceDelivery($price);
+            }
+        }
+
+        $parameters = [
+            "ENTITY" => $order,
+        ];
+
+        return new EventResult(EventResult::SUCCESS, $parameters);
+    }
 }
