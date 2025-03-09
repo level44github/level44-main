@@ -4,6 +4,7 @@ namespace Level44\Event;
 
 use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Context;
 use Bitrix\Main\Event;
@@ -15,6 +16,7 @@ use Bitrix\Main\SystemException;
 use Bitrix\Main\Web\Json;
 use Bitrix\Sale\Delivery\CalculationResult;
 use Bitrix\Sale\Delivery\Restrictions\ByPaySystem;
+use Bitrix\Sale\Order;
 use Bitrix\Sale\PaySystem\Manager;
 use Bitrix\Sale\Shipment;
 use Bitrix\Sale\ShipmentCollection;
@@ -31,6 +33,7 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
         static::addEventHandler("sale", "OnSaleComponentOrderOneStepDelivery");
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
+        static::addEventHandler("sale", "OnSaleShipmentSetField");
 
     }
 
@@ -63,33 +66,30 @@ class CheckoutHandlers extends HandlerBase
      */
     public static function OnSaleComponentOrderOneStepDeliveryHandler(&$arResult, &$arUserResult, $arParams)
     {
-        $arResult["DELIVERY"] = array_filter($arResult["DELIVERY"], fn($item) => empty($item["CALCULATE_ERRORS"]));
-
-        $items = array_map(fn($delivery) => [
-            'DELIVERY' => $delivery,
-            'TYPE'     => Delivery::getType($delivery['ID'])
-        ], $arResult["DELIVERY"]);
-
         $location = $arUserResult['DELIVERY_LOCATION_BCODE'];
         $typesDelivery = [];
         $courierFittingList = [];
         $courierList = [];
 
-        foreach ($items as $item) {
-            switch ($item['TYPE']) {
+        foreach ($arResult["DELIVERY"] as $delivery) {
+            if (!empty($delivery["CALCULATE_ERRORS"])) {
+                continue;
+            }
+
+            switch (Delivery::getType($delivery['ID'])) {
                 case DeliveryType::Shop:
-                    $typesDelivery["SHOP"] = $item['DELIVERY'];
+                    $typesDelivery["SHOP"] = $delivery;
                     break;
                 case DeliveryType::Pickup:
-                    $typesDelivery["PICKUP"] = $item['DELIVERY'];
+                    $typesDelivery["PICKUP"] = $delivery;
                     break;
                 case DeliveryType::CourierFitting:
-                    $item['DELIVERY']["IS_COURIER"] = true;
-                    $courierFittingList[] = $item['DELIVERY'];
+                    $delivery["IS_COURIER"] = true;
+                    $courierFittingList[] = $delivery;
                     break;
                 case DeliveryType::Courier:
-                    $item['DELIVERY']["IS_COURIER"] = true;
-                    $courierList[] = $item['DELIVERY'];
+                    $delivery["IS_COURIER"] = true;
+                    $courierList[] = $delivery;
                     break;
             }
         }
@@ -111,7 +111,7 @@ class CheckoutHandlers extends HandlerBase
             $typesDelivery['PICKUP'] = $pickup;
         }
 
-        $arResult["DELIVERY"] = array_map(Delivery::prepareService(...), $typesDelivery);
+        $arResult["DELIVERY"] = array_map(Delivery::prepareService(...), array_filter($typesDelivery));
     }
 
     /**
@@ -144,5 +144,29 @@ class CheckoutHandlers extends HandlerBase
         ];
 
         return new EventResult(EventResult::SUCCESS, $parameters);
+    }
+
+
+    /**
+     * @param Event $event
+     * @return EventResult
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public static function OnSaleShipmentSetFieldHandler(Event $event)
+    {
+        ['ENTITY' => $entity, 'NAME' => $name, 'VALUE' => $value] = $event->getParameters();
+
+        if ($name === 'DELIVERY_ID' && !$entity->isSystem() && $entity->isClone()) {
+            $deliveries = Delivery::getDeliveries();
+
+            if ($deliveries[$value]['CODE'] === 'kse') {
+                $entity->setBasePriceDelivery(0);
+                $entity->save();
+            }
+        }
+
+        return new EventResult(EventResult::SUCCESS);
     }
 }

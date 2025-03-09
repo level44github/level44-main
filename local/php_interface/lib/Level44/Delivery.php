@@ -13,6 +13,7 @@ use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\PaySystem\Manager;
 use Bitrix\Sale\PriceMaths;
 use Level44\Enums\DeliveryType;
+use Sale\Handlers\Delivery\KCEDeliveryHandler;
 
 //Important, depends on the language file local/php_interface/lang/*/lib/Level44/Delivery.php
 Loc::loadMessages(__FILE__);
@@ -42,6 +43,10 @@ class Delivery
             $deliveries = [];
 
             while ($delivery = $res->fetch()) {
+                if (empty($delivery['CODE']) && is_a($delivery['CLASS_NAME'], KCEDeliveryHandler::class, true)) {
+                    $delivery['CODE'] = 'kse';
+                }
+
                 $deliveries[$delivery["ID"]] = $delivery;
             }
 
@@ -96,7 +101,7 @@ class Delivery
             return DeliveryType::Pickup;
         }
 
-        if (in_array($code, ['dalli_service:dalli_courier', 'dalli_service:dalli_cfo'])) {
+        if (in_array($code, ['dalli_service:dalli_courier', 'dalli_service:dalli_cfo', 'kse'])) {
             if (ByPaySystem::check([$paySystems['cloudpayment']], [], $id)) {
                 return DeliveryType::Courier;
             } elseif (ByPaySystem::check([$paySystems['cash']], [], $id)) {
@@ -153,7 +158,11 @@ class Delivery
      */
     public static function getSuitableCourier(array $courierList, string $location): array
     {
-        $service = $courierList[0];
+        usort($courierList, fn($a, $b) => $a['PRICE'] <=> $b['PRICE']);
+
+        [$service] = $courierList;
+
+        $someChecked = !empty(array_filter($courierList, fn($item) => $item['CHECKED'] === 'Y'));
 
         if (!empty($service)) {
             if (empty(static::$printLog)) {
@@ -162,16 +171,24 @@ class Delivery
 
                 foreach ($courierList as $courier) {
                     $delivery = !empty($deliveries[$courier["ID"]]['PARENT_ID']) ?
-                        $deliveries[$deliveries[$courier["ID"]]['PARENT_ID']]['NAME'] : $deliveries[$courier["ID"]]['NAME'];
+                        $deliveries[$deliveries[$courier["ID"]]['PARENT_ID']] : $deliveries[$courier["ID"]];
 
-                    echo "Рассчитанная стоимость " . $delivery . " - " . $courier["PRICE_FORMATED"] . "<br>";
+                    $name = is_a($delivery['CLASS_NAME'], KCEDeliveryHandler::class, true) ? 'КСЭ' : $delivery['NAME'];
+
+                    echo "Рассчитанная стоимость " . $name . " - " . $courier["PRICE_FORMATED"] . "<br>";
                 }
 
                 $delivery = !empty($deliveries[$service["ID"]]['PARENT_ID']) ?
-                    $deliveries[$deliveries[$service["ID"]]['PARENT_ID']]['NAME'] : $deliveries[$service["ID"]]['NAME'];
+                    $deliveries[$deliveries[$service["ID"]]['PARENT_ID']] : $deliveries[$service["ID"]];
 
-                echo "Выбрана служба: " . $delivery . "<br>";
+                $name = is_a($delivery['CLASS_NAME'], KCEDeliveryHandler::class, true) ? 'КСЭ' : $delivery['NAME'];
+
+                echo "Выбрана служба: " . $name . "<br>";
                 static::$printLog = ob_get_clean();
+            }
+
+            if ($service['CHECKED'] !== 'Y' && $someChecked) {
+                $service['CHECKED'] = 'Y';
             }
 
             [$initialPrice, $deliveryId] = [(int)$service['PRICE'], (int)$service['ID']];
