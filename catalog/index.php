@@ -8,7 +8,11 @@ $APPLICATION->SetTitle("Каталог");
 global $arrFilter;
 
 $arrFilter = [
-    "<=PROPERTY_OLD_PRICE" => 0,
+    [
+        'LOGIC'                => 'OR',
+        "<=PROPERTY_OLD_PRICE" => 0,
+        'ID'                   => [3480, 3437]
+    ]
 ];
 
 $APPLICATION->IncludeComponent(
