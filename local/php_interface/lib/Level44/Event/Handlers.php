@@ -3,12 +3,11 @@
 namespace Level44\Event;
 
 
-use Bitrix\Main\EventManager;
+use Bitrix\Catalog\Model\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Delivery\CalculationResult;
 use Level44\Base;
-use Level44\Exchange1C;
 use Level44\PreOrder;
 use UniPlug\Settings;
 
@@ -25,12 +24,14 @@ class Handlers extends HandlerBase
         static::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
         static::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
         static::addEventHandler("iblock", "OnBeforeIBlockUpdate");
-        static::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
 
         static::addEventHandler("sale", "OnOrderNewSendEmail");
         static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
+        static::addEventHandler("catalog", "Bitrix\Catalog\Model\Product::OnBeforeUpdate", static::class, 'OnBeforeProductSaveHandler');
 
         static::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
+
+        Exchange1cHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
@@ -374,22 +375,11 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementAddHandler(&$arFields)
     {
-        Exchange1C::handleAddProduct($arFields);
-
         return Base::checkOldPrices($arFields);
-    }
-
-    public static function OnBeforeIBlockSectionAddHandler(&$arFields)
-    {
-        Exchange1C::handleAddSection($arFields);
-
-        return true;
     }
 
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
-        Exchange1C::handleUpdateProduct($arFields);
-
         return Base::checkOldPrices($arFields);
     }
 
@@ -458,5 +448,17 @@ LAYOUT;
 
 
         return true;
+    }
+
+    public static function OnBeforeProductSaveHandler(Event $event)
+    {
+        $result = new \Bitrix\Catalog\Model\EventResult();
+
+        $fields = $event->getParameter('fields');
+        $fields['VAT_ID'] = Base::CATALOG_VAT_ID;
+        $fields['VAT_INCLUDED'] = 'Y';
+        $result->modifyFields($fields);
+
+        return $result;
     }
 }
