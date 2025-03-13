@@ -11,6 +11,7 @@ class Exchange1cHandlers extends HandlerBase
     {
         static::addEventHandler('iblock', 'OnBeforeIBlockElementAdd');
         static::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
+        static::addEventHandler("iblock", "OnBeforeIBlockSectionUpdate");
         static::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
     }
 
@@ -57,17 +58,22 @@ class Exchange1cHandlers extends HandlerBase
                 }
             }
 
-            $res = \CIBlockElement::GetElementGroups($arFields["ID"], true, ['ID']);
+            $res = \CIBlockElement::GetElementGroups($arFields["ID"], true, ['ID', 'XML_ID']);
             $product = \CIBlockElement::GetByID($arFields["ID"])->GetNext();
 
-            $sections = [];
+            $onlyBitrixSections = [];
 
             while ($section = $res->GetNext()) {
-                $sections[] = $section['ID'];
+                if (empty($section['XML_ID'])) {
+                    $onlyBitrixSections[] = $section['ID'];
+                }
             }
 
-            if (!empty($sections)) {
-                $arFields['IBLOCK_SECTION'] = $sections;
+            if (!empty($onlyBitrixSections)) {
+                $arFields['IBLOCK_SECTION'] = is_array($arFields['IBLOCK_SECTION']) ? $arFields['IBLOCK_SECTION'] : [];
+                $arFields['IBLOCK_SECTION'] = array_values(
+                    array_unique(array_merge($arFields['IBLOCK_SECTION'], $onlyBitrixSections), SORT_REGULAR)
+                );
             }
 
             $arFields['NAME'] = $product['NAME'] ?: $arFields['NAME'];
@@ -79,6 +85,17 @@ class Exchange1cHandlers extends HandlerBase
     {
         if (static::isSource1C() && (int)$arFields["IBLOCK_ID"] === Base::CATALOG_IBLOCK_ID) {
             $arFields["ACTIVE"] = 'N';
+        }
+    }
+
+    static function OnBeforeIBlockSectionUpdateHandler(array &$arFields): void
+    {
+        if (static::isSource1C() && (int)$arFields["IBLOCK_ID"] === Base::CATALOG_IBLOCK_ID) {
+            $section = \CIBlockSection::GetByID($arFields['ID'])->GetNext();
+
+            if ($arFields['ACTIVE'] !== 'Y' && $section['ACTIVE'] === 'Y') {
+                $arFields['ACTIVE'] = 'Y';
+            }
         }
     }
 }
