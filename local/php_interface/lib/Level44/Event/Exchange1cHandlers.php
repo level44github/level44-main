@@ -20,7 +20,7 @@ class Exchange1cHandlers extends HandlerBase
         $request = Context::getCurrent()->getRequest();
         return $request->get('type') === 'catalog'
             && $request->get('mode') === 'import'
-            && $request->get('type') === 'catalog'
+            && $request->get('mode') === 'deactivate'
             && str_contains($GLOBALS['APPLICATION']->GetCurPage(), '1c_exchange.php');
     }
 
