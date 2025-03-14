@@ -75,8 +75,8 @@ class Exchange1cHandlers extends HandlerBase
                 );
             }
 
-            $arFields['NAME'] = $product['NAME'] ?: $arFields['NAME'];
-            $arFields['CODE'] = $product['CODE'] ?: $arFields['CODE'];
+            $arFields['NAME'] = $product['~NAME'] ?: $arFields['NAME'];
+            $arFields['CODE'] = $product['~CODE'] ?: $arFields['CODE'];
         }
     }
 
