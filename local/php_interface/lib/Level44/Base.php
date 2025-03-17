@@ -9,6 +9,7 @@ use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Registry;
+use Level44\Event\Exchange1cHandlers;
 use Level44\Sale\Basket;
 use Bitrix\Highloadblock as HL;
 use Level44\Sale\PropertyValue;
@@ -19,6 +20,7 @@ class Base
     const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
+    const CATALOG_VAT_ID = 3;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
     const IMAGES_ORIGINAL_HL_TBL_NAME = "images_original";
     const SIZE_HL_TBL_NAME = "size_reference";
@@ -405,7 +407,7 @@ class Base
             $ecommerceData = $product->getEcommerceData([$productId]);
             $oldPrice = $ecommerceData[$productId]["prices"]["oldPrice"];
 
-            if ($oldPrice > 0 && $currentPrice > 0 && $currentPrice >= $oldPrice) {
+            if ($oldPrice > 0 && $currentPrice > 0 && $currentPrice >= $oldPrice && !Exchange1cHandlers::isSource1C()) {
                 $APPLICATION->throwException("Текущая цена должна быть меньше Старой цены");
                 return false;
             }
@@ -464,7 +466,7 @@ class Base
                         $value = &$property[key($property)]["VALUE"];
                         $value = (int)$value;
 
-                        if ($value !== 0 && $offerPrice >= $value) {
+                        if ($value !== 0 && $offerPrice >= $value && !Exchange1cHandlers::isSource1C()) {
                             $APPLICATION->throwException("Старая цена должна быть больше Текущей цены");
                             return false;
                         }
