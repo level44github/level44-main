@@ -380,6 +380,15 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
+        if (!Exchange1cHandlers::isSource1C()) {
+            $properties = static::getProperties(Base::CATALOG_IBLOCK_ID);
+            $onModeration = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']]);
+
+            if ($arFields['ACTIVE'] === 'Y' && isset($onModeration)) {
+                $arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']] = '';
+            }
+        }
+
         return Base::checkOldPrices($arFields);
     }
 
