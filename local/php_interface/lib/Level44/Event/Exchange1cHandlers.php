@@ -2,6 +2,10 @@
 
 namespace Level44\Event;
 
+use Bitrix\Iblock\PropertyEnumerationTable;
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
 use Level44\Base;
 use Bitrix\Main\Context;
 
@@ -23,6 +27,13 @@ class Exchange1cHandlers extends HandlerBase
             && str_contains($GLOBALS['APPLICATION']->GetCurPage(), '1c_exchange.php');
     }
 
+    /**
+     * @param array $arFields
+     * @return void
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
     static function OnBeforeIBlockElementAddHandler(array &$arFields): void
     {
         if (static::isSource1C() && (int)$arFields["IBLOCK_ID"] === Base::CATALOG_IBLOCK_ID) {
@@ -39,6 +50,16 @@ class Exchange1cHandlers extends HandlerBase
             }
 
             $arFields["ACTIVE"] = 'N';
+
+            $onModerationEnum = PropertyEnumerationTable::getList(
+                ['filter' => ['PROPERTY_ID' => $properties['ON_MODERATION']]]
+            )->fetch();
+
+            if (!empty($onModerationEnum['ID'])) {
+                $arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']] = [
+                    'n0' => ['VALUE' => $onModerationEnum['ID']]
+                ];
+            }
         }
     }
 
@@ -58,7 +79,13 @@ class Exchange1cHandlers extends HandlerBase
             }
 
             $res = \CIBlockElement::GetElementGroups($arFields["ID"], true, ['ID', 'XML_ID']);
-            $product = \CIBlockElement::GetByID($arFields["ID"])->GetNext();
+            $product = \CIBlockElement::GetList([], ['ID' => $arFields["ID"]], false, false, [
+                'ID',
+                'NAME',
+                'CODE',
+                'ACTIVE',
+                'PROPERTY_ON_MODERATION'
+            ])->GetNext();
 
             $onlyBitrixSections = [];
 
@@ -77,6 +104,10 @@ class Exchange1cHandlers extends HandlerBase
 
             $arFields['NAME'] = $product['~NAME'] ?: $arFields['NAME'];
             $arFields['CODE'] = $product['~CODE'] ?: $arFields['CODE'];
+
+            if ($arFields['ACTIVE'] === 'Y' && $product['ACTIVE'] !== 'Y' && $product['PROPERTY_ON_MODERATION_VALUE'] === 'Y') {
+                $arFields['ACTIVE'] = 'N';
+            }
         }
     }
 
@@ -84,16 +115,30 @@ class Exchange1cHandlers extends HandlerBase
     {
         if (static::isSource1C() && (int)$arFields["IBLOCK_ID"] === Base::CATALOG_IBLOCK_ID) {
             $arFields["ACTIVE"] = 'N';
+            $arFields['UF_ON_MODERATION'] = '1';
         }
     }
 
     static function OnBeforeIBlockSectionUpdateHandler(array &$arFields): void
     {
-        if (static::isSource1C() && (int)$arFields["IBLOCK_ID"] === Base::CATALOG_IBLOCK_ID) {
-            $section = \CIBlockSection::GetByID($arFields['ID'])->GetNext();
+        if ((int)$arFields["IBLOCK_ID"] === Base::CATALOG_IBLOCK_ID) {
+            if (static::isSource1C()) {
+                $section = \CIBlockSection::GetList([], [
+                    'ID'        => $arFields['ID'],
+                    'IBLOCK_ID' => Base::CATALOG_IBLOCK_ID
+                ], false, ['ID', 'ACTIVE', 'XML_ID', 'UF_ON_MODERATION'])->GetNext();
 
-            if ($arFields['ACTIVE'] !== 'Y' && $section['ACTIVE'] === 'Y' && empty($section['XML_ID'])) {
-                $arFields['ACTIVE'] = 'Y';
+                if ($arFields['ACTIVE'] !== 'Y' && $section['ACTIVE'] === 'Y' && empty($section['XML_ID'])) {
+                    $arFields['ACTIVE'] = 'Y';
+                }
+
+                if ($arFields['ACTIVE'] === 'Y' && $section['ACTIVE'] !== 'Y' && $section['UF_ON_MODERATION']) {
+                    $arFields['ACTIVE'] = 'N';
+                }
+            } else {
+                if ($arFields['ACTIVE'] === 'Y') {
+                    $arFields['UF_ON_MODERATION'] = '0';
+                }
             }
         }
     }
