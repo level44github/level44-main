@@ -2,29 +2,19 @@
 
 namespace Level44\Event;
 
-use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\ArgumentException;
-use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
-use Bitrix\Main\Context;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\NotImplementedException;
 use Bitrix\Main\NotSupportedException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
-use Bitrix\Main\Web\Json;
 use Bitrix\Sale\Delivery\CalculationResult;
-use Bitrix\Sale\Delivery\Restrictions\ByPaySystem;
-use Bitrix\Sale\Order;
-use Bitrix\Sale\PaySystem\Manager;
 use Bitrix\Sale\Shipment;
-use Bitrix\Sale\ShipmentCollection;
-use CIBlockProperty;
-use Level44\Base;
+use \Level44\CustomKCEClass;
 use Level44\Delivery;
 use Level44\Enums\DeliveryType;
-use Level44\PreOrder;
 
 class CheckoutHandlers extends HandlerBase
 {
@@ -34,7 +24,7 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "OnSaleComponentOrderOneStepDelivery");
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
         static::addEventHandler("sale", "OnSaleShipmentSetField");
-
+        static::addEventHandler("sale", "OnSaleStatusOrderChange", CustomKCEClass::class, sort: 50);
     }
 
 
