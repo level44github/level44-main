@@ -7,7 +7,7 @@ use CIBlockProperty;
 
 class HandlerBase
 {
-    protected static function addEventHandler($moduleId, $eventType, ?string $class = null, ?string $method = null): void
+    protected static function addEventHandler($moduleId, $eventType, ?string $class = null, ?string $method = null, ?int $sort = 100): void
     {
         $instance = EventManager::getInstance();
 
@@ -28,7 +28,9 @@ class HandlerBase
         $instance->addEventHandler(
             $moduleId,
             $eventType,
-            [$class, $method]
+            [$class, $method],
+            false,
+            $sort
         );
     }
 
