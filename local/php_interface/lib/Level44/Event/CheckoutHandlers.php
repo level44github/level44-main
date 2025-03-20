@@ -11,6 +11,8 @@ use Bitrix\Main\NotSupportedException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
 use Bitrix\Sale\Delivery\CalculationResult;
+use Bitrix\Sale\Location\LocationTable;
+use Bitrix\Sale\Order;
 use Bitrix\Sale\Shipment;
 use \Level44\CustomKCEClass;
 use Level44\Delivery;
@@ -25,6 +27,7 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
         static::addEventHandler("sale", "OnSaleShipmentSetField");
         static::addEventHandler("sale", "OnSaleStatusOrderChange", CustomKCEClass::class, sort: 50);
+        static::addEventHandler("sale", "OnSaleStatusShipmentChange", CustomKCEClass::class);
     }
 
 
@@ -62,7 +65,7 @@ class CheckoutHandlers extends HandlerBase
         $courierList = [];
 
         foreach ($arResult["DELIVERY"] as $delivery) {
-            if (!empty($delivery["CALCULATE_ERRORS"])) {
+            if (!empty($delivery["CALCULATE_ERRORS"]) || $delivery['PERIOD_TEXT'] === 'Connection Error') {
                 continue;
             }
 
@@ -114,14 +117,30 @@ class CheckoutHandlers extends HandlerBase
      */
     public static function OnSaleOrderBeforeSavedHandler(Event $event)
     {
+        /** @var Order $order */
         $order = $event->getParameter("ENTITY");
+        $location = $order->getPropertyCollection()->getDeliveryLocation();
 
         $shipmentCollection = $order->getShipmentCollection();
+        if (($zipProperty = $order->getPropertyCollection()->getDeliveryLocationZip()) && $location) {
+
+            $locData = LocationTable::getList([
+                'filter' => [
+                    'CODE'                                         => $location->getValue(),
+                    'SALE_LOCATION_LOCATION_EXTERNAL_SERVICE_CODE' => 'ZIP'
+                ],
+                'select' => ['EXTERNAL.*', 'EXTERNAL.SERVICE.CODE']
+            ])->fetch();
+
+            if ($zipValue = $locData['SALE_LOCATION_LOCATION_EXTERNAL_XML_ID']) {
+                $zipProperty->setValue($zipValue);
+            }
+        }
 
         /** @var Shipment $shipment */
         foreach ($shipmentCollection as $shipment) {
             if (!$shipment->isSystem()) {
-                if ($location = $order->getPropertyCollection()->getDeliveryLocation()) {
+                if ($location) {
                     [$price] = Delivery::reCalcPrice($shipment->getPrice(), $location->getValue(), $shipment->getDeliveryId());
                 }
 

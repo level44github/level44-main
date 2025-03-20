@@ -6,6 +6,8 @@ namespace Level44;
     use Bitrix\Main\Config\Option;
     use Bitrix\Sale\Order;
     use cKCE;
+    use Level44\Enums\DeliveryType;
+
 class CustomKCEClass
 {
 
@@ -26,6 +28,7 @@ class CustomKCEClass
                         $ClientName,
                         $ClientNameOfficial,
                         $SenderPhone,
+                        $SenderEmail,
                         $SenderAddress,
                         $SenderComment,
                         $TakeDate,
@@ -84,7 +87,7 @@ class CustomKCEClass
 
         $XmlData .='<car:Recipient>
                          <car:Client>'.$RecepientName.'</car:Client>
-                         <car:Official></car:Official>
+                         <car:Official>'.$RecepientName.'</car:Official>
                          <car:Address>
                              <car:Geography>'.$GeoTo.'</car:Geography>
                              <car:Info>'.$RecepientFullAddress.'</car:Info>
@@ -117,6 +120,7 @@ class CustomKCEClass
                              <car:PackageQty>'.$Item['QTY'].'</car:PackageQty>
                              <car:Qty>'.$Item['QTY'].'</car:Qty>
                              <car:VATRate>'.$VATRate.'</car:VATRate>
+                             <car:AssessedValue>'.$Item['PRICE'].'</car:AssessedValue>
                              <car:Comment>'.$Item['NAME'].'</car:Comment>
                          </car:Products>';
         }
@@ -129,7 +133,7 @@ class CustomKCEClass
                              <car:VATRate>'.$VATRate.'</car:VATRate>
                              <car:Comment>Услуга доставки</car:Comment>
                          </car:Products>';
-    if ($GUIDPvz) {    
+    if ($GUIDPvz) {
         $XmlData .='<car:PVZ>'.$GUIDPvz.'</car:PVZ>';
     }
         $XmlData .='</car:Recipient>                        
@@ -144,6 +148,7 @@ class CustomKCEClass
                              <car:FreeForm>true</car:FreeForm>
                          </car:Address>
                          <car:Phone>'.$SenderPhone.'</car:Phone>
+                         <car:EMail>'.$SenderEmail.'</car:EMail>
                      </car:Sender>
                      <car:TakeDate>'.$TakeDate.'</car:TakeDate>
                      <car:TypeOfCargo>'.$TypeOfCargo.'</car:TypeOfCargo>
@@ -176,6 +181,10 @@ class CustomKCEClass
 
     public static function OnSaleStatusOrderChangeHandler(Event $event)
     {
+        if (!class_exists(cKCE::class, 'SetWaybill')) {
+            return;
+        }
+
         $allow = Option::get("courierserviceexpress.moduledost", "allowAutoSetWayBill");
         $order = $event->getParameter("ENTITY");
         $orderId = $order->getId();
@@ -205,6 +214,7 @@ class CustomKCEClass
                 $moduleId = 'courierserviceexpress.moduledost';
 
                 $orderProps = new \KseOrderProperties($order);
+                $properties = $orderProps->propertiesByCode;
                 $TotalQty = 1;//?????
                 $ordersTotalSum = $order->getPrice() - $order->getDeliveryPrice();
                 $ordersTotalWeight = $orderProps->getTotalWeight();
@@ -214,12 +224,12 @@ class CustomKCEClass
                 $ordersTakingAmountSum = $orderProps->getTakingAmount();
                 $orderZIP = $orderProps->propertiesByCode['ZIP'];
                 $matterCategoryList[] = $orderProps->getMatter();
-                $delivery_address = $orderProps->getDeliveryAddressWithCityPrefix();
+                $delivery_address = $orderProps->getDeliveryAddress();
                 $delivery_required_date = date('Y-m-d', strtotime('+' . Option::get($moduleId, "dateZaboraDays") . ' day'));//дата доставки
                 //$delivery_required_date = date('Y-m-d', strtotime($orderProps->getRequiredFinishDatetime()));
                 $delivery_required_start_time = date('H:i', strtotime($orderProps->getRequiredStartDatetime()));
                 $delivery_required_finish_time = date('H:i', strtotime($orderProps->getRequiredFinishDatetime()));
-                $delivery_recipient_name = $orderProps->getRecipientName();
+                $delivery_recipient_name = trim("{$properties['LAST_NAME']} {$properties['FIRST_NAME']} {$properties['SECOND_NAME']}");
                 $delivery_recipient_phone = $orderProps->getRecipientPhone();
                 $delivery_note = $orderProps->getNoteWithPrefix();
                 $pickup_date = date('Y-m-d', strtotime('+' . Option::get($moduleId, "dateZaboraDays") . ' day'));
@@ -250,7 +260,33 @@ class CustomKCEClass
                 $WayOfPayment = Option::get("courierserviceexpress.moduledost", "PaymentMethod");
                 $BtrxOrderId = $orderId;
                 $SenderPhone = Option::get($moduleId, "SenderContactPhone");
-                $DeliveryOfCargo = Option::get("courierserviceexpress.moduledost", "kurierka");
+                $SenderEmail = Option::get($moduleId, "SenderContactEmail");
+                $VATRate = Option::get("courierserviceexpress.moduledost", "KCEVat");
+                //Курьер до дверей
+                $DeliveryOfCargo = '0';
+
+                $deliveryType = \Level44\Delivery::getType($order->getField('DELIVERY_ID'));
+
+                //Получаем код плательщика
+                $PayerCodes = cKCE::GetPayerCode($login, $password);
+                if (is_array($PayerCodes)) {
+                    [, $sender, $recipient] = array_map(fn($item) => $item['mKey'], $PayerCodes);
+
+                    if (isset($sender) && $deliveryType === DeliveryType::Courier) {
+                        $TypeOfPayer = $sender;
+                    } elseif (isset($recipient) && $deliveryType === DeliveryType::CourierFitting) {
+                        $TypeOfPayer = $recipient;
+                    }
+                }
+
+                $VATRates = static::GetVATRates($login, $password);
+
+                if (is_array($VATRates)) {
+                    $current = current(array_filter($VATRates, fn($item) => $item['mValue'] === '5%'));
+                    if (isset($current['mKey'])) {
+                        $VATRate = $current['mKey'];
+                    }
+                }
 
                 //Получаем информацию о товарах из корзины
                 $res = \CSaleBasket::GetList([], ["ORDER_ID" => $orderId]);
@@ -261,8 +297,8 @@ class CustomKCEClass
                 $RecepientEmail = $order['USER_EMAIL'];
                 $orderProps = \CSaleOrderPropsValue::GetOrderProps($orderId);
                 $EmailID = Option::get("courierserviceexpress.moduledost", "inputEmail");
-                $GUIDPvzOptionsFiz = Option::get("courierserviceexpress.moduledost", "inputPVZFIZ");
-                $GUIDPvzOptionsUr = Option::get("courierserviceexpress.moduledost", "inputPVZUR");
+                $GUIDPvzOptionsFiz = '';
+                $GUIDPvzOptionsUr = '';
                 AddMessage2Log($DeliveryOfCargo);
                 while ($prop = $orderProps->Fetch()) {
 
@@ -282,6 +318,7 @@ class CustomKCEClass
                         $DeliveryOfCargoPVZ = Option::get("courierserviceexpress.moduledost", "pvz");
                     }
                 }
+                $RecepientEmail = $properties['EMAIL'];
 
                 if ($DeliveryOfCargoPVZ) $DeliveryOfCargo = $DeliveryOfCargoPVZ;
 
@@ -321,11 +358,10 @@ class CustomKCEClass
 
                 $DeliveryDate = '';//$delivery_required_date;
                 $DeliveryTime = '';//$delivery_required_start_time.' - '.$delivery_required_finish_time;
-                $VATRate = Option::get("courierserviceexpress.moduledost", "KCEVat");
 
                 if (($login) && ($password) && ($BtrxOrderId) && ($RecepientName) && ($GeoTo) && ($RecepientFullAddress) && ($RecepientPhone) && ($Urgency) && ($CargoPackageQty) && ($Weight) && ($GeoFrom) && ($ClientName) && ($SenderPhone) && ($TakeDate) && ($TypeOfCargo) && ($Items)) {
                     //Формируем накладную и получаем ее номер для отслеживания статусов
-                    $WayBillID = \cKCE::SetWaybill(
+                    $WayBillID = static::SetWaybill(
                         $login,
                         $password,
                         $BtrxOrderId,
@@ -342,6 +378,7 @@ class CustomKCEClass
                         $ClientName,
                         $ClientNameOfficial,
                         $SenderPhone,
+                        $SenderEmail,
                         $SenderAddress,
                         $SenderComment,
                         $TakeDate,
@@ -373,31 +410,33 @@ class CustomKCEClass
                         $OrderUpd = \CSaleOrder::Update($orderId, $UpdTrack);
 
                         //Записываем накладную в список
-                        $hlbl = \COption::GetOptionString("courierserviceexpress.moduledost", "WayBillshblockID") * 1;
-                        $hlblock = HL\HighloadBlockTable::getById($hlbl)->fetch();
-                        $entity = HL\HighloadBlockTable::compileEntity($hlblock);
-                        $entity_data_class = $entity->getDataClass();
+                        $hl = \Bitrix\Highloadblock\HighloadBlockTable::getList(['filter' => ['TABLE_NAME' => 'ksewaybills']])->fetch();
 
-                        //Если такая накладная уже есть в базе, то не пишем её
-                        $rsData = $entity_data_class::getList([
-                            "select" => ["*"],
-                            "order"  => ["ID" => "ASC"],
-                            "filter" => ["UF_WAYBILLID" => $WayBillID]
-                        ]);
-                        $rsData = $rsData->fetch();
-                        //pr ($rsData);
-                        if (!$rsData) {
-                            $HBLdata = [
-                                "UF_WAYBILLID"    => $WayBillID,
-                                "UF_ORDERID"      => $orderId,
-                                "UF_WAYBILL_DATE" => $UpdTrack['DELIVERY_DOC_DATE'],
-                                "UF_ADR_OTPR"     => Option::get($moduleId, "AdresZaboraGruza"),
-                                "UF_KSE_WEIGHT"   => $Weight,
-                                "UF_KSE_QTY"      => $CargoPackageQty
-                            ];
-                            $HBLresult = $entity_data_class::add($HBLdata);
+                        if (!empty($hl['ID'])) {
+                            $hlblock = HL\HighloadBlockTable::getById($hl['ID'])->fetch();
+                            $entity = HL\HighloadBlockTable::compileEntity($hlblock);
+                            $entity_data_class = $entity->getDataClass();
+
+                            //Если такая накладная уже есть в базе, то не пишем её
+                            $rsData = $entity_data_class::getList([
+                                "select" => ["*"],
+                                "order"  => ["ID" => "ASC"],
+                                "filter" => ["UF_WAYBILLID" => $WayBillID]
+                            ]);
+                            $rsData = $rsData->fetch();
+                            //pr ($rsData);
+                            if (!$rsData) {
+                                $HBLdata = [
+                                    "UF_WAYBILLID"    => $WayBillID,
+                                    "UF_ORDERID"      => $orderId,
+                                    "UF_WAYBILL_DATE" => $UpdTrack['DELIVERY_DOC_DATE'],
+                                    "UF_ADR_OTPR"     => Option::get($moduleId, "AdresZaboraGruza"),
+                                    "UF_KSE_WEIGHT"   => $Weight,
+                                    "UF_KSE_QTY"      => $CargoPackageQty
+                                ];
+                                $HBLresult = $entity_data_class::add($HBLdata);
+                            }
                         }
-
                         $result = $WayBillID;
                         //AddMessage2Log($result);
                     } else {
@@ -411,6 +450,53 @@ class CustomKCEClass
             } else {
                 //AddMessage2Log('checked=NO!');
             }
+        }
+    }
+
+    public static function GetVATRates($login,$password) {
+
+        $XmlData = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.cargo3.ru">
+                     <soap:Header/>
+                     <soap:Body>
+                     <ns1:GetReferenceData>
+                     <ns1:login>'.$login.'</ns1:login>
+                     <ns1:password>'.$password.'</ns1:password>
+                     <ns1:parameters>
+                     <ns1:Key>parameters</ns1:Key>
+                     <ns1:List>
+                     <ns1:Key>Reference</ns1:Key>
+                     <ns1:Value>VATRates</ns1:Value>
+                     <ns1:ValueType>string</ns1:ValueType>
+                     </ns1:List>
+                     </ns1:parameters>
+                     </ns1:GetReferenceData>
+                     </soap:Body>
+                    </soap:Envelope>';
+
+        $result = cKCE::GetData($XmlData);
+        $text = cKCE::FormatXml($result);
+
+        return $text;
+
+    }
+
+    public static function OnSaleStatusShipmentChangeHandler(Event $event)
+    {
+        $shipment = $event->getParameter('ENTITY');
+        $value = $event->getParameter('VALUE');
+
+        $orderId = $shipment->getField('ORDER_ID');
+
+        switch ($value) {
+            case 'KD':
+                (new \CSaleOrder())->StatusOrder($orderId, 'DE');
+                break;
+            case 'KC':
+                (new \CSaleOrder())->StatusOrder($orderId, 'F');
+                break;
+            case 'KR':
+                (new \CSaleOrder())->StatusOrder($orderId, 'RT');
+                break;
         }
     }
 }
