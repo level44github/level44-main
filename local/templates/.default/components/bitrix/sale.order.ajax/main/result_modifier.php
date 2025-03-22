@@ -53,6 +53,16 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
         continue;
     }
 
+    if ($prop["CODE"] === "DELIVERY_DATE") {
+        $arResult["ORDER_PROP_DELIVERY_DATE"] = $prop;
+        continue;
+    }
+
+    if ($prop["CODE"] === "TIME_INTERVAL") {
+        $arResult["ORDER_PROP_TIME_INTERVAL"] = $prop;
+        continue;
+    }
+
     if ($prop["CODE"] === "LOCATION") {
         if (empty($prop["VALUE"])) {
             $arResult["DELIVERY"] = [];
@@ -118,7 +128,7 @@ if (!empty($basketProductIds)) {
 
     while ($product = $resProduct->GetNext()) {
         $arProductsAdd[$product["ID"]] = [
-            "NAME_EN" => $product["PROPERTY_NAME_EN_VALUE"],
+            "NAME_EN"      => $product["PROPERTY_NAME_EN_VALUE"],
             "COLOR_XML_ID" => $product["PROPERTY_COLOR_REF_VALUE"],
         ];
     }
@@ -137,7 +147,7 @@ $productsData = $productIds;
 $rsProductsData = CIBlockElement::GetList(
     [],
     [
-        "ID" => array_values($productsData),
+        "ID"        => array_values($productsData),
         "IBLOCK_ID" => Base::CATALOG_IBLOCK_ID
     ],
     false,
@@ -228,7 +238,7 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 
     if (!empty($basketItem["COLOR"])) {
         $basketItem["PROPS"]["COLOR_REF"] = [
-            "CODE" => "COLOR_REF",
+            "CODE"  => "COLOR_REF",
             "VALUE" => $basketItem["COLOR"]["COLOR_NAME"],
         ];
     }
@@ -251,7 +261,7 @@ $columns = array_chunk($columns, 2);
 
 $resultProps = $columns || $fulls ? [
     "COLUMNS" => $columns,
-    "FULLS" => $fulls,
+    "FULLS"   => $fulls,
 ] : [];
 
 $arResult["ORDER_PROP"]["USER_PROPS_Y"] = $resultProps;
@@ -269,7 +279,16 @@ if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
         && !empty($arResult["PAY_SYSTEM"]["ACTION_FILE"]);
 }
 
-$dollarTotalPrice = Base::getDollarPrice($arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"], null, true) + $sumPriceDollar;
+$dollarTotalPrice = Base::getDollarPrice($arResult['CURRENT_DELIVERY']['PRICE'], null, true) + $sumPriceDollar;
 $arResult["ORDER_TOTAL_PRICE_DOLLAR"] = $dollarTotalPrice <= 0 || !Base::isEnLang() ? false
     : Base::formatDollar($dollarTotalPrice);
+
+if (!empty($arResult['CURRENT_DELIVERY'])) {
+    $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision((
+            $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] - $arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"]
+        ) + $arResult['CURRENT_DELIVERY']['PRICE']);
+
+    $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"] = SaleFormatCurrency($arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"], 'RUB');
+}
+
 $arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];

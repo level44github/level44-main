@@ -40,12 +40,15 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
 						this.ctrls.inputs.fake.setAttribute('title', path);
 						this.ctrls.fullRoute.value = path;
 
+						if (Number(itemId) && this.isModified) {
+							BX.saleOrderAjax.address.selected = null;
+							BX.saleOrderAjax.address.getInput()?.val('');
+							BX.saleOrderAjax.addressValidate(true);
+							this.isModified = false
+						}
+
 						if(typeof this.opts.callback == 'string' && this.opts.callback.length > 0 && this.opts.callback in window)
 							window[this.opts.callback].apply(this, [itemId, this]);
-                        if (Number(itemId) && this.isModified) {
-                            $(".js-form__control[data-prop='ADDRESS']").val("")
-                            this.isModified = false
-                        }
 					},
 					'after-deselect-item': function(){
 						this.ctrls.fullRoute.value = '';

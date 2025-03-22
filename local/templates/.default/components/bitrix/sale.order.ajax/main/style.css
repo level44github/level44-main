@@ -46,3 +46,7 @@ font.errortext {
 .option__description {
     padding: 8px 32px 16px;
 }
+
+.suggestions-promo a[target="_blank"] svg {
+    display: none;
+}

@@ -12,6 +12,9 @@ use Bitrix\Sale\Delivery\Services\Table;
 use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\PaySystem\Manager;
 use Bitrix\Sale\PriceMaths;
+use cKCE;
+use Exception;
+use KseService;
 use Level44\Enums\DeliveryType;
 use Sale\Handlers\Delivery\KCEDeliveryHandler;
 
@@ -23,6 +26,7 @@ class Delivery
     const MSK_LOCATION_CODE = '0000073738';
     const MO_LOCATION_CODE = '0000028025';
     const SPB_LOCATION_CODE = '0000103664';
+    const LO_LOCATION_CODE = '0000028043';
 
     /** @var array|null */
     static $paysystems = null;
@@ -149,14 +153,14 @@ class Delivery
 
     /**
      * @param array $courierList
-     * @param string $location
+     * @param array $properties
      * @return array
      * @throws ArgumentException
      * @throws NotImplementedException
      * @throws ObjectPropertyException
      * @throws SystemException
      */
-    public static function getSuitableCourier(array $courierList, string $location): array
+    public static function getSuitableCourier(array $courierList, array $properties): array
     {
         usort($courierList, fn($a, $b) => $a['PRICE'] <=> $b['PRICE']);
 
@@ -187,16 +191,42 @@ class Delivery
                 static::$printLog = ob_get_clean();
             }
 
+            $deliveries = static::getDeliveries();
+            $deliveryData = $deliveries[$service['ID']];
+
             if ($service['CHECKED'] !== 'Y' && $someChecked) {
                 $service['CHECKED'] = 'Y';
             }
 
             [$initialPrice, $deliveryId] = [(int)$service['PRICE'], (int)$service['ID']];
 
-            [$price, $priceFormated] = static::reCalcPrice($initialPrice, $location, $deliveryId, $service['CURRENCY']);
+            [
+                $price,
+                $priceFormated
+            ] = static::reCalcPrice($initialPrice, $properties['LOCATION'], $deliveryId, $service['CURRENCY']);
 
             $service['PRICE'] = $price;
             $service['PRICE_FORMATED'] = $priceFormated;
+
+
+            if ($service['CHECKED'] === 'Y') {
+                if (in_array($deliveryData['CODE'], [
+                    'dalli_service:dalli_courier',
+                    'dalli_service:dalli_cfo',
+                    'kse'
+                ])) {
+                    $slots = static::getSlots($deliveryData['CODE'], $properties);
+
+                    if (is_array($slots)) {
+                        $service['DELIVERY_DATES'] = $slots;
+                        $checkedDate = current(array_filter($slots, fn($slot) => $slot['CHECKED']));
+
+                        if ($checkedDate) {
+                            $service['TIME_INTERVALS'] = $checkedDate['intervals'];
+                        }
+                    }
+                }
+            }
 
             return $service;
         }
@@ -221,17 +251,18 @@ class Delivery
         $calculated = $price;
 
         if (in_array($deliveryType, [DeliveryType::Courier, DeliveryType::CourierFitting])) {
-            $isMoscow = in_array($location, [static::MSK_LOCATION_CODE, static::MO_LOCATION_CODE], true)
-                || LocationTable::checkNodeIsParentOfNode(static::MSK_LOCATION_CODE, $location, ['ACCEPT_CODE' => true])
-                || LocationTable::checkNodeIsParentOfNode(static::MO_LOCATION_CODE, $location, ['ACCEPT_CODE' => true]);
+            $isMoscow = function ($code) {
+                return static::includedInRegion($code, self::MSK_LOCATION_CODE) || static::includedInRegion($code, self::MO_LOCATION_CODE);
+            };
 
-            $isSpb = $location === static::SPB_LOCATION_CODE
-                || LocationTable::checkNodeIsParentOfNode(static::SPB_LOCATION_CODE, $location, ['ACCEPT_CODE' => true]);
+            $isSpb = function ($code) {
+                return static::includedInRegion($code, self::SPB_LOCATION_CODE);
+            };
 
 
-            if ($isMoscow) {
+            if ($isMoscow($location)) {
                 $calculated = 590;
-            } elseif ($isSpb) {
+            } elseif ($isSpb($location)) {
                 $calculated = 690;
             } else {
                 if ($price <= 690) {
@@ -247,5 +278,209 @@ class Delivery
         }
 
         return [PriceMaths::roundPrecision($calculated), SaleFormatCurrency($calculated, $currency)];
+    }
+
+    /**
+     * @param string $serviceCode
+     * @param array $properties
+     * @return array|null
+     */
+    public static function getSlots(string $serviceCode, array $properties): array|null
+    {
+        $slots = null;
+
+        try {
+            if (empty($properties['LOCATION'])) {
+                throw new \Exception();
+            }
+
+            if ($serviceCode === 'kse') {
+                if (!class_exists(KseService::class) || !class_exists(cKCE::class)) {
+                    throw new \Exception();
+                }
+
+                $location = LocationTable::getByCode($properties['LOCATION'])->fetch();
+                $zipTo = KseService::GetZipCode($location['ID']);
+
+                $slots = CustomKCEClass::GetAvailableDeliveryDates($zipTo);
+            } elseif (in_array($serviceCode, ['dalli_service:dalli_courier', 'dalli_service:dalli_cfo'])) {
+                if (empty($properties['ADDRESS'])) {
+                    throw new \Exception();
+                }
+
+                if (!class_exists(\DalliservicecomDelivery::class)) {
+                    throw new \Exception();
+                }
+
+                $zone = static::getDalliZone($properties['LOCATION'], $properties['ADDRESS']);
+                $slots = static::getDalliDates($properties['LOCATION'], $zone, $serviceCode);
+            }
+        } catch (\Exception) {
+        }
+
+        if (is_array($slots)) {
+            $slots = array_map(function ($item) use ($properties) {
+                if ($item['date'] === trim($properties['DELIVERY_DATE'])) {
+                    $item['CHECKED'] = true;
+
+                    if (is_array($item['intervals'])) {
+                        $item['intervals'] = array_map(function ($interval) use ($properties) {
+                            if ($interval['value'] === trim($properties['TIME_INTERVAL'])) {
+                                $interval['CHECKED'] = true;
+                            }
+
+                            return $interval;
+                        }, $item['intervals']);
+                    }
+                }
+
+                return $item;
+            }, $slots);
+        }
+
+        return $slots;
+    }
+
+    /**
+     * @param string $locationCode
+     * @param string $address
+     * @return int
+     * @throws Exception
+     */
+    public static function getDalliZone(string $locationCode, string $address): int
+    {
+        $token = \COption::GetOptionString('dalliservicecom.delivery', 'DALLI_TOKEN');
+        $location = LocationTable::getByCode($locationCode)->fetch();
+        $arLocationTo = \CSaleLocation::GetByID($location['ID'], 'ru');
+
+        $region = $arLocationTo["REGION_NAME"];
+
+        if (!isset($region)) {
+            $region = $arLocationTo['CITY_NAME'];
+        }
+
+        $xml_data = '<?xml version="1.0" encoding="UTF-8"?>
+                <deliverycost module="bitrix">
+                    <auth token="' . $token . '"></auth>
+                    <partner>DS</partner>
+                    <townto>' . $address . '</townto>
+                    <oblname>' . $region . '</oblname>
+                    <weight>1</weight>
+                    <price>0</price>
+                    <inshprice>0</inshprice>
+					<cashservices>NO</cashservices>
+                    <length>1</length>
+                    <width>1</width>
+                    <height>1</height>
+                    <typedelivery>KUR</typedelivery>
+                </deliverycost>';
+
+        $arResult = \DalliservicecomDelivery::send_xml($xml_data);
+
+        if ((int)$arResult['deliverycost']['@']['error'] > 0 || (int)$arResult['request']['@']['error'] > 0) {
+            throw new \Exception();
+        }
+
+        return (int)$arResult['deliverycost']['@']['zone'];
+    }
+
+    /**
+     * @param $locationCode
+     * @param $address
+     * @return int
+     * @throws Exception
+     */
+    public static function getDalliDates(string $locationCode, int $zone, string $serviceCode): array
+    {
+        $token = \COption::GetOptionString('dalliservicecom.delivery', 'DALLI_TOKEN');
+        $location = LocationTable::getList([
+            'filter' => ['=CODE' => $locationCode, '=NAME.LANGUAGE_ID' => 'ru'],
+            'select' => ['CITY_NAME' => 'NAME.NAME']
+        ])->fetch();
+
+
+        $service = null;
+
+        $isMoscow = function ($code) {
+            return static::includedInRegion($code, self::MSK_LOCATION_CODE) || static::includedInRegion($code, self::MO_LOCATION_CODE);
+        };
+
+        $isSpb = function ($code) {
+            return static::includedInRegion($code, self::SPB_LOCATION_CODE) || static::includedInRegion($code, self::LO_LOCATION_CODE);
+        };
+
+        if ($serviceCode === 'dalli_service:dalli_courier') {
+            if ($isMoscow($locationCode)) {
+                $service = 1;
+            } elseif ($isSpb($locationCode)) {
+                $service = 11;
+            }
+        } elseif ($serviceCode === 'dalli_service:dalli_cfo') {
+            $service = 22;
+        }
+
+        if ($service === null) {
+            throw new \Exception();
+        }
+
+        $xml_data = '<?xml version="1.0" encoding="UTF-8"?>
+                <intervals>
+                    <auth token="' . $token . '"></auth>
+                    <output>dates</output>
+                    <zone>' . $zone . '</zone>
+                    <town>' . $location['CITY_NAME'] . '</town>
+                    <service>' . $service . '</service>
+                </intervals>';
+
+        $arResult = \DalliservicecomDelivery::send_xml($xml_data);
+
+        if ((int)$arResult['dates']['@']['error'] > 0 || (int)$arResult['request']['@']['error'] > 0) {
+            throw new \Exception();
+        }
+
+        $list = $arResult['dates']['#']['date'];
+
+        if (empty($list)) {
+            throw new \Exception();
+        }
+
+        $deliveryDates = [];
+
+        foreach ($list as $item) {
+            $intervals = [];
+
+            foreach ($item['#']['intervals'][0]['#']['interval'] as $intervalItem) {
+                $timeMin = $intervalItem['#']['time_min'][0];
+                $timeMax = $intervalItem['#']['time_max'][0];
+
+                if (isset($timeMin['#']) && isset($timeMax['#'])) {
+                    $from = str_pad($timeMin['#'], 2, '0', STR_PAD_LEFT) . ':00';
+                    $to = str_pad($timeMax['#'], 2, '0', STR_PAD_LEFT) . ':00';
+
+                    $intervals[] = [
+                        'value' => "$from - $to"
+                    ];
+                }
+            }
+
+            if (!empty($intervals) && !empty($item['@']['value'])) {
+                $deliveryDates[] = ["date" => $item['@']['value'], 'intervals' => $intervals];
+            }
+        }
+
+        return array_slice($deliveryDates, 0, 5);
+    }
+
+    /**
+     * @param string $locationCode
+     * @param string $regionCode
+     * @return bool
+     */
+    static function includedInRegion(string $locationCode, string $regionCode)
+    {
+        return $locationCode && $regionCode && (
+                $locationCode === $regionCode
+                || LocationTable::checkNodeIsParentOfNode($regionCode, $locationCode, ['ACCEPT_CODE' => true])
+            );
     }
 }

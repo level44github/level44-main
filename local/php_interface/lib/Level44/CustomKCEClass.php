@@ -6,6 +6,8 @@ namespace Level44;
     use Bitrix\Main\Config\Option;
     use Bitrix\Sale\Order;
     use cKCE;
+    use Exception;
+    use KseService;
     use Level44\Enums\DeliveryType;
 
 class CustomKCEClass
@@ -42,6 +44,7 @@ class CustomKCEClass
                         $DeliveryOfCargo,
                         $GUIDPvz,
                         $DeliveryDate,
+                        $DeliveryDateOf,
                         $DeliveryTime,
                         $VATRate
     ) {
@@ -57,9 +60,14 @@ class CustomKCEClass
 
         $rand=rand(0,1598458);
         $DeclaredValueRate = $SumNeedPayZakaz - $SumDost;
-        if ($DeliveryDate) {
-            $DeliveryDate = cKCE::DateTimeFormat($DeliveryDate);
+
+        if ($DeclaredValueRate > 50000) {
+            $DeclaredValueRate = 50000;
         }
+
+//        if ($DeliveryDate) {
+//            $DeliveryDate = cKCE::DateTimeFormat($DeliveryDate);
+//        }
                 if ($SumPayZakaz>0) {
             $COD = floatval($SumNeedPayZakaz) - floatval($SumPayZakaz);
         }else{
@@ -81,9 +89,11 @@ class CustomKCEClass
                      <car:ClientContact/>';
         if ($DeliveryDate) {
             $XmlData .='<car:DeliveryDate>'.$DeliveryDate.'</car:DeliveryDate>';
-                        //<car:DeliveryTime>'.$DeliveryTime.'</car:DeliveryTime>'; 
         }
-        
+
+        if ($DeliveryDateOf) {
+            $XmlData .='<car:DeliveryDateOf>'.$DeliveryDateOf.'</car:DeliveryDateOf>';
+        }
 
         $XmlData .='<car:Recipient>
                          <car:Client>'.$RecepientName.'</car:Client>
@@ -173,7 +183,11 @@ class CustomKCEClass
         $text = $sxe->children('soap',TRUE);
         $text = $text->children('m',TRUE);
 
-        $WayBills = json_decode(json_encode($text->SaveWaybillOfficeResponse->return->Items));        
+        $WayBills = json_decode(json_encode($text->SaveWaybillOfficeResponse->return->Items));
+        if ($WayBills?->Error === 'true') {
+            return null;
+        }
+
         $WayBillID = (string)$WayBills->Value;
 
         return $WayBillID;
@@ -181,7 +195,7 @@ class CustomKCEClass
 
     public static function OnSaleStatusOrderChangeHandler(Event $event)
     {
-        if (!class_exists(cKCE::class, 'SetWaybill')) {
+        if (!class_exists(cKCE::class)) {
             return;
         }
 
@@ -205,7 +219,9 @@ class CustomKCEClass
             $autostatuses = explode(',', $autostatuses);
             //AddMessage2Log($autostatuses);
 
-            if (in_array($orderstatus, $autostatuses)) {
+            $delivery = Delivery::getDeliveries();
+
+            if (in_array($orderstatus, $autostatuses) && $delivery[$order->getField('DELIVERY_ID')]['CODE'] === 'kse') {
 
                 //AddMessage2Log("yes3");
 
@@ -225,7 +241,8 @@ class CustomKCEClass
                 $orderZIP = $orderProps->propertiesByCode['ZIP'];
                 $matterCategoryList[] = $orderProps->getMatter();
                 $delivery_address = $orderProps->getDeliveryAddress();
-                $delivery_required_date = date('Y-m-d', strtotime('+' . Option::get($moduleId, "dateZaboraDays") . ' day'));//дата доставки
+                $delivery_required_date = $orderProps->propertiesByCode['DELIVERY_DATE'];
+                $delivery_required_time = $orderProps->propertiesByCode['TIME_INTERVAL'];
                 //$delivery_required_date = date('Y-m-d', strtotime($orderProps->getRequiredFinishDatetime()));
                 $delivery_required_start_time = date('H:i', strtotime($orderProps->getRequiredStartDatetime()));
                 $delivery_required_finish_time = date('H:i', strtotime($orderProps->getRequiredFinishDatetime()));
@@ -355,9 +372,18 @@ class CustomKCEClass
                 $SumPayZakaz = $OrderData['SUM_PAID'];
 
                 $SumNeedPayZakaz = $OrderData['PRICE'];
+                $parts = explode(' - ', $delivery_required_time);
 
-                $DeliveryDate = '';//$delivery_required_date;
-                $DeliveryTime = '';//$delivery_required_start_time.' - '.$delivery_required_finish_time;
+                $DeliveryTime = '';
+                $DeliveryDate = '';
+                $DeliveryDateOf = '';
+
+//                if (!empty($parts[0]) && !empty($parts[1]) && !empty($delivery_required_date)) {
+//                    $DeliveryTime = "$parts[0]:00 - $parts[1]:00";
+//
+//                    $DeliveryDate = "{$delivery_required_date}T$parts[0]:00";
+//                    $DeliveryDateOf = "{$delivery_required_date}T$parts[1]:00";
+//                }
 
                 if (($login) && ($password) && ($BtrxOrderId) && ($RecepientName) && ($GeoTo) && ($RecepientFullAddress) && ($RecepientPhone) && ($Urgency) && ($CargoPackageQty) && ($Weight) && ($GeoFrom) && ($ClientName) && ($SenderPhone) && ($TakeDate) && ($TypeOfCargo) && ($Items)) {
                     //Формируем накладную и получаем ее номер для отслеживания статусов
@@ -392,6 +418,7 @@ class CustomKCEClass
                         $DeliveryOfCargo,
                         $GUIDPvz,
                         $DeliveryDate,
+                        $DeliveryDateOf,
                         $DeliveryTime,
                         $VATRate
                     );
@@ -498,5 +525,99 @@ class CustomKCEClass
                 (new \CSaleOrder())->StatusOrder($orderId, 'RT');
                 break;
         }
+    }
+
+    /**
+     * @param $zipTo
+     * @return array
+     * @throws Exception
+     */
+    public static function GetAvailableDeliveryDates($zipTo)
+    {
+        $login = Option::get("courierserviceexpress.moduledost", "login");
+        $password = Option::get("courierserviceexpress.moduledost", "pass");
+        $zipFrom = KseService::GetZipCode(Option::get("courierserviceexpress.moduledost", "GorodZaboraGruza"));
+        $urgency = Option::get("courierserviceexpress.moduledost", "urgency");
+        $additionalTakeDays = Option::get("courierserviceexpress.moduledost", "dateZaboraDays");
+        $takeDate = date('Y-m-d', strtotime('+' . $additionalTakeDays . ' day')) . 'T' . '00:00:00';
+
+        $XmlData = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.cargo3.ru">
+          <soap:Header/>
+          <soap:Body>
+         <ns1:GetReferenceData>
+          <ns1:login>' . $login . '</ns1:login>
+          <ns1:password>' . $password . '</ns1:password>
+          <ns1:parameters>
+           <ns1:Key>parameters</ns1:Key>
+           <ns1:List>
+            <ns1:Key>Reference</ns1:Key>
+            <ns1:Value>availabledeliverydates</ns1:Value>
+            <ns1:ValueType>string</ns1:ValueType>
+           </ns1:List>
+           <ns1:List>
+            <ns1:Key>Search</ns1:Key>
+            <ns1:Value>' . "postcode-$zipTo" . '</ns1:Value>
+            <ns1:ValueType>string</ns1:ValueType>
+           </ns1:List>
+           <ns1:List>
+            <ns1:Key>geography</ns1:Key>
+            <ns1:Value>' . "postcode-$zipFrom" . '</ns1:Value>
+            <ns1:ValueType>string</ns1:ValueType>
+           </ns1:List>
+           <ns1:List>
+            <ns1:Key>other</ns1:Key>
+            <ns1:Value>' . $urgency . '</ns1:Value>
+            <ns1:ValueType>string</ns1:ValueType>
+           </ns1:List>
+           <ns1:List>
+            <ns1:Key>takedate</ns1:Key>
+            <ns1:Value>' . $takeDate . '</ns1:Value>
+            <ns1:ValueType>dateTime</ns1:ValueType>
+           </ns1:List>
+          </ns1:parameters>
+         </ns1:GetReferenceData>
+          </soap:Body>
+        </soap:Envelope>';
+
+        $search_result = cKCE::GetData($XmlData);
+
+        $sxe = new \SimpleXMLElement($search_result);
+
+        $text = $sxe->children('soap', TRUE);
+        $text = $text->children('m', TRUE);
+
+        $list = $text->GetReferenceDataResponse->return->List;
+
+        if (empty($list)) {
+            throw new \Exception();
+        }
+
+        $deliveryDates = [];
+
+        foreach ($list as $item) {
+            $intervals = [];
+
+            foreach ($item->Properties as $property) {
+                [$timeFrom, $timeTo] = $property->Fields;
+
+                [$fromHour, $fromMinute] = explode(':', $timeFrom->Value);
+                [$toHour, $toMinute] = explode(':', $timeTo->Value);
+
+                $fromIsCorrect = empty(array_filter([$fromHour, $fromMinute], fn($item) => !isset($item)));
+                $toIsCorrect = empty(array_filter([$toHour, $toMinute], fn($item) => !isset($item)));
+
+                if ($fromIsCorrect && $toIsCorrect) {
+                    $from = "$fromHour:$fromMinute";
+                    $to = "$toHour:$toMinute";
+
+                    $intervals[] = [
+                        'value' => "$from - $to",
+                    ];
+                }
+            }
+            $deliveryDates[] = ["date" => (string)$item->Fields->Value, 'intervals' => $intervals];
+        }
+
+        return array_slice($deliveryDates, 0, 5);
     }
 }

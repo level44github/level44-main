@@ -6,6 +6,23 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Web\Json;
 use Level44\Delivery;
 
+function formatSlotDate(string $datetime): false|string
+{
+    try {
+        $dt = new DateTime($datetime);
+    } catch (\Exception) {
+        return '';
+    }
+
+    $formatter = new IntlDateFormatter(
+        \Level44\Base::isEnLang() ? 'en_EN' : 'ru_RU',
+        IntlDateFormatter::LONG,
+        IntlDateFormatter::LONG
+    );
+    $formatter->setPattern('d MMMM');
+    return $formatter->format($dt);
+}
+
 ?>
 
 
@@ -135,7 +152,7 @@ if (!function_exists("PrintDelivery")) {
         <? if ($arResult["CURRENT_DELIVERY"]["IS_COURIER"]): ?>
             <div class="form-group">
                 <label for="<?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"><?= $arResult["ORDER_PROP_ADDRESS"]["NAME"] ?></label>
-                <input class="form-control js-form__control js-address-field <?= $arResult["ORDER_PROP_ADDRESS"]["REQUIRED"] ? "is-required" : "" ?>"
+                <input class="form-control js-form__control js-address-field"
                        type="text"
                        id=" <?= $arResult["ORDER_PROP_ADDRESS"]["FIELD_NAME"] ?>"
                        maxlength="250"
@@ -165,6 +182,72 @@ if (!function_exists("PrintDelivery")) {
                     BX.saleOrderAjax.address.lastAddressOutRussia = <?=Json::encode($arResult["OUT_RUSSIA"])?>;
                 </script>
             </div>
+
+            <? if (!empty($arResult["CURRENT_DELIVERY"]['DELIVERY_DATES']) && !empty($arResult['ORDER_PROP_DELIVERY_DATE'])): ?>
+                <fieldset class="fieldset">
+                    <label><?= Loc::getMessage("DELIVERY_DATE") ?></label>
+                    <div class="checkout__radio" id="dates">
+                        <? foreach ($arResult["CURRENT_DELIVERY"]['DELIVERY_DATES'] as $index => $slot): ?>
+                            <div class="card option">
+                                <a class="option__header <?= $slot["CHECKED"] ? "" : "collapsed" ?> js-date_slot_link"
+                                   data-toggle="collapse"
+                                   href="#date_slot<?= $index ?>"
+                                   role="button"
+                                   aria-expanded="<?= $slot["CHECKED"] ? "true" : "false" ?>"
+                                   aria-controls="date_slot<?= $index ?>"
+                                   data-target-label="date_slot<?= $index ?>label"
+                                >
+                                    <div class="option__title"><?= formatSlotDate($slot["date"]) ?></div>
+                                </a>
+                                <label style="display: none;" for="date_slot<?= $index ?>input"
+                                       id="date_slot<?= $index ?>label"></label>
+                                <input id="date_slot<?= $index ?>input"
+                                       type="radio"
+                                       class="js-date_slot-input"
+                                       name="<?= $arResult['ORDER_PROP_DELIVERY_DATE']["FIELD_NAME"] ?>"
+                                       style="display: none;"
+                                       value="<?= $slot["date"] ?>"
+                                    <?= $slot["CHECKED"] ? " checked" : "" ?>
+                                       onclick="submitForm();"
+                                >
+                            </div>
+                        <? endforeach; ?>
+                    </div>
+                </fieldset>
+            <? endif; ?>
+
+            <? if (!empty($arResult["CURRENT_DELIVERY"]['TIME_INTERVALS']) && !empty($arResult['ORDER_PROP_TIME_INTERVAL'])): ?>
+                <fieldset class="fieldset">
+                    <label><?= Loc::getMessage("TIME_INTERVAL") ?></label>
+                    <div class="checkout__radio" id="intervals">
+                        <? foreach ($arResult["CURRENT_DELIVERY"]['TIME_INTERVALS'] as $index => $slot): ?>
+                            <div class="card option">
+                                <a class="option__header <?= $slot["CHECKED"] ? "" : "collapsed" ?> js-time_slot_link"
+                                   data-toggle="collapse"
+                                   href="#time_slot<?= $index ?>"
+                                   role="button"
+                                   aria-expanded="<?= $slot["CHECKED"] ? "true" : "false" ?>"
+                                   aria-controls="time_slot<?= $index ?>"
+                                   data-target-label="time_slot<?= $index ?>label"
+                                >
+                                    <div class="option__title"><?= $slot["value"] ?></div>
+                                </a>
+                                <label style="display: none;" for="time_slot<?= $index ?>input"
+                                       id="time_slot<?= $index ?>label"></label>
+                                <input id="time_slot<?= $index ?>input"
+                                       type="radio"
+                                       class="js-time_slot-input"
+                                       name="<?= $arResult['ORDER_PROP_TIME_INTERVAL']["FIELD_NAME"] ?>"
+                                       style="display: none;"
+                                       value="<?= $slot["value"] ?>"
+                                    <?= $slot["CHECKED"] ? " checked" : "" ?>
+                                       onclick="submitForm();"
+                                >
+                            </div>
+                        <? endforeach; ?>
+                    </div>
+                </fieldset>
+            <? endif; ?>
         <? endif; ?>
 
         <div class="form-group">

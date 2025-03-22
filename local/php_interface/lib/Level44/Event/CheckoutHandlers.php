@@ -6,6 +6,7 @@ use Bitrix\Main\ArgumentException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
+use Bitrix\Main\Loader;
 use Bitrix\Main\NotImplementedException;
 use Bitrix\Main\NotSupportedException;
 use Bitrix\Main\ObjectPropertyException;
@@ -27,6 +28,7 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
         static::addEventHandler("sale", "OnSaleShipmentSetField");
         static::addEventHandler("sale", "OnSaleStatusOrderChange", CustomKCEClass::class, sort: 50);
+        static::removeKCEOnSaleOrderSavedHandler();
         static::addEventHandler("sale", "OnSaleStatusShipmentChange", CustomKCEClass::class);
     }
 
@@ -59,10 +61,23 @@ class CheckoutHandlers extends HandlerBase
      */
     public static function OnSaleComponentOrderOneStepDeliveryHandler(&$arResult, &$arUserResult, $arParams)
     {
-        $location = $arUserResult['DELIVERY_LOCATION_BCODE'];
         $typesDelivery = [];
         $courierFittingList = [];
         $courierList = [];
+
+        $res = \CSaleOrderProps::GetList([], ['ACTIVE' => 'Y']);
+
+        $properties = [];
+        while ($prop = $res->fetch()) {
+            $properties[$prop['ID']] = $prop;
+        }
+
+        $orderProperties = [];
+        foreach ($arUserResult['ORDER_PROP'] as $id => $value) {
+            if (!empty($properties[$id]['CODE'])) {
+                $orderProperties[$properties[$id]['CODE']] = $value;
+            }
+        }
 
         foreach ($arResult["DELIVERY"] as $delivery) {
             if (!empty($delivery["CALCULATE_ERRORS"]) || $delivery['PERIOD_TEXT'] === 'Connection Error') {
@@ -88,18 +103,18 @@ class CheckoutHandlers extends HandlerBase
         }
 
         if (!empty($courierFittingList)) {
-            $typesDelivery["COURIER_FITTING"] = Delivery::getSuitableCourier($courierFittingList, $location);
+            $typesDelivery["COURIER_FITTING"] = Delivery::getSuitableCourier($courierFittingList, $orderProperties);
         }
 
         if (!empty($courierList)) {
-            $typesDelivery["COURIER"] = Delivery::getSuitableCourier($courierList, $location);
+            $typesDelivery["COURIER"] = Delivery::getSuitableCourier($courierList, $orderProperties);
         }
 
         if (!empty($pickup = $typesDelivery['PICKUP'])) {
             [
                 $pickup['PRICE'],
                 $pickup['PRICE_FORMATED']
-            ] = Delivery::reCalcPrice((int)$pickup['PRICE'], $location, (int)$pickup['ID'], $pickup['CURRENCY']);
+            ] = Delivery::reCalcPrice((int)$pickup['PRICE'], $orderProperties['LOCATION'], (int)$pickup['ID'], $pickup['CURRENCY']);
 
             $typesDelivery['PICKUP'] = $pickup;
         }
@@ -134,6 +149,20 @@ class CheckoutHandlers extends HandlerBase
 
             if ($zipValue = $locData['SALE_LOCATION_LOCATION_EXTERNAL_XML_ID']) {
                 $zipProperty->setValue($zipValue);
+            }
+        }
+
+        if ($timeIntervalProperty = $order->getPropertyCollection()->getItemByOrderPropertyCode('TIME_INTERVAL')) {
+            [$from, $to] = explode(' - ', $timeIntervalProperty->getValue());
+
+            if (isset($from) && isset($to)) {
+                if ($fromProperty = $order->getPropertyCollection()->getItemByOrderPropertyCode('TIME_INTERVAL_FROM')) {
+                    $fromProperty->setValue($from);
+                }
+
+                if ($toProperty = $order->getPropertyCollection()->getItemByOrderPropertyCode('TIME_INTERVAL_TO')) {
+                    $toProperty->setValue($to);
+                }
             }
         }
 
@@ -177,5 +206,16 @@ class CheckoutHandlers extends HandlerBase
         }
 
         return new EventResult(EventResult::SUCCESS);
+    }
+
+    public static function removeKCEOnSaleOrderSavedHandler()
+    {
+        $handlers = \Bitrix\Main\EventManager::getInstance()->findEventHandlers("sale", "OnSaleStatusOrderChange");
+        foreach ($handlers as $hKey => $handler) {
+            if ($handler['TO_METHOD'] === 'KCEOnSaleOrderSavedHandler') {
+                $eventManager = \Bitrix\Main\EventManager::getInstance();
+                $eventManager->removeEventHandler('sale', 'OnSaleStatusOrderChange', $hKey);
+            }
+        }
     }
 }

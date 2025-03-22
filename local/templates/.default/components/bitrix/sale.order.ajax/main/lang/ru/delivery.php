@@ -10,3 +10,5 @@ $MESS["DELIVERY_COURIER_FITTING_NAME"] = "Курьер с примеркой";
 $MESS["DELIVERY_COURIER_FITTING_DESCRIPTION"] = "Возможна только оплата при получении. Доступна примерка и частичный выкуп.";
 $MESS["DELIVERY_SHOP_NAME"] = "Самовывоз из магазина";
 $MESS["DELIVERY_SHOP_DESCRIPTION"] = "Возможна только онлайн оплата.<br>Пункт самовывоза: г. Москва, ул. Малая Бронная, 24, стр. 3, во дворе, по лестнице этаж 3 и налево";
+$MESS["DELIVERY_DATE"] = "Дата доставки";
+$MESS["TIME_INTERVAL"] = "Время доставки";

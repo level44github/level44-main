@@ -234,7 +234,7 @@ if (!function_exists("PrintPropsForm")) {
 
             <div class="form-group region-select">
                 <button class="region-select--button region-select--russia <?= $arProperty["OUT_RUSSIA"] ? "" : "region-selected" ?>"><?=Loc::getMessage("INSIDE_RUSSIA");?></button>
-                <button class="region-select--button region-select--world <?= $arProperty["OUT_RUSSIA"] ? "region-selected" : "" ?>"><?=Loc::getMessage("OUTSIDE_RUSSIA");?></button>
+                <button class="region-select--button region-select--world <?= $arProperty["OUT_RUSSIA"] ? "region-selected" : "" ?>" hidden><?=Loc::getMessage("OUTSIDE_RUSSIA");?></button>
             </div>
 
             <div class="form-group bx_block">

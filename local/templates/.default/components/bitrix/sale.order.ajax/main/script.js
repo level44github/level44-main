@@ -515,7 +515,17 @@ BX.saleOrderAjax = {
                 .not(".js-form__location")
                 .blur();
 
+            this.addressValidate();
+
             if ($(".is-invalid:not(.is-invalid-soft)").length) {
+                const offsetError = $(".is-invalid:not(.is-invalid-soft)").first().offset();
+
+                if (offsetError?.top) {
+                    $('html, body').animate({
+                        scrollTop: parseInt(offsetError?.top - 100)
+                    }, 500);
+                }
+
                 this.BXFormPosting = false;
                 $(".checkout-loading-overlay").hide();
                 return;
@@ -646,6 +656,9 @@ BX.saleOrderAjax = {
 
         const addressFieldValue = addressField.val()?.trim();
 
+        $(addressField).removeClass('is-invalid');
+        $(addressField).removeClass('is-invalid-soft');
+
         if (!selectedAddress) {
             if (!addressFieldValue) {
                 if (!skipEmptyCheck) {
@@ -653,10 +666,10 @@ BX.saleOrderAjax = {
                     $(addressField).addClass('is-invalid');
                 }
             } else {
-                const previousValue = this.address.previousValue?.trim();
+                const previousValue = this.address.previousValue;
 
-                if (previousValue && addressFieldValue === previousValue) {
-                    addressField.suggestions().getSuggestions(addressFieldValue)
+                if (previousValue && addressFieldValue === previousValue?.trim()) {
+                    addressField.suggestions().getSuggestions(previousValue)
                         .done(function (suggestions) {
                             if (!suggestions?.length) {
                                 addressField.val('');
@@ -675,9 +688,6 @@ BX.saleOrderAjax = {
             } else if (!selectedAddress?.flat) {
                 $(addressField).siblings('.invalid-feedback').text(this.address.errors.MISSED_FLAT);
                 $(addressField).addClass('is-invalid').addClass('is-invalid-soft');
-            } else {
-                $(addressField).removeClass('is-invalid');
-                $(addressField).removeClass('is-invalid-soft');
             }
         }
     },
@@ -703,6 +713,10 @@ BX.saleOrderAjax = {
                 onSelect: function (suggestion) {
                     that.address.selected = suggestion;
                     that.addressValidate();
+
+                    if (!that.address.getInput()?.hasClass('is-invalid') || that.address.getInput()?.hasClass('is-invalid-soft')) {
+                        BX.saleOrderAjax.submitForm();
+                    }
                 },
                 onSelectNothing: function () {
                     that.address.selected = null;
@@ -716,6 +730,8 @@ BX.saleOrderAjax = {
                     }
                 }
             });
+
+            BX.saleOrderAjax.addressValidate(true)
         }
     }
 };
@@ -725,6 +741,30 @@ $(function () {
         BX.saleOrderAjax.setErrorForCountryField()
     }
     $(document).on("click", ".js-delivery-link", function (event) {
+        var labelId = $(this).data("target-label");
+        if (labelId) {
+            $(document).find("#" + labelId).click()
+        }
+
+        if ($(document).find(".js-delivery-link").not(".collapsed").length <= 0) {
+            $(document).find(".js-delivery-input").prop("checked", false)
+        }
+    })
+
+    $(document).on("click", ".js-date_slot_link", function (event) {
+        event.preventDefault();
+        var labelId = $(this).data("target-label");
+        if (labelId) {
+            $(document).find("#" + labelId).click()
+        }
+
+        if ($(document).find(".js-delivery-link").not(".collapsed").length <= 0) {
+            $(document).find(".js-delivery-input").prop("checked", false)
+        }
+    })
+
+    $(document).on("click", ".js-time_slot_link", function (event) {
+        event.preventDefault();
         var labelId = $(this).data("target-label");
         if (labelId) {
             $(document).find("#" + labelId).click()
