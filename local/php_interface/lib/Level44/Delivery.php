@@ -136,6 +136,27 @@ class Delivery
             }
         }
 
+        //Get max value from period
+        if (in_array(static::getType($delivery['ID']), [DeliveryType::CourierFitting, DeliveryType::Courier])) {
+            $forms = [Loc::getMessage("PERIOD_DAY"), Loc::getMessage("PERIOD_DAYA"), Loc::getMessage("PERIOD_DAYS")];
+            [$period, $measure] = explode(' ', trim($delivery["PERIOD_TEXT"]));
+            [$from, $to] = explode('-', $period);
+
+            if (is_numeric($from) && is_numeric($to) && in_array(strtolower(trim($measure)), $forms)) {
+                $lst = $to % 10;
+
+                if ($lst === 1) {
+                    $form = $forms[0];
+                } elseif ($lst < 5) {
+                    $form = $forms[1];
+                } else {
+                    $form = $forms[2];
+                }
+
+                $delivery["PERIOD_TEXT"] = trim($to) . " $form";
+            }
+        }
+
         $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
 
         $delivery["DOLLAR_PRICE"] = Base::getDollarPrice($delivery["PRICE"]);
