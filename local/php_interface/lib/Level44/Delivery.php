@@ -47,7 +47,7 @@ class Delivery
             $deliveries = [];
 
             while ($delivery = $res->fetch()) {
-                if (empty($delivery['CODE']) && is_a($delivery['CLASS_NAME'], KCEDeliveryHandler::class, true)) {
+                if (empty($delivery['CODE']) && str_contains($delivery['CLASS_NAME'], 'Sale\Handlers\Delivery\KCEDeliveryHandler')) {
                     $delivery['CODE'] = 'kse';
                 }
 
