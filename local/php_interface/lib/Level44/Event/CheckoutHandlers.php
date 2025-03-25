@@ -4,6 +4,7 @@ namespace Level44\Event;
 
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\ArgumentOutOfRangeException;
+use Bitrix\Main\Context;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
@@ -72,9 +73,23 @@ class CheckoutHandlers extends HandlerBase
             $properties[$prop['ID']] = $prop;
         }
 
+        $request = Context::getCurrent()->getRequest();
+        $orderRequest = $request->getPost('order');
         $orderProperties = [];
         foreach ($arUserResult['ORDER_PROP'] as $id => $value) {
             if (!empty($properties[$id]['CODE'])) {
+                //Clear address, if it takes from profile, but not passed in ajax request
+                if ($properties[$id]['CODE'] === 'ADDRESS') {
+                    if (!empty($value) &&
+                        (
+                            (empty($orderRequest["ORDER_PROP_$id"]) && $orderRequest["is_ajax_post"] === 'Y')
+                            || (empty($request->get("ORDER_PROP_$id")) && $request->get('is_ajax_post') === 'Y')
+                        )
+                    ) {
+                        $value = '';
+                    }
+                }
+
                 $orderProperties[$properties[$id]['CODE']] = $value;
             }
         }

@@ -414,6 +414,7 @@ class Delivery
     public static function getDalliDates(string $locationCode, int $zone, string $serviceCode): array
     {
         $token = \COption::GetOptionString('dalliservicecom.delivery', 'DALLI_TOKEN');
+        $additionalDays = (int)\COption::GetOptionString('dalliservicecom.delivery', 'DS_COURIER_PLUS_DELIVERY_PERIOD');
         $location = LocationTable::getList([
             'filter' => ['=CODE' => $locationCode, '=NAME.LANGUAGE_ID' => 'ru'],
             'select' => ['CITY_NAME' => 'NAME.NAME']
@@ -489,7 +490,7 @@ class Delivery
             }
         }
 
-        return array_slice($deliveryDates, 0, 5);
+        return array_slice($deliveryDates, $additionalDays, 5);
     }
 
     /**
