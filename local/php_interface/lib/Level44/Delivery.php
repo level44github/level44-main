@@ -231,20 +231,14 @@ class Delivery
 
 
             if ($service['CHECKED'] === 'Y') {
-                if (in_array($deliveryData['CODE'], [
-                    'dalli_service:dalli_courier',
-                    'dalli_service:dalli_cfo',
-                    'kse'
-                ])) {
-                    $slots = static::getSlots($deliveryData['CODE'], $properties);
+                $slots = static::getSlots($deliveryData['CODE'], $properties);
 
-                    if (is_array($slots)) {
-                        $service['DELIVERY_DATES'] = $slots;
-                        $checkedDate = current(array_filter($slots, fn($slot) => $slot['CHECKED']));
+                if (is_array($slots)) {
+                    $service['DELIVERY_DATES'] = $slots;
+                    $checkedDate = current(array_filter($slots, fn($slot) => $slot['CHECKED']));
 
-                        if ($checkedDate) {
-                            $service['TIME_INTERVALS'] = $checkedDate['intervals'];
-                        }
+                    if ($checkedDate) {
+                        $service['TIME_INTERVALS'] = $checkedDate['intervals'];
                     }
                 }
             }

@@ -26,7 +26,6 @@ class Handlers extends HandlerBase
         static::addEventHandler("iblock", "OnBeforeIBlockUpdate");
 
         static::addEventHandler("sale", "OnOrderNewSendEmail");
-        static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
         static::addEventHandler("catalog", "Bitrix\Catalog\Model\Product::OnBeforeUpdate", static::class, 'OnBeforeProductSaveHandler');
 
         static::addEventHandler("germen.settings", "OnAfterSettingsUpdate");
