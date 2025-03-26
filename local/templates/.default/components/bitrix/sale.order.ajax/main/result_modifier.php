@@ -3,11 +3,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Main\Context;
 use Bitrix\Main\Localization\Loc;
-use \Level44\Base;
+use Bitrix\Sale\Location\LocationTable;
+use Level44\Base;
 use Level44\Product;
 
-$request = \Bitrix\Main\Context::getCurrent()->getRequest();
+$request = Context::getCurrent()->getRequest();
 
 $columns = [];
 $fulls = [];
@@ -17,7 +19,7 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
 
     $prop["VALUE"] = reset($prop["VALUE"]);
     if ($prop["CODE"] === "LOCATION") {
-        $prop["VALUE"] = \CSaleLocation::getLocationIDbyCODE($prop["VALUE"]);
+        $prop["VALUE"] = CSaleLocation::getLocationIDbyCODE($prop["VALUE"]);
     }
 
     $prop["FIELD_NAME"] = "ORDER_PROP_" . $prop["ID"];
@@ -51,6 +53,16 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
         continue;
     }
 
+    if ($prop["CODE"] === "DELIVERY_DATE") {
+        $arResult["ORDER_PROP_DELIVERY_DATE"] = $prop;
+        continue;
+    }
+
+    if ($prop["CODE"] === "TIME_INTERVAL") {
+        $arResult["ORDER_PROP_TIME_INTERVAL"] = $prop;
+        continue;
+    }
+
     if ($prop["CODE"] === "LOCATION") {
         if (empty($prop["VALUE"])) {
             $arResult["DELIVERY"] = [];
@@ -59,7 +71,7 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
 
         $locPath = [];
         if ((int)$prop["VALUE"] > 0) {
-            $locPath = \Bitrix\Sale\Location\LocationTable::getPathToNode($prop["VALUE"], [])->fetchAll();
+            $locPath = LocationTable::getPathToNode($prop["VALUE"], [])->fetchAll();
             $locPath = current($locPath);
         }
 
@@ -77,7 +89,7 @@ foreach ($arResult["JS_DATA"]["ORDER_PROP"]["properties"] as &$prop) {
         }
         $prop["OUT_RUSSIA"] = $arResult["OUT_RUSSIA"];
         if ($prop["OUT_RUSSIA"]) {
-            $prop["NAME"] = \Level44\Base::getMultiLang("Страна", "Country");
+            $prop["NAME"] = Base::getMultiLang("Страна", "Country");
         }
     }
 
@@ -99,7 +111,7 @@ foreach ($arResult["BASKET_ITEMS"] as $item) {
 $arProductsAdd = [];
 
 if (!empty($basketProductIds)) {
-    $resProduct = \CIBlockElement::GetList(
+    $resProduct = CIBlockElement::GetList(
         [],
         [
             "=ID" => $basketProductIds
@@ -116,14 +128,14 @@ if (!empty($basketProductIds)) {
 
     while ($product = $resProduct->GetNext()) {
         $arProductsAdd[$product["ID"]] = [
-            "NAME_EN" => $product["PROPERTY_NAME_EN_VALUE"],
+            "NAME_EN"      => $product["PROPERTY_NAME_EN_VALUE"],
             "COLOR_XML_ID" => $product["PROPERTY_COLOR_REF_VALUE"],
         ];
     }
 
 }
 
-$productList = \CCatalogSKU::getProductList($basketProductIds);
+$productList = CCatalogSKU::getProductList($basketProductIds);
 
 $productIds = [];
 foreach ($productList as $offerId => $product) {
@@ -132,11 +144,11 @@ foreach ($productList as $offerId => $product) {
 
 $productsData = $productIds;
 
-$rsProductsData = \CIBlockElement::GetList(
+$rsProductsData = CIBlockElement::GetList(
     [],
     [
-        "ID" => array_values($productsData),
-        "IBLOCK_ID" => \Level44\Base::CATALOG_IBLOCK_ID
+        "ID"        => array_values($productsData),
+        "IBLOCK_ID" => Base::CATALOG_IBLOCK_ID
     ],
     false,
     false,
@@ -173,7 +185,7 @@ $products = array_map(function ($productId) {
     ];
 }, $productIds);
 
-\Level44\Base::setColorOffers($products);
+Base::setColorOffers($products);
 
 foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
     $basketItem["COLOR"] = $products[$basketItem["PRODUCT_ID"]];
@@ -190,7 +202,7 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
     $itemPriceDollar = 0;
 
     if ($basketItem["PRICE_DOLLAR"] <= 0) {
-        $itemPriceDollar = \Level44\Base::getDollarPrice(
+        $itemPriceDollar = Base::getDollarPrice(
             $basketItem["PRICE"],
             null,
             true
@@ -217,16 +229,16 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $oldSumPriceDollar += $basketItem["oldPriceDollar"];
     }
 
-    $basketItem["PRICE_DOLLAR"] = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($itemPriceDollar) : false;
+    $basketItem["PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar($itemPriceDollar) : false;
 
-    $basketItem["NAME"] = \Level44\Base::getMultiLang(
+    $basketItem["NAME"] = Base::getMultiLang(
         $basketItem["NAME"],
         $arProductsAdd[$basketItem["PRODUCT_ID"]]["NAME_EN"]
     );
 
     if (!empty($basketItem["COLOR"])) {
         $basketItem["PROPS"]["COLOR_REF"] = [
-            "CODE" => "COLOR_REF",
+            "CODE"  => "COLOR_REF",
             "VALUE" => $basketItem["COLOR"]["COLOR_NAME"],
         ];
     }
@@ -236,7 +248,7 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 unset($basketItem);
 
 $arResult["BASKET_ITEMS_QUANTITY"] = $basketItemsQuantity;
-$arResult["SUM_PRICE_DOLLAR"] = \Level44\Base::isEnLang() ? \Level44\Base::formatDollar($sumPriceDollar) : false;
+$arResult["SUM_PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar($sumPriceDollar) : false;
 $arResult["OLD_SUM_PRICE"] = CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB");
 $arResult["OLD_SUM_PRICE_DOLLAR"] = Base::formatDollar($oldSumPriceDollar);
 $arResult["SHOW_OLD_SUM_PRICE"] = !empty($oldSumPrice) && $oldSumPrice !== $arResult["ORDER_PRICE"];
@@ -249,77 +261,16 @@ $columns = array_chunk($columns, 2);
 
 $resultProps = $columns || $fulls ? [
     "COLUMNS" => $columns,
-    "FULLS" => $fulls,
+    "FULLS"   => $fulls,
 ] : [];
 
 $arResult["ORDER_PROP"]["USER_PROPS_Y"] = $resultProps;
 
-foreach ($arResult["DELIVERY"] as $key => &$delivery) {
-    $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
-    if (in_array((int)$delivery["ID"], \Level44\Base::DELIVERY_COURIER)) {
-        $delivery["PERIOD_TEXT"] = Loc::getMessage("DAY");
-    }
+$currentDelivery = current(array_filter($arResult["DELIVERY"], fn($delivery) => $delivery["CHECKED"]));
 
-    if ($delivery["NAME"] === "DHL") {
-        if (strripos($delivery["PERIOD_TEXT"], "Приблизительное число дней доставки: ") !== false) {
-            $delivery["PERIOD_TEXT"] = str_replace("Приблизительное число дней доставки: ", "", $delivery["PERIOD_TEXT"]);
-        }
-        $delivery["PERIOD_TEXT"] = $delivery["PERIOD_TEXT"] . " " . Base::getMultiLang("дн.", "dd.");
-    }
-
-
-    $delivery["PRICE_PERIOD_TEXT"] = $delivery["PERIOD_TEXT"];
-    $delivery["PRICE_PERIOD_TEXT"] = $delivery["PRICE_PERIOD_TEXT"] .
-        (!empty($delivery["PRICE_PERIOD_TEXT"]) ? ", " : "");
-
-    $delivery["DOLLAR_PRICE"] = \Level44\Base::getDollarPrice($delivery["PRICE"]);
-    if (empty($delivery["PRICE_FORMATED"]) || (int)$delivery["PRICE"] <= 0) {
-        if (!empty($delivery["CALCULATE_ERRORS"])) {
-            $delivery["CALCULATE_INVALID"] = true;
-            $delivery["CHECKED"] = false;
-        } else {
-            $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");
-            $delivery["DOLLAR_PRICE"] = false;
-        }
-    }
-    $delivery["PRICE_PERIOD_TEXT"] .= $delivery["PRICE_FORMATED"];
-    if ($delivery["CHECKED"]) {
-        $arResult["CURRENT_DELIVERY"] = $delivery;
-    }
+if (!empty($currentDelivery)) {
+    $arResult["CURRENT_DELIVERY"] = $currentDelivery;
 }
-unset($delivery);
-foreach ($arResult["PAY_SYSTEM"] as &$paySystem) {
-    if (!is_array($paySystem)) {
-        continue;
-    }
-
-    if ($paySystem["PSA_ACTION_FILE"] === "yandexcheckoutcustom") {
-        $paySystem["ICONS"] = [
-            "visa",
-            "mastercard",
-            "maestro",
-            "mir",
-            "jcb",
-            "diners-club",
-            "american-express",
-            "qiwi",
-            "ya-money",
-        ];
-    }
-
-    if (strripos($paySystem["PSA_ACTION_FILE"], "vampirus.yandexcustom") !== false) {
-        $paySystem["ICONS"] = [
-            "visa",
-            "mastercard",
-            "maestro",
-            "mir",
-            "qiwi",
-            "ya-money",
-        ];
-    }
-
-}
-unset($paySystem);
 
 if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
     $arResult["IS_CASH"] = !empty($arResult["ORDER"]) && !empty($arResult["PAY_SYSTEM"])
@@ -328,7 +279,16 @@ if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
         && !empty($arResult["PAY_SYSTEM"]["ACTION_FILE"]);
 }
 
-$dollarTotalPrice = \Level44\Base::getDollarPrice($arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"], null, true) + $sumPriceDollar;
-$arResult["ORDER_TOTAL_PRICE_DOLLAR"] = $dollarTotalPrice <= 0 || !\Level44\Base::isEnLang() ? false
-    : \Level44\Base::formatDollar($dollarTotalPrice);
+$dollarTotalPrice = Base::getDollarPrice($arResult['CURRENT_DELIVERY']['PRICE'], null, true) + $sumPriceDollar;
+$arResult["ORDER_TOTAL_PRICE_DOLLAR"] = $dollarTotalPrice <= 0 || !Base::isEnLang() ? false
+    : Base::formatDollar($dollarTotalPrice);
+
+if (!empty($arResult['CURRENT_DELIVERY'])) {
+    $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision((
+            $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] - $arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"]
+        ) + $arResult['CURRENT_DELIVERY']['PRICE']);
+
+    $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"] = SaleFormatCurrency($arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"], 'RUB');
+}
+
 $arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];

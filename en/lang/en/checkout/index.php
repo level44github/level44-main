@@ -1,7 +1,13 @@
 <?
 $MESS["IPOLSDEK_DELIV_day"] = "day";
-$MESS['IPOLSDEK_DELIV_daya'] = "of the day";
+$MESS['IPOLSDEK_DELIV_daya'] = "days";
 $MESS['IPOLSDEK_DELIV_days'] = "days";
+$MESS["KCE_DAY"] = "day";
+$MESS["KCE_DAY2"] = "days";
+$MESS["KCE_DAYS"] = "days";
+$MESS['DAY'] = "day";
+$MESS['DAY_DEC'] = "days";
+$MESS['DAYS'] = "days";
 $MESS['TEXT_DAYS'] = 'dd.';
 
 $MESS ['VAMPIRUS.YANDEX_PAY'] = "Go to the payment";

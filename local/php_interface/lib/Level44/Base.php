@@ -8,7 +8,9 @@ use Bitrix\Main\Context;
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Location\LocationTable;
+use Bitrix\Sale\Order;
 use Bitrix\Sale\Registry;
+use Level44\Enums\DeliveryType;
 use Level44\Event\Exchange1cHandlers;
 use Level44\Sale\Basket;
 use Bitrix\Highloadblock as HL;
@@ -17,7 +19,6 @@ use UniPlug\Settings;
 
 class Base
 {
-    const DELIVERY_COURIER = [2, 21, 24];
     const OFFERS_IBLOCK_ID = 3;
     const CATALOG_IBLOCK_ID = 2;
     const CATALOG_VAT_ID = 3;
@@ -476,5 +477,47 @@ class Base
             unset($property);
             return true;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public static function cancelUnPaidOrders()
+    {
+        try {
+            $paySystems = \Level44\Delivery::getPaySystems();
+            $deliveries = \Level44\Delivery::getDeliveries();
+            $courierDeliveries = [];
+
+            if (is_array($deliveries)) {
+                $courierDeliveries = array_filter($deliveries, fn($item) => in_array(Delivery::getType($item['ID']), [
+                    DeliveryType::Courier,
+                    DeliveryType::CourierFitting
+                ]));
+
+                $courierDeliveries = array_values(array_map(fn($item) => $item['ID'], $courierDeliveries));
+            }
+
+            if (!empty($paySystems['cloudpayment']) && !empty($courierDeliveries)) {
+                $orders = Order::getList([
+                    'filter' => [
+                        "PAY_SYSTEM_ID" => $paySystems['cloudpayment'],
+                        "DELIVERY_ID"   => $courierDeliveries,
+                        "!STATUS_ID"    => 'CO',
+                        "!PAYED"        => 'Y',
+                        "<=DATE_INSERT" => ConvertTimeStamp(AddToTimeStamp(["HH" => -4]), 'FULL'),
+                        ">=DATE_INSERT" => "25.03.2025 00:00:00",
+                    ]
+                ])->fetchAll();
+
+                /** @var Order $order */
+                foreach ($orders as $order) {
+                    \CSaleOrder::StatusOrder($order['ID'], 'CO');
+                }
+            }
+        } catch (\Exception) {
+        }
+
+        return "\Level44\Base::cancelUnPaidOrders();";
     }
 }

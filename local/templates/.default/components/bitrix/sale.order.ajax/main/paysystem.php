@@ -18,7 +18,7 @@ use Bitrix\Main\Localization\Loc;
                        aria-controls="payment<?= $paySystem["ID"] ?>"
                        data-target-label="pay_system<?= $paySystem["ID"] ?>label"
                     >
-                        <div class="option__title"><?= $paySystem["NAME"] ?></div>
+                        <div class="option__title"><?= Loc::getMessage($paySystem["CODE"] . '_PAY_SYSTEM_NAME') ?></div>
                         <? if (!empty($paySystem["ICONS"])): ?>
                             <? foreach ($paySystem["ICONS"] as $icon): ?>
                                 <div class="option__system <?= $icon ?>"></div>
