@@ -62,7 +62,7 @@ if (!function_exists("PrintDelivery")) {
                  data-parent="#delivery">
                 <div class="option__description">
                     <? if (in_array($delivery["ID"], CDeliverySDEK::getDeliveryId('pickup'))): ?>
-                        <? if (!empty($arResult["ORDER_PROP_ADDRESS_SDEK"]) && $arResult["ORDER_PROP_ADDRESS_SDEK"]["TYPE"] === "STRING"): ?>
+                        <? if (!empty($data["ORDER_PROP_ADDRESS_SDEK"]) && $data["ORDER_PROP_ADDRESS_SDEK"]["TYPE"] === "STRING"): ?>
                             <div class="form-group">
                                 <input class="form-control js-form__control"
                                        type="text"
@@ -70,10 +70,10 @@ if (!function_exists("PrintDelivery")) {
                                        id="form-delivery<?= $delivery["ID"] ?>-address"
                                        maxlength="250"
                                        data-delivery="<?= $delivery["ID"] ?>"
-                                       size="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["SIZE1"] ?>"
-                                       name="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["FIELD_NAME"] ?>"
-                                       value="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["VALUE"] ?>"
-                                       data-prop="<?= $arResult["ORDER_PROP_ADDRESS_SDEK"]["CODE"] ?>"
+                                       size="<?= $data["ORDER_PROP_ADDRESS_SDEK"]["SIZE1"] ?>"
+                                       name="<?= $data["ORDER_PROP_ADDRESS_SDEK"]["FIELD_NAME"] ?>"
+                                       value="<?= $data["ORDER_PROP_ADDRESS_SDEK"]["VALUE"] ?>"
+                                       data-prop="<?= $data["ORDER_PROP_ADDRESS_SDEK"]["CODE"] ?>"
                                 >
                             </div>
                         <? endif; ?>
@@ -108,8 +108,9 @@ if (!function_exists("PrintDelivery")) {
             <?
             if (!empty($deliveryTypes["PICKUP"])) {
                 $data = [
-                    "NAME"        => Loc::getMessage("DELIVERY_PICKUP_NAME"),
-                    "DESCRIPTION" => Loc::getMessage("DELIVERY_PICKUP_DESCRIPTION"),
+                    "NAME"                    => Loc::getMessage("DELIVERY_PICKUP_NAME"),
+                    "DESCRIPTION"             => Loc::getMessage("DELIVERY_PICKUP_DESCRIPTION"),
+                    "ORDER_PROP_ADDRESS_SDEK" => $arResult["ORDER_PROP_ADDRESS_SDEK"],
                 ];
 
                 PrintDelivery($deliveryTypes["PICKUP"], $data);
