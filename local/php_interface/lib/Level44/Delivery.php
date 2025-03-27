@@ -2,6 +2,7 @@
 
 namespace Level44;
 
+use Bitrix\Main\Application;
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\NotImplementedException;
@@ -425,7 +426,21 @@ class Delivery
                     <service>' . $service . '</service>
                 </intervals>';
 
+        $logs = file_get_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log");
+        $logs .= "<--------------------------------------------DALLI-------------------------------------------->\n";
+        $logs .= "<-------------------------------------------REQUEST------------------------------------------->\n";
+        $logs .= "<-------------------------------------" . date('Y-m-d H:i:s') . "------------------------------------->\n";
+        $logs .= $xml_data . "\n";
+        file_put_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log", $logs);
+
         $arResult = \DalliservicecomDelivery::send_xml($xml_data);
+
+        $logs = file_get_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log");
+        $logs .= "\n<-------------------------------------------ANSWER------------------------------------------->\n";
+        ob_start();
+        print_r($arResult);
+        $logs .= ob_get_clean() . "\n";
+        file_put_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log", $logs);
 
         if ((int)$arResult['dates']['@']['error'] > 0 || (int)$arResult['request']['@']['error'] > 0) {
             throw new \Exception();

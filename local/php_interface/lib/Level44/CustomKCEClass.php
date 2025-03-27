@@ -1,5 +1,6 @@
 <?
 namespace Level44;
+    use Bitrix\Main\Application;
     use Bitrix\Main\Event;
     use Bitrix\Highloadblock as HL;
     use Bitrix\Main\Type\DateTime;
@@ -579,7 +580,19 @@ class CustomKCEClass
           </soap:Body>
         </soap:Envelope>';
 
+        $logs = file_get_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log");
+        $logs .= "<---------------------------------------------KSE--------------------------------------------->\n";
+        $logs .= "<-------------------------------------------REQUEST------------------------------------------->\n";
+        $logs .= "<-------------------------------------" . date('Y-m-d H:i:s') . "------------------------------------->\n";
+        $logs .= $XmlData . "\n";
+        file_put_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log", $logs);
+
         $search_result = cKCE::GetData($XmlData);
+
+        $logs = file_get_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log");
+        $logs .= "\n<-------------------------------------------ANSWER------------------------------------------->\n";
+        $logs .= $search_result . "\n";
+        file_put_contents(Application::getDocumentRoot() . "/upload/delivery_slots.log", $logs);
 
         $sxe = new \SimpleXMLElement($search_result);
 
