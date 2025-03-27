@@ -184,11 +184,10 @@ class CheckoutHandlers extends HandlerBase
         /** @var Shipment $shipment */
         foreach ($shipmentCollection as $shipment) {
             if (!$shipment->isSystem()) {
-                if ($location) {
+                if ($location && $location->getValue()) {
                     [$price] = Delivery::reCalcPrice($shipment->getPrice(), $location->getValue(), $shipment->getDeliveryId());
+                    $shipment->setBasePriceDelivery($price);
                 }
-
-                $shipment->setBasePriceDelivery($price);
             }
         }
 
