@@ -33,6 +33,7 @@ class Delivery
     static $paysystems = null;
     /** @var array|null */
     static $deliveries = null;
+    static $printLog = '';
 
     /**
      * @throws ArgumentException
@@ -190,6 +191,28 @@ class Delivery
         $someChecked = !empty(array_filter($courierList, fn($item) => $item['CHECKED'] === 'Y'));
 
         if (!empty($service)) {
+            if (empty(static::$printLog)) {
+                ob_start();
+                $deliveries = static::getDeliveries();
+
+                foreach ($courierList as $courier) {
+                    $delivery = !empty($deliveries[$courier["ID"]]['PARENT_ID']) ?
+                        $deliveries[$deliveries[$courier["ID"]]['PARENT_ID']] : $deliveries[$courier["ID"]];
+
+                    $name = is_a($delivery['CLASS_NAME'], KCEDeliveryHandler::class, true) ? 'КСЭ' : $delivery['NAME'];
+
+                    echo "Рассчитанная стоимость " . $name . " - " . $courier["PRICE_FORMATED"] . "<br>";
+                }
+
+                $delivery = !empty($deliveries[$service["ID"]]['PARENT_ID']) ?
+                    $deliveries[$deliveries[$service["ID"]]['PARENT_ID']] : $deliveries[$service["ID"]];
+
+                $name = is_a($delivery['CLASS_NAME'], KCEDeliveryHandler::class, true) ? 'КСЭ' : $delivery['NAME'];
+
+                echo "Выбрана служба: " . $name . "<br>";
+                static::$printLog = ob_get_clean();
+            }
+
             $deliveries = static::getDeliveries();
             $deliveryData = $deliveries[$service['ID']];
 
