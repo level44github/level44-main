@@ -57,7 +57,7 @@ class CustomKCEClass
         $arProd = cKCE::UpdateClientProducts($login, $password, $Items);
         
         //приводим тип доставки в соответствие с накладными
-        $DeliveryOfCargo = static::GetDeliveryType($DeliveryOfCargo);
+        $DeliveryOfCargo = cKCE::GetDeliveryType($DeliveryOfCargo);
 
         $rand=rand(0,1598458);
         $DeclaredValueRate = $SumNeedPayZakaz - $SumDost;
@@ -294,7 +294,6 @@ class CustomKCEClass
                         $TypeOfPayer = $sender;
                     } elseif (isset($recipient) && $deliveryType === DeliveryType::CourierFitting) {
                         $TypeOfPayer = $recipient;
-                        $DeliveryOfCargo = '5';
                     }
                 }
 
@@ -633,35 +632,5 @@ class CustomKCEClass
         }
 
         return array_slice($deliveryDates, 0, 5);
-    }
-
-    public static function GetDeliveryType($DeliveryOfCargo) {
-        switch ($DeliveryOfCargo) {
-            case '0':
-                //Дверь-Дверь
-                $res = 1;
-                break;
-            case '1':
-                //Склад-Дверь
-                $res = 6;
-                break;
-            case '2':
-                //Дверь-Склад (самовывоз)
-                $res = 5;
-                break;
-            case '3':
-                //Склад-Склад (самовывоз)
-                $res = 7;
-                break;
-            case '4':
-                //Склад-Склад (самовывоз)
-                $res = 2;
-                break;
-            case '5':
-                //с наложенным платежом
-                $res = 0;
-                break;
-        }
-        return $res;
     }
 }
