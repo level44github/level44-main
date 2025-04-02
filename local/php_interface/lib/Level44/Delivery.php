@@ -73,7 +73,7 @@ class Delivery
             $paySystems = [];
 
             while ($paySystem = $res->fetch()) {
-                $paySystems[$paySystem["ACTION_FILE"]] = $paySystem["ID"];
+                $paySystems[$paySystem["CODE"]] = $paySystem["ID"];
             }
 
             static::$paysystems = $paySystems;
@@ -106,7 +106,7 @@ class Delivery
         }
 
         if (in_array($code, ['dalli_service:dalli_courier', 'dalli_service:dalli_cfo', 'kse'])) {
-            if (ByPaySystem::check([$paySystems['cloudpayment']], [], $id)) {
+            if (ByPaySystem::check([$paySystems['cloudpayments']], [], $id)) {
                 return DeliveryType::Courier;
             } elseif (ByPaySystem::check([$paySystems['cash']], [], $id)) {
                 return DeliveryType::CourierFitting;
