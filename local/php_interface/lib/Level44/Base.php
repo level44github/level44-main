@@ -498,10 +498,10 @@ class Base
                 $courierDeliveries = array_values(array_map(fn($item) => $item['ID'], $courierDeliveries));
             }
 
-            if (!empty($paySystems['cloudpayment']) && !empty($courierDeliveries)) {
+            if (!empty($paySystems['cloudpayments']) && !empty($courierDeliveries)) {
                 $orders = Order::getList([
                     'filter' => [
-                        "PAY_SYSTEM_ID" => $paySystems['cloudpayment'],
+                        "PAY_SYSTEM_ID" => $paySystems['cloudpayments'],
                         "DELIVERY_ID"   => $courierDeliveries,
                         "!STATUS_ID"    => 'CO',
                         "!PAYED"        => 'Y',
