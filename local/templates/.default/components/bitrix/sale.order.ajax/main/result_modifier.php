@@ -272,13 +272,13 @@ if (!empty($currentDelivery)) {
     $arResult["CURRENT_DELIVERY"] = $currentDelivery;
 }
 
-$arResult["PAY_SYSTEM"] = array_filter($arResult["PAY_SYSTEM"], fn($item) => $item['CODE'] !== 'cloudpayments_crm');
-
 if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
     $arResult["IS_CASH"] = !empty($arResult["ORDER"]) && !empty($arResult["PAY_SYSTEM"])
         && $arResult["PAY_SYSTEM"]["IS_CASH"] === "Y"
         && strripos($arResult["PAY_SYSTEM"]["ACTION_FILE"], "cash") !== false
         && !empty($arResult["PAY_SYSTEM"]["ACTION_FILE"]);
+} else {
+    $arResult["PAY_SYSTEM"] = array_filter($arResult["PAY_SYSTEM"], fn($item) => $item['CODE'] !== 'cloudpayments_crm');
 }
 
 $dollarTotalPrice = Base::getDollarPrice($arResult['CURRENT_DELIVERY']['PRICE'], null, true) + $sumPriceDollar;
