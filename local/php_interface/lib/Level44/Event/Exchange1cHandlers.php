@@ -4,6 +4,8 @@ namespace Level44\Event;
 
 use Bitrix\Iblock\PropertyEnumerationTable;
 use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Event;
+use Bitrix\Catalog\Model;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
 use Level44\Base;
@@ -17,6 +19,8 @@ class Exchange1cHandlers extends HandlerBase
         static::addEventHandler("iblock", "OnBeforeIBlockSectionAdd");
         static::addEventHandler("iblock", "OnBeforeIBlockSectionUpdate");
         static::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
+        static::addEventHandler("catalog", "Bitrix\Catalog\Model\Product::OnAfterAdd", method: 'OnProductSaveHandler');
+        static::addEventHandler("catalog", "Bitrix\Catalog\Model\Product::OnAfterUpdate", method: 'OnProductSaveHandler');
     }
 
     public static function isSource1C()
@@ -50,6 +54,7 @@ class Exchange1cHandlers extends HandlerBase
             }
 
             $arFields["ACTIVE"] = 'N';
+            unset($arFields['DETAIL_TEXT']);
 
             $onModerationEnum = PropertyEnumerationTable::getList(
                 ['filter' => ['PROPERTY_ID' => $properties['ON_MODERATION']]]
@@ -143,5 +148,43 @@ class Exchange1cHandlers extends HandlerBase
                 }
             }
         }
+    }
+
+    static function OnProductSaveHandler(Event $event): Model\EventResult
+    {
+        $result = new Model\EventResult();
+
+        if (!static::isSource1C()) {
+            return $result;
+        }
+
+        $id = $event->getParameter('id');
+        $externalFields = $event->getParameter('external_fields');
+
+        if ((int)$externalFields['IBLOCK_ID'] === Base::OFFERS_IBLOCK_ID && ($productInfo = \CCatalogSku::GetProductInfo($id))) {
+            $productsOffers = \CCatalogSku::getOffersList($productInfo['ID'], fields: ['QUANTITY', 'ACTIVE']);
+
+            $totalQuantity = 0;
+
+            if (is_array($offers = $productsOffers[$productInfo['ID']])) {
+                foreach ($offers as $offer) {
+                    if ($offer['ACTIVE'] === 'Y') {
+                        $totalQuantity += (int)$offer['QUANTITY'];
+                    }
+                }
+            }
+
+            $product = \CIBlockElement::GetByID($productInfo['ID'])->GetNext();
+
+            if ($product['ACTIVE'] === 'Y' && $totalQuantity <= 0) {
+                (new \CIBlockElement)->Update($productInfo['ID'], ['ACTIVE' => 'N']);
+            }
+
+            if ($product['ACTIVE'] === 'N' && $totalQuantity > 0) {
+                (new \CIBlockElement)->Update($productInfo['ID'], ['ACTIVE' => 'Y']);
+            }
+        }
+
+        return $result;
     }
 }
