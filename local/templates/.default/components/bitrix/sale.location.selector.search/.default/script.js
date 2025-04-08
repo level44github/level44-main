@@ -45,6 +45,18 @@ if(typeof BX.Sale.component.location.selector.search == 'undefined' && typeof BX
 							BX.saleOrderAjax.address.getInput()?.val('');
 							BX.saleOrderAjax.addressValidate(true);
 							this.isModified = false
+
+                            if (typeof IPOLSDEK_pvz === 'object') {
+								IPOLSDEK_pvz.pvzId = false
+								IPOLSDEK_pvz.pvzAdress = ''
+								if (!!IPOLSDEK_pvz.markUnable) {
+									IPOLSDEK_pvz.markUnable()
+								}
+								$('.sdek_pvzLair').remove()
+								if (!!IPOLSDEK_pvz.onLoad) {
+									IPOLSDEK_pvz.onLoad()
+								}
+							}
 						}
 
 						if(typeof this.opts.callback == 'string' && this.opts.callback.length > 0 && this.opts.callback in window)
