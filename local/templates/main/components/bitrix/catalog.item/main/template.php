@@ -108,7 +108,7 @@ if (isset($arResult['ITEM']))
 	?>
 
 
-    <div class="col-6 col-lg-3 catalog__item" id="<?=$areaId?>" data-entity="item">
+    <div class="grid__item" id="<?=$areaId?>" data-entity="item">
 		<?
 		$documentRoot = Main\Application::getDocumentRoot();
 		$templatePath = strtolower($arResult['TYPE']).'/template.php';

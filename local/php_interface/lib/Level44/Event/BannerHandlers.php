@@ -68,7 +68,7 @@ class BannerHandlers extends HandlerBase
             }
         }
 
-        $properties = static::getProperties();
+        $properties = static::getProperties(Base::BANNER_SLIDES_IBLOCK_ID);
 
         $linkAddress = (string)static::getPropertyValue($arFields["PROPERTY_VALUES"][$properties["LINK_ADDRESS"]]);
 
@@ -151,35 +151,4 @@ class BannerHandlers extends HandlerBase
         <?
         return true;
     }
-
-    private static function getPropertyValue($property): mixed
-    {
-        if (!is_array($property)) {
-            $property = [];
-        }
-
-        return $property[key($property)]["VALUE"];
-    }
-
-    private static function setPropertyValue(&$property, $value): void
-    {
-        if (!is_array($property)) {
-            return;
-        }
-
-        $property[key($property)]["VALUE"] = $value;
-    }
-
-    private static function getProperties(): array
-    {
-        $res = CIBlockProperty::GetList([], ["IBLOCK_ID" => Base::BANNER_SLIDES_IBLOCK_ID]);
-
-        $properties = [];
-        while ($property = $res->GetNext()) {
-            $properties[$property["CODE"]] = $property["ID"];
-        }
-
-        return $properties;
-    }
-
 }
