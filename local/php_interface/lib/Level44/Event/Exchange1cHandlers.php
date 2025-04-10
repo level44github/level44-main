@@ -110,6 +110,7 @@ class Exchange1cHandlers extends HandlerBase
 
             $arFields['NAME'] = $product['~NAME'] ?: $arFields['NAME'];
             $arFields['CODE'] = $product['~CODE'] ?: $arFields['CODE'];
+            $arFields['DETAIL_TEXT_TYPE'] = $product['DETAIL_TEXT_TYPE'] ?: $arFields['DETAIL_TEXT_TYPE'];
             $arFields['DETAIL_TEXT'] = $product['~DETAIL_TEXT'];
 
             if ($arFields['ACTIVE'] === 'Y' && $product['ACTIVE'] !== 'Y' && $product['PROPERTY_ON_MODERATION_VALUE'] === 'Y') {
