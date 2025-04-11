@@ -142,7 +142,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     ]
                 ); ?>
             </div>
-            <div class="nav-trigger__footer">
+            <div class="nav-trigger__footer" hidden>
                 <button class="btn btn-dark" type="button">Личный кабинет</button>
             </div>
         </div>

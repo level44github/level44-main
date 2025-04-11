@@ -13,18 +13,21 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
 ?>
 </div>
 <footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-6 col-lg-3 order-3 order-lg-1 footer__divider">
-                <div class="mb-2">© <?= date("Y") ?> Level 44</div>
-            </div>
-            <div class="col-6 col-lg-3 order-2">
-                <div class="footer__title"><?= Loc::getMessage("FOOTER_BUYERS") ?></div>
+    <div class="content-container">
+        <div class="footer__subscribe footer__col">
+            <? /*<div class="email">
+                <p class="email__text">Подпишитесь на нашу e-mail рассылку, чтобы первыми получать информацию о новинках
+                    и спецпредложениях</p>
+                <a class="btn btn-dark" href="#">Подписаться</a>
+            </div>*/ ?>
+
+            <div class="news">
+                <h5 class="footer__title"><?= Loc::getMessage('FOOTER_FOLLOW') ?></h5>
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:menu",
                     "footer_links",
                     Array(
-                        "ROOT_MENU_TYPE" => "to_customers",
+                        "ROOT_MENU_TYPE" => "links",
                         "MAX_LEVEL" => "1",
                         "CHILD_MENU_TYPE" => "top",
                         "USE_EXT" => "N",
@@ -33,60 +36,64 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
                         "MENU_CACHE_TYPE" => "N",
                         "MENU_CACHE_TIME" => "3600",
                         "MENU_CACHE_USE_GROUPS" => "Y",
-                        "MENU_CACHE_GET_VARS" => ""
+                        "MENU_CACHE_GET_VARS" => "",
+                        "EXT_LINKS" => "Y",
                     )
                 ); ?>
             </div>
-            <div class="col-6 col-lg-3 order-2">
-                <div class="footer__title footer__title_level">LEVEL44</div>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="footer__link pb-0"><?= Loc::getMessage("FOOTER_FLAGMAN") ?></a></li>
-                    <li class="nav-item text-muted pb-2">
-                        <? $APPLICATION->IncludeComponent(
-                            "bitrix:main.include",
-                            "",
-                            array(
-                                "AREA_FILE_SHOW" => "file",
-                                "PATH" => SITE_DIR . "include/footer_flagman.php",
-                            ),
-                            false
-                        ); ?>
-                    </li>
-                    <li class="nav-item"><a class="footer__link pb-0"><?= Loc::getMessage("FOOTER_SHOWROOM") ?></a></li>
-                    <li class="nav-item text-muted pb-2">
-                        <? $APPLICATION->IncludeComponent(
-                            "bitrix:main.include",
-                            "",
-                            array(
-                                "AREA_FILE_SHOW" => "file",
-                                "PATH" => SITE_DIR . "include/footer_showroom.php",
-                            ),
-                            false
-                        ); ?>
-                    </li>
-                    <? $APPLICATION->IncludeComponent(
-                        "bitrix:menu",
-                        "footer_links",
-                        Array(
-                            "ROOT_MENU_TYPE" => "links",
-                            "MAX_LEVEL" => "1",
-                            "CHILD_MENU_TYPE" => "top",
-                            "USE_EXT" => "N",
-                            "DELAY" => "N",
-                            "ALLOW_MULTI_SELECT" => "Y",
-                            "MENU_CACHE_TYPE" => "N",
-                            "MENU_CACHE_TIME" => "3600",
-                            "MENU_CACHE_USE_GROUPS" => "Y",
-                            "MENU_CACHE_GET_VARS" => "",
-                            "EXT_LINKS" => "Y",
-                        )
-                    ); ?>
-            </div>
-            <div class="col-6 col-lg-2 order-4 order-lg-4 footer__divider">
-                <img class="img-fluid mr-3" src="<?= \Level44\Base::getAssetsPath() ?>/img/visa.svg" alt="">
-                <img class="img-fluid" src="<?= \Level44\Base::getAssetsPath() ?>/img/master-card.svg" alt="">
-            </div>
         </div>
+        <div class="footer__address footer__col">
+            <h5 class="footer__title"><?= Loc::getMessage('FOOTER_SHOPS') ?></h5>
+            <? $APPLICATION->IncludeComponent(
+                "bitrix:main.include",
+                "",
+                array(
+                    "AREA_FILE_SHOW" => "file",
+                    "PATH" => SITE_DIR . "include/footer_flagman.php",
+                ),
+                false
+            ); ?>
+            <? $APPLICATION->IncludeComponent(
+                "bitrix:main.include",
+                "",
+                array(
+                    "AREA_FILE_SHOW" => "file",
+                    "PATH" => SITE_DIR . "include/footer_showroom.php",
+                ),
+                false
+            ); ?>
+        </div>
+        <div class="footer__info footer__col">
+            <h5 class="footer__title"><?= Loc::getMessage("FOOTER_BUYERS") ?></h5>
+            <? $APPLICATION->IncludeComponent(
+                "bitrix:menu",
+                "footer_links",
+                Array(
+                    "ROOT_MENU_TYPE" => "to_customers",
+                    "MAX_LEVEL" => "1",
+                    "CHILD_MENU_TYPE" => "top",
+                    "USE_EXT" => "N",
+                    "DELAY" => "N",
+                    "ALLOW_MULTI_SELECT" => "Y",
+                    "MENU_CACHE_TYPE" => "N",
+                    "MENU_CACHE_TIME" => "3600",
+                    "MENU_CACHE_USE_GROUPS" => "Y",
+                    "MENU_CACHE_GET_VARS" => ""
+                )
+            ); ?>
+        </div>
+        <div class="footer__logo footer__col">
+            <a href="<?= SITE_DIR ?>">LEVEL44</a>
+        </div>
+        <? $APPLICATION->IncludeComponent(
+            "bitrix:main.site.selector",
+            "mobile",
+            [
+                "SITE_LIST"  => ["*all*"],
+                "CACHE_TYPE" => "A",
+                "CACHE_TIME" => "3600",
+            ]
+        ); ?>
     </div>
 </footer>
 </div>
