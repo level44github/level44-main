@@ -224,6 +224,7 @@ $GLOBALS['CATALOG_CURRENT_ELEMENT_ID'] = $elementId;
 $addToYouLookProducts = Content::getAddToYouLookProducts($elementId);
 $recommendProducts = Content::recommendProductsOrdered($elementId);
 
+if ($USER->IsAdmin()){
 if (!empty($addToYouLookProducts)) {
     ?>
     <h4 class="text-center mb-4"><?= Loc::getMessage("ADD_TO_YOUR_LOOK") ?></h4>
@@ -462,4 +463,5 @@ if (!empty($recommendProducts)) {
 		],
 		$component
 	);
+}
 }
