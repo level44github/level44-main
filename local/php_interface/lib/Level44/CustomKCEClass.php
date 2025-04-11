@@ -47,7 +47,8 @@ class CustomKCEClass
                         $DeliveryDate,
                         $DeliveryDateOf,
                         $DeliveryTime,
-                        $VATRate
+                        $VATRate,
+                        $fitting
     ) {
         
        // $regionFrom = 'fias-'.$regionFrom;
@@ -92,8 +93,8 @@ class CustomKCEClass
             $XmlData .='<car:DeliveryDate>'.$DeliveryDate.'</car:DeliveryDate>';
         }
 
-        if ($DeliveryDateOf) {
-            $XmlData .='<car:DeliveryDateOf>'.$DeliveryDateOf.'</car:DeliveryDateOf>';
+        if ($DeliveryTime) {
+            $XmlData .='<car:DeliveryTime>'.$DeliveryTime.'</car:DeliveryTime>';
         }
 
         $XmlData .='<car:Recipient>
@@ -131,7 +132,7 @@ class CustomKCEClass
                              <car:PackageQty>'.$Item['QTY'].'</car:PackageQty>
                              <car:Qty>'.$Item['QTY'].'</car:Qty>
                              <car:VATRate>'.$VATRate.'</car:VATRate>
-                             <car:AssessedValue>'.$Item['PRICE'].'</car:AssessedValue>
+                             <car:AssessedValue>'.$Item['HALF_PRICE'].'</car:AssessedValue>
                              <car:Comment>'.$Item['NAME'].'</car:Comment>
                          </car:Products>';
         }
@@ -166,8 +167,19 @@ class CustomKCEClass
                      <car:TypeOfPayer>'.$TypeOfPayer.'</car:TypeOfPayer>
                      <car:WayOfPayment>'.$WayOfPayment.'</car:WayOfPayment>
                      <car:Comment>'.$SenderComment.'</car:Comment>
-                     <car:DeliveryOfCargo>'.$DeliveryOfCargo.'</car:DeliveryOfCargo>                                                                            
-                 </car:OrderData>
+                     <car:DeliveryOfCargo>'.$DeliveryOfCargo.'</car:DeliveryOfCargo>';
+
+        if ($DeliveryDateOf) {
+            $XmlData .='<car:DeliveryDateOf>'.$DeliveryDateOf.'</car:DeliveryDateOf>';
+        }
+
+        if ($fitting) {
+            $XmlData .= '<car:AdditionalServices>
+                        <car:Items>245e367f-2fed-11eb-a0f8-005056b646f7</car:Items>
+                      </car:AdditionalServices>';
+        }
+
+        $XmlData .='</car:OrderData>
                  <car:Office/>
              </car:SaveWaybillOffice>
          </soap:Body>
@@ -282,6 +294,7 @@ class CustomKCEClass
                 $VATRate = Option::get("courierserviceexpress.moduledost", "KCEVat");
                 //Курьер до дверей
                 $DeliveryOfCargo = '0';
+                $fitting = false;
 
                 $deliveryType = \Level44\Delivery::getType($order->getField('DELIVERY_ID'));
 
@@ -293,6 +306,7 @@ class CustomKCEClass
                     if (isset($sender) && $deliveryType === DeliveryType::Courier) {
                         $TypeOfPayer = $sender;
                     } elseif (isset($recipient) && $deliveryType === DeliveryType::CourierFitting) {
+                        $fitting = true;
                         $TypeOfPayer = $recipient;
                     }
                 }
@@ -361,6 +375,7 @@ class CustomKCEClass
                     //Формируем массив с данынми по товару
                     $Items[$i]['NAME'] = $arItem['NAME'];
                     $Items[$i]['PRICE'] = $arItem['PRICE'];
+                    $Items[$i]['HALF_PRICE'] = number_format((float)$arItem['PRICE'] / 2, 4, '.', '');
                     $Items[$i]['CURR'] = $arItem['CURRENCY'];
                     $Items[$i]['QTY'] = $arItem['QUANTITY'];
                     $Items[$i]['ID'] = $arItem['PRODUCT_ID'];
@@ -379,12 +394,12 @@ class CustomKCEClass
                 $DeliveryDate = '';
                 $DeliveryDateOf = '';
 
-//                if (!empty($parts[0]) && !empty($parts[1]) && !empty($delivery_required_date)) {
-//                    $DeliveryTime = "$parts[0]:00 - $parts[1]:00";
-//
-//                    $DeliveryDate = "{$delivery_required_date}T$parts[0]:00";
-//                    $DeliveryDateOf = "{$delivery_required_date}T$parts[1]:00";
-//                }
+                if (!empty($parts[0]) && !empty($parts[1]) && !empty($delivery_required_date)) {
+                    $DeliveryTime = "$parts[0] - $parts[1]";
+
+                    $DeliveryDate = "{$delivery_required_date}T$parts[0]:00";
+                    $DeliveryDateOf = "{$delivery_required_date}T$parts[1]:00";
+                }
 
                 if (($login) && ($password) && ($BtrxOrderId) && ($RecepientName) && ($GeoTo) && ($RecepientFullAddress) && ($RecepientPhone) && ($Urgency) && ($CargoPackageQty) && ($Weight) && ($GeoFrom) && ($ClientName) && ($SenderPhone) && ($TakeDate) && ($TypeOfCargo) && ($Items)) {
                     //Формируем накладную и получаем ее номер для отслеживания статусов
@@ -421,7 +436,8 @@ class CustomKCEClass
                         $DeliveryDate,
                         $DeliveryDateOf,
                         $DeliveryTime,
-                        $VATRate
+                        $VATRate,
+                        $fitting
                     );
                     $result = $WayBillID;
 
