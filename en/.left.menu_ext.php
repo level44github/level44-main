@@ -25,7 +25,7 @@ $aMenuLinksExt = array_merge(
     $catalogMenuObj->arMenu,
     [
         [
-            "Покупателям",
+            "To buyers",
             "",
             [],
             [

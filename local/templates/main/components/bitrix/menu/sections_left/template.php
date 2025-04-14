@@ -4,19 +4,25 @@
 
 use Bitrix\Main\Localization\Loc;
 
-function getContainerClass($params): string
-{
-    return !empty($params['EXPANDED']) && $params['EXPANDED'] === true ? 'active' : '';
+if (!function_exists('getContainerClass')) {
+    function getContainerClass($params): string
+    {
+        return !empty($params['EXPANDED']) && $params['EXPANDED'] === true ? 'active' : '';
+    }
 }
 
-function getLinkClass($params): string
-{
-    return !empty($params['SELECTED']) && $params['SELECTED'] === true ? 'selected' : '';
+if (!function_exists('getLinkClass')) {
+    function getLinkClass($params): string
+    {
+        return !empty($params['SELECTED']) && $params['SELECTED'] === true ? 'selected' : '';
+    }
 }
 
-function getSaleClass($params): string
-{
-    return !empty($params['IS_SALE']) && $params['IS_SALE'] === true ? 'featured' : '';
+if (!function_exists('getSaleClass')) {
+    function getSaleClass($params): string
+    {
+        return !empty($params['IS_SALE']) && $params['IS_SALE'] === true ? 'featured' : '';
+    }
 }
 
 ?>
