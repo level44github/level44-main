@@ -12,6 +12,7 @@ if (empty(\Level44\Base::$typePage)) {
 $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
 ?>
 </div>
+<?php $APPLICATION->ShowViewContent("catalog-filters"); ?>
 <footer class="footer">
     <div class="content-container">
         <div class="footer__subscribe footer__col">
