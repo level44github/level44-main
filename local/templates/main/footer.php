@@ -3,13 +3,30 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-use Bitrix\Main\Localization\Loc;
+/**
+ * @global CMain $APPLICATION
+ */
 
-if (empty(\Level44\Base::$typePage)) {
-    \Level44\Base::$typePage = "layout";
+use Bitrix\Main\Localization\Loc;
+use Level44\Base;
+
+if (empty(Base::$typePage)) {
+    Base::$typePage = "layout";
 }
 
-$APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
+switch (Base::$typePage) {
+    case 'home':
+        $APPLICATION->AddViewContent("header-class", 'transparent');
+        break;
+    case 'product':
+        $APPLICATION->AddViewContent("header-class", 'product');
+        break;
+    default:
+        $APPLICATION->AddViewContent("header-class", 'navbar-light');
+        break;
+}
+
+$APPLICATION->AddViewContent("type-page", Base::$typePage);
 ?>
 </div>
 <?php $APPLICATION->ShowViewContent("catalog-filters"); ?>
@@ -99,7 +116,7 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
 </footer>
 </div>
 <?
-\Level44\Base::loadScripts();
+Base::loadScripts();
 ?>
 <div class="d-none">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

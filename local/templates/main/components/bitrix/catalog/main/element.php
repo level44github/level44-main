@@ -221,8 +221,8 @@ $elementId = $APPLICATION->IncludeComponent(
 );
 $GLOBALS['CATALOG_CURRENT_ELEMENT_ID'] = $elementId;
 
-$addToYouLookProducts = Content::getAddToYouLookProducts($elementId);
-$recommendProducts = Content::recommendProductsOrdered($elementId);
+$addToYouLookProducts = [];
+$recommendProducts = [];
 
 if (!empty($addToYouLookProducts)) {
     ?>
