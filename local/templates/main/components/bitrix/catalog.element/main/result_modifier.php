@@ -128,29 +128,29 @@ $arResult["ACTUAL_ITEM"] = $actualItem;
 
 $component->SetResultCacheKeys(["ACTUAL_ITEM"]);
 
-$sectionIds = array_map(fn($item) => (int)$item['ID'], $arResult['SECTION']['PATH']);
-$enSectionNames = [];
-
-if (!empty($sectionIds)) {
-    $rsSections = CIBlockSection::GetList([], [
-        'ID'        => $sectionIds,
-        'IBLOCK_ID' => $arResult['IBLOCK_ID'],
-    ], false, [
-        "ID",
-        "UF_NAME_EN",
-        "CODE",
-    ]);
-
-    while ($section = $rsSections->GetNext()) {
-        $enSectionNames[$section['ID']] = $section['UF_NAME_EN'];
-    }
-}
-
-foreach ($arResult['SECTION']['PATH'] as $path) {
-    $APPLICATION->AddChainItem(
-        Base::getMultiLang($path['NAME'], $enSectionNames[$path['ID']]),
-        $path['~SECTION_PAGE_URL']
-    );
-}
-
-$APPLICATION->AddChainItem($arResult["NAME"]);
+//$sectionIds = array_map(fn($item) => (int)$item['ID'], $arResult['SECTION']['PATH']);
+//$enSectionNames = [];
+//
+//if (!empty($sectionIds)) {
+//    $rsSections = CIBlockSection::GetList([], [
+//        'ID'        => $sectionIds,
+//        'IBLOCK_ID' => $arResult['IBLOCK_ID'],
+//    ], false, [
+//        "ID",
+//        "UF_NAME_EN",
+//        "CODE",
+//    ]);
+//
+//    while ($section = $rsSections->GetNext()) {
+//        $enSectionNames[$section['ID']] = $section['UF_NAME_EN'];
+//    }
+//}
+//
+//foreach ($arResult['SECTION']['PATH'] as $path) {
+//    $APPLICATION->AddChainItem(
+//        Base::getMultiLang($path['NAME'], $enSectionNames[$path['ID']]),
+//        $path['~SECTION_PAGE_URL']
+//    );
+//}
+//
+//$APPLICATION->AddChainItem($arResult["NAME"]);
