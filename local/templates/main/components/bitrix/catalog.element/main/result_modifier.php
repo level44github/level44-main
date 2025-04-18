@@ -1,4 +1,6 @@
-<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+<? use Level44\Base;
+
+if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
@@ -66,7 +68,7 @@ $arResult["MEASUREMENTS"] = \Level44\Base::getMultiLang(
     $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS_KIT_EN"]["DISPLAY_VALUE"]
 );
 
-if (empty($arResult["MEASUREMENTS"])){
+if (empty($arResult["MEASUREMENTS"])) {
     $arResult["MEASUREMENTS_ROWS"] = \Level44\Base::getMultiLang(
         $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"],
         $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS_EN"]["DISPLAY_VALUE"]
@@ -74,22 +76,6 @@ if (empty($arResult["MEASUREMENTS"])){
 }
 
 $APPLICATION->SetTitle($arResult["NAME"]);
-
-$videoProperty = $arResult["DISPLAY_PROPERTIES"]["VIDEO"];
-$arResult["VIDEOS"] = [];
-
-if (is_array($videoProperty["VALUE"])) {
-    foreach ($videoProperty["VALUE"] as $key => $video) {
-        if (!$video["path"] || !$videoProperty["PROPERTY_VALUE_ID"][$key]) {
-            continue;
-        }
-
-        $arResult["VIDEOS"][] = [
-            "PATH" => $video["path"],
-            "ID"   => $videoProperty["PROPERTY_VALUE_ID"][$key],
-        ];
-    }
-}
 
 if (!empty($arResult['OFFERS'])) {
     foreach ($arResult["OFFERS"] as &$offer) {
@@ -121,6 +107,14 @@ if (!empty($arResult['OFFERS'])) {
     $actualItem = $arResult;
 }
 
+if (!empty($arResult["PROPERTIES"]["VIDEO"]['VALUE']) && !empty($arResult["PROPERTIES"]["PREVIEW_VIDEO"]['VALUE'])) {
+    $actualItem["MORE_PHOTO"][] = [
+        'SRC'        => \CFile::GetPath($arResult["PROPERTIES"]["VIDEO"]['VALUE']),
+        'POSTER_SRC' => \CFile::GetPath($arResult["PROPERTIES"]["PREVIEW_VIDEO"]['VALUE']),
+        'IS_VIDEO'   => true,
+    ];
+}
+
 $rsSections = \CIBlockElement::GetElementGroups($arResult["ID"]);
 
 $sections = [];
@@ -133,3 +127,30 @@ $arResult["IS_SHOES"] = !empty(array_filter($sections, fn($section) => $section[
 $arResult["ACTUAL_ITEM"] = $actualItem;
 
 $component->SetResultCacheKeys(["ACTUAL_ITEM"]);
+
+$sectionIds = array_map(fn($item) => (int)$item['ID'], $arResult['SECTION']['PATH']);
+$enSectionNames = [];
+
+if (!empty($sectionIds)) {
+    $rsSections = CIBlockSection::GetList([], [
+        'ID'        => $sectionIds,
+        'IBLOCK_ID' => $arResult['IBLOCK_ID'],
+    ], false, [
+        "ID",
+        "UF_NAME_EN",
+        "CODE",
+    ]);
+
+    while ($section = $rsSections->GetNext()) {
+        $enSectionNames[$section['ID']] = $section['UF_NAME_EN'];
+    }
+}
+
+foreach ($arResult['SECTION']['PATH'] as $path) {
+    $APPLICATION->AddChainItem(
+        Base::getMultiLang($path['NAME'], $enSectionNames[$path['ID']]),
+        $path['~SECTION_PAGE_URL']
+    );
+}
+
+$APPLICATION->AddChainItem($arResult["NAME"]);

@@ -41,7 +41,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
 <!-- End Google Tag Manager (noscript) -->
 <? $APPLICATION->ShowPanel(); ?>
 <div class="layout__wrapper <?= $isMain ? 'no-header-offset' : '' ?>">
-    <header class="header <?= $isMain ? 'transparent' : 'navbar-light' ?>">
+    <header class="header <? $APPLICATION->ShowViewContent("header-class") ?>">
         <nav class="header__container">
             <div class="header__column">
                 <button class="btn btn-link menu__link nav-trigger__btn" type="button" aria-label="Toggle navigation">

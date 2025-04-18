@@ -213,6 +213,17 @@ if (isset($arParams['USER_CONSENT_IS_LOADED'])) {
     $componentElementParams['USER_CONSENT_IS_LOADED'] = $arParams['USER_CONSENT_IS_LOADED'];
 }
 
+$APPLICATION->IncludeComponent(
+    'bitrix:breadcrumb',
+    'detail',
+    [
+        'START_FROM' => 0,
+        'PATH'       => '',
+        'SITE_ID'    => SITE_ID,
+    ],
+    false
+);
+
 $elementId = $APPLICATION->IncludeComponent(
     'bitrix:catalog.element',
     'main',
@@ -221,8 +232,8 @@ $elementId = $APPLICATION->IncludeComponent(
 );
 $GLOBALS['CATALOG_CURRENT_ELEMENT_ID'] = $elementId;
 
-$addToYouLookProducts = Content::getAddToYouLookProducts($elementId);
-$recommendProducts = Content::recommendProductsOrdered($elementId);
+$addToYouLookProducts = [];
+$recommendProducts = [];
 
 if (!empty($addToYouLookProducts)) {
     ?>
