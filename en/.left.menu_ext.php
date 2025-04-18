@@ -1,7 +1,5 @@
 <?
 
-use Level44\Menu;
-
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
@@ -13,29 +11,9 @@ if (empty($aMenuLinks)) {
 }
 
 $toCustomersMenuObj = new CMenu("to_customers");
-$toCustomersMenuObj->Init(SITE_DIR);
-
-$toCustomersMenu = array_map(fn($item) => Menu::markIfSelected($item), $toCustomersMenuObj->arMenu);
+$toCustomersMenuObj->Init(SITE_DIR, true);
 
 $catalogMenuObj = new CMenu("catalog");
 $catalogMenuObj->Init(SITE_DIR, true);
 
-
-$aMenuLinksExt = array_merge(
-    $catalogMenuObj->arMenu,
-    [
-        [
-            "To buyers",
-            "",
-            [],
-            [
-                "CHILDREN"        => $toCustomersMenu,
-                "IS_TO_CUSTOMERS" => true
-            ],
-            !empty($toCustomersMenuObj->arMenu) ? 'true' : 'false'
-        ],
-    ]
-);
-
-$aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);
-Menu::setExpanded($aMenuLinks);
+$aMenuLinks = array_merge($aMenuLinks, $catalogMenuObj->arMenu, $toCustomersMenuObj->arMenu);
