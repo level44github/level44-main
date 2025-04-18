@@ -490,10 +490,7 @@ class Base
             $courierDeliveries = [];
 
             if (is_array($deliveries)) {
-                $courierDeliveries = array_filter($deliveries, fn($item) => in_array(Delivery::getType($item['ID']), [
-                    DeliveryType::Courier,
-                    DeliveryType::CourierFitting
-                ]));
+                $courierDeliveries = array_filter($deliveries, fn($item) => Delivery::getType($item['ID']) === DeliveryType::Courier);
 
                 $courierDeliveries = array_values(array_map(fn($item) => $item['ID'], $courierDeliveries));
             }
