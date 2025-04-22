@@ -375,6 +375,16 @@ LAYOUT;
         if (!Exchange1cHandlers::isSource1C()) {
             $properties = static::getProperties(Base::CATALOG_IBLOCK_ID);
             $onModeration = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']]);
+            $video = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['VIDEO']]);
+            $previewVideo = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['PREVIEW_VIDEO']]);
+
+            $videoUploaded = !empty($video) && $video['del'] !== 'Y';
+            $previewVideoUploaded = !empty($previewVideo) && $previewVideo['del'] !== 'Y';
+
+            if ($videoUploaded && !$previewVideoUploaded) {
+                $GLOBALS['APPLICATION']->throwException("Необходимо загрузить превью картинку для видео");
+                return false;
+            }
 
             if ($arFields['ACTIVE'] === 'Y' && isset($onModeration)) {
                 $arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']] = '';

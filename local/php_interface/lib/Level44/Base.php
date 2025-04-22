@@ -274,7 +274,7 @@ class Base
         }
 
         $HLOriginalImages = HLWrapper::table(Base::IMAGES_ORIGINAL_HL_TBL_NAME);
-        $rsOriginalImages = $HLOriginalImages->getList(["filter" => $fileIds]);
+        $rsOriginalImages = $HLOriginalImages->getList(["filter" => ['UF_RESIZED_IMAGE_ID' => $fileIds]]);
         $originalImages = [];
         while ($originalImage = $rsOriginalImages->fetch()) {
             $originalImages[$originalImage["UF_RESIZED_IMAGE_ID"]] = $originalImage["UF_IMAGE"];

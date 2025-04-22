@@ -50,10 +50,10 @@ use \Bitrix\Main\Localization\Loc;
         <? endif; ?>
     </div>
 
-    <? if ($price["oldPriceDollar"]): ?>
+    <? if ($price["PRICE_DOLLAR"]): ?>
         <div class="grid__item__prices">
-            <div class="grid__item__price"><?= $price['PRICE_DOLLAR'] ?></div>
-            <? if (!empty($price["oldPriceDollarFormat"])): ?>
+            <div class="grid__item__price"><?= $price['PRICE_DOLLAR_FORMATTED'] ?></div>
+            <? if (!empty($price["oldPriceDollar"])): ?>
                 <div class="grid__item__discount"><?= $price["oldPriceDollarFormat"] ?></div>
             <? endif; ?>
         </div>

@@ -3,16 +3,36 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-use Bitrix\Main\Localization\Loc;
+/**
+ * @global CMain $APPLICATION
+ */
 
-if (empty(\Level44\Base::$typePage)) {
-    \Level44\Base::$typePage = "layout";
+use Bitrix\Main\Localization\Loc;
+use Level44\Base;
+
+if (empty(Base::$typePage)) {
+    Base::$typePage = "layout";
 }
 
-$APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
+switch (Base::$typePage) {
+    case 'home':
+        $APPLICATION->AddViewContent("header-class", 'transparent');
+        break;
+    case 'product':
+        $APPLICATION->AddViewContent("header-class", 'product');
+        break;
+    default:
+        $APPLICATION->AddViewContent("header-class", 'navbar-light');
+        break;
+}
+
+$APPLICATION->AddViewContent("type-page", Base::$typePage);
 ?>
 </div>
 <?php $APPLICATION->ShowViewContent("catalog-filters"); ?>
+<? $APPLICATION->ShowViewContent("preorder-form"); ?>
+<? $APPLICATION->ShowViewContent("sizes-table"); ?>
+
 <footer class="footer">
     <div class="content-container">
         <div class="footer__subscribe footer__col">
@@ -97,9 +117,10 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
         ); ?>
     </div>
 </footer>
+<? $APPLICATION->ShowViewContent("image-modal"); ?>
 </div>
 <?
-\Level44\Base::loadScripts();
+Base::loadScripts();
 ?>
 <div class="d-none">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -142,6 +163,10 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
                   data-fill="true"/>
             <circle cx="10.5" cy="3.5" r=".875" data-fill="true"/>
         </symbol>
+        <symbol viewBox="0 0 24 24" id="play" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 4.747v14.506a.4.4 0 00.622.332L17.5 12.333a.4.4 0 000-.666L6.62 4.415a.4.4 0 00-.62.332z"
+                  data-stroke="true" fill="none"/>
+        </symbol>
         <symbol viewBox="0 0 24 24" id="search" xmlns="http://www.w3.org/2000/svg">
             <circle cx="10.636" cy="10.136" r="8.536" data-stroke="true" fill="none"/>
             <path d="M16.368 16.238l6.338 6.337" data-stroke="true" fill="none"/>
@@ -151,14 +176,14 @@ $APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
             <path d="M1.98 11.78l9.334-9.334" data-stroke="true" fill="none"/>
         </symbol>
         <symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#ma)" fill="none">
+            <g clip-path="url(#na)" fill="none">
                 <path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z"
                       data-stroke="true" fill="none"/>
                 <path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z"
                       data-fill="true"/>
             </g>
             <defs fill="none">
-                <clipPath id="ma" fill="none"/>
+                <clipPath id="na" fill="none"/>
             </defs>
         </symbol>
     </svg>

@@ -273,12 +273,13 @@ class PreOrder
     {
         $langCodes = ["LPO_PREORDER"];
         $button = <<<BUTTONS
-                        <button class="btn btn-block mb-4 btn-outline-dark bx-catalog-subscribe-button js-open-subscribe"
+                        <button class="btn btn-outline-dark btn-block product__add-basket-desktop js-open-subscribe"
+                        style="display: inherit;"
                                 data-toggle="modal" data-target="#subscribe-modal"
-                                type="button">
+                                type="submit">
                             <svg width="14" height="16" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1.5791 12.624H8.46289C8.4082 13.5469 7.82031 14.1348 6.99316 14.1348C6.17285 14.1348 5.57812 13.5469 5.53027 12.624H4.46387C4.51855 13.9365 5.55078 15.0918 6.99316 15.0918C8.44238 15.0918 9.47461 13.9434 9.5293 12.624H12.4141C13.0566 12.624 13.4463 12.2891 13.4463 11.7969C13.4463 11.1133 12.749 10.498 12.1611 9.88965C11.71 9.41797 11.5869 8.44727 11.5322 7.66113C11.4844 4.96777 10.7871 3.22461 8.96875 2.56836C8.73633 1.67969 8.00488 0.96875 6.99316 0.96875C5.98828 0.96875 5.25 1.67969 5.02441 2.56836C3.20605 3.22461 2.50879 4.96777 2.46094 7.66113C2.40625 8.44727 2.2832 9.41797 1.83203 9.88965C1.2373 10.498 0.546875 11.1133 0.546875 11.7969C0.546875 12.2891 0.929688 12.624 1.5791 12.624ZM1.87305 11.5918V11.5098C1.99609 11.3047 2.40625 10.9082 2.76172 10.5049C3.25391 9.95801 3.48633 9.08301 3.54785 7.74316C3.60254 4.7627 4.49121 3.80566 5.66016 3.49121C5.83105 3.4502 5.92676 3.36133 5.93359 3.19043C5.9541 2.47266 6.36426 1.97363 6.99316 1.97363C7.62891 1.97363 8.03223 2.47266 8.05957 3.19043C8.06641 3.36133 8.15527 3.4502 8.32617 3.49121C9.50195 3.80566 10.3906 4.7627 10.4453 7.74316C10.5068 9.08301 10.7393 9.95801 11.2246 10.5049C11.5869 10.9082 11.9902 11.3047 12.1133 11.5098V11.5918H1.87305Z"
-                                      fill="#212121"/>
+                                      fill="currentColor"/>
                             </svg>
                             <span>#LPO_PREORDER#</span>
                         </button>
@@ -291,7 +292,7 @@ BUTTONS;
     {
         $langCodes = ["LPO_ALREADY_SUBSCRIBED"];
         $button = <<<BUTTONS
-            <span class="btn btn-block mb-4 btn-outline-dark bx-catalog-subscribe-button disabled" type="button">
+            <span class="btn btn-outline-dark btn-block product__add-basket-desktop disabled" style="display: inherit;" type="submit">
                             <span>#LPO_ALREADY_SUBSCRIBED#</span>
                         </span>
 BUTTONS;
@@ -325,7 +326,7 @@ BUTTONS;
             return true;
         }
 
-        if (empty($_SESSION['PRE_ORDER_PRODUCT'])) {
+        if (empty($_SESSION['PRE_ORDER_PRODUCT'][$this->siteId]) || !is_array($_SESSION['PRE_ORDER_PRODUCT'][$this->siteId])) {
             return false;
         }
 

@@ -41,14 +41,13 @@ $MESS["EXIST_QUESTIONS"] = "Have questions?";
 $MESS["SIZE_TABLE"] = "Size table";
 $MESS["CLOSE_MODAL"] = "Close";
 $MESS["SIZE"] = "Size";
-$MESS["CHEST_CIRCUMFERENCE"] = "Chest girth, cm";
+$MESS["CHEST_CIRCUMFERENCE"] = "Chest girth (cm)";
 $MESS["HOIST_GIRTH"] = "Waist circumference";
 $MESS["HIP_GIRTH"] = "Hip girth";
 $MESS["ADD_TO_BASKET"] = "Add to Basket";
 $MESS["NOT_AVAILABLE"] = "Sold Out";
 $MESS["CURRENT_COLOR"] = "Color";
 $MESS["EXIST_QUESTIONS"] = "Have questions?";
-$MESS["MEASUREMENTS"] = "Product measurements";
 $MESS["TITLE_POPUP_SUBSCRIBED"] = "Availability notification";
 $MESS["DESC_POPUP_SUBSCRIBED"] = "Please, leave your email and we will notify you as soon as this item available again.";
 $MESS["PHONE_POPUP_SUBSCRIBED"] = "Phone";
@@ -60,6 +59,10 @@ $MESS["ALREADY_SUBSCRIBED"] = "You are already subscribed to this item";
 $MESS["BTN_SEND_POPUP_SUBSCRIBED"] = "Subscribe";
 $MESS["SUCCESS_POPUP_SUBSCRIBED"] = "You have successfully subscribed";
 $MESS["SIZE_TABLE_SIZE"] = "Size";
-$MESS["SIZE_TABLE_FOOT_LENGTH"] = "Foot length, cm";
+$MESS["SIZE_TABLE_FOOT_LENGTH"] = "Foot length (cm)";
+$MESS["ARTICLE"] = "Article";
+$MESS["AVAILABILITY"] = "Available in the store";
+$MESS["MEASUREMENTS"] = "Product measurements";
+$MESS["CARE"] = "Care instructions";
 
 ?>
