@@ -62,6 +62,11 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                         ]
                     ); ?>
                     <li class="m-search js-m-search">
+                        <button class="btn btn-link menu__link m-search__btn" id="search-trigger" type="button">
+                            <svg class="icon icon-search menu__icon">
+                                <use xlink:href="#search"></use>
+                            </svg>
+                        </button>
                         <div class="m-search__container">
                             <form action="<?= SITE_DIR ?>search" class="js-search__line">
                                 <div class="input-group m-search__group">
@@ -73,7 +78,7 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                                            autocomplete="off"
                                     >
                                     <div class="input-group-append">
-                                        <button class="btn btn-link menu__link m-search__btn" type="button">
+                                        <button class="btn btn-link menu__link m-search__btn" type="submit">
                                             <svg class="icon icon-search menu__icon">
                                                 <use xlink:href="#search"></use>
                                             </svg>

@@ -207,6 +207,7 @@ if (!empty($searchFilter) && is_array($searchFilter))
 	) + $elementOrder;?>
 
     <div class="nav-mobile">
+        <div></div>
         <button class="btn btn-link nav-mobile__link nav-mobile__link__filters" type="button"
                 aria-label="Toggle filters"
                 data-open-bottom-sheet="filters-sheet">
