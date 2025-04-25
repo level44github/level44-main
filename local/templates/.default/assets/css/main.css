@@ -38,11 +38,6 @@
   margin-right: 10px;
 }
 
-.home {
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-}
-
 .thank-order__title {
   text-align: center;
 }
