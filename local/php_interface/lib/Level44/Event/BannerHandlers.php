@@ -119,7 +119,7 @@ class BannerHandlers extends HandlerBase
             return true;
         }
 
-        $properties = static::getProperties(Base::BANNER_SLIDES_IBLOCK_ID);
+        $properties = static::getProperties();
 
         \CJSCore::Init(["jquery"]);
         ?>
