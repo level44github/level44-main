@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Public-offer page desc">
+    <meta name="author" content="">
+    <title>Публичная оферта</title>
+    <link rel="shortcut icon" href="../img/favicons/favicon.ico" type="image/x-icon">
+    <link rel="icon" sizes="16x16" href="../img/favicons/favicon-16x16.png" type="image/png">
+    <link rel="icon" sizes="32x32" href="../img/favicons/favicon-32x32.png" type="image/png">
+    <link rel="apple-touch-icon" href="../img/favicons/apple-touch-icon.png">
+    <link rel="mask-icon" href="../img/favicons/safari-pinned-tab.svg" color="#ffffff">
+    <!--link(rel="manifest" href="../img/favicons/site.webmanifest")-->
+    <meta name="msapplication-config" content="../img/favicons/browserconfig.xml">
+    <!-- Core CSS-->
+    <link href="css/app.css?v=1745860927957" rel="stylesheet">
+  </head>
+  <body class="layout">
+    <div class="layout__wrapper">
+      <header class="header navbar-light">
+        <nav class="header__container">
+          <div class="header__column">
+            <button class="btn btn-link menu__link nav-trigger__btn" type="button" aria-label="Toggle navigation">
+              <svg class="icon icon-burger menu__icon">
+                <use xlink:href="#burger"></use>
+              </svg>
+            </button>
+          </div><a class="header__logo" href="/">LEVEL44</a>
+          <div class="header__column right">
+            <ul class="menu">
+              <li class="menu__lang">
+                <button class="btn btn-link menu__link" type="button">EN</button>
+              </li>
+              <li class="m-search js-m-search">
+                <button class="btn btn-link menu__link m-search__btn" id="search-trigger" type="button">
+                  <svg class="icon icon-search menu__icon">
+                    <use xlink:href="#search"></use>
+                  </svg>
+                </button>
+                <div class="m-search__container">
+                  <form>
+                    <div class="input-group m-search__group">
+                      <input class="form-control m-search__control js-m-search__control" type="text" placeholder="Товар, модель или артикул" autocomplete="off">
+                      <div class="input-group-append">
+                        <button class="btn btn-link menu__link m-search__btn" type="button">
+                          <svg class="icon icon-search menu__icon">
+                            <use xlink:href="#search"></use>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </li>
+              <li class="m-basket"><a class="btn btn-link menu__link m-basket-link" href="#" role="button" data-toggle="dropdown">
+                  <svg class="icon icon-basket menu__icon">
+                    <use xlink:href="#basket"></use>
+                  </svg>
+                  <div class="menu__basket-count">1</div></a>
+                <div class="m-basket__dropdown">
+                  <div class="m-basket__title">Корзина</div>
+                  <div class="m-basket__items">
+                    <div class="m-basket__item"><a class="m-basket__image" href="#"><img class="img-fluid" src="img/m-basket__item.jpg" alt=""></a>
+                      <div class="m-basket__body"><a href="#">
+                          <div>Платье с v-образным вырезом</div>
+                          <div>14 800 руб.</div>
+                          <div>Размер: S</div></a></div><a class="m-basket__remove" href="#">
+                        <svg class="icon icon-close ">
+                          <use xlink:href="#close"></use>
+                        </svg></a>
+                    </div>
+                    <div class="m-basket__item"><a class="m-basket__image" href="#"><img class="img-fluid" src="img/m-basket__item.jpg" alt=""></a>
+                      <div class="m-basket__body"><a href="#">
+                          <div>Платье с v-образным вырезом</div>
+                          <div>14 800 руб.</div>
+                          <div>Размер: S</div></a></div><a class="m-basket__remove" href="#">
+                        <svg class="icon icon-close ">
+                          <use xlink:href="#close"></use>
+                        </svg></a>
+                    </div>
+                  </div><a class="btn btn-dark btn-block" href="#">Перейти к оформлению заказа</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <div class="nav-trigger">
+        <div class="nav-trigger__body">
+          <div class="nav-trigger__header">
+            <button class="btn btn-link nav-trigger__close" type="button" aria-label="Toggle navigation">
+              <svg class="icon icon-close nav-trigger__icon">
+                <use xlink:href="#close"></use>
+              </svg>
+            </button>
+          </div>
+          <div class="nav-trigger__scroll">
+            <ul class="nav-menu">
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container"><a class="nav-menu__link first-level" href="#">Новинки</a></div>
+              </li>
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container"><a class="nav-menu__link first-level" href="#">Скоро</a></div>
+              </li>
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link first-level">Одежда</span>
+                  <svg class="icon icon-arrow-down nav-menu__icon">
+                    <use xlink:href="#arrow-down"></use>
+                  </svg>
+                </div>
+                <ul class="nav-menu__submenu-list second-level">
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Все вещи</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">New</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Платья</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Топы и блузы</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Блузы</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Топы</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Рубашки</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Льняные</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">С длинным рукавом</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Корсетные</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Футболки</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Базовые</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Принтованные</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Оверсайз</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Поло</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Кроп-топы</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Юбки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Брюки и шорты</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Рубашки</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Классические</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Оверсайз</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Льняные</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">С коротким рукавом</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Жакеты</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Классические</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Оверсайз</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Кожаные</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">С поясом</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Боди</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Классические</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Кружевные</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Спортивные</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Повседневные</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Изделия из кожи</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Куртки</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Юбки</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Штаны</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Платья</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Аксессуары</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link second-level">Комплекты</span>
+                      <svg class="icon icon-arrow-down nav-menu__icon">
+                        <use xlink:href="#arrow-down"></use>
+                      </svg>
+                    </div>
+                    <ul class="nav-menu__submenu-list">
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Костюмы</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Топ + Юбка</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Топ + Шорты</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Спортивные комплекты</a></div>
+                      </li>
+                      <li class="nav-menu__submenu-item">
+                        <div class="nav-menu__link-container"><a class="nav-menu__link third-level" href="#">Льняные</a></div>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link first-level">Обувь</span>
+                  <svg class="icon icon-arrow-down nav-menu__icon">
+                    <use xlink:href="#arrow-down"></use>
+                  </svg>
+                </div>
+                <ul class="nav-menu__submenu-list second-level">
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Ботинки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Туфли</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Кроссовки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Босоножки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Сапоги</a></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link first-level">Сумки и аксессуары</span>
+                  <svg class="icon icon-arrow-down nav-menu__icon">
+                    <use xlink:href="#arrow-down"></use>
+                  </svg>
+                </div>
+                <ul class="nav-menu__submenu-list second-level">
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Сумки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Кошельки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Ремни</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Шарфы</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Очки</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Украшения</a></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container"><a class="nav-menu__link first-level" href="#">Outlet</a></div>
+              </li>
+              <li class="nav-menu__item">
+                <div class="nav-menu__link-container" role="button" tabindex="0"><span class="nav-menu__link first-level">Покупателям</span>
+                  <svg class="icon icon-arrow-down nav-menu__icon">
+                    <use xlink:href="#arrow-down"></use>
+                  </svg>
+                </div>
+                <ul class="nav-menu__submenu-list second-level">
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Доставка</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Возврат</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">Контакты</a></div>
+                  </li>
+                  <li class="nav-menu__submenu-item">
+                    <div class="nav-menu__link-container"><a class="nav-menu__link second-level" href="#">FAQ</a></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-trigger__footer">
+            <button class="btn btn-dark" type="button">Личный кабинет</button>
+          </div>
+        </div>
+        <div class="nav-trigger__overlay"></div>
+      </div>
+      <div class="container layout__container">
+        <div class="row">
+          <div class="col-lg-3 d-none d-lg-block">
+            <div class="nav-aside">
+              <ul class="nav flex-column">
+                <li class="nav-aside__item"><a class="nav-aside__link" href="./order-registration.html">Оформление заказа</a></li>
+                <li class="nav-aside__item"><a class="nav-aside__link active" href="./delivery.html">Самовывоз и доставка</a></li>
+                <li class="nav-aside__item"><a class="nav-aside__link" href="./payment.html">Оплата</a></li>
+                <li class="nav-aside__item"><a class="nav-aside__link" href="./return-of-goods.html">Возврат товара</a></li>
+                <li class="nav-aside__item"><a class="nav-aside__link" href="./public-offer.html">Публичная оферта</a></li>
+                <li class="nav-aside__item"><a class="nav-aside__link" href="./contacts.html">Контакты</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <h1 class="article__title">Публичная оферта</h1>
+            <div class="list__header">Основные понятия</div>
+            <ul class="list__disc">
+              <li>Посетитель Сайта — лицо, пришедшее на сайт www.level44.net без цели размещения Заказа.</li>
+              <li>Пользователь — физическое лицо, посетитель Сайта, принимающий условия настоящего Соглашения и желающий разместить Заказы в Интернет-магазине www.level44.net</li>
+              <li>Покупатель — Пользователь, разместивший Заказ в Интернет-магазине www.level44.net</li>
+              <li>2moodstore.com — Индивидуальный предприниматель  Воробьева Ксения Александровна (ОГРН 319774600393745, ИНН 760605844208, место нахождения: 117452, г. Москва, Симферопольский б-р, дом 24,5, кв. 154.</li>
+              <li>Продавец — www.level44.net Индивидуальный предприниматель Воробьева Ксения Александровна.</li>
+              <li>Интернет-магазин — Интернет-сайт, принадлежащий Level44, расположенный в сети интернет по адресу www.level44.net, где представлены Товары, а также условия оплаты и доставки Товаров Покупателям.</li>
+              <li>Сайт — www.level44.net.</li>
+              <li>Товар — обувь, одежда, аксессуары и иные товары, представленные к продаже на Сайте.</li>
+              <li>Заказ — должным образом оформленный запрос Покупателя на приобретение и доставку по указанному Покупателем адресу / посредством самовывоза Товаров, выбранных на Сайте.</li>
+            </ul>
+            <p class="list__header">1.  Общие положения</p>
+            <p>1.  Продавец осуществляет продажу Товаров через Интернет-магазин по адресу www.level44.net.</p>
+            <p>2.  Заказывая Товары через Интернет-магазин, Пользователь соглашается с условиями продажи Товаров, изложенными ниже (далее — Условия продажи товаров). В случае несогласия с настоящим Пользовательским соглашением (далее — Соглашение / Публичная оферта) Пользователь обязан немедленно прекратить использование сервиса и покинуть сайт www.level44.net.</p>
+            <p>3.  Настоящие Условия продажи товаров, а также информация о Товаре, представленная на Сайте, являются публичной офертой в соответствии со ст.435 и п.2 ст.437 Гражданского кодекса Российской Федерации.</p>
+            <p>4.  Соглашение может быть изменено Продавцом в одностороннем порядке без уведомления Пользователя/Покупателя.</p>
+            <p>5.  Публичная оферта признается акцептованной Посетителем Сайта / Покупателем с момента регистрации Посетителя на Сайте, оформления Покупателем Заказа без авторизации на Сайте, а также с момента принятия от Покупателя Заказа по телефону указанному в разделе Контакты Сайта.
+              <div>Договор розничной купли-продажи считается заключенным с момента выдачи Продавцом Покупателю кассового или товарного чека либо иного документа, подтверждающего оплату товара.</div>
+              <div>Сообщая Продавцу свой e-mail и номер телефона, Посетитель Сайта/Пользователь/Покупатель дает согласие на использование указанных средств связи Продавцом, а также третьими лицами, привлекаемыми им для целей выполнения обязательств перед Посетителями Сайта/Пользователями/Покупателями, в целях осуществления рассылок рекламного и информационного характера, содержащих информацию о скидках, предстоящих и действующих акциях и других мероприятиях Продавца, о передаче заказа в доставку, а также иную информацию, непосредственно связанную с выполнением обязательств Покупателем в рамках настоящей Публичной оферты.</div>
+            </p>
+            <p>6.  Осуществляя Заказ, Пользователь/Покупатель соглашается с тем, что Продавец может поручить исполнение Договора третьему лицу, при этом оставаясь ответственным за его исполнение.</p>
+            <p>7.  Все права и обязательства по заключенному с Пользователем Договору возникают непосредственно у Продавца, при этом Покупатель, принимая настоящее Соглашение, полностью понимает и соглашается, что в случае заключения договора с Продавцом, отличным от Level44, Level44 не является стороной указанного договора и не несет обязанностей, связанных с его исполнением, кроме предусмотренных настоящей Публичной офертой.</p>
+            <p>8.  В рамках Заказа 2moodstore предоставляет Пользователю информационное сопровождение заключенного Пользователем с Продавцом Договора.</p>
+            <p>9.  Вы можете оформить заказ в Интернет-магазине www.level44.net 24 часа в сутки, 7 дней в неделю, кроме периодов проведения регламентных работ или технических сбоев.</p>
+            <p>10.  Адреса и режим работы Пунктов выдачи заказов, через которые возможно осуществить возврат, доступны на сайте 2moodstore.com в разделе «Возврат».</p>
+            <p class="list__header">2.  Предмет соглашения</p>
+            <p>1.  Предметом настоящего Соглашения является предоставление возможности Пользователю приобретать для личных, семейных, домашних и иных нужд, не связанных с осуществлением предпринимательской деятельности, Товары, представленные в каталоге Интернет-магазина по адресу www.level44.net.</p>
+            <p>2.  Данное Соглашение распространяется на все виды Товаров и услуг, представленных на Сайте, пока такие предложения с описанием присутствуют в каталоге Интернет-магазина.</p>
+            <p class="list__header">3.  Регистрация на сайте</p>
+            <p>1.  Регистрация на Сайте осуществляется на странице «Регистрация».</p>
+            <p>2.  Регистрация на Сайте не является обязательной для оформления Заказа.</p>
+            <p>3.  Level44 не несет ответственности за точность и правильность информации, предоставляемой Пользователем при регистрации.</p>
+            <p>4.  Пользователь обязуется не сообщать третьим лицам логин и пароль, указанные Пользователем при регистрации. В случае возникновения у Пользователя подозрений относительно безопасности его логина и пароля или возможности их несанкционированного использования третьими лицами, Пользователь обязуется незамедлительно уведомить об этом Level44, направив соответствующее электронное письмо по адресу: level44level@yandex.ru.</p>
+            <p>5.  Общение Пользователя/Покупателя с менеджерами и иными представителями Level44 и иных Продавцов должно строиться на принципах общепринятой морали и коммуникационного этикета. Строго запрещено использование нецензурных слов, брани, оскорбительных выражений, а также угроз и шантажа, в независимости от того, в каком виде и кому они были адресованы.</p>
+            <p class="list__header">4.  Товар и порядок совершения покупки</p>
+            <p>1.  В случае отсутствия заказанных Покупателем Товаров на складе Продавца, последний вправе исключить указанный Товар из Заказа / аннулировать Заказ Покупателя, уведомив об этом Покупателя путем направления соответствующего электронного сообщения по адресу, указанному Покупателем при регистрации .</p>
+            <p>2.  В случае аннуляции полностью либо частично предоплаченного Заказа стоимость аннулированного Товара возвращается Продавцом Покупателю способом, которым Товар был оплачен.</p>
+            <p>3.  Заказ Покупателя оформляется в соответствии с процедурами, указанными на Сайте в разделе «Оформление Заказа».</p>
+            <p>4.  Покупатель несет полную ответственность за предоставление неверных сведений, повлекшее за собой невозможность надлежащего исполнения Продавцом своих обязательств перед Покупателем.</p>
+            <p>5.  После оформления Заказа на Сайте Покупателю предоставляется информация о предполагаемой дате доставки путем направления электронного сообщения по адресу, указанному Покупателем при регистрации, или по телефону. Менеджер, обслуживающий данный Заказ, уточняет детали Заказа, согласовывает дату доставки, которая зависит от наличия заказанных Товаров на складе и времени, необходимого для обработки и доставки Заказа.</p>
+            <p>6.  Ожидаемая дата передачи Заказа в Службу доставки соответствующего Продавца сообщается Покупателю менеджером, обслуживающим Заказ, по электронной почте или при контрольном звонке Покупателю.</p>
+            <p class="list__header">5.  Доставка заказа</p>
+            <p>1.  Способы, а также примерные сроки доставки Товаров, реализуемых Level44, указаны на Сайте в разделе «Доставка». Конкретные сроки доставки могут быть согласованы Покупателем с менеджером при подтверждении заказа.</p>
+            <p>2.  Покупатель соглашается, что территория доставки Товаров, может быть ограничена.</p>
+            <p>3.  При доставке Заказ вручается Покупателю либо третьему лицу, указанному в Заказе в качестве получателя (далее Покупатель и третье лицо именуются «Получатель»). При невозможности получения Заказа, оплаченного посредством наличного расчета, указанными выше лицами, Заказ может быть вручен лицу, который может предоставить сведения о Заказе (номер отправления и/или ФИО Получателя), а также оплатить стоимость Заказа в полном объеме лицу, осуществляющему доставку Заказа.</p>
+            <p>4.  Во избежание случаев мошенничества, а также для выполнения взятых на себя обязательств, указанных в пункте</p>
+            <p>5. настоящего Соглашения, при вручении предоплаченного Заказа лицо, осуществляющее доставку Заказа, вправе затребовать документ, удостоверяющий личность Получателя, а также указать тип и номер предоставленного Получателем документа на квитанции к Заказу. Продавец гарантирует конфиденциальность и защиту персональных данных Получателя (раздел 9).</p>
+            <p>6.  Риск случайной гибели или случайного повреждения Товара переходит к Покупателю с момента передачи ему Заказа и проставления Получателем Заказа подписи в документах, подтверждающих доставку Заказа. В случае недоставки Заказа Продавец возмещает Покупателю стоимость предоплаченного Покупателем Заказа и доставки в полном объеме после получения от Службы доставки подтверждения утраты Заказа.</p>
+            <p>7.  Стоимость доставки каждого Заказа рассчитывается индивидуально, исходя из веса Товара, региона и способа доставки, а также (в случае необходимости) формы оплаты, и указывается на Сайте на последнем этапе оформления Заказа, либо может быть уточнена посредством звонка менеджером Level44.</p>
+            <p>8.  Обязанность Продавца передать товар Покупателю считается исполненной в момент вручения курьером Товара Получателю или получения Товара Получателем в отделении почтовой связи либо в заранее оговоренном месте выдачи Заказа (в т.ч. в пункте самовывоза).
+              <div>При получении Заказа в отделении транспортной компании Получатель после оплаты доставленного Товара вправе осмотреть доставленный Товар и произвести его вскрытие в присутствии работников транспортной компании для проверки Товара на соответствие заявленному количеству, ассортименту и комплектности Товара. В случае наличия претензий к доставленному Товару (недовложение, вложение Товара отличного от указанного в описи отправления, производственный брак, иные претензии) по указанию Получателя работниками транспортной компании составляется Акт о выявленных несоответствиях.</div>
+              <div>В случае возврата доставленного посредством транспортной компании Товара в связи с наличием претензий к Товару Получатель обязан приложить к Отправлению, содержащему возвращаемый Товар, следующие документы:</div>
+            </p>
+            <ul class="list__disc">
+              <li>заявление на возврат денежных средств;</li>
+              <li>копию акта о выявленных несоответствиях;</li>
+              <li>копию квитанции об оплате;</li>
+              <li>копию описи Отправления;</li>
+              <li>бланк возврата.</li>
+            </ul>
+            <p>9.  При принятии Заказа от курьера, Получатель вправе осмотреть доставленный Товар и проверить его на соответствие заявленному количеству, ассортименту и комплектности Товара. В случае отсутствия претензий к доставленному Товару Получатель расписывается в «Бланке доставки заказов» либо ином аналогичном документе, предоставляемом курьером, и оплачивает Заказ (в отсутствие 100%-ной предоплаты). Подпись в доставочных документах свидетельствует о том, что претензий к Товару Получателем не заявлено и Продавец полностью и надлежащим образом выполнил свою обязанность по передаче Товара.</p>
+            <p>10.  Время нахождения курьеров, доставляющих товар, реализуемый Level44, по адресу Получателя ограничено 15 минутами.</p>
+            <p>11.  Уточнить дату, время и при необходимости маршрут доставки, можно у менеджера, который связывается с Покупателем для подтверждения Заказа. Cотрудники Level44 обязуются оказывать любое возможное содействие и принимать зависящее от них меры для предоставления Покупателю необходиой информации, связанной с заказом.</p>
+            <p class="list__header">6.  Оплата товара</p>
+            <p>1.  Цена товара, реализуемого в Интернет-магазине, указывается в рублях Российской Федерации.</p>
+            <p>2.  Цена Товара указывается на Сайте. В случае неверного указания цены заказанного Покупателем Товара, Продавец информирует об этом Покупателя для подтверждения Заказа по исправленной цене либо аннулирования Заказа. При невозможности связаться с Покупателем данный Заказ считается аннулированным. Если Заказ был оплачен, Продавец возвращает Покупателю оплаченную за Заказ сумму тем же способом, которым она была уплачена.</p>
+            <p>3.  Цена Товара на Сайте может быть изменена Продавцом в одностороннем порядке. При этом цена на заказанный Покупателем Товар изменению не подлежит.</p>
+            <p class="list__header">7.  Особенности оплаты товара с помощью банковских карт:</p>
+            <p>1.  В соответствии с положением ЦБ РФ «Об эмиссии банковских карт и об операциях, совершаемых с использованием платежных карт» от 24.12.2004 № 266-П операции по банковским картам совершаются держателем карты либо уполномоченным им лицом.</p>
+            <p>2.  Авторизация операций по банковским картам осуществляется банком. Если у банка есть основания полагать, что операция носит мошеннический характер, то банк вправе отказать в осуществлении данной операции. Мошеннические операции с банковскими картами попадают под действие статьи 159 УК РФ.</p>
+            <p>3.  Во избежание случаев различного рода неправомерного использования банковских карт при оплате все Заказы, оформленные на Сайте и предоплаченные банковской картой, проверяются Продавцом. В целях проверки личности владельца и его правомочности на использование карты Продавец вправе потребовать от Покупателя, оформившего такой заказ, предъявления документа, удостоверяющего личность.</p>
+            <p>5.  Level44 вправе предоставлять скидки на Товары и устанавливать программу бонусов. Виды скидок, бонусов, порядок и условия начисления определяются Продавцами самостоятельно и могут быть изменены в одностороннем порядке.</p>
+            <p>6.  При проведении маркетинговых мероприятий, предполагающих вложение каких-либо объектов в отправления с Заказом Покупателя, доставка указанных вложений осуществляется за счет Покупателя. Для того, чтобы отказаться от вложения, Покупателю необходимо обратиться в Службу по работе с клиентами.</p>
+            <p>7.  Заказ считается неукомплектованным, если Покупатель сообщил об изменении решения о покупке до момента начала сборки заказа на складе. Если Покупатель сообщил Продавцу об этом после момента начала сборки заказа на складе, то такой Заказ считается отклоненным.</p>
+            <p>8.  Level44 вправе принять решение о блокировке для Покупателя способа оплаты «При получении», в отношении реализуемых Level44 Товаров.</p>
+            <p>9.  При этом в случае если было установлено, что Покупатель, в отношении которого были установлены условия оплаты «При заказе товара», использует другой аккаунт для заказа товара на иных условиях оплаты («При получении»), в отношении такого аккаунта также могут быть установлены условия оплаты «При заказе товара». Для определения связи аккаунта с лицом, в отношении которого установлены условия оплаты «При заказе товара», достаточным является совпадение части регистрационных данных или наличия у 2moodstore иных сведений, позволяющих отнести аккаунт к соответствующему лицу.
+              <div>Покупатель имеет право обратиться в Службу поддержки по адресу level44level@yandex.ru с просьбой о предоставлении возможности использования способа оплаты «при получении». Решение по заявке принимается Компанией в течение пяти рабочих дней, после чего сообщается Покупателю посредством отправки уведомления на электронную почту, указанную при подаче заявки.</div>
+              <div>Указанные положения не являются проявлением дискриминации и не направлены на ущемление прав, гарантированных законодательством Российской Федерации потребителям, а нацелены на снижение убытков Level44 от действий Покупателей.</div>
+            </p>
+            <p class="list__header">8.  Возврат товара и денежных средств</p>
+            <p>1.  Возврат Товара, реализуемого Level44, осуществляется в соответствии с условиями, указанными на Сайте в разделе "Возврат".</p>
+            <p>2.  Возврат Товара надлежащего качества</p>
+            <ul class="list__disc">
+              <li>1.  Покупатель вправе отказаться от заказанного Товара в любое время до его получения, а после получения    Товара — в течение 7 дней, не считая дня покупки.</li>
+              <li>2.  При отказе Покупателя от Товара согласно п.7.2.1. Продавец возвращает ему стоимость возвращенного Товара, за исключением расходов Продавца, связанных с доставкой возвращенного Покупателем Товара, в срок до 10 дней с даты поступления возвращенного Товара на склад Продавца вместе с заполненным Покупателем заявлением на возврат.</li>
+              <li>3.  Если на момент обращения Покупателя аналогичный товар отсутствует в продаже у Продавца, Покупатель вправе отказаться от исполнения настоящего Соглашения и потребовать возврата уплаченной за указанный Товар денежной суммы. Продавец обязан вернуть уплаченную за возвращенный товар денежную сумму. Обращаем ваше внимание, что возврат денежных средств зависит от скорости обработки операции вашим Банком и может достигать 30 банковских дней.</li>
+            </ul>
+            <p>3.  Возврат Товара ненадлежащего качества:</p>
+            <ul class="list__disc">
+              <li>1.  Под товаром ненадлежащего качества подразумевается товар, который несоответсвует описанию на Сайте.</li>
+              <li>2.  Внешний вид и комплектность Товара, а также комплектность всего Заказа могут быть проверены Получателем в момент доставки Товара.</li>
+              <li>3.  При доставке Товара Покупатель ставит свою подпись в квитанции о доставке в графе: «Заказ принял, комплектность полная, претензий к количеству и внешнему виду товара не имею», либо в ином аналогичном документе, выпускаемого транспортной компанией, в графе, предусматривающей проставление Покупателем отметки об отсутствии у него претензий к комплектности и количеству Товара.</li>
+              <li>4.  Если Покупателю был передан Товар ненадлежащего качества и оное не было заранее оговорено Продавцом, Покупатель вправе воспользоваться положениями ст. 18 «Права потребителя при обнаружении в товаре недостатков» Закона о защите прав потребителей.</li>
+              <li>5.  Требования о возврате уплаченной за товар денежной суммы подлежат удовлетворению в течение 10 дней со дня предъявления соответствующего требования (ст. 22 Закона РФ «О защите прав потребителей»). Обращаем ваше внимание, что возврат денежных средств зависит от скорости обработки операции вашим Банком и может достигать 30 банковских дней.</li>
+            </ul>
+            <p>4.  Возврат денежных средств осуществляется посредством возврата стоимости оплаченного Товара на банковскую карту. Способ должен быть указан в соответствующем поле заявления на возврат Товара.</p>
+            <p class="list__header">9.  Ответственность</p>
+            <p>1.  Продавец не несет ответственности за ущерб, причиненный Покупателю вследствие ненадлежащего использования Товаров, приобретенных в Интернет-магазине.</p>
+            <p>2.  Продавец не несет ответственности за содержание и функционирование внешних сайтов.</p>
+            <p class="list__header">10.  Конфиденциальность и защита информации</p>
+            <p>1.  Персональные данные Пользователя/Покупателя обрабатывается в соответствии с ФЗ «О персональных данных» № 152-ФЗ.</p>
+            <p>2.  При регистрации на Сайте Пользователь предоставляет следующую информацию: Фамилия, Имя, контактный номер телефона, адрес электронной почты, адрес доставки товара.</p>
+            <p>3.  Предоставляя свои персональные данные Продавцу, Посетитель Сайта/Пользователь/Покупатель соглашается на их обработку Продавцом, в том числе в целях выполнения Продавцом обязательств перед Посетителем Сайта/Пользователем/Покупателем в рамках настоящей Публичной оферты, продвижения Продавцом товаров и услуг, проведения электронных и sms опросов, контроля результатов маркетинговых акций, клиентской поддержки, организации доставки товара Покупателям, оформления потребительского кредита у компании-партнера Продавца, проведение розыгрышей призов среди Посетителей Сайта/Пользователей/ Покупателей, контроля удовлетворенности Посетителя Сайта/Пользователя/Покупателя, а также качества услуг, оказываемых Продавцом.</p>
+            <p>4.  Под обработкой персональных данных понимается любое действие (операция) или совокупность действий (операций), совершаемых с использованием средств автоматизации или без использования таких средств с персональными данными, включая сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение) извлечение, использование, передачу (в том числе передачу третьим лицам, не исключая трансграничную передачу, если необходимость в ней возникла в ходе исполнения обязательств), обезличивание, блокирование, удаление, уничтожение персональных данных.</p>
+            <ul class="list__disc">
+              <li>1.  Продавец имеет право отправлять информационные, в том числе рекламные сообщения, на электронную почту и мобильный телефон Пользователя/Покупателя с его согласия, выраженного посредством совершения им действий, однозначно идентифицирующих этого абонента и позволяющих достоверно установить его волеизъявление на получение сообщения. Пользователь/Покупатель вправе отказаться от получения рекламной и другой информации без объяснения причин отказа путем информирования 2moodstore о своем отказе посредством направления соответствующего заявления на электронный адрес Продавца: Level44level@yandex.ru. Сервисные сообщения, информирующие Пользователя/Покупателя о заказе и этапах его обработки, отправляются автоматически и не могут быть отклонены Пользователем/Покупателем.</li>
+              <pli>2.  Отзыв согласия на обработку персональных данных осуществляется путем направления соответствующего заявления на электронный адрес Продавца: level44level@yandex.ru.</pli>
+            </ul>
+            <p>5.  Продавец вправе использовать технологию «cookies». «Cookies» не содержат конфиденциальную информацию. Посетитель / Пользователь / Покупатель настоящим дает согласие на сбор, анализ и использование cookies, в том числе третьими лицами для целей формирования статистики и оптимизации рекламных сообщений.</p>
+            <p>6.  Продавец получает информацию об ip-адресе посетителя Сайта www.2moodstore.ru. Данная информация не используется для установления личности посетителя.</p>
+            <p>7.  Продавец не несет ответственности за сведения, предоставленные Пользователем/Покупателем на Сайте в общедоступной форме.</p>
+            <p>8.  Продавец вправе осуществлять записи телефонных разговоров с Пользователем/Покупателем. При этом Продавец обязуется: предотвращать попытки несанкционированного доступа к информации, полученной в ходе телефонных переговоров, и/или передачу ее третьим лицам, не имеющим непосредственного отношения к исполнению Заказов, в соответствии с п. 4 ст. 16 Федерального закона «Об информации, информационных технологиях и о защите информации».</p>
+            <p class="list__header">11.  Срок действия публичной оферты</p>
+            <p>1. Настоящая Публичная оферта вступает в силу с момента ее акцепта Посетителем Сайта/Покупателем, и действует до момента отзыва акцепта Публичной оферты.</p>
+            <p class="list__header">12.  Дополнительные условия</p>
+            <p>1.  Продавец вправе переуступать либо каким-либо иным способом передавать свои права и обязанности, вытекающие из его отношений с Покупателем, третьим лицам.</p>
+            <p>2.  Интернет-магазин и предоставляемые сервисы могут временно частично или полностью недоступны по причине проведения профилактических или иных работ или по любым другим причинам технического характера. Техническая служба 2moodstore имеет право периодически проводить необходимые профилактические или иные работы с предварительным уведомлением Покупателей или без такового.</p>
+            <p>3.  К отношениям между Пользователем/Покупателем и Продавцом применяются положения Российского законодательства.</p>
+            <p>4.  В случае возникновения вопросов и претензий со стороны Пользователя/Покупателя он вправе обратиться к Продавцу по телефону или иным доступным способом.</p>
+            <p>5.  Признание судом недействительности какого-либо положения настоящего Соглашения не влечет за собой недействительность остальных положений.</p>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="content-container">
+          <div class="footer__subscribe footer__col">
+            <div class="email">
+              <p class="email__text">Подпишитесь на нашу e-mail рассылку, чтобы первыми получать информацию о новинках и спецпредложениях</p><a class="btn btn-dark" href="#">Подписаться</a>
+            </div>
+            <div class="news"> 
+              <h5 class="footer__title">Следите за новостями</h5>
+              <ul class="nav flex-column news__links">
+                <li class="nav-item"> <a class="footer__link" href="https://www.instagram.com/le4v4el">Telegram</a></li>
+                <li class="nav-item"> <a class="footer__link" href="https://api.whatsapp.com/send/?phone=79672419889&amp;text&amp;type=phone_number&amp;app_absent=0">WhatsApp</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="footer__address footer__col">
+            <h5 class="footer__title">Магазины</h5>
+            <div class="location"><a class="footer__link" href="#">Флагманский магазин</a>
+              <div class="info">
+                <div>Москва, Малая Бронная 16</div>
+                <div>11:00-22:00 ежедневно</div><a class="footer__link" href="tel:+74957901051">+7(495)790-10-51</a>
+              </div>
+            </div>
+            <div class="location"><a class="footer__link" href="#">Шоурум</a>
+              <div class="info">
+                <div>Москва, Малая Бронная 24/3</div>
+                <div>11:00-22:00 ежедневно</div><a class="footer__link" href="tel:+79852112169">+7(985)211-21-69</a>
+              </div>
+            </div>
+          </div>
+          <div class="footer__info footer__col">
+            <h5 class="footer__title">Покупателям</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="footer__link" href="#">Оформление заказа</a></li>
+              <li class="nav-item"><a class="footer__link" href="#">Самовывоз и доставка</a></li>
+              <li class="nav-item"><a class="footer__link" href="#">Оплата</a></li>
+              <li class="nav-item"><a class="footer__link" href="#">Возврат товара</a></li>
+              <li class="nav-item"><a class="footer__link" href="#">Публичная оферта</a></li>
+              <li class="nav-item"><a class="footer__link" href="#">Контакты</a></li>
+            </ul>
+          </div>
+          <div class="footer__logo footer__col"><a href="/">LEVEL44</a></div>
+          <ul class="nav flex-row footer__mobile-langs">
+            <li><a class="footer__link active" href="#">Русский</a></li>
+            <li> <a class="footer__link" href="#">English</a></li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+    <script src="js/jquery.min.js?v=1745860927957"></script>
+    <script src="js/app.js?v=1745860927957"></script>
+    <div class="d-none"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><symbol viewBox="0 0 24 24" id="arrow-back" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 12l9 10M4 12h17" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 16 16" id="arrow-down" xmlns="http://www.w3.org/2000/svg"><path d="M2 4.822l6 6.356 6-6.329" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 24" id="arrow-left" xmlns="http://www.w3.org/2000/svg"><path d="M16 1L8 12l8 11" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 24" id="arrow-right" xmlns="http://www.w3.org/2000/svg"><path d="M8 23l8-11L8 1" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 24" id="basket" xmlns="http://www.w3.org/2000/svg"><path d="M4.698 8.8a.775.775 0 01.77-.692h13.064c.396 0 .728.298.77.692l1.37 12.742a.775.775 0 01-.77.857H4.098c-.46 0-.82-.4-.77-.857L4.698 8.8zM8.2 5.373a3.773 3.773 0 017.545 0v2.635H8.2V5.373z" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 24" id="burger" xmlns="http://www.w3.org/2000/svg"><path d="M0 3.4h24m-24 8h24m-24 8h24" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 25" id="close" xmlns="http://www.w3.org/2000/svg"><path d="M3.473 20.914L20.444 3.943m.083 16.971L3.557 3.944" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 16 16" id="close-small" xmlns="http://www.w3.org/2000/svg"><path d="M3 3l10 10m0-10L3 13" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 24" id="filters" xmlns="http://www.w3.org/2000/svg"><path d="M0 6.9l13.5-.002M24 6.9h-4.5M0 16.9l4.5.001m19.5 0H10.5" data-stroke="true" fill="none"/><circle cx="7.5" cy="16.9" r="2.9" data-stroke="true" fill="none"/><circle cx="16.5" cy="6.9" r="2.9" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 14 14" id="instagram" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.158 12.996a934.657 934.657 0 005.06-.001l.6-.001h.005l.064-.003.214-.014c.186-.013.347-.03.422-.046 1.472-.301 2.474-1.426 2.474-3.043V7.026l.001-.835c.002-.702.003-1.397-.005-2.094a3.065 3.065 0 00-.066-.633c-.335-1.49-1.543-2.458-3.094-2.461a1256.78 1256.78 0 00-5.663.001h-.002c-.176 0-.344.01-.504.03-1.505.203-2.658 1.518-2.661 3.03-.004 1.96-.005 3.916.003 5.873.001.205.024.412.068.605.338 1.485 1.542 2.45 3.084 2.454zM.006 9.942c-.008-1.96-.007-3.92-.003-5.88C.007 2.05 1.533.313 3.533.045c.21-.028.423-.04.635-.04C6.058 0 7.946-.002 9.835.003c2.012.004 3.629 1.29 4.068 3.24.062.274.087.561.09.843.008.704.007 1.409.005 2.113v3.689c0 2.112-1.356 3.63-3.274 4.023-.292.06-.883.083-.883.083s-3.79.008-5.686.002C2.152 13.99.541 12.708.1 10.765a3.82 3.82 0 01-.094-.823z" data-fill="true"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.995 5.17a1.825 1.825 0 100 3.65 1.825 1.825 0 000-3.65zM4.17 6.995a2.825 2.825 0 115.65 0 2.825 2.825 0 01-5.65 0z" data-fill="true"/><circle cx="10.5" cy="3.5" r=".875" data-fill="true"/></symbol><symbol viewBox="0 0 24 24" id="play" xmlns="http://www.w3.org/2000/svg"><path d="M6 4.747v14.506a.4.4 0 00.622.332L17.5 12.333a.4.4 0 000-.666L6.62 4.415a.4.4 0 00-.62.332z" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 24 24" id="search" xmlns="http://www.w3.org/2000/svg"><circle cx="10.636" cy="10.136" r="8.536" data-stroke="true" fill="none"/><path d="M16.368 16.238l6.338 6.337" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 14 14" id="stop" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="6.5" data-stroke="true" fill="none"/><path d="M1.98 11.78l9.334-9.334" data-stroke="true" fill="none"/></symbol><symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#na)" fill="none"><path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z" data-stroke="true" fill="none"/><path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z" data-fill="true"/></g><defs fill="none"><clipPath id="na" fill="none"/></defs></symbol></svg></div>
+  </body>
+</html>
