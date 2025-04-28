@@ -149,9 +149,9 @@
 		this.obTree = null;
 		this.obPriceRanges = null;
 		this.obBuyBtn = null;
-		this.obAddToBasketBtn = null;
-		this.obBasketActions = null;
-		this.obNotAvail = null;
+		this.obAddToBasketBtn = [];
+		this.obBasketActions = [];
+		this.obNotAvail = [];
 		this.obSubscribe = null;
 		this.obSkuProps = null;
 		this.obMainSkuProps = null;
@@ -404,20 +404,17 @@
 					}
 				}
 
-				this.obBasketActions = BX(this.visual.BASKET_ACTIONS_ID);
-				if (this.obBasketActions)
-				{
-					if (BX.util.in_array('BUY', this.config.basketAction))
-					{
+				this.obBasketActions = document.querySelectorAll('.' + this.visual.BASKET_ACTIONS_ID);
+				if (this.obBasketActions?.length) {
+					if (BX.util.in_array('BUY', this.config.basketAction)) {
 						this.obBuyBtn = BX(this.visual.BUY_LINK);
 					}
 
-					if (BX.util.in_array('ADD', this.config.basketAction))
-					{
-						this.obAddToBasketBtn = BX(this.visual.ADD_BASKET_LINK);
+					if (BX.util.in_array('ADD', this.config.basketAction)) {
+						this.obAddToBasketBtn = document.querySelectorAll('.' + this.visual.ADD_BASKET_LINK)
 					}
 				}
-				this.obNotAvail = BX(this.visual.NOT_AVAILABLE_MESS);
+				this.obNotAvail = document.querySelectorAll('.' + this.visual.NOT_AVAILABLE_MESS)
 			}
 
 			if (this.config.showQuantity)
@@ -649,7 +646,9 @@
 				this.obBuyBtn && BX.bind(this.obBuyBtn, 'click', BX.proxy(this.buyBasket, this));
 				this.smallCardNodes.buyButton && BX.bind(this.smallCardNodes.buyButton, 'click', BX.proxy(this.buyBasket, this));
 
-				this.obAddToBasketBtn && BX.bind(this.obAddToBasketBtn, 'click', BX.proxy(this.add2Basket, this));
+				for (const obAddToBasketBtnElement of this.obAddToBasketBtn) {
+					obAddToBasketBtnElement && BX.bind(obAddToBasketBtnElement, 'click', BX.proxy(this.add2Basket, this));
+				}
 				this.smallCardNodes.addButton && BX.bind(this.smallCardNodes.addButton, 'click', BX.proxy(this.add2Basket, this));
 
 				if (this.obCompare)
@@ -1978,11 +1977,15 @@
 				{
 					this.node.quantity && BX.style(this.node.quantity, 'display', '');
 
-					this.obBasketActions && BX.style(this.obBasketActions, 'display', '');
+					for (const obBasketAction of this.obBasketActions) {
+						obBasketAction && BX.style(obBasketAction, 'display', '');
+					}
 					this.smallCardNodes.buyButton && BX.style(this.smallCardNodes.buyButton, 'display', '');
 					this.smallCardNodes.addButton && BX.style(this.smallCardNodes.addButton, 'display', '');
 
-					this.obNotAvail && BX.style(this.obNotAvail, 'display', 'none');
+					for (const obNotAvailElement of this.obNotAvail) {
+						obNotAvailElement && BX.style(obNotAvailElement, 'display', 'none');
+					}
 					this.smallCardNodes.notAvailableButton && BX.style(this.smallCardNodes.notAvailableButton, 'display', 'none');
 
 					this.obSubscribe && BX.style(this.obSubscribe, 'display', 'none');
@@ -1991,11 +1994,15 @@
 				{
 					this.node.quantity && BX.style(this.node.quantity, 'display', 'none');
 
-					this.obBasketActions && BX.style(this.obBasketActions, 'display', 'none');
+					for (const obBasketAction of this.obBasketActions) {
+						obBasketAction && BX.style(obBasketAction, 'display', 'none');
+					}
 					this.smallCardNodes.buyButton && BX.style(this.smallCardNodes.buyButton, 'display', 'none');
 					this.smallCardNodes.addButton && BX.style(this.smallCardNodes.addButton, 'display', 'none');
 
-					this.obNotAvail && BX.style(this.obNotAvail, 'display', '');
+					for (const obNotAvailElement of this.obNotAvail) {
+						obNotAvailElement && BX.style(obNotAvailElement, 'display', '');
+					}
 					this.smallCardNodes.notAvailableButton && BX.style(this.smallCardNodes.notAvailableButton, 'display', '');
 
 					$(document).find(".js-preorder-productId").val(newOffer.ID);
@@ -3384,9 +3391,12 @@
 		basketResult: function(arResult)
 		{
 			BX.onCustomEvent('OnBasketChange',[{showAfterAdd: true}]);
-            $(this.obAddToBasketBtn).removeClass("btn__spinner");
-			var $textContent = $(this.obAddToBasketBtn).find(".js-text-content");
-            $textContent.text($textContent.data("added-text"));
+
+			$(this.obAddToBasketBtn).each((index, element) => {
+				$(element).removeClass("btn__spinner");
+				$(element).text($(element).data("added-text"));
+			})
+
 			return; //Не выводим попап при добавлении в корзину
 			var popupContent, popupButtons, productPict;
 
@@ -3567,9 +3577,18 @@
 	}
 })(window);
 
+var preOrderIsSent = false;
+
 $(function () {
 	$(document).on("click", ".js-subscribe-button", function (e) {
 		e.preventDefault();
+
+		if (preOrderIsSent) {
+			return false;
+		}
+
+		preOrderIsSent = true
+
 		var $subscribeForm = $(this).closest("form");
 		var $errors = $subscribeForm.find(".js-errors");
 		var productId = Number($subscribeForm.find("[name='productId']").val());
@@ -3622,10 +3641,13 @@ $(function () {
 				} else {
 					$errors.append(BX.message("SUBSCRIBE_INTERNAL_ERROR"));
 				}
+
+				preOrderIsSent = false;
 			},
 			error: function () {
 				$errors.html("");
 				$errors.append(BX.message("SUBSCRIBE_INTERNAL_ERROR"));
+				preOrderIsSent = false;
 			}
 		});
 	});

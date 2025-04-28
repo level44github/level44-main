@@ -1,6 +1,10 @@
 <?
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 $APPLICATION->SetTitle('Главная');
+
+ob_start();
+$APPLICATION->IncludeComponent("system:empty", "main_banner");
+$APPLICATION->AddViewContent("main_banner", ob_get_clean());
 ?>
 <?
 global $arrFilter;

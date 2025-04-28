@@ -112,7 +112,7 @@ if (isset($arResult['ITEM']))
 	?>
 
 
-    <div class="carousel__item" id="<?=$areaId?>" data-entity="items-row">
+    <div class="embla__slide" id="<?= $areaId ?>" data-entity="items-row">
 		<?
 		$documentRoot = Main\Application::getDocumentRoot();
 		$templatePath = strtolower($arResult['TYPE']).'/template.php';
