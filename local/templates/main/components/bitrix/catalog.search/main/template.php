@@ -13,19 +13,22 @@
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
+use Level44\Content;
 
 $this->setFrameMode(true);
 
 global $searchFilter;
 
+$content = new Content();
+
 $elementOrder = array();
 if ($arParams['USE_SEARCH_RESULT_ORDER'] === 'N')
 {
 	$elementOrder = array(
-		"ELEMENT_SORT_FIELD" => $arParams["ELEMENT_SORT_FIELD"],
-		"ELEMENT_SORT_ORDER" => $arParams["ELEMENT_SORT_ORDER"],
-		"ELEMENT_SORT_FIELD2" => $arParams["ELEMENT_SORT_FIELD2"],
-		"ELEMENT_SORT_ORDER2" => $arParams["ELEMENT_SORT_ORDER2"],
+        "ELEMENT_SORT_FIELD"  => $content->getSortValue('field'),
+        "ELEMENT_SORT_FIELD2" => $content->getSortValue('field2'),
+        "ELEMENT_SORT_ORDER"  => $content->getSortValue('order'),
+        "ELEMENT_SORT_ORDER2" => $content->getSortValue('order2'),
 	);
 }
 
@@ -201,13 +204,59 @@ if (!empty($searchFilter) && is_array($searchFilter))
 		'COMPARE_PATH' => (isset($arParams['COMPARE_PATH']) ? $arParams['COMPARE_PATH'] : ''),
 		'COMPARE_NAME' => (isset($arParams['COMPARE_NAME']) ? $arParams['COMPARE_NAME'] : ''),
 		'USE_COMPARE_LIST' => (isset($arParams['USE_COMPARE_LIST']) ? $arParams['USE_COMPARE_LIST'] : '')
-	) + $elementOrder;
+	) + $elementOrder;?>
 
-	$APPLICATION->IncludeComponent(
-		"bitrix:catalog.section",
-		"main",
-		$componentParams,
-		$arResult["THEME_COMPONENT"],
-		array('HIDE_ICONS' => 'Y')
-	);
-}
+    <div class="nav-mobile">
+        <div></div>
+        <button class="btn btn-link nav-mobile__link nav-mobile__link__filters" type="button"
+                aria-label="Toggle filters"
+                data-open-bottom-sheet="filters-sheet">
+            <svg class="icon icon-filters nav-mobile__link__icon">
+                <use xlink:href="#filters"></use>
+            </svg>
+        </button>
+    </div>
+    <div class="catalog__content">
+        <div class="catalog__col right">
+            <?
+                $APPLICATION->IncludeComponent(
+                    "bitrix:catalog.smart.filter",
+                    "main",
+                    array(
+                        "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+                        "IBLOCK_ID" => $arParams["IBLOCK_ID"],
+                        "FILTER_NAME" => "searchFilter",
+                        "PRICE_CODE" => $arParams["~PRICE_CODE"],
+                        "CACHE_TYPE" => $arParams["CACHE_TYPE"],
+                        "CACHE_TIME" => $arParams["CACHE_TIME"],
+                        "CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
+                        "SAVE_IN_SESSION" => "N",
+                        "FILTER_VIEW_MODE" => $arParams["FILTER_VIEW_MODE"],
+                        "XML_EXPORT" => "N",
+                        "SECTION_TITLE" => "NAME",
+                        "SECTION_DESCRIPTION" => "DESCRIPTION",
+                        'HIDE_NOT_AVAILABLE' => $arParams["HIDE_NOT_AVAILABLE"],
+                        "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"],
+                        'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
+                        'CURRENCY_ID' => $arParams['CURRENCY_ID'],
+                        "SEF_MODE" => $arParams["SEF_MODE"],
+                        "SEF_RULE" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["smart_filter"],
+                        "SMART_FILTER_PATH" => $arResult["VARIABLES"]["SMART_FILTER_PATH"],
+                        "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
+                        "INSTANT_RELOAD" => $arParams["INSTANT_RELOAD"],
+                        'SORT_LIST' => $content->getSortList(),
+                    ),
+                    $component,
+                    array('HIDE_ICONS' => 'Y')
+                );
+
+                $APPLICATION->IncludeComponent(
+                    "bitrix:catalog.section",
+                    "main",
+                    $componentParams,
+                    $arResult["THEME_COMPONENT"],
+                    array('HIDE_ICONS' => 'Y')
+                );?>
+        </div>
+    </div>
+<? }

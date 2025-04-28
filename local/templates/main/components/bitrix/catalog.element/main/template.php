@@ -93,6 +93,11 @@ $arResult["MORE_PHOTO_COUNT"] = count($actualItem["MORE_PHOTO"]);
 $price = $actualItem['ITEM_PRICES'][$actualItem['ITEM_PRICE_SELECTED']];
 $price["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice(
     $price['PRICE'],
+    $arResult["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"],
+    true
+);
+$price["PRICE_DOLLAR_FORMATTED"] = \Level44\Base::getDollarPrice(
+    $price['PRICE'],
     $arResult["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]
 );
 $price = array_merge($price, $arParams["ECOMMERCE_DATA"]["prices"]);
@@ -142,467 +147,608 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 }
 ?>
 
-    <div class="row product__body" id="<?= $itemIds['ID'] ?>">
-        <?
-        if (!empty($actualItem['MORE_PHOTO']) || !empty($actualItem['VIDEOS'])): ?>
-            <div class="col-lg-7 mb-lg-5 gallery" id="<?= $itemIds['BIG_SLIDER_ID'] ?>">
-                <div class="gallery__thumb js-gallery__thumb">
-                    <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
-                        <div class="gallery__thumb-item" data-entity="image" data-id="<?= $photo['ID'] ?>">
-                            <img class="img-fluid" src="<?= $photo['SRC'] ?>" alt="<?= $alt ?>">
-                        </div>
-                    <? endforeach; ?>
-
-                    <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
-                        <div class="gallery__thumb-item" data-entity="image" data-id="<?= $video["ID"] ?>">
-                            <div class="gallery__thumb-video">
-                                <video class="img-fluid js-gallery__popup-img">
-                                    <source src="<?= $video["PATH"] ?>"/>
-                                </video>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="gallery__arrow">
-                                <path d="M6 4.74741V19.2526C6 19.5721 6.35606 19.7626 6.62188 19.5854L17.5008 12.3328C17.7383 12.1745 17.7383 11.8255 17.5008 11.6672L6.62188 4.41459C6.35606 4.23737 6 4.42793 6 4.74741Z" stroke="white"/>
-                                </svg>
+<? if (!empty($actualItem['MORE_PHOTO'])): ?>
+    <div class="product__slider-mobile">
+        <div class="embla" data-mouse-scroll="false" data-loop="true" data-autoplay="false">
+            <div class="embla__container">
+                <? foreach ($actualItem['MORE_PHOTO'] as $item): ?>
+                    <? if ($item['IS_VIDEO']): ?>
+                        <div class="embla__slide">
+                            <div class="embla__slide-content">
+                                <div class="product__video-wrapper">
+                                    <div class="video-image">
+                                        <img class="img-fluid" src="<?= $item['PREVIEW_SRC'] ?>" alt="">
+                                        <svg class="icon icon-play video-play-icon">
+                                            <use xlink:href="#play"></use>
+                                        </svg>
+                                    </div>
+                                    <video class="product__video mobile" loop playsinline>
+                                        <source src="<?= $item['SRC'] ?>" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
                             </div>
                         </div>
+                    <? else: ?>
+                        <div class="embla__slide">
+                            <div class="embla__slide-content">
+                                <img class="img-fluid" src="<?= $item['SRC'] ?>" alt="">
+                            </div>
+                        </div>
+                    <? endif; ?>
+                <? endforeach; ?>
+            </div>
+            <div class="embla__dots">
+                <? foreach ($actualItem['MORE_PHOTO'] as $index => $item): ?>
+                    <button type="button" data-index="<?= $index ?>">
+                        <div class="button-body"></div>
+                    </button>
+                <? endforeach; ?>
+            </div>
+        </div>
+    </div>
+<? endif; ?>
+    <div class="product__body" id="<?= $itemIds['ID'] ?>">
+        <? if (!empty($actualItem['MORE_PHOTO'])): ?>
+            <div class="product__slider-desktop">
+                <div class="previews">
+                    <? foreach ($actualItem['MORE_PHOTO'] as $index => $item): ?>
+                        <? if ($item['IS_VIDEO']): ?>
+                            <a class="preview-link with-video" href="#image-<?= $index ?>" data-index="<?= $index ?>">
+                                <svg class="icon icon-play video-play-icon">
+                                    <use xlink:href="#play"></use>
+                                </svg>
+                                <img class="img-fluid" src="<?= $item['POSTER_SRC'] ?>" alt="">
+                            </a>
+                        <? else: ?>
+                            <a class="preview-link" href="#image-<?= $index ?>" data-index="<?= $index ?>">
+                                <img class="img-fluid" src="<?= $item['SRC'] ?>" alt="">
+                            </a>
+                        <? endif; ?>
                     <? endforeach; ?>
                 </div>
-                <div class="gallery__main">
-                    <div class="gallery__picture js-gallery__picture">
-                        <? foreach ($actualItem['MORE_PHOTO'] as $key => $photo): ?>
-                            <a class="gallery__full" href="#" data-toggle="modal"
-                               data-target="#gallery__popup">
-                                <img class="img-fluid js-gallery__popup-img" alt="" data-lazy="<?= $photo["SRC"] ?>">
-                            </a>
-                        <? endforeach; ?>
-
-                        <? foreach ($arResult['VIDEOS'] as $key => $video): ?>
-                            <a class="gallery__full" href="#" data-toggle="modal"
-                               data-target="#gallery__popup">
-                                <video autoplay muted playsinline loop class="img-fluid js-gallery__popup-img">
-                                    <source src="<?= $video["PATH"] ?>"/>
-                                </video>
-                            </a>
-                        <? endforeach; ?>
-                    </div>
+                <div class="images">
+                    <? foreach ($actualItem['MORE_PHOTO'] as $index => $item): ?>
+                        <? if ($item['IS_VIDEO']): ?>
+                            <div class="image-wrapper" id="image-<?= $index ?>">
+                                <div class="product__video-wrapper">
+                                    <div class="video-image">
+                                        <img class="img-fluid" src="<?= $item['POSTER_SRC'] ?>" alt="">
+                                        <svg class="icon icon-play video-play-icon">
+                                            <use xlink:href="#play"></use>
+                                        </svg>
+                                    </div>
+                                    <video class="product__video" loop playsinline>
+                                        <source src="<?= $item['SRC'] ?>" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </div>
+                        <? else: ?>
+                            <div class="image-wrapper" id="image-<?= $index ?>">
+                                <img class="img-fluid" src="<?= $item['SRC'] ?>" alt="">
+                            </div>
+                        <? endif; ?>
+                    <? endforeach; ?>
                 </div>
+            </div>
 
-                <div class="modal fade" id="gallery__popup" tabindex="-1" role="dialog" aria-labelledby="gallery__popup" aria-hidden="true">
-                    <button class="close gallery__popup-close" type="button" data-dismiss="modal" aria-label="Закрыть">
-                        <svg class="icon icon-close ">
-                            <use xlink:href="#close"></use>
-                        </svg>
-                    </button>
-                    <div class="modal-dialog gallery__popup-dialog" role="document">
-                        <div class="modal-content gallery__popup-content">
-                            <div class="modal-body gallery__popup-body">
-                                <div class="gallery__popup-list mb-0"></div>
-                                <div class="gallery__popup-thumbs"></div>
+            <? ob_start(); ?>
+            <div class="modal fade" id="product-image-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <button class="close modal-close" type="button" aria-label="Закрыть">
+                            <svg class="icon icon-close ">
+                                <use xlink:href="#close"></use>
+                            </svg>
+                        </button>
+                        <div class="modal-body p-0">
+                            <div class="embla" data-mouse-scroll="false" data-loop="true" data-autoplay="false">
+                                <div class="embla__container">
+                                    <? foreach ($actualItem['MORE_PHOTO'] as $index => $item): ?>
+                                        <? if ($item['IS_VIDEO']): ?>
+                                            <div class="embla__slide">
+                                                <div class="embla__slide-content">
+                                                    <div class="product__video-wrapper">
+                                                        <div class="video-image">
+                                                            <img class="img-fluid" src="<?= $item['POSTER_SRC'] ?>"
+                                                                 alt="">
+                                                            <svg class="icon icon-play video-play-icon">
+                                                                <use xlink:href="#play"></use>
+                                                            </svg>
+                                                        </div>
+                                                        <video class="product__video" loop playsinline>
+                                                            <source src="<?= $item['SRC'] ?>" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <? else: ?>
+                                            <div class="embla__slide">
+                                                <div class="embla__slide-content">
+                                                    <img class="img-fluid" src="<?= $item['SRC'] ?>" alt="">
+                                                </div>
+                                            </div>
+                                        <? endif; ?>
+                                    <? endforeach; ?>
+                                </div>
+                                <button class="btn btn-link embla__arrow prev" type="button" aria-label="Arrow prev">
+                                    <svg class="icon icon-arrow-left embla__arrow__icon">
+                                        <use xlink:href="#arrow-left"></use>
+                                    </svg>
+                                </button>
+                                <button class="btn btn-link embla__arrow next" type="button" aria-label="Arrow next">
+                                    <svg class="icon icon-arrow-right embla__arrow__icon">
+                                        <use xlink:href="#arrow-right"></use>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <? $APPLICATION->AddViewContent("image-modal", ob_get_clean()); ?>
         <? endif; ?>
-        <div class="col-lg-5">
-            <form>
-                <div class="product__header">
-                    <h1 class="product__title"><?= $name ?></h1>
-                    <div class="<?= $price["oldPrice"] ? "product__final-price" : "" ?>">
-                        <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
-                            <?= $price['PRINT_PRICE'] ?>
-                        </span>
-                        <?
-                        if ($price["PRICE_DOLLAR"]): ?>
-                            &middot; <span class="product__price">
-                            <?= $price["PRICE_DOLLAR"] ?>
-                        </span>
-                        <? endif; ?>
-                    </div>
-                    <?if (!empty($price["oldPrice"])):?>
-                    <div class="product__price-crossed">
-                        <span class="product__price" id="<?= $itemIds['PRICE_ID'] ?>">
+
+        <div class="product__info">
+            <div>
+                <h1 class="product__title"><?= $name ?></h1>
+                <div class="product__price-wrapper">
+                    <div class="product__price" id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_PRICE'] ?></div>
+                    <? if (!empty($price["oldPrice"])): ?>
+                        <div class="product__price discount" id="<?= $itemIds['PRICE_ID'] ?>">
                             <?= $price["oldPriceFormat"] ?>
-                        </span>
-                        <?
-                        if ($price["PRICE_DOLLAR"]): ?>
-                            &middot; <span class="product__price">
-                            <?= $price["oldPriceDollarFormat"] ?>
-                        </span>
+                        </div>
+                    <? endif; ?>
+                </div>
+                <? if ($price["PRICE_DOLLAR"]): ?>
+                    <div class="product__price-wrapper">
+                        <div class="product__price"
+                             id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRICE_DOLLAR_FORMATTED'] ?></div>
+                        <? if (!empty($price["oldPriceDollar"])): ?>
+                            <div class="product__price discount" id="<?= $itemIds['PRICE_ID'] ?>">
+                                <?= $price["oldPriceDollarFormat"] ?>
+                            </div>
                         <? endif; ?>
                     </div>
-                    <?endif;?>
-                </div>
-                <div id="<?= $itemIds['TREE_ID'] ?>">
-                    <?
-                    if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>
-                        <?
-                        foreach ($arResult['SKU_PROPS'] as $skuProperty): ?>
-                            <? if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']])):
-                                continue;
-                                ?>
-                            <?endif;
-                            $skuProps[] = [
-                                'ID'           => $skuProperty['ID'],
-                                'SHOW_MODE'    => $skuProperty['SHOW_MODE'],
-                                'VALUES'       => $skuProperty['VALUES'],
-                                'VALUES_COUNT' => $skuProperty['VALUES_COUNT']
-                            ];
-                            ?>
-                            <?
-                            if ($skuProperty['CODE'] === "SIZE_REF"): ?>
-                                <div class="dimension" data-entity="sku-line-block">
-                                    <div class="dimension__group btn-group-toggle" data-toggle="buttons">
-                                        <? foreach ($skuProperty['VALUES'] as $value): ?>
-                                            <label class="btn dimension__btn dimension__btn_auto-width"
-                                                   data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
-                                                   data-onevalue="<?= $value['ID'] ?>"
-                                                   style="box-shadow: none"
-                                            >
-                                                <input id="dimension<?= $skuProperty['ID'] ?><?= $value['ID'] ?>"
-                                                       type="radio"
-                                                       name="dimension"
-                                                       autocomplete="off"
-                                                >
-                                                <?= $value['NAME'] ?>
-                                            </label>
-                                        <? endforeach; ?>
-                                    </div>
-                                    <!-- Button modal-->
-                                    <button class="btn dimension__table-btn" type="button" data-toggle="modal"
-                                            data-target="#dimension__table-modal"><?= Loc::getMessage("SIZE_TABLE") ?></button>
-                                    <!-- Modal-->
-                                    <div class="modal fade" id="dimension__table-modal" tabindex="-1" role="dialog"
-                                         aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title"><?= Loc::getMessage("SIZE_TABLE") ?></h5>
-                                                    <button class="close" type="button" data-dismiss="modal"
-                                                            aria-label="<?= Loc::getMessage("CLOSE_MODAL") ?>">
-                                                        <svg class="icon icon-close ">
-                                                            <use xlink:href="#close"></use>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                                <? if ($arResult["IS_SHOES"]): ?>
-                                                    <div class="modal-body px-0">
-                                                        <div class="d-lg-none">
-                                                            <table class="table">
-                                                                <thead>
-                                                                <tr>
-                                                                    <td><?= Loc::getMessage("SIZE_TABLE_SIZE") ?></td>
-                                                                    <td><?= Loc::getMessage("SIZE_TABLE_FOOT_LENGTH") ?></td>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>37</td>
-                                                                    <td>23</td>
-                                                                </tr>
-                                                                </tbody>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>38</td>
-                                                                    <td>24</td>
-                                                                </tr>
-                                                                </tbody>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>39</td>
-                                                                    <td>25</td>
-                                                                </tr>
-                                                                </tbody>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>40</td>
-                                                                    <td>26</td>
-                                                                </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                <? else: ?>
-                                                    <div class="modal-body px-0">
-                                                        <div class="d-lg-none">
-                                                            <table class="table">
-                                                                <thead>
-                                                                <tr>
-                                                                    <td>XS</td>
-                                                                    <td>S</td>
-                                                                    <td>M</td>
-                                                                </tr>
-                                                                </thead>
-                                                                <thead>
-                                                                <tr>
-                                                                    <th colspan="4"><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>84–88</td>
-                                                                    <td>89–92</td>
-                                                                    <td>93–96</td>
-                                                                </tr>
-                                                                </tbody>
-                                                                <thead>
-                                                                <tr>
-                                                                    <th colspan="4"><?= Loc::getMessage("HOIST_GIRTH") ?></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>60–64</td>
-                                                                    <td>65–69</td>
-                                                                    <td>70–75</td>
-                                                                </tr>
-                                                                </tbody>
-                                                                <thead>
-                                                                <tr>
-                                                                    <th colspan="4"><?= Loc::getMessage("HIP_GIRTH") ?></th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <tr>
-                                                                    <td>89–93</td>
-                                                                    <td>94–97</td>
-                                                                    <td>98–102</td>
-                                                                </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                <? endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <? endif; ?>
+            </div>
+
+            <? if (!empty($arResult["COLORS"])): ?>
+                <div class="product__color color">
+                    <div class="color__group btn-group-toggle" data-toggle="buttons">
+                        <? foreach ($arResult["COLORS"] as $index => $item): ?>
+                            <? if ($item["ACTIVE"]): ?>
+                                <label class="btn color__btn js-color__btn active" title="<?= $item['COLOR_NAME'] ?>">
+                                    <input id="color<?= $index ?>" type="radio" autocomplete="off" name="color" checked>
+                                    <span class="color__value"
+                                          style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');">
+                                    </span>
+                                </label>
+                            <? else: ?>
+                                <label class="btn color__btn js-color__btn" title="<?= $item['COLOR_NAME'] ?>">
+                                    <input id="color<?= $index ?>" type="radio" autocomplete="off" name="color">
+                                    <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
+                                        <span class="color__value"
+                                              style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');">
+                                        </span>
+                                    </a>
+                                </label>
                             <? endif; ?>
                         <? endforeach; ?>
-                    <? endif; ?>
-
-                    <? if (!empty($arResult["COLORS"])): ?>
-                        <div class="color" data-entity="sku-line-block">
-                            <? if (!empty($arResult["COLOR_NAME"])): ?>
-                                <div class="color__title">
-                                    <?= Loc::getMessage("CURRENT_COLOR") ?>: <?= $arResult["COLOR_NAME"] ?>
-                                    <span class="js-color__text"></span>
-                                </div>
-                            <? endif; ?>
-                            <div class="color__group btn-group-toggle">
-                                <? foreach ($arResult["COLORS"] as $item): ?>
-                                    <? if ($item["ACTIVE"]): ?>
-                                        <label class="btn color__btn js-color__btn active"
-                                               title="<?= $item["COLOR_NAME"] ?>"
-                                               style="box-shadow: none"
-                                        >
-                                            <span class="color__value"
-                                                  style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');"
-                                            ></span>
-                                        </label>
-                                    <? else: ?>
-                                        <label class="btn color__btn js-color__btn"
-                                               title="<?= $item["COLOR_NAME"] ?>"
-                                               style="box-shadow: none"
-                                        >
-                                            <a href="<?= $item["DETAIL_PAGE_URL"] ?>">
-                                        <span class="color__value"
-                                              style="background-image: url('<?= $item["COLOR"]['UF_FILE'] ?>');"
-                                        ></span>
-                                            </a>
-                                        </label>
-                                    <? endif; ?>
-                                <? endforeach; ?>
-                            </div>
-                        </div>
+                    </div>
+                    <? if (!empty($arResult["COLOR_NAME"])): ?>
+                        <div class="color__title js-color__name"><?= $arResult["COLOR_NAME"] ?></div>
                     <? endif; ?>
                 </div>
-                <div id="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
-                     style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
-                    <button class="btn btn-dark btn-block mb-4 js-btn__add-basket"
-                            type="button"
-                            id="<?= $itemIds['ADD_BASKET_LINK'] ?>"
-                    >
-                        <svg class="icon icon-basket product__basket-icon">
-                            <use xlink:href="#basket"></use>
-                        </svg>
-                        <span class="js-text-content" data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>">
-                            <?= Loc::getMessage("ADD_TO_BASKET") ?>
-                        </span>
-                    </button>
-                </div>
-                <button class="btn btn-dark btn-block mb-3"
-                        type="button"
-                        id="<?= $itemIds['NOT_AVAILABLE_MESS'] ?>"
-                        onclick="return false;"
-                        style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
-                        disabled
-                >
-                    <svg class="icon icon-stop product__basket-icon">
-                        <use xlink:href="#stop"></use>
-                    </svg>
-
-                    <?= Loc::getMessage("NOT_AVAILABLE") ?>
-                </button>
-
-                <div class="js-subscribe-buttons"
-                     style="display:<?= !$actualItem["CAN_BUY"] ? "block" : "none" ?>;"
-                >
+            <? endif; ?>
+            <?
+            if ($haveOffers && !empty($arResult['OFFERS_PROP'])): ?>
                 <?
-                if (!$actualItem["CAN_BUY"]): ?>
-                    <button class="btn btn-block mb-4 btn-outline-dark bx-catalog-subscribe-button js-open-subscribe"
-                            data-toggle="modal" data-target="#subscribe-modal"
-                            type="button"
-                            style="<?= ($actualItem["CAN_BUY"] ? 'display: none;' : '') ?>">
-                        <svg width="14" height="16" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1.5791 12.624H8.46289C8.4082 13.5469 7.82031 14.1348 6.99316 14.1348C6.17285 14.1348 5.57812 13.5469 5.53027 12.624H4.46387C4.51855 13.9365 5.55078 15.0918 6.99316 15.0918C8.44238 15.0918 9.47461 13.9434 9.5293 12.624H12.4141C13.0566 12.624 13.4463 12.2891 13.4463 11.7969C13.4463 11.1133 12.749 10.498 12.1611 9.88965C11.71 9.41797 11.5869 8.44727 11.5322 7.66113C11.4844 4.96777 10.7871 3.22461 8.96875 2.56836C8.73633 1.67969 8.00488 0.96875 6.99316 0.96875C5.98828 0.96875 5.25 1.67969 5.02441 2.56836C3.20605 3.22461 2.50879 4.96777 2.46094 7.66113C2.40625 8.44727 2.2832 9.41797 1.83203 9.88965C1.2373 10.498 0.546875 11.1133 0.546875 11.7969C0.546875 12.2891 0.929688 12.624 1.5791 12.624ZM1.87305 11.5918V11.5098C1.99609 11.3047 2.40625 10.9082 2.76172 10.5049C3.25391 9.95801 3.48633 9.08301 3.54785 7.74316C3.60254 4.7627 4.49121 3.80566 5.66016 3.49121C5.83105 3.4502 5.92676 3.36133 5.93359 3.19043C5.9541 2.47266 6.36426 1.97363 6.99316 1.97363C7.62891 1.97363 8.03223 2.47266 8.05957 3.19043C8.06641 3.36133 8.15527 3.4502 8.32617 3.49121C9.50195 3.80566 10.3906 4.7627 10.4453 7.74316C10.5068 9.08301 10.7393 9.95801 11.2246 10.5049C11.5869 10.9082 11.9902 11.3047 12.1133 11.5098V11.5918H1.87305Z"
-                                  fill="#212121"/>
-                        </svg>
-                        <span><?= Loc::getMessage("PREORDER") ?></span>
-                    </button>
-                <? endif; ?>
-                </div>
-                <button type="button"
-                        class="modal-toggle"
-                        style="display:none;"
-                ></button>
-                <div class="js-subscribe-modal modal fade" id="subscribe-modal" tabindex="-1" role="dialog"
-                     aria-hidden="true">
-                    <div class="js-subscribe-form modal-dialog modal-dialog-centered product-subscribe__dialog"
-                         role="document"
-                    >
-                        <div class="modal-content">
-                            <button class="close product-subscribe__close" type="button" data-dismiss="modal"
-                                    aria-label="Закрыть">
-                                <svg class="icon icon-close ">
-                                    <use xlink:href="#close"></use>
-                                </svg>
-                            </button>
-                            <div class="product-subscribe__header">
-                                <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
-                            </div>
-                            <div class="js-subscribe-form-body modal-body product-subscribe__body">
-                                <div class="text-center px-lg-1 mb-3"><?= Loc::getMessage("DESC_POPUP_SUBSCRIBED") ?></div>
-                                <form id="bx-catalog-subscribe-form">
-                                    <input type="hidden" class="js-preorder-productId" name="productId"
-                                           value="<?= $actualItem["ID"] ?>">
-                                    <input type="hidden" name="siteId" value="<?= SITE_ID ?>">
-                                    <div id="bx-catalog-subscribe-form-div" class="form-group">
-                                        <div class="js-errors" style="color: red;"></div>
-                                        <label for="subscribe-email" class="sr-only">E-mail</label>
-                                        <input id="subscribe-email" class="form-control" type="text"
-                                               name="email" placeholder="E-mail">
-                                        <p></p>
-                                        <label for="subscribe-tel"
-                                               class="sr-only"><?= Loc::getMessage("PHONE_POPUP_SUBSCRIBED") ?></label>
-                                        <input id="subscribe-tel" class="form-control" type="text"
-                                               name="phone"
-                                               placeholder="<?= Loc::getMessage("PHONE_POPUP_SUBSCRIBED") ?>">
-                                    </div>
-                                    <button type="submit" class="js-subscribe-button btn btn-dark btn-block">
-                                        <?= Loc::getMessage("BTN_SEND_POPUP_SUBSCRIBED") ?>
+                foreach ($arResult['SKU_PROPS'] as $skuProperty): ?>
+                    <? if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']])):
+                        continue;
+                        ?>
+                    <?endif;
+                    $skuProps[] = [
+                        'ID'           => $skuProperty['ID'],
+                        'SHOW_MODE'    => $skuProperty['SHOW_MODE'],
+                        'VALUES'       => $skuProperty['VALUES'],
+                        'VALUES_COUNT' => $skuProperty['VALUES_COUNT']
+                    ];
+                    ?>
+                    <?
+                    if ($skuProperty['CODE'] === "SIZE_REF"): ?>
+                        <div>
+                            <div class="dimension" id="<?= $itemIds['TREE_ID'] ?>">
+                                <div class="dimension__header">
+                                    <div class="title"><?= Loc::getMessage('SIZE') ?></div>
+                                    <!-- Button modal-->
+                                    <button class="btn table-btn dimension__table-btn" type="button" data-toggle="modal"
+                                            data-target="#dimension__table-modal">
+                                        <?= Loc::getMessage('SIZE_TABLE') ?>
                                     </button>
-                                </form>
+                                </div>
+                                <div class="dimension__group btn-group-toggle" data-toggle="buttons"
+                                     data-entity="sku-line-block">
+                                    <? foreach ($skuProperty['VALUES'] as $index => $value): ?>
+                                        <label class="btn dimension__btn"
+                                               data-treevalue="<?= $skuProperty['ID'] ?>_<?= $value['ID'] ?>"
+                                               data-onevalue="<?= $value['ID'] ?>"
+
+                                        >
+                                            <input id="dimension<?= $index ?>" type="radio" name="dimension"
+                                                   autocomplete="off">
+                                            <?= $value['NAME'] ?>
+                                        </label>
+                                    <? endforeach; ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <? endif; ?>
+                <? endforeach; ?>
+            <? endif; ?>
 
-                    <div class="js-subscribe-suc modal-dialog modal-dialog-centered product-subscribe__dialog"
-                         style="display: none"
-                         role="document"
-                    >
-                        <div class="modal-content">
-                            <button class="close product-subscribe__close" type="button" data-dismiss="modal"
-                                    aria-label="Закрыть">
+            <div class="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
+                 style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
+                <button class="btn btn-dark btn-block js-btn__add-basket product__add-basket-desktop <?= $itemIds['ADD_BASKET_LINK'] ?>"
+                        data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>"
+                        type="submit">
+                    <?= Loc::getMessage("ADD_TO_BASKET") ?>
+                </button>
+            </div>
+
+            <button class="btn btn-dark btn-block js-btn__add-basket product__add-basket-desktop <?= $itemIds['NOT_AVAILABLE_MESS'] ?>"
+                    type="submit"
+                    onclick="return false;"
+                    style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
+                    disabled
+            >
+                <?= Loc::getMessage("NOT_AVAILABLE") ?>
+            </button>
+
+            <div class="js-subscribe-buttons"
+                 style="display:<?= !$actualItem["CAN_BUY"] ? "block" : "none" ?>;"
+            ></div>
+            <button type="button"
+                    class="modal-toggle"
+                    style="display:none;"
+            ></button>
+
+            <? ob_start(); ?>
+            <div class="js-subscribe-modal modal fade" id="subscribe-modal" tabindex="-1" role="dialog"
+                 aria-hidden="true">
+                <div class="js-subscribe-form modal-dialog modal-dialog-centered product-subscribe__dialog"
+                     role="document"
+                >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
+                            <button class="close modal-close" type="button"
+                                    aria-label="<?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?>">
                                 <svg class="icon icon-close ">
                                     <use xlink:href="#close"></use>
                                 </svg>
                             </button>
-                            <div class="product-subscribe__header">
-                                <h5 class="product-subscribe__title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
-                            </div>
-                            <div class="modal-body product-subscribe__body">
-                                <div class="js-text text-center px-lg-1 mb-3"><?= Loc::getMessage("SUCCESS_POPUP_SUBSCRIBED") ?></div>
-                                <button class="btn btn-dark btn-block" data-dismiss="modal" aria-label="Закрыть"
-                                        type="submit"><?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?></button>
-                            </div>
+                        </div>
+                        <div class="js-subscribe-form-body modal-body product-subscribe__body">
+                            <div class="mb-3"><?= Loc::getMessage("DESC_POPUP_SUBSCRIBED") ?></div>
+                            <form id="bx-catalog-subscribe-form">
+                                <input type="hidden" class="js-preorder-productId" name="productId"
+                                       value="<?= $actualItem["ID"] ?>">
+                                <input type="hidden" name="siteId" value="<?= SITE_ID ?>">
+                                <div id="bx-catalog-subscribe-form-div" class="form-group">
+                                    <div class="js-errors" style="color: red;"></div>
+                                    <label for="subscribe-email" class="sr-only">E-mail</label>
+                                    <input id="subscribe-email" class="form-control" type="text"
+                                           name="email" placeholder="E-mail">
+                                    <p></p>
+                                    <label for="subscribe-tel"
+                                           class="sr-only"><?= Loc::getMessage("PHONE_POPUP_SUBSCRIBED") ?></label>
+                                    <input id="subscribe-tel" class="form-control" type="text"
+                                           name="phone"
+                                           placeholder="<?= Loc::getMessage("PHONE_POPUP_SUBSCRIBED") ?>">
+                                </div>
+                                <button type="submit" class="js-subscribe-button btn btn-dark btn-block">
+                                    <?= Loc::getMessage("BTN_SEND_POPUP_SUBSCRIBED") ?>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <?
-                if (!empty($arResult["DETAIL_TEXT"]) || !empty($arResult["PRODUCT_PROPERTIES"])): ?>
-                    <div class="product__desc">
+
+                <div class="js-subscribe-suc modal-dialog modal-dialog-centered product-subscribe__dialog"
+                     style="display: none"
+                     role="document"
+                >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><?= Loc::getMessage("TITLE_POPUP_SUBSCRIBED") ?></h5>
+                            <button class="close modal-close" type="button"
+                                    aria-label="<?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?>">
+                                <svg class="icon icon-close ">
+                                    <use xlink:href="#close"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="modal-body product-subscribe__body">
+                            <div class="js-text px-lg-1 mb-3"><?= Loc::getMessage("SUCCESS_POPUP_SUBSCRIBED") ?></div>
+                            <button class="btn btn-dark btn-block modal-close" data-dismiss="modal"
+                                    aria-label="<?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?>"
+                                    type="submit">
+                                <?= Loc::getMessage("CPST_SUBSCRIBE_BUTTON_CLOSE") ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <? $APPLICATION->AddViewContent("preorder-form", ob_get_clean()); ?>
+
+            <? ob_start(); ?>
+            <div class="modal fade" id="dimension__table-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><?= Loc::getMessage("SIZE_TABLE") ?></h5>
+                            <button class="close modal-close" type="button" aria-label="Закрыть">
+                                <svg class="icon icon-close ">
+                                    <use xlink:href="#close"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <? if ($arResult["IS_SHOES"]): ?>
+                            <div class="modal-body px-0">
+                                <div class="d-none d-lg-block">
+                                    <table class="table table-hover table-borderless">
+                                        <thead>
+                                        <tr>
+                                            <th><?= Loc::getMessage("SIZE_TABLE_SIZE") ?></th>
+                                            <th><?= Loc::getMessage("SIZE_TABLE_FOOT_LENGTH") ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>37</td>
+                                            <td>23</td>
+                                        </tr>
+                                        <tr>
+                                            <td>38</td>
+                                            <td>24</td>
+                                        </tr>
+                                        <tr>
+                                            <td>39</td>
+                                            <td>25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>40</td>
+                                            <td>26</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-lg-none">
+                                    <table class="table table-borderless">
+                                        <thead>
+                                        <tr>
+                                            <td>37</td>
+                                            <td>38</td>
+                                            <td>39</td>
+                                            <td>40</td>
+                                        </tr>
+                                        </thead>
+                                        <thead>
+                                        <tr>
+                                            <th colspan="4"><?= Loc::getMessage("SIZE_TABLE_FOOT_LENGTH") ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>23</td>
+                                            <td>24</td>
+                                            <td>25</td>
+                                            <td>25</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <? else: ?>
+                            <div class="modal-body px-0">
+                                <div class="d-none d-lg-block">
+                                    <table class="table table-hover table-borderless">
+                                        <thead>
+                                        <tr>
+                                            <th><?= Loc::getMessage("SIZE_TABLE_SIZE") ?></th>
+                                            <th><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
+                                            <th><?= Loc::getMessage("HOIST_GIRTH") ?></th>
+                                            <th><?= Loc::getMessage("HIP_GIRTH") ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>XXS</td>
+                                            <td>80</td>
+                                            <td>60</td>
+                                            <td>88</td>
+                                        </tr>
+                                        <tr>
+                                            <td>XS</td>
+                                            <td>84</td>
+                                            <td>64</td>
+                                            <td>92</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S</td>
+                                            <td>88</td>
+                                            <td>68</td>
+                                            <td>96</td>
+                                        </tr>
+                                        <tr>
+                                            <td>M</td>
+                                            <td>92</td>
+                                            <td>72</td>
+                                            <td>100</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="d-lg-none">
+                                    <table class="table table-borderless">
+                                        <thead>
+                                        <tr>
+                                            <td>XXS</td>
+                                            <td>XS</td>
+                                            <td>S</td>
+                                            <td>M</td>
+                                        </tr>
+                                        </thead>
+                                        <thead>
+                                        <tr>
+                                            <th colspan="4"><?= Loc::getMessage("CHEST_CIRCUMFERENCE") ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>80</td>
+                                            <td>84</td>
+                                            <td>88</td>
+                                            <td>92</td>
+                                        </tr>
+                                        </tbody>
+                                        <thead>
+                                        <tr>
+                                            <th colspan="4"><?= Loc::getMessage("HOIST_GIRTH") ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>60</td>
+                                            <td>64</td>
+                                            <td>68</td>
+                                            <td>72</td>
+                                        </tr>
+                                        </tbody>
+                                        <thead>
+                                        <tr>
+                                            <th colspan="4"><?= Loc::getMessage("HIP_GIRTH") ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>88</td>
+                                            <td>92</td>
+                                            <td>96</td>
+                                            <td>100</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <? endif; ?>
+                    </div>
+                </div>
+            </div>
+            <? $APPLICATION->AddViewContent("sizes-table", ob_get_clean()); ?>
+
+            <? if (!empty($arResult['DETAIL_TEXT'])): ?>
+                <div class="product__desc">
+                    <div class="title"><?= Loc::getMessage('CT_BCE_CATALOG_DESCRIPTION') ?></div>
+                    <div class="body">
+                        <? if (!empty($artnumber = $arResult["DISPLAY_PROPERTIES"]['ARTNUMBER']['DISPLAY_VALUE'])): ?>
+                            <p><?= Loc::getMessage('ARTICLE') ?>: <?= $artnumber ?></p>
+                        <? endif; ?>
                         <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
                             <?= $arResult['DETAIL_TEXT'] ?>
                         <? else: ?>
                             <p><?= $arResult['DETAIL_TEXT'] ?></p>
                         <? endif; ?>
-
-                        <? if (!empty($arResult["PRODUCT_PROPERTIES"])): ?>
-                            <ul class="list__disc">
-                                <? foreach ($arResult["PRODUCT_PROPERTIES"] as $property): ?>
-                                    <li><?= $property["NAME"] ?>: <?= $property["DISPLAY_VALUE"] ?></li>
-                                <? endforeach; ?>
-                            </ul>
-                        <? endif; ?>
-
-                        <? if (!empty($arResult["MEASUREMENTS"]) || !empty($arResult["MEASUREMENTS_ROWS"])): ?>
-                            <!-- Button modal-->
-                            <button class="btn measurement__btn" type="button" data-toggle="modal"
-                                    data-target="#measurement__modal"><?= Loc::getMessage("MEASUREMENTS") ?></button>
-                            <!-- Modal-->
-                            <div class="modal fade" id="measurement__modal" tabindex="-1" role="dialog"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered measurement__modal-dialog"
-                                     role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title"><?= Loc::getMessage("MEASUREMENTS") ?></h5>
-                                            <button class="close" type="button" data-dismiss="modal"
-                                                    aria-label="Закрыть">
-                                                <svg class="icon icon-close ">
-                                                    <use xlink:href="#close"></use>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body measurement__modal-body">
-                                            <? if (!empty($arResult["MEASUREMENTS"])): ?>
-                                                <?= $arResult["MEASUREMENTS"] ?>
-                                            <? else: ?>
-                                                <div class="measurement__item">
-                                                    <?
-                                                    foreach ($arResult["MEASUREMENTS_ROWS"] as $row): ?>
-                                                        <div><?= $row ?></div>
-                                                    <? endforeach; ?>
-                                                </div>
-                                            <? endif; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <? endif; ?>
-                    </div>
-                <? endif; ?>
-                <div class="product__question">
-                    <div class="product__question-title mb-2"><?= Loc::getMessage("EXIST_QUESTIONS") ?></div>
-                    <div class="d-flex">
-                        <a class="btn btn-outline-secondary product__question-btn"
-                           target="_blank"
-                           href="https://wa.me/79672419889">
-                            <svg class="icon icon-whatsapp ">
-                                <use xlink:href="#whatsapp"></use>
-                            </svg>
-                            WhatsApp</a>
-                        <a class="btn btn-outline-secondary product__question-btn"
-                           target="_blank"
-                           href="https://instagram.com/le4v4el?igshid=688ic3aif5yp">
-                            <svg class="icon icon-instagram ">
-                                <use xlink:href="#instagram"></use>
-                            </svg>
-                            Instagram</a>
                     </div>
                 </div>
-            </form>
+            <?endif; ?>
+            <div class="product__accordions">
+                <? if (!empty($arResult['STORES'])): ?>
+                    <div class="accordion">
+                        <button class="btn btn-link accordion__trigger" type="button" aria-label="Toggle accordion">
+                            <div class="accordion__title"><?= Loc::getMessage('AVAILABILITY') ?></div>
+                            <svg class="icon icon-arrow-down accordion__icon">
+                                <use xlink:href="#arrow-down"></use>
+                            </svg>
+                        </button>
+                        <div class="accordion__content">
+                            <div class="product__availability">
+                                <? foreach ($arResult['STORES'] as $store): ?>
+                                    <div class="item">
+                                        <? if (!empty($store['TITLE'])): ?>
+                                            <div class="title"><?= $store['TITLE'] ?></div>
+                                        <? endif; ?>
+                                        <div class="grid">
+                                            <div class="address"><?= $store['ADDRESS'] ?></div>
+                                            <div class="sizes">
+                                                <? foreach ($store['SIZES'] as $size): ?>
+                                                    <? if (!empty($size['NAME'])): ?>
+                                                        <div class="size"><?= $size['NAME'] ?></div>
+                                                    <? endif; ?>
+                                                <? endforeach; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <? endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                <? endif; ?>
+                <? if (!empty($arResult["MEASUREMENTS"])): ?>
+                    <div class="accordion">
+                        <button class="btn btn-link accordion__trigger" type="button" aria-label="Toggle accordion">
+                            <div class="accordion__title"><?= Loc::getMessage('MEASUREMENTS') ?></div>
+                            <svg class="icon icon-arrow-down accordion__icon">
+                                <use xlink:href="#arrow-down"></use>
+                            </svg>
+                        </button>
+                        <div class="accordion__content">
+                            <div class="body">
+                                <?= $arResult["MEASUREMENTS"] ?>
+                            </div>
+                        </div>
+                    </div>
+                <? endif; ?>
+                <? if (!empty($arResult["CARE_INFO"])): ?>
+                    <div class="accordion">
+                        <button class="btn btn-link accordion__trigger" type="button" aria-label="Toggle accordion">
+                            <div class="accordion__title"><?= Loc::getMessage('CARE') ?></div>
+                            <svg class="icon icon-arrow-down accordion__icon">
+                                <use xlink:href="#arrow-down"></use>
+                            </svg>
+                        </button>
+                        <div class="accordion__content">
+                            <div class="body">
+                                <?= $arResult["CARE_INFO"] ?>
+                            </div>
+                        </div>
+                    </div>
+                <?endif; ?>
+            </div>
         </div>
+    </div>
+    <div class="product__add-basket-mobile">
+        <div class="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
+             style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
+            <button class="btn btn-dark btn-block js-btn__add-basket <?= $itemIds['ADD_BASKET_LINK'] ?>"
+                    data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>"
+                    type="submit">
+                <?= Loc::getMessage("ADD_TO_BASKET") ?>
+            </button>
+        </div>
+
+        <button class="btn btn-dark btn-block js-btn__add-basket <?= $itemIds['NOT_AVAILABLE_MESS'] ?>"
+                type="submit"
+                onclick="return false;"
+                style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
+                disabled
+        >
+            <?= Loc::getMessage("NOT_AVAILABLE") ?>
+        </button>
     </div>
 <?
 if ($haveOffers) {
