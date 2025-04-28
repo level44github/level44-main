@@ -10,7 +10,6 @@ namespace Level44;
 
 
 use Bitrix\Main\ArgumentException;
-use Bitrix\Main\Context;
 use Bitrix\Main\LoaderException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
@@ -22,12 +21,6 @@ use Bitrix\Main\Type\Collection;
  */
 class Content
 {
-    private $sortData = [];
-
-    public function __construct()
-    {
-        $this->initSortData();
-    }
 
     /**
      * @param array $arResult
@@ -200,93 +193,5 @@ class Content
         }
 
         return $resultList;
-    }
-
-    /**
-     * @return void
-     */
-    private function initSortData(): void
-    {
-        $request = Context::getCurrent()->getRequest();
-        $sortData =& $this->sortData;
-        $sortData["code"] = $request->get("sort");
-        $sortData["field2"] = 'sort';
-        $sortData["order2"] = 'asc';
-
-        switch ($sortData["code"]) {
-            case "price-asc":
-                $sortData["field"] = 'SCALED_PRICE_1';
-                $sortData["order"] = 'asc';
-                break;
-            case "price-desc":
-                $sortData["field"] = 'SCALED_PRICE_1';
-                $sortData["order"] = 'desc';
-                break;
-            case "popularity":
-                $sortData["field"] = 'shows';
-                $sortData["order"] = 'desc';
-                break;
-            case "new":
-                $sortData["field"] = 'created';
-                $sortData["order"] = 'desc';
-                break;
-            default:
-                $sortData["field"] = 'sort';
-                $sortData["order"] = 'asc';
-                $sortData["code"] = 'default';
-                break;
-        }
-
-        $sortData["list"] = [
-            [
-                "code" => "default",
-                "name" => Base::getMultiLang("По умолчанию", "Default"),
-            ],
-            [
-                "code" => "price-asc",
-                "name" => Base::getMultiLang("По возрастанию цены", "Price: Low to High"),
-            ],
-            [
-                "code" => "price-desc",
-                "name" => Base::getMultiLang("По убыванию цены", "Price: High to Low"),
-            ],
-            [
-                "code" => "popularity",
-                "name" => Base::getMultiLang("По популярности", "Popularity"),
-            ],
-            [
-                "code" => "new",
-                "name" => Base::getMultiLang("По новизне", "Newest"),
-            ],
-        ];
-
-        if (!in_array($sortData["code"], array_map(fn($item) => $item['code'], $sortData["list"]))) {
-            $sortData["code"] = 'default';
-        }
-
-        $sortData["list"] = array_map(
-            fn($item) => array_merge($item, ['selected' => $item["code"] === $sortData["code"]]),
-            $sortData["list"]
-        );
-
-
-        unset($sortData);
-    }
-
-    /**
-     * @param string $fieldName
-     * @return string
-     */
-    public function getSortValue(string $fieldName): string
-    {
-        return $this->sortData[$fieldName] ?: '';
-    }
-
-    /**
-     * @return array
-     */
-    public function getSortList(): array
-    {
-        return $this->sortData["list"];
     }
 }

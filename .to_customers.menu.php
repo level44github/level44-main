@@ -29,13 +29,6 @@ $aMenuLinks = Array(
       "",
     ),
     Array(
-      "Контакты",
-      SITE_DIR . "about/",
-      Array(),
-      Array(),
-      "",
-    ),
-    Array(
       "Публичная оферта",
       SITE_DIR . "about/offer/",
       Array(),
@@ -43,17 +36,12 @@ $aMenuLinks = Array(
       "",
     ),
     Array(
-      "Политика обработки персональных данных",
-      SITE_DIR . "about/personal/",
+      "Контакты",
+      SITE_DIR . "about/",
       Array(),
-      Array(),
-      "",
-    ),
-    Array(
-      "Политика использования файлов Cookie",
-      SITE_DIR . "about/cookie/",
-      Array(),
-      Array(),
+      Array(
+          "IS_CONTACTS" => true
+      ),
       "",
     ),
 );

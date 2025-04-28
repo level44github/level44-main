@@ -87,12 +87,6 @@ if (isset($arResult['ITEM']))
 
     $price["PRICE_DOLLAR"] = \Level44\Base::getDollarPrice(
         $price["PRICE"],
-        $item["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"],
-        true
-    );
-
-    $price["PRICE_DOLLAR_FORMATTED"] = \Level44\Base::getDollarPrice(
-        $price["PRICE"],
         $item["DISPLAY_PROPERTIES"]['PRICE_DOLLAR']["DISPLAY_VALUE"]
     );
     $price = array_merge($price, $item["ecommerceData"]["prices"]);
@@ -114,7 +108,7 @@ if (isset($arResult['ITEM']))
 	?>
 
 
-    <div class="grid__item" id="<?=$areaId?>" data-entity="item">
+    <div class="col-6 col-lg-3 catalog__item" id="<?=$areaId?>" data-entity="item">
 		<?
 		$documentRoot = Main\Application::getDocumentRoot();
 		$templatePath = strtolower($arResult['TYPE']).'/template.php';

@@ -143,65 +143,65 @@ $obName = 'ob' . preg_replace('/[^a-zA-Z0-9_]/', 'x', $this->GetEditAreaId($navP
 $containerName = 'container-' . $navParams['NavNum'];
 ?>
 
-<?
-if (!empty($arResult['ITEMS']) && !empty($arResult['ITEM_ROWS'])) {
-    $areaIds = [];
+    <div class="carousel js-carousel" data-entity="<?= $containerName ?>">
+        <?
+        if (!empty($arResult['ITEMS']) && !empty($arResult['ITEM_ROWS'])) {
+            $areaIds = array();
 
-    foreach ($arResult['ITEMS'] as $item) {
-        $uniqueId = $item['ID'] . '_' . md5($this->randString() . $component->getAction());
-        $areaIds[$item['ID']] = $this->GetEditAreaId($uniqueId);
-        $this->AddEditAction($uniqueId, $item['EDIT_LINK'], $elementEdit);
-        $this->AddDeleteAction($uniqueId, $item['DELETE_LINK'], $elementDelete, $elementDeleteParams);
-    }
-    ?>
-    <div class="product__related">
-        <div class="title"><?= $arParams['TITLE'] ?></div>
-        <div class="slider">
-            <div class="embla" data-mouse-scroll="false" data-loop="false" data-autoplay="false">
-                <div class="embla__container" data-entity="<?= $containerName ?>">
-                    <!-- items-container -->
-                    <?
-                    foreach ($arResult["ITEMS"] as $item) {
-                        $APPLICATION->IncludeComponent(
-                            'bitrix:catalog.item',
-                            'product_on_detail',
-                            [
-                                'RESULT' => [
-                                    'ITEM'                 => $item,
-                                    'AREA_ID'              => $areaIds[$item['ID']],
-                                    'TYPE'                 => "card",
-                                    'BIG_LABEL'            => 'N',
-                                    'BIG_DISCOUNT_PERCENT' => 'N',
-                                    'BIG_BUTTONS'          => 'N',
-                                    'SCALABLE'             => 'N'
-                                ],
-                                'PARAMS' => $generalParams
-                                    + ['SKU_PROPS' => $arResult['SKU_PROPS'][$item['IBLOCK_ID']]]
-                            ],
-                            $component,
-                            ['HIDE_ICONS' => 'Y']
-                        );
-                    }
-                    unset($generalParams, $rowItems);
-                    ?>
-                    <!-- items-container -->
-                </div>
-                <button class="btn btn-link embla__arrow prev" type="button" aria-label="Arrow prev">
-                    <svg class="icon icon-arrow-left embla__arrow__icon">
-                        <use xlink:href="#arrow-left"></use>
-                    </svg>
-                </button>
-                <button class="btn btn-link embla__arrow next" type="button" aria-label="Arrow next">
-                    <svg class="icon icon-arrow-right embla__arrow__icon">
-                        <use xlink:href="#arrow-right"></use>
-                    </svg>
-                </button>
-            </div>
-        </div>
+            foreach ($arResult['ITEMS'] as $item) {
+                $uniqueId = $item['ID'] . '_' . md5($this->randString() . $component->getAction());
+                $areaIds[$item['ID']] = $this->GetEditAreaId($uniqueId);
+                $this->AddEditAction($uniqueId, $item['EDIT_LINK'], $elementEdit);
+                $this->AddDeleteAction($uniqueId, $item['DELETE_LINK'], $elementDelete, $elementDeleteParams);
+            }
+            ?>
+            <!-- items-container -->
+            <?
+            foreach ($arResult["ITEMS"] as $item) {
+                $APPLICATION->IncludeComponent(
+                    'bitrix:catalog.item',
+                    'product_on_detail',
+                    array(
+                        'RESULT' => array(
+                            'ITEM' => $item,
+                            'AREA_ID' => $areaIds[$item['ID']],
+                            'TYPE' => "card",
+                            'BIG_LABEL' => 'N',
+                            'BIG_DISCOUNT_PERCENT' => 'N',
+                            'BIG_BUTTONS' => 'N',
+                            'SCALABLE' => 'N'
+                        ),
+                        'PARAMS' => $generalParams
+                            + array('SKU_PROPS' => $arResult['SKU_PROPS'][$item['IBLOCK_ID']])
+                    ),
+                    $component,
+                    array('HIDE_ICONS' => 'Y')
+                );
+            }
+            unset($generalParams, $rowItems);
+            ?>
+            <!-- items-container -->
+            <?
+        } else {
+            // load css for bigData/deferred load
+            $APPLICATION->IncludeComponent(
+                'bitrix:catalog.item',
+                'product_on_detail',
+                array(),
+                $component,
+                array('HIDE_ICONS' => 'Y')
+            );
+        }
+        ?>
     </div>
-    <?
-}
-?>
+    <div class="catalog__show-more" data-use="show-more-<?= $navParams['NavNum'] ?>" style="display:none;">
+        <button class="btn btn-link">
+            <span class="spinner-border text-secondary" role="status">
+                <span class="sr-only">Loading...</span>
+            </span>
+        </button>
+    </div>
+
 
 <?
 $signer = new \Bitrix\Main\Security\Sign\Signer;

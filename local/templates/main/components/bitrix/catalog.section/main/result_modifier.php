@@ -1,5 +1,4 @@
 <? use Level44\Content;
-use Level44\Base;
 
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
@@ -53,47 +52,4 @@ $arResult["NAME"] = \Level44\Base::getMultiLang(
 
 if (\Level44\Base::isEnLang()) {
     $APPLICATION->SetTitle($arResult["NAME"]);
-}
-
-//Multi lang breadcrumb
-$paths = [];
-$pathIterator = CIBlockSection::GetNavChain(
-    $arResult['IBLOCK_ID'],
-    $arResult['ID'],
-    [
-        'ID',
-        'CODE',
-        'IBLOCK_ID',
-        'NAME',
-        'SECTION_PAGE_URL'
-    ]
-);
-$pathIterator->SetUrlTemplates('', $arParams['SECTION_URL']);
-while ($path = $pathIterator->GetNext()) {
-    $paths[] = $path;
-}
-
-$sectionIds = array_map(fn($item) => (int)$item['ID'], $paths);
-$enSectionNames = [];
-
-if (!empty($sectionIds)) {
-    $rsSections = CIBlockSection::GetList([], [
-        'ID'        => $sectionIds,
-        'IBLOCK_ID' => $arResult['IBLOCK_ID'],
-    ], false, [
-        "ID",
-        "UF_NAME_EN",
-        "CODE",
-    ]);
-
-    while ($section = $rsSections->GetNext()) {
-        $enSectionNames[$section['ID']] = $section['UF_NAME_EN'];
-    }
-}
-
-foreach ($paths as $path) {
-    $APPLICATION->AddChainItem(
-        Base::getMultiLang($path['NAME'], $enSectionNames[$path['ID']]),
-        $path['~SECTION_PAGE_URL']
-    );
 }

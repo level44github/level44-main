@@ -1,4 +1,5 @@
 <?
 $MESS["FOOTER_BUYERS"] = "Покупателям";
-$MESS["FOOTER_SHOPS"] = "Магазины";
-$MESS['FOOTER_FOLLOW'] = "Следите за новостями";
+$MESS["CREATE_IN"] = "Сделано в ";
+$MESS["FOOTER_FLAGMAN"] = "Флагманский магазин";
+$MESS["FOOTER_SHOWROOM"] = "Шоурум";

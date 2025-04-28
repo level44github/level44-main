@@ -1,6 +1,4 @@
-<? use Level44\Base;
-
-if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
@@ -32,11 +30,6 @@ $arResult["DETAIL_TEXT"] = \Level44\Base::getMultiLang(
     $arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"]
 );
 
-$arResult["DETAIL_TEXT_TYPE"] = \Level44\Base::getMultiLang(
-    $arResult["DETAIL_TEXT_TYPE"],
-    strtolower($arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["VALUE"]["TYPE"])
-);
-
 foreach ($arResult['SKU_PROPS'] as &$skuProp) {
     foreach ($skuProp['VALUES'] as &$value) {
         $value = $value["ID"] > 0 ? $value : null;
@@ -66,72 +59,35 @@ $linkedElements = $arResult["DISPLAY_PROPERTIES"]["OTHER_COLORS"]["LINK_ELEMENT_
 
 $arResult["COLORS"] = $linkedElements;
 
+$arResult["MEASUREMENTS_ROWS"] = [];
+
 $arResult["MEASUREMENTS"] = \Level44\Base::getMultiLang(
     $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS_KIT"]["DISPLAY_VALUE"],
     $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS_KIT_EN"]["DISPLAY_VALUE"]
 );
 
- if (!empty($arResult["MEASUREMENTS"])){
-     $arResult["MEASUREMENTS"] = preg_replace('#(\s*<br\s*/?>)*\s*$#i', '', $arResult["MEASUREMENTS"]);
- }
-
-$arResult["CARE_INFO"] = \Level44\Base::getMultiLang(
-    $arResult["DISPLAY_PROPERTIES"]["CARE_INFO"]["DISPLAY_VALUE"],
-    $arResult["DISPLAY_PROPERTIES"]["CARE_INFO_EN"]["DISPLAY_VALUE"]
-);
+if (empty($arResult["MEASUREMENTS"])){
+    $arResult["MEASUREMENTS_ROWS"] = \Level44\Base::getMultiLang(
+        $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS"]["DISPLAY_VALUE"],
+        $arResult["DISPLAY_PROPERTIES"]["MEASUREMENTS_EN"]["DISPLAY_VALUE"]
+    );
+}
 
 $APPLICATION->SetTitle($arResult["NAME"]);
 
-$sizes = [];
-$arResult['STORES'] = [];
-$sizeRefProp = $arResult['SKU_PROPS']['SIZE_REF'];
+$videoProperty = $arResult["DISPLAY_PROPERTIES"]["VIDEO"];
+$arResult["VIDEOS"] = [];
 
-foreach ($sizeRefProp['VALUES'] as $sizeRefValue) {
-    foreach ($arResult['OFFERS'] as $offer) {
-        if ($offer['TREE']["PROP_{$sizeRefProp['ID']}"] === $sizeRefValue['ID']) {
-            $sizes[] = [
-                'OFFER_ID' => $offer['ID'],
-                'NAME'     => $sizeRefValue['NAME'],
-            ];
+if (is_array($videoProperty["VALUE"])) {
+    foreach ($videoProperty["VALUE"] as $key => $video) {
+        if (!$video["path"] || !$videoProperty["PROPERTY_VALUE_ID"][$key]) {
+            continue;
         }
-    }
-}
 
-if (!empty($sizes)) {
-    $storesRests = \Bitrix\Sale\StoreProductTable::getList(
-        [
-            'filter' => [
-                'PRODUCT_ID' => array_map(fn($size) => $size['OFFER_ID'], $sizes)
-            ]
-        ])->fetchAll();
-
-    $rsStores = \Bitrix\Catalog\StoreTable::getList([
-        'filter' => ['ACTIVE' => 'Y'],
-        'select' => ['ID', 'TITLE', 'ADDRESS', 'UF_*']
-    ]);
-
-    $stores = [];
-    while ($store = $rsStores->fetch()) {
-        $stores[$store['ID']] = $store;
-    }
-
-    foreach ($storesRests as $storeRests) {
-        if ((int)$storeRests['AMOUNT'] > 0) {
-            $size = current(array_filter($sizes, fn($size) => (int)$size['OFFER_ID'] === (int)$storeRests['PRODUCT_ID']));
-            if (!empty($size)) {
-                $availability[$storeRests['STORE_ID']][] = $size;
-            }
-        }
-    }
-
-    foreach ($availability as $storeId => $sizes) {
-        if (!empty($store = $stores[$storeId])) {
-            $arResult['STORES'][] = [
-                'TITLE'   => Base::getMultiLang($store['TITLE'], $store['UF_TITLE_EN']),
-                'ADDRESS' => Base::getMultiLang($store['ADDRESS'], $store['UF_ADDRESS_EN']),
-                'SIZES'   => $sizes
-            ];
-        }
+        $arResult["VIDEOS"][] = [
+            "PATH" => $video["path"],
+            "ID"   => $videoProperty["PROPERTY_VALUE_ID"][$key],
+        ];
     }
 }
 
@@ -165,14 +121,6 @@ if (!empty($arResult['OFFERS'])) {
     $actualItem = $arResult;
 }
 
-if (!empty($arResult["PROPERTIES"]["VIDEO"]['VALUE']) && !empty($arResult["PROPERTIES"]["PREVIEW_VIDEO"]['VALUE'])) {
-    $actualItem["MORE_PHOTO"][] = [
-        'SRC'        => \CFile::GetPath($arResult["PROPERTIES"]["VIDEO"]['VALUE']),
-        'POSTER_SRC' => \CFile::GetPath($arResult["PROPERTIES"]["PREVIEW_VIDEO"]['VALUE']),
-        'IS_VIDEO'   => true,
-    ];
-}
-
 $rsSections = \CIBlockElement::GetElementGroups($arResult["ID"]);
 
 $sections = [];
@@ -185,32 +133,3 @@ $arResult["IS_SHOES"] = !empty(array_filter($sections, fn($section) => $section[
 $arResult["ACTUAL_ITEM"] = $actualItem;
 
 $component->SetResultCacheKeys(["ACTUAL_ITEM"]);
-
-if (!empty($arResult['SECTION']['PATH']) && is_array($arResult['SECTION']['PATH'])) {
-    $sectionIds = array_map(fn($item) => (int)$item['ID'], $arResult['SECTION']['PATH']);
-    $enSectionNames = [];
-
-    if (!empty($sectionIds)) {
-        $rsSections = CIBlockSection::GetList([], [
-            'ID'        => $sectionIds,
-            'IBLOCK_ID' => $arResult['IBLOCK_ID'],
-        ], false, [
-            "ID",
-            "UF_NAME_EN",
-            "CODE",
-        ]);
-
-        while ($section = $rsSections->GetNext()) {
-            $enSectionNames[$section['ID']] = $section['UF_NAME_EN'];
-        }
-    }
-
-    foreach ($arResult['SECTION']['PATH'] as $path) {
-        $APPLICATION->AddChainItem(
-            Base::getMultiLang($path['NAME'], $enSectionNames[$path['ID']]),
-            $path['~SECTION_PAGE_URL']
-        );
-    }
-
-    $APPLICATION->AddChainItem($arResult["NAME"]);
-}

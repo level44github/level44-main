@@ -23,7 +23,7 @@ $APPLICATION->IncludeComponent(
         "ADD_ELEMENT_CHAIN" => "N",
         "PRODUCT_DISPLAY_MODE" => "Y",
         "ADD_PROPERTIES_TO_BASKET" => "Y",
-        "ADD_SECTIONS_CHAIN" => "N",
+        "ADD_SECTIONS_CHAIN" => "Y",
         "AJAX_MODE" => "N",
         "AJAX_OPTION_ADDITIONAL" => "",
         "AJAX_OPTION_HISTORY" => "N",

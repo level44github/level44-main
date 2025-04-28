@@ -13,17 +13,5 @@ $(function () {
         e.preventDefault();
         $(this).siblings('.nav.submenu').slideToggle();
     });
-
-    $('.form-radio-group [name="sort"]').on('change', function (e) {
-        const location = window.location.href;
-        const url = new URL(location);
-        url.searchParams.set('sort', e.target.value);
-        window.location.href = url.toString()
-    })
-
-    const dropdownItem = $('[data-dropdown] [name="sort"]:checked + span');
-    if (dropdownItem?.length) {
-        $('[data-dropdown] [name="sort"]').closest('[data-dropdown]').find('.dropdown__title').text(dropdownItem.text());
-    }
 })
 

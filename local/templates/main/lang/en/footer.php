@@ -1,4 +1,5 @@
 <?
 $MESS["FOOTER_BUYERS"] = "To buyers";
-$MESS["FOOTER_SHOPS"] = "The shops";
-$MESS['FOOTER_FOLLOW'] = "Follow the news";
+$MESS["CREATE_IN"] = "Made in ";
+$MESS["FOOTER_FLAGMAN"] = "Flagship store";
+$MESS["FOOTER_SHOWROOM"] = "Showroom";

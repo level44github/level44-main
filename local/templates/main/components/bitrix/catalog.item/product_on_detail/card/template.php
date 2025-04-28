@@ -25,24 +25,22 @@ use \Bitrix\Main\Localization\Loc;
  */
 ?>
 
-<div class="grid__item">
-    <a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
-        <img class="grid__item__image" src="<?= $item['PREVIEW_PICTURE']['SRC'] ?>" alt="<?= $item['NAME'] ?>">
-        <div class="grid__item__title"><?= $item['NAME'] ?></div>
-        <div class="grid__item__prices">
-            <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
-            <? if (!empty($price['oldPrice'])): ?>
-                <div class="grid__item__discount"><?= $price['oldPriceFormat'] ?></div>
+<a class="carousel__image" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+    <img class="img-fluid" src="<?= $item['PREVIEW_PICTURE']['SRC'] ?>" alt="<?= $item['NAME'] ?>">
+</a>
+<div class="carousel__footer">
+    <a class="carousel__title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
+    <div class="<?= $price["oldPrice"] ? "product__final-price" : "" ?>">
+        <span class="carousel__price"><?= $price['PRINT_PRICE'] ?></span>
+        <? if ($item["PRICE_DOLLAR"]): ?>
+            &middot; <span class="carousel__price"><?= $item["PRICE_DOLLAR"] ?></span>
+        <? endif; ?>
+    </div>
+    <? if (!empty($price['oldPrice'])): ?>
+        <div class="carousel__price-crossed"><span><?= $price['oldPriceFormat'] ?></span>
+            <? if ($item["PRICE_DOLLAR"]): ?>
+                &middot; <span class="carousel__price"><?= $price["oldPriceDollarFormat"] ?></span>
             <? endif; ?>
         </div>
-
-        <? if ($item["PRICE_DOLLAR"]): ?>
-            <div class="grid__item__prices">
-                <div class="grid__item__price"><?= $item["PRICE_DOLLAR"] ?></div>
-                <? if (!empty($price['oldPriceDollar'])): ?>
-                    <div class="grid__item__discount"><?= $price['oldPriceDollarFormat'] ?></div>
-                <? endif; ?>
-            </div>
-        <? endif; ?>
-    </a>
+    <? endif; ?>
 </div>
