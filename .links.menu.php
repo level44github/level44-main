@@ -9,7 +9,7 @@ $aMenuLinks = Array(
     ),
     Array(
         "WhatsApp",
-        "https://api.whatsapp.com/send/?phone=79672419889&amp;text&amp;type=phone_number&amp;app_absent=0",
+        "https://wa.me/79672419889",
         Array(),
         Array(),
         ""

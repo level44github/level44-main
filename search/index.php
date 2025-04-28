@@ -64,7 +64,6 @@ $APPLICATION->SetTitle("Поиск");
 		"LAZY_LOAD" => "Y",
 		"LOAD_ON_SCROLL" => "Y",
 		"COMPATIBLE_MODE" => "Y",
-		"FILTER_VIEW_MODE" => "VERTICAL",
 	)
 );?>
 

@@ -49,4 +49,3 @@ $aMenuLinksExt = Menu::prepareMenuSections($aMenuLinksExt);
 $aMenuLinksExt = Menu::addSaleSection($aMenuLinksExt);
 
 $aMenuLinks = array_merge($aMenuLinks, $aMenuLinksExt);
-Menu::setExpanded($aMenuLinks);

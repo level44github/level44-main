@@ -3,52 +3,28 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
-/**
- * @global CMain $APPLICATION
- */
-
 use Bitrix\Main\Localization\Loc;
-use Level44\Base;
 
-if (empty(Base::$typePage)) {
-    Base::$typePage = "layout";
+if (empty(\Level44\Base::$typePage)) {
+    \Level44\Base::$typePage = "layout";
 }
 
-switch (Base::$typePage) {
-    case 'home':
-        $APPLICATION->AddViewContent("header-class", 'transparent');
-        break;
-    case 'product':
-        $APPLICATION->AddViewContent("header-class", 'product');
-        break;
-    default:
-        $APPLICATION->AddViewContent("header-class", 'navbar-light');
-        break;
-}
-
-$APPLICATION->AddViewContent("type-page", Base::$typePage);
+$APPLICATION->AddViewContent("type-page", \Level44\Base::$typePage);
 ?>
 </div>
-<?php $APPLICATION->ShowViewContent("catalog-filters"); ?>
-<? $APPLICATION->ShowViewContent("preorder-form"); ?>
-<? $APPLICATION->ShowViewContent("sizes-table"); ?>
-
 <footer class="footer">
-    <div class="content-container">
-        <div class="footer__subscribe footer__col">
-            <? /*<div class="email">
-                <p class="email__text">Подпишитесь на нашу e-mail рассылку, чтобы первыми получать информацию о новинках
-                    и спецпредложениях</p>
-                <a class="btn btn-dark" href="#">Подписаться</a>
-            </div>*/ ?>
-
-            <div class="news">
-                <h5 class="footer__title"><?= Loc::getMessage('FOOTER_FOLLOW') ?></h5>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-lg-3 order-3 order-lg-1 footer__divider">
+                <div class="mb-2">© <?= date("Y") ?> Level 44</div>
+            </div>
+            <div class="col-6 col-lg-3 order-2">
+                <div class="footer__title"><?= Loc::getMessage("FOOTER_BUYERS") ?></div>
                 <? $APPLICATION->IncludeComponent(
                     "bitrix:menu",
                     "footer_links",
                     Array(
-                        "ROOT_MENU_TYPE" => "links",
+                        "ROOT_MENU_TYPE" => "to_customers",
                         "MAX_LEVEL" => "1",
                         "CHILD_MENU_TYPE" => "top",
                         "USE_EXT" => "N",
@@ -57,102 +33,77 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
                         "MENU_CACHE_TYPE" => "N",
                         "MENU_CACHE_TIME" => "3600",
                         "MENU_CACHE_USE_GROUPS" => "Y",
-                        "MENU_CACHE_GET_VARS" => "",
-                        "EXT_LINKS" => "Y",
+                        "MENU_CACHE_GET_VARS" => ""
                     )
                 ); ?>
             </div>
+            <div class="col-6 col-lg-3 order-2">
+                <div class="footer__title footer__title_level">LEVEL44</div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="footer__link pb-0"><?= Loc::getMessage("FOOTER_FLAGMAN") ?></a></li>
+                    <li class="nav-item text-muted pb-2">
+                        <? $APPLICATION->IncludeComponent(
+                            "bitrix:main.include",
+                            "",
+                            array(
+                                "AREA_FILE_SHOW" => "file",
+                                "PATH" => SITE_DIR . "include/footer_flagman.php",
+                            ),
+                            false
+                        ); ?>
+                    </li>
+                    <li class="nav-item"><a class="footer__link pb-0"><?= Loc::getMessage("FOOTER_SHOWROOM") ?></a></li>
+                    <li class="nav-item text-muted pb-2">
+                        <? $APPLICATION->IncludeComponent(
+                            "bitrix:main.include",
+                            "",
+                            array(
+                                "AREA_FILE_SHOW" => "file",
+                                "PATH" => SITE_DIR . "include/footer_showroom.php",
+                            ),
+                            false
+                        ); ?>
+                    </li>
+                    <? $APPLICATION->IncludeComponent(
+                        "bitrix:menu",
+                        "footer_links",
+                        Array(
+                            "ROOT_MENU_TYPE" => "links",
+                            "MAX_LEVEL" => "1",
+                            "CHILD_MENU_TYPE" => "top",
+                            "USE_EXT" => "N",
+                            "DELAY" => "N",
+                            "ALLOW_MULTI_SELECT" => "Y",
+                            "MENU_CACHE_TYPE" => "N",
+                            "MENU_CACHE_TIME" => "3600",
+                            "MENU_CACHE_USE_GROUPS" => "Y",
+                            "MENU_CACHE_GET_VARS" => "",
+                            "EXT_LINKS" => "Y",
+                        )
+                    ); ?>
+            </div>
+            <div class="col-6 col-lg-2 order-4 order-lg-4 footer__divider">
+                <img class="img-fluid mr-3" src="<?= \Level44\Base::getAssetsPath() ?>/img/visa.svg" alt="">
+                <img class="img-fluid" src="<?= \Level44\Base::getAssetsPath() ?>/img/master-card.svg" alt="">
+            </div>
         </div>
-        <div class="footer__address footer__col">
-            <h5 class="footer__title"><?= Loc::getMessage('FOOTER_SHOPS') ?></h5>
-            <? $APPLICATION->IncludeComponent(
-                "bitrix:main.include",
-                "",
-                array(
-                    "AREA_FILE_SHOW" => "file",
-                    "PATH" => SITE_DIR . "include/footer_flagman.php",
-                ),
-                false
-            ); ?>
-            <? $APPLICATION->IncludeComponent(
-                "bitrix:main.include",
-                "",
-                array(
-                    "AREA_FILE_SHOW" => "file",
-                    "PATH" => SITE_DIR . "include/footer_showroom.php",
-                ),
-                false
-            ); ?>
-        </div>
-        <div class="footer__info footer__col">
-            <h5 class="footer__title"><?= Loc::getMessage("FOOTER_BUYERS") ?></h5>
-            <? $APPLICATION->IncludeComponent(
-                "bitrix:menu",
-                "footer_links",
-                Array(
-                    "ROOT_MENU_TYPE" => "to_customers",
-                    "MAX_LEVEL" => "1",
-                    "CHILD_MENU_TYPE" => "top",
-                    "USE_EXT" => "N",
-                    "DELAY" => "N",
-                    "ALLOW_MULTI_SELECT" => "N",
-                    "MENU_CACHE_TYPE" => "N",
-                    "MENU_CACHE_TIME" => "3600",
-                    "MENU_CACHE_USE_GROUPS" => "Y",
-                    "MENU_CACHE_GET_VARS" => ""
-                )
-            ); ?>
-        </div>
-        <div class="footer__logo footer__col">
-            <a href="<?= SITE_DIR ?>">LEVEL44</a>
-        </div>
-        <? $APPLICATION->IncludeComponent(
-            "bitrix:main.site.selector",
-            "mobile",
-            [
-                "SITE_LIST"  => ["*all*"],
-                "CACHE_TYPE" => "A",
-                "CACHE_TIME" => "3600",
-            ]
-        ); ?>
     </div>
 </footer>
-<? $APPLICATION->ShowViewContent("image-modal"); ?>
 </div>
 <?
-Base::loadScripts();
+\Level44\Base::loadScripts();
 ?>
 <div class="d-none">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <symbol viewBox="0 0 24 24" id="arrow-back" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13 2L4 12l9 10M4 12h17" data-stroke="true" fill="none"/>
+        <symbol viewBox="0 0 14 14" id="arrow-left" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7h13m-7 6L1 7l6-6" data-stroke="true" fill="none"/>
         </symbol>
-        <symbol viewBox="0 0 16 16" id="arrow-down" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 4.822l6 6.356 6-6.329" data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 24" id="arrow-left" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 1L8 12l8 11" data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 24" id="arrow-right" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 23l8-11L8 1" data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 24" id="basket" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.698 8.8a.775.775 0 01.77-.692h13.064c.396 0 .728.298.77.692l1.37 12.742a.775.775 0 01-.77.857H4.098c-.46 0-.82-.4-.77-.857L4.698 8.8zM8.2 5.373a3.773 3.773 0 017.545 0v2.635H8.2V5.373z"
+        <symbol viewBox="0 0 13 16" id="basket" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.726 5.68a.5.5 0 01.497-.447h8.501a.5.5 0 01.497.447l.997 9.267a.5.5 0 01-.498.553H1.227a.5.5 0 01-.498-.553l.997-9.267zm2.067-2.5a2.68 2.68 0 115.36 0v2.014h-5.36V3.18z"
                   data-stroke="true" fill="none"/>
         </symbol>
-        <symbol viewBox="0 0 24 24" id="burger" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 3.4h24m-24 8h24m-24 8h24" data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 25" id="close" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3.473 20.914L20.444 3.943m.083 16.971L3.557 3.944" data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 16 16" id="close-small" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 3l10 10m0-10L3 13" data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 24" id="filters" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 6.9l13.5-.002M24 6.9h-4.5M0 16.9l4.5.001m19.5 0H10.5" data-stroke="true" fill="none"/>
-            <circle cx="7.5" cy="16.9" r="2.9" data-stroke="true" fill="none"/>
-            <circle cx="16.5" cy="6.9" r="2.9" data-stroke="true" fill="none"/>
+        <symbol viewBox="0 0 10 9" id="close" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.146 8.646l8-8m.208 8l-8-8" data-stroke="true" fill="none"/>
         </symbol>
         <symbol viewBox="0 0 14 14" id="instagram" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -163,27 +114,27 @@ Base::loadScripts();
                   data-fill="true"/>
             <circle cx="10.5" cy="3.5" r=".875" data-fill="true"/>
         </symbol>
-        <symbol viewBox="0 0 24 24" id="play" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 4.747v14.506a.4.4 0 00.622.332L17.5 12.333a.4.4 0 000-.666L6.62 4.415a.4.4 0 00-.62.332z"
-                  data-stroke="true" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 24" id="search" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10.636" cy="10.136" r="8.536" data-stroke="true" fill="none"/>
-            <path d="M16.368 16.238l6.338 6.337" data-stroke="true" fill="none"/>
+        <symbol viewBox="0 0 16 16" id="search" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="6.645" cy="6.645" r="6.145" data-stroke="true" fill="none"/>
+            <path d="M10.857 11.037l4.609 4.609" data-stroke="true" fill="none"/>
         </symbol>
         <symbol viewBox="0 0 14 14" id="stop" xmlns="http://www.w3.org/2000/svg">
             <circle cx="7" cy="7" r="6.5" data-stroke="true" fill="none"/>
             <path d="M1.98 11.78l9.334-9.334" data-stroke="true" fill="none"/>
         </symbol>
+        <symbol width="14" height="16" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.5791 12.624H8.46289C8.4082 13.5469 7.82031 14.1348 6.99316 14.1348C6.17285 14.1348 5.57812 13.5469 5.53027 12.624H4.46387C4.51855 13.9365 5.55078 15.0918 6.99316 15.0918C8.44238 15.0918 9.47461 13.9434 9.5293 12.624H12.4141C13.0566 12.624 13.4463 12.2891 13.4463 11.7969C13.4463 11.1133 12.749 10.498 12.1611 9.88965C11.71 9.41797 11.5869 8.44727 11.5322 7.66113C11.4844 4.96777 10.7871 3.22461 8.96875 2.56836C8.73633 1.67969 8.00488 0.96875 6.99316 0.96875C5.98828 0.96875 5.25 1.67969 5.02441 2.56836C3.20605 3.22461 2.50879 4.96777 2.46094 7.66113C2.40625 8.44727 2.2832 9.41797 1.83203 9.88965C1.2373 10.498 0.546875 11.1133 0.546875 11.7969C0.546875 12.2891 0.929688 12.624 1.5791 12.624ZM1.87305 11.5918V11.5098C1.99609 11.3047 2.40625 10.9082 2.76172 10.5049C3.25391 9.95801 3.48633 9.08301 3.54785 7.74316C3.60254 4.7627 4.49121 3.80566 5.66016 3.49121C5.83105 3.4502 5.92676 3.36133 5.93359 3.19043C5.9541 2.47266 6.36426 1.97363 6.99316 1.97363C7.62891 1.97363 8.03223 2.47266 8.05957 3.19043C8.06641 3.36133 8.15527 3.4502 8.32617 3.49121C9.50195 3.80566 10.3906 4.7627 10.4453 7.74316C10.5068 9.08301 10.7393 9.95801 11.2246 10.5049C11.5869 10.9082 11.9902 11.3047 12.1133 11.5098V11.5918H1.87305Z" fill="#212121"/>
+        </symbol>
+
         <symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#na)" fill="none">
+            <g clip-path="url(#gclip0)" fill="none">
                 <path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z"
                       data-stroke="true" fill="none"/>
                 <path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z"
                       data-fill="true"/>
             </g>
             <defs fill="none">
-                <clipPath id="na" fill="none"/>
+                <clipPath id="gclip0" fill="none"/>
             </defs>
         </symbol>
     </svg>
