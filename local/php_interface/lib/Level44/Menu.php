@@ -2,10 +2,13 @@
 
 namespace Level44;
 
+
 class Menu
 {
     static function prepareMenuSections($sections): array
     {
+         $sections = array_map(fn($section) => static::markIfSelected($section), $sections);
+
         $tree = $parents = [];
 
         foreach ($sections as &$section) {
@@ -22,78 +25,29 @@ class Menu
         }
         unset($section);
 
-        return array_map(function ($item) {
-            if ($item[3]['CODE'] === 'skoro_v_prodazhe') {
-                $item[3]['IS_COMING_SOON'] = true;
-            }
-
-            return $item;
-        }, $tree);
+        return $tree;
     }
 
     static function addSaleSection($menuSections): array
     {
-        $menuSections[] = [
-            "OUTLET",
-            SITE_DIR . "catalog/sale/",
-            [],
-            [
-                "CSS_CLASS" => "sale-section",
-                "IS_SALE"   => true,
-                "CHILDREN"  => static::getSaleChildren()
-            ],
-            ""
-        ];
+        $saleChildren = static::getSaleChildren();
 
-        return $menuSections;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public static function existSaleProducts(): bool
-    {
-        $productsId = [];
-        $exist = false;
-        $result = \CIBlockElement::GetList(
-            [],
-            [
-                "ACTIVE"              => "Y",
-                "IBLOCK_ID"           => Base::CATALOG_IBLOCK_ID,
-                ">PROPERTY_OLD_PRICE" => 0,
-            ],
-            false,
-            false,
-            [
-                "IBLOCK_ID",
-                "ID",
-                "PROPERTY_OLD_PRICE"
-            ]
-        );
-
-        while ($row = $result->GetNext()) {
-            $productsId[] = $row["ID"];
-        }
-
-        if (!empty($productsId)) {
-            $result = \CIBlockElement::GetList(
+        if (!empty($saleChildren)) {
+            $saleSection = [
+                "Outlet",
+                SITE_DIR . "catalog/sale/",
                 [],
                 [
-                    "ACTIVE"             => "Y",
-                    "CATALOG_AVAILABLE"  => "Y",
-                    "IBLOCK_ID"          => Base::OFFERS_IBLOCK_ID,
-                    "PROPERTY_CML2_LINK" => $productsId,
+                    "IS_SALE"  => true,
+                    "CHILDREN" => $saleChildren
                 ],
-                false,
-                [
-                    "nTopCount" => 1
-                ]
-            )->GetNext();
+                ""
+            ];
 
-            $exist = !empty($result);
+            $menuSections[] = Menu::markIfSelected($saleSection);
         }
-        return $exist;
+
+        return $menuSections;
     }
 
     public static function getSaleChildren(): array
@@ -132,6 +86,57 @@ class Menu
             }
         }
 
-        return static::prepareMenuSections($aMenuLinksExt);
+        $treeSections = [];
+
+        foreach (static::prepareMenuSections($aMenuLinksExt) as $section) {
+            $treeSections = array_merge($treeSections, !empty($section[3]['CHILDREN']) ? $section[3]['CHILDREN'] : [$section]);
+        }
+
+        return $treeSections;
+    }
+
+    /**
+     * @param $section
+     * @return array
+     */
+    public static function markIfSelected(array $section): array
+    {
+        global $APPLICATION;
+
+        $normalizedLink = "/" . rtrim(ltrim($section[1], '/'), '/') . "/";
+        $normalizedCurPage = "/" . rtrim(ltrim($APPLICATION->GetCurPage(false), '/'), '/') . "/";
+
+        if (strtolower($normalizedLink) === strtolower($normalizedCurPage)) {
+            $section[3]['SELECTED'] = true;
+        }
+
+        return $section;
+    }
+
+    /**
+     * @param array $items
+     * @return bool
+     */
+    public static function setExpanded(array &$items): bool
+    {
+        $PARAMS = 3;
+
+        foreach ($items as &$item) {
+            if ($item[$PARAMS]["SELECTED"]) {
+                if (!empty($item[$PARAMS]["CHILDREN"])) {
+                    $item[$PARAMS]["EXPANDED"] = true;
+                }
+
+                return true;
+            } elseif (!empty($item[$PARAMS]["CHILDREN"])) {
+                if (static::setExpanded($item[$PARAMS]["CHILDREN"])) {
+                    $item[$PARAMS]["EXPANDED"] = true;
+                    return true;
+                }
+            }
+        }
+        unset($item);
+
+        return false;
     }
 }

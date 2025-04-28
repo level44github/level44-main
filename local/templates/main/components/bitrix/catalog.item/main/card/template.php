@@ -25,29 +25,37 @@ use \Bitrix\Main\Localization\Loc;
  */
 ?>
 
-<div class="catalog__scroll">
-    <a class="catalog__item-image" href="<?= $item['DETAIL_PAGE_URL'] ?>">
-        <? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
-            <img class="img-fluid" src="<?= $previewImage ?>" alt="<?= $item['NAME'] ?>">
-        <? endforeach; ?>
-    </a>
-</div>
-<div class="catalog__item-footer">
-    <a class="catalog__item-title" href="<?= $item['DETAIL_PAGE_URL'] ?>"><?= $item['NAME'] ?></a>
-    <div class="<?= $price["oldPrice"] ? "product__final-price" : "" ?>">
-      <span class="catalog__item-price"><?= $price['PRINT_PRICE'] ?></span>
-        <? if ($price["PRICE_DOLLAR"]): ?>
-            &middot;
-            <span class="catalog__item-price"><?= $price["PRICE_DOLLAR"] ?></span>
+<a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+    <div class="embla" data-mouse-scroll="true">
+        <div class="embla__container">
+            <? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
+                <div class="embla__slide">
+                    <img class="grid__item__image" src="<?= $previewImage ?>" alt="<?= $item['NAME'] ?>">
+                </div>
+            <? endforeach; ?>
+        </div>
+        <div class="embla__dots">
+            <? foreach ($item["PREVIEW_IMAGES"] as $index => $previewImage): ?>
+                <button type="button" data-index="<?= $index ?>>">
+                    <div class="button-body"></div>
+                </button>
+            <? endforeach; ?>
+        </div>
+    </div>
+    <div class="grid__item__title"><?= $item['NAME'] ?></div>
+    <div class="grid__item__prices">
+        <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
+        <? if (!empty($price["oldPrice"])): ?>
+            <div class="grid__item__discount"><?= $price['oldPriceFormat'] ?></div>
         <? endif; ?>
     </div>
-    <? if (!empty($price["oldPrice"])): ?>
-        <div class="catalog__item-price-crossed">
-            <span class="catalog__item-price"><?= $price['oldPriceFormat'] ?></span>
-            <? if ($price["PRICE_DOLLAR"]): ?>
-                &middot;
-                <span class="catalog__item-price"><?= $price["oldPriceDollarFormat"] ?></span>
+
+    <? if ($price["PRICE_DOLLAR"]): ?>
+        <div class="grid__item__prices">
+            <div class="grid__item__price"><?= $price['PRICE_DOLLAR_FORMATTED'] ?></div>
+            <? if (!empty($price["oldPriceDollar"])): ?>
+                <div class="grid__item__discount"><?= $price["oldPriceDollarFormat"] ?></div>
             <? endif; ?>
         </div>
     <? endif; ?>
-</div>
+</a>
