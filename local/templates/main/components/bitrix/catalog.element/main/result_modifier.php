@@ -106,7 +106,7 @@ if (!empty($sizes)) {
         ])->fetchAll();
 
     $rsStores = \Bitrix\Catalog\StoreTable::getList([
-        'filter' => ['ACTIVE' => 'Y'],
+        'filter' => ['ACTIVE' => 'Y', 'ISSUING_CENTER' => 'Y'],
         'select' => ['ID', 'TITLE', 'ADDRESS', 'UF_*']
     ]);
 
