@@ -7,7 +7,7 @@ class Menu
 {
     static function prepareMenuSections($sections): array
     {
-         $sections = array_map(fn($section) => static::markIfSelected($section), $sections);
+        $sections = array_map(fn($section) => static::markIfSelected($section), $sections);
 
         $tree = $parents = [];
 
@@ -88,9 +88,12 @@ class Menu
 
         $treeSections = [];
 
-        foreach (static::prepareMenuSections($aMenuLinksExt) as $section) {
-            $treeSections = array_merge($treeSections, !empty($section[3]['CHILDREN']) ? $section[3]['CHILDREN'] : [$section]);
-        }
+        foreach (static::prepareMenuSections($aMenuLinksExt) as $section)
+            if ($section[3]['SALE_ONLY_SUBSECTIONS'] && !empty($section[3]['CHILDREN'])) {
+                $treeSections = array_merge($treeSections, $section[3]['CHILDREN']);
+            } else {
+                $treeSections[] = $section;
+            }
 
         return $treeSections;
     }

@@ -60,6 +60,7 @@ if($this->StartResultCache())
 			"NAME",
 			"SECTION_PAGE_URL",
 			"UF_NAME_EN",
+			"UF_SALE_ONLY_SUBSECTIONS",
 			"CODE",
 		));
 		if($arParams["IS_SEF"] !== "Y")
@@ -75,6 +76,7 @@ if($this->StartResultCache())
 				"~NAME" => $arSection["~NAME"],
 				"~SECTION_PAGE_URL" => $arSection["~SECTION_PAGE_URL"],
 				"~NAME_EN" => $arSection["UF_NAME_EN"],
+				"SALE_ONLY_SUBSECTIONS" => $arSection["UF_SALE_ONLY_SUBSECTIONS"],
 			);
 			$arResult["ELEMENT_LINKS"][$arSection["ID"]] = array();
 		}
@@ -151,6 +153,7 @@ foreach($arResult["SECTIONS"] as $arSection)
 			"IS_PARENT" => false,
 			"DEPTH_LEVEL" => $arSection["DEPTH_LEVEL"],
 			"CODE" => $arSection["CODE"],
+			"SALE_ONLY_SUBSECTIONS" => $arSection["SALE_ONLY_SUBSECTIONS"],
 		),
 	);
 }
