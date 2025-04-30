@@ -128,13 +128,14 @@ if ($isFilter) {
                 "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"],
                 'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
                 'CURRENCY_ID' => $arParams['CURRENCY_ID'],
-                "SEF_MODE" => $arParams["SEF_MODE"],
-                "SEF_RULE" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["smart_filter"],
+                "SEF_MODE" => "Y",
+                "SEF_RULE" =>$arResult['FOLDER'].$arResult['VARIABLES']['SECTION_CODE'].'/'.'filter/#SMART_FILTER_PATH#/apply/',
                 "SMART_FILTER_PATH" => $arResult["VARIABLES"]["SMART_FILTER_PATH"],
                 "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
                 "INSTANT_RELOAD" => $arParams["INSTANT_RELOAD"],
                 'SORT_LIST' => $content->getSortList(),
             ),
+
             $component,
             array('HIDE_ICONS' => 'Y')
         );
