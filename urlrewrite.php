@@ -1,8 +1,6 @@
 <?php
-require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
-
 $arUrlRewrite=array (
-  0 =>
+  0 => 
   array (
     'CONDITION' => '#^\\/?\\/mobileapp/jn\\/(.*)\\/.*#',
     'RULE' => 'componentName=$1',
@@ -10,7 +8,7 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/mobileapp/jn.php',
     'SORT' => 100,
   ),
-  2 =>
+  2 => 
   array (
     'CONDITION' => '#^/bitrix/services/ymarket/#',
     'RULE' => '',
@@ -18,7 +16,39 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/ymarket/index.php',
     'SORT' => 100,
   ),
-  1 =>
+  4 =>
+  array (
+    'CONDITION' => '#^catalog/sale/#',
+    'RULE' => '',
+    'ID' => 'bitrix:catalog',
+    'PATH' => 'catalog/sale/index.php',
+    'SORT' => 100,
+  ),
+    3 =>
+        array (
+            'CONDITION' => '#^/catalog/filter/(.+?)/apply/#',
+            'RULE' => 'SMART_FILTER_PATH=$1',
+            'ID' => '',
+            'PATH' => '/catalog/index.php',
+            'SORT' => 99,
+        ),
+  6 =>
+  array (
+    'CONDITION' => '#^/catalog/#',
+    'RULE' => '',
+    'ID' => 'bitrix:catalog',
+    'PATH' => '/catalog/index.php',
+    'SORT' => 100,
+  ),
+  5 =>
+  array (
+    'CONDITION' => '#^catalog/#',
+    'RULE' => '',
+    'ID' => 'bitrix:catalog',
+    'PATH' => 'catalog/index.php',
+    'SORT' => 100,
+  ),
+  1 => 
   array (
     'CONDITION' => '#^/rest/#',
     'RULE' => '',
@@ -26,20 +56,5 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/rest/index.php',
     'SORT' => 100,
   ),
-  3 =>
-  array (
-      'CONDITION' => '#^' . SITE_DIR . 'catalog/sale/#',
-      'RULE' => '',
-      'ID' => 'bitrix:catalog',
-      'PATH' => SITE_DIR . 'catalog/sale/index.php',
-      'SORT' => 100,
-  ),
-  4 =>
-  array (
-      'CONDITION' => '#^' . SITE_DIR . 'catalog/#',
-      'RULE' => '',
-      'ID' => 'bitrix:catalog',
-      'PATH' => SITE_DIR . 'catalog/index.php',
-      'SORT' => 100,
-  ),
+
 );
