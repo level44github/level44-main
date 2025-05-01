@@ -507,6 +507,6 @@ class Delivery
             $date = date('Y-m-d', strtotime("$date +1 day"));
         }
 
-        return $deliveryDates;
+        return array_filter($deliveryDates, fn($item) => $item['date'] !== '2025-05-09');
     }
 }
