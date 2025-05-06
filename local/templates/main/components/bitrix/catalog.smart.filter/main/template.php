@@ -185,35 +185,34 @@ $this->setFrameMode(true);
 			</div>
 
                 </div>
-            </div>
-
-            <div>
-                <div class="dropdown dropdown--right" data-dropdown id="">
-                    <div class="dropdown__header" role="button"><span
-                                class="dropdown__title"><?= current(array_filter($arParams["SORT_LIST"], fn($item) => $item["selected"]))['name'] ?></span><span
-                                class="dropdown__counter hidden">1</span>
-                        <svg class="icon icon-arrow-down dropdown__icon">
-                            <use xlink:href="#arrow-down"></use>
-                        </svg>
-                    </div>
-                    <div class="dropdown__content">
-                        <div class="catalog__filter-group">
-                            <div class="form-group">
-                                <label class="radio-label" for="form-sort">Сортировать</label>
-                                <div class="form-radio-group catalog__mobile-radio-group">
-                                    <? foreach ($arParams["SORT_LIST"] as $sortItem): ?>
-                                        <label class="form-radio">
-                                            <input type="radio"
-                                                   id="form-sort-<?= $sortItem["code"] ?>"
-                                                   name="sort"
-                                                   value="<?= $sortItem["code"] ?>"
-                                                <?= $sortItem["selected"] ? "checked" : '' ?>
-                                            >
-                                            <span><?= $sortItem["name"] ?></span>
-                                        </label>
-                                    <? endforeach; ?>
+                <div>
+                    <div class="dropdown dropdown--right" data-dropdown id="">
+                        <div class="dropdown__header" role="button"><span
+                                    class="dropdown__title"><?= current(array_filter($arParams["SORT_LIST"], fn($item) => $item["selected"]))['name'] ?></span><span
+                                    class="dropdown__counter hidden">1</span>
+                            <svg class="icon icon-arrow-down dropdown__icon">
+                                <use xlink:href="#arrow-down"></use>
+                            </svg>
+                        </div>
+                        <div class="dropdown__content">
+                            <div class="catalog__filter-group">
+                                <div class="form-group">
+                                    <label class="radio-label" for="form-sort">Сортировать</label>
+                                    <div class="form-radio-group catalog__mobile-radio-group">
+                                        <? foreach ($arParams["SORT_LIST"] as $sortItem): ?>
+                                            <label class="form-radio">
+                                                <input type="radio"
+                                                       id="form-sort-<?= $sortItem["code"] ?>"
+                                                       name="sort"
+                                                       value="<?= $sortItem["code"] ?>"
+                                                    <?= $sortItem["selected"] ? "checked" : '' ?>
+                                                >
+                                                <span><?= $sortItem["name"] ?></span>
+                                            </label>
+                                        <? endforeach; ?>
+                                    </div>
+                                    <div class="invalid-feedback">Пожалуйста, выберите значение</div>
                                 </div>
-                                <div class="invalid-feedback">Пожалуйста, выберите значение</div>
                             </div>
                         </div>
                     </div>
