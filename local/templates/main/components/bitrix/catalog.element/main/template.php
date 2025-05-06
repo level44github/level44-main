@@ -651,21 +651,26 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             </div>
             <? $APPLICATION->AddViewContent("sizes-table", ob_get_clean()); ?>
 
-            <? if (!empty($arResult['DETAIL_TEXT'])): ?>
+            <? if (!empty($arResult['DETAIL_TEXT']) || !empty($arResult['ARTNUMBER']) || !empty($arResult["PRODUCT_COMPOSITION"])): ?>
                 <div class="product__desc">
                     <div class="title"><?= Loc::getMessage('CT_BCE_CATALOG_DESCRIPTION') ?></div>
                     <div class="body">
-                        <? if (!empty($artnumber = $arResult["DISPLAY_PROPERTIES"]['ARTNUMBER']['DISPLAY_VALUE'])): ?>
-                            <p><?= Loc::getMessage('ARTICLE') ?>: <?= $artnumber ?></p>
+                        <? if (!empty($arResult['ARTNUMBER'])): ?>
+                            <p><?= Loc::getMessage('ARTICLE') ?>: <?= $arResult['ARTNUMBER'] ?></p>
                         <? endif; ?>
-                        <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
-                            <?= $arResult['DETAIL_TEXT'] ?>
-                        <? else: ?>
-                            <p><?= $arResult['DETAIL_TEXT'] ?></p>
+                        <? if (!empty($arResult['DETAIL_TEXT'])): ?>
+                            <? if ($arResult['DETAIL_TEXT_TYPE'] === 'html'): ?>
+                                <?= $arResult['DETAIL_TEXT'] ?>
+                            <? else: ?>
+                                <p><?= $arResult['DETAIL_TEXT'] ?></p>
+                            <? endif; ?>
+                        <? endif; ?>
+                        <? if (!empty($arResult["PRODUCT_COMPOSITION"])): ?>
+                            <p><?= Loc::getMessage('COMPOSITION') ?>: <?= $arResult["PRODUCT_COMPOSITION"] ?></p>
                         <? endif; ?>
                     </div>
                 </div>
-            <?endif; ?>
+            <? endif; ?>
             <div class="product__accordions">
                 <? if (!empty($arResult['STORES'])): ?>
                     <div class="accordion">

@@ -64,5 +64,6 @@ $MESS["ARTICLE"] = "Article";
 $MESS["AVAILABILITY"] = "Available in the store";
 $MESS["MEASUREMENTS"] = "Product measurements";
 $MESS["CARE"] = "Care instructions";
+$MESS["COMPOSITION"] = "Composition";
 
 ?>
