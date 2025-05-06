@@ -66,5 +66,6 @@ $MESS["ARTICLE"] = "Артикул";
 $MESS["AVAILABILITY"] = "Наличие в магазинах";
 $MESS["MEASUREMENTS"] = "Обмеры изделия";
 $MESS["CARE"] = "Уход";
+$MESS["COMPOSITION"] = "Состав";
 
 ?>

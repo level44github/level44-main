@@ -32,10 +32,16 @@ $arResult["DETAIL_TEXT"] = \Level44\Base::getMultiLang(
     $arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["DISPLAY_VALUE"]
 );
 
+if (!empty($arResult["DETAIL_TEXT"])) {
+    $arResult["DETAIL_TEXT"] = preg_replace('#(\s*<br\s*/?>)*\s*$#i', '', $arResult["DETAIL_TEXT"]);
+}
+
 $arResult["DETAIL_TEXT_TYPE"] = \Level44\Base::getMultiLang(
     $arResult["DETAIL_TEXT_TYPE"],
     strtolower($arResult["DISPLAY_PROPERTIES"]["DETAIL_TEXT_EN"]["VALUE"]["TYPE"])
 );
+
+$arResult['ARTNUMBER'] = $arResult["DISPLAY_PROPERTIES"]['ARTNUMBER']['DISPLAY_VALUE'];
 
 foreach ($arResult['SKU_PROPS'] as &$skuProp) {
     foreach ($skuProp['VALUES'] as &$value) {
@@ -78,6 +84,11 @@ $arResult["MEASUREMENTS"] = \Level44\Base::getMultiLang(
 $arResult["CARE_INFO"] = \Level44\Base::getMultiLang(
     $arResult["DISPLAY_PROPERTIES"]["CARE_INFO"]["DISPLAY_VALUE"],
     $arResult["DISPLAY_PROPERTIES"]["CARE_INFO_EN"]["DISPLAY_VALUE"]
+);
+
+$arResult["PRODUCT_COMPOSITION"] = \Level44\Base::getMultiLang(
+    $arResult["DISPLAY_PROPERTIES"]["PRODUCT_COMPOSITION"]["DISPLAY_VALUE"],
+    $arResult["DISPLAY_PROPERTIES"]["EN_PRODUCT_COMPOSITION"]["DISPLAY_VALUE"]
 );
 
 $APPLICATION->SetTitle($arResult["NAME"]);
