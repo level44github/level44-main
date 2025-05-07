@@ -8,7 +8,6 @@ use Bitrix\Main\Context;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
-use Bitrix\Main\LoaderException;
 use Bitrix\Main\NotImplementedException;
 use Bitrix\Main\NotSupportedException;
 use Bitrix\Main\ObjectPropertyException;
@@ -17,17 +16,12 @@ use Bitrix\Sale\Delivery\CalculationResult;
 use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Order;
 use Bitrix\Sale\Shipment;
-use DalliservicecomDelivery;
 use \Level44\CustomKCEClass;
 use Level44\Delivery;
 use Level44\Enums\DeliveryType;
-use Level44\CustomDalliservicecomDelivery;
 
 class CheckoutHandlers extends HandlerBase
 {
-    /**
-     * @throws LoaderException
-     */
     public static function register()
     {
         static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
@@ -35,13 +29,8 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
         static::addEventHandler("sale", "OnSaleShipmentSetField");
         static::addEventHandler("sale", "OnSaleStatusOrderChange", CustomKCEClass::class, sort: 50);
-        static::removeKCEOrderStatusHandler();
+        static::removeKCEOnSaleOrderSavedHandler();
         static::addEventHandler("sale", "OnSaleStatusShipmentChange", CustomKCEClass::class);
-
-        if (Loader::includeModule('dalliservicecom.delivery') && class_exists(DalliservicecomDelivery::class)) {
-            static::addEventHandler("sale", "OnSaleBeforeStatusOrderChange", CustomDalliservicecomDelivery::class, compatible: true);
-            static::removeDalliOrderStatusHandler();
-        }
     }
 
 
@@ -233,24 +222,13 @@ class CheckoutHandlers extends HandlerBase
         return new EventResult(EventResult::SUCCESS);
     }
 
-    public static function removeKCEOrderStatusHandler()
+    public static function removeKCEOnSaleOrderSavedHandler()
     {
         $handlers = \Bitrix\Main\EventManager::getInstance()->findEventHandlers("sale", "OnSaleStatusOrderChange");
         foreach ($handlers as $hKey => $handler) {
             if ($handler['TO_METHOD'] === 'KCEOnSaleOrderSavedHandler') {
                 $eventManager = \Bitrix\Main\EventManager::getInstance();
                 $eventManager->removeEventHandler('sale', 'OnSaleStatusOrderChange', $hKey);
-            }
-        }
-    }
-
-    public static function removeDalliOrderStatusHandler()
-    {
-        $handlers = \Bitrix\Main\EventManager::getInstance()->findEventHandlers("sale", "OnSaleBeforeStatusOrderChange");
-        foreach ($handlers as $hKey => $handler) {
-            if ($handler['TO_CLASS'] === 'DalliservicecomDelivery' && $handler['TO_METHOD'] === 'OnSaleBeforeStatusOrderChange') {
-                $eventManager = \Bitrix\Main\EventManager::getInstance();
-                $eventManager->removeEventHandler('sale', 'OnSaleBeforeStatusOrderChange', $hKey);
             }
         }
     }
