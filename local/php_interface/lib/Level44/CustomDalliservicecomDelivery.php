@@ -17,7 +17,7 @@ use Exception;
 
 class CustomDalliservicecomDelivery extends DalliservicecomDelivery
 {
-    public static function OnSaleBeforeStatusOrderChange($order)
+    public static function OnSaleBeforeStatusOrderChangeHandler($order)
     {
         if ($order->getField('STATUS_ID') != COption::GetOptionString('dalliservicecom.delivery', 'SEND_ON_STATUS'))
             return false;
@@ -232,6 +232,9 @@ class CustomDalliservicecomDelivery extends DalliservicecomDelivery
                     } else {
                         $result['item_retprice_' . $i] = $arItem['PRICE'];
                     }
+
+                    $result['item_inshprice_' . $i] = $result['item_retprice_' . $i] / 2;
+
                     if(count($governmentCodes[$arItem["PRODUCT_ID"]])>1){
                         $arItem['QUANTITY'] = 1;
                     }
@@ -278,7 +281,13 @@ class CustomDalliservicecomDelivery extends DalliservicecomDelivery
             $result['paytype'] = 'NO';
         if (empty($result['paytype']))
             $result['paytype'] = 'CASH';
-        $result['inshprice'] = $result['price'];
+
+        if ($result['paytype'] === 'NO') {
+            $result['inshprice'] = $result['price'] / 2;
+        } else {
+            $result['inshprice'] = $result['price'];
+        }
+
         $result['place_quantity'] = 1;
         $errors = self::sendOrder2DS($result, true);
         if (!empty($errors)) {
@@ -335,6 +344,10 @@ class CustomDalliservicecomDelivery extends DalliservicecomDelivery
                     $index = substr($key, 14);
                     $arrItems[$index]['retprice'] = $param;
                 }
+                if (strpos($key, 'item_inshprice_') !== false) {
+                    $index = substr($key, 15);
+                    $arrItems[$index]['inshprice'] = $param;
+                }
                 if (strpos($key, 'item_name_') !== false) {
                     $index = substr($key, 10);
                     $arrItems[$index]['name'] = $param;
@@ -352,10 +365,11 @@ class CustomDalliservicecomDelivery extends DalliservicecomDelivery
             if (count($arrItems) > 0) {
                 foreach ($arrItems as $item) {
                     $items .= sprintf(
-                        "<item quantity='%s' mass='%s' retprice='%s' barcode='%s' article='%s' governmentCode='%s' VATrate='%s'>%s</item>",
+                        "<item quantity='%s' mass='%s' retprice='%s' inshprice='%s' barcode='%s' article='%s' governmentCode='%s' VATrate='%s'>%s</item>",
                         $item["quantity"],
                         $item["mass"],
                         $item["retprice"],
+                        $item["inshprice"],
                         $item["barcode"],
                         $item["article"],
                         $item["governmentCode"],
