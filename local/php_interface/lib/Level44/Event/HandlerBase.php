@@ -7,7 +7,14 @@ use CIBlockProperty;
 
 class HandlerBase
 {
-    protected static function addEventHandler($moduleId, $eventType, ?string $class = null, ?string $method = null, ?int $sort = 100): void
+    protected static function addEventHandler(
+        $moduleId,
+        $eventType,
+        ?string $class = null,
+        ?string $method = null,
+        ?int $sort = 100,
+        ?bool $compatible = false
+    ): void
     {
         $instance = EventManager::getInstance();
 
@@ -25,13 +32,23 @@ class HandlerBase
             return;
         }
 
-        $instance->addEventHandler(
-            $moduleId,
-            $eventType,
-            [$class, $method],
-            false,
-            $sort
-        );
+        if ($compatible) {
+            $instance->addEventHandlerCompatible(
+                $moduleId,
+                $eventType,
+                [$class, $method],
+                false,
+                $sort
+            );
+        } else {
+            $instance->addEventHandler(
+                $moduleId,
+                $eventType,
+                [$class, $method],
+                false,
+                $sort
+            );
+        }
     }
 
 
