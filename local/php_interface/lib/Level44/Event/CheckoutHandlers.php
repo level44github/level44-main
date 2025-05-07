@@ -38,7 +38,7 @@ class CheckoutHandlers extends HandlerBase
         static::removeKCEOrderStatusHandler();
         static::addEventHandler("sale", "OnSaleStatusShipmentChange", CustomKCEClass::class);
 
-        if (Loader::includeModule('dalliservicecom.delivery') && class_exists(DalliservicecomDelivery::class)) {
+        if (Loader::includeModule('dalliservicecom.delivery') && class_exists(DalliservicecomDelivery::class, false)) {
             static::addEventHandler("sale", "OnSaleBeforeStatusOrderChange", CustomDalliservicecomDelivery::class, compatible: true);
             static::removeDalliOrderStatusHandler();
         }
