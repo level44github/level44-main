@@ -228,6 +228,9 @@
 				this.processPagination(result.pagination);
 				this.processEpilogue(result.epilogue);
 				this.checkButton();
+
+				const event = new Event("set_carousel");
+				window.dispatchEvent(event);
 			}
 		},
 
