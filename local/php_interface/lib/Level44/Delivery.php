@@ -100,10 +100,6 @@ class Delivery
             return DeliveryType::Shop;
         }
 
-        if ($code === 'level44:courier_fitting') {
-            return DeliveryType::CourierFitting;
-        }
-
         if ($code === 'sdek:pickup') {
             return DeliveryType::Pickup;
         }
@@ -131,7 +127,7 @@ class Delivery
     {
         $deliveries = static::getDeliveries();
 
-        if (in_array($deliveries[$delivery['ID']]['CODE'], ['level44:pickup', 'level44:courier_fitting'])) {
+        if ($deliveries[$delivery['ID']]['CODE'] === 'level44:pickup') {
             $period = $deliveries[$delivery['ID']]['CONFIG']['MAIN']['PERIOD'];
 
             if (($from = (int)$period['FROM']) && ($to = (int)$period['TO']) && $period['TYPE'] === 'D') {
@@ -140,7 +136,7 @@ class Delivery
         }
 
         //Get max value from period
-        if (static::getType($delivery['ID']) === DeliveryType::Courier) {
+        if (in_array(static::getType($delivery['ID']), [DeliveryType::CourierFitting, DeliveryType::Courier])) {
             $forms = [Loc::getMessage("PERIOD_DAY"), Loc::getMessage("PERIOD_DAYA"), Loc::getMessage("PERIOD_DAYS")];
             [$period, $measure] = explode(' ', trim($delivery["PERIOD_TEXT"]));
             [$from, $to] = explode('-', $period);
@@ -246,7 +242,7 @@ class Delivery
         $deliveryType = static::getType($deliveryId);
         $calculated = $price;
 
-        if ($deliveryType === DeliveryType::Courier) {
+        if (in_array($deliveryType, [DeliveryType::Courier, DeliveryType::CourierFitting])) {
             $isMoscow = function ($code) {
                 return static::includedInRegion($code, self::MSK_LOCATION_CODE) || static::includedInRegion($code, self::MO_LOCATION_CODE);
             };
@@ -310,8 +306,6 @@ class Delivery
 
                 $zone = static::getDalliZone($properties['LOCATION'], $properties['ADDRESS']);
                 $slots = static::getDalliDates($properties['LOCATION'], $zone, $serviceCode);
-            } elseif ($serviceCode === 'level44:courier_fitting') {
-                $slots = static::getOwnCourierFittingDates();
             }
         } catch (\Exception) {
         }
@@ -481,32 +475,5 @@ class Delivery
                 $locationCode === $regionCode
                 || LocationTable::checkNodeIsParentOfNode($regionCode, $locationCode, ['ACCEPT_CODE' => true])
             );
-    }
-
-    /**
-     * @return array
-     */
-    public static function getOwnCourierFittingDates(): array
-    {
-        $deliveryDates = [];
-        $date = date('Y-m-d', strtotime('+2 day'));
-        $timeIntervals = [
-            ['value' => '12:00 - 14:00',],
-            ['value' => '14:00 - 16:00',],
-            ['value' => '16:00 - 18:00',],
-            ['value' => '18:00 - 20:00',],
-            ['value' => '20:00 - 21:00',],
-        ];
-
-        for ($i = 0; $i < 5; $i++) {
-            $deliveryDates[] = [
-                'date'      => $date,
-                'intervals' => $timeIntervals,
-            ];
-
-            $date = date('Y-m-d', strtotime("$date +1 day"));
-        }
-
-        return $deliveryDates;
     }
 }
