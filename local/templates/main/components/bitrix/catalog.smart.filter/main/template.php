@@ -16,8 +16,6 @@ use Bitrix\Iblock\SectionPropertyTable;
 $this->setFrameMode(true);
 
 
-
-
 ?>
 
 		<form name="<?echo $arResult["FILTER_NAME"]."_form"?>" action="<?echo $arResult["FORM_ACTION"]?>" method="get" class="catalog__desktop-form">
@@ -204,6 +202,7 @@ $this->setFrameMode(true);
                                                 <input type="radio"
                                                        id="form-sort-<?= $sortItem["code"] ?>"
                                                        name="sort"
+                                                       data-section="<?=$arParams['SECTION_ID']?>"
                                                        value="<?= $sortItem["code"] ?>"
                                                     <?= $sortItem["selected"] ? "checked" : '' ?>
                                                 >
@@ -248,6 +247,7 @@ $this->setFrameMode(true);
                                 <input type="radio"
                                        id="form-sort-<?= $sortItem["code"] ?>"
                                        name="sort"
+                                       data-section="<?=$arParams['SECTION_ID']?>"
                                        value="<?= $sortItem["code"] ?>"
                                     <?= $sortItem["selected"] ? "checked" : '' ?>
                                 >

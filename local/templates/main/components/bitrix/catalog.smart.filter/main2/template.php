@@ -282,6 +282,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                                id="form-sort-<?= $sortItem["code"] ?>"
                                                name="sort"
                                                value="<?= $sortItem["code"] ?>"
+                                               data-section=""
                                             <?= $sortItem["selected"] ? "checked" : '' ?>
                                         >
                                         <span><?= $sortItem["name"] ?></span>
