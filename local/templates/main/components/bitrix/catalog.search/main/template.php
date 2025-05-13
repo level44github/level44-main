@@ -19,7 +19,7 @@ $this->setFrameMode(true);
 
 global $searchFilter;
 
-$content = new Content();
+$content = new Content(999999999);
 
 $elementOrder = array();
 if ($arParams['USE_SEARCH_RESULT_ORDER'] === 'N')

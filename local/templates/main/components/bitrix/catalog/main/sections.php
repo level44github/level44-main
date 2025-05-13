@@ -72,7 +72,9 @@ if ($isFilter) {
     if (!isset($arCurSection)) {
         $arCurSection = array();
     }
-} ?>
+}
+
+?>
 
 <?php $APPLICATION->IncludeComponent(
     'bitrix:breadcrumb',
@@ -107,7 +109,7 @@ if ($isFilter) {
     </div>
     <div class="catalog__col right">
         <?
-        $content = new Content();
+        $content = new Content(0);
 
 
         $APPLICATION->IncludeComponent(
