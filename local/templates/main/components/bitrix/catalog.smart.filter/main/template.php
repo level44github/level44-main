@@ -202,7 +202,7 @@ $this->setFrameMode(true);
                                                 <input type="radio"
                                                        id="form-sort-<?= $sortItem["code"] ?>"
                                                        name="sort"
-                                                       data-section="<?=$arParams['SECTION_ID']?>"
+                                                       data-sort-cookie-name="<?= $arParams['SORT_COOKIE_NAME'] ?>"
                                                        value="<?= $sortItem["code"] ?>"
                                                     <?= $sortItem["selected"] ? "checked" : '' ?>
                                                 >
