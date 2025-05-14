@@ -178,16 +178,28 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/delivery.php");
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/paysystem.php");
         ?>
-        <div class="d-lg-block">
+        <div class="d-none d-lg-block js-submit-block">
+            <div class="privacy-checkboxes">
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="subscribe" name="subscribe"
+                            <?= $arResult['SUBSCRIBE_CHECKED'] ? 'checked' : '' ?>
+                               value="Y">
+                        <span><?= Loc::getMessage('CHECKOUT_NEWSLETTER_CONSENT') ?></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="policy" name="policy" checked value="Y">
+                        <span><?= Loc::getMessage('CHECKOUT_PRIVACY_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
+                    </label>
+                </div>
+            </div>
             <div class="form-group">
                 <button class="btn btn-dark btn__fix-width"
                         onclick="submitForm('Y'); return false;"
                         type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
             </div>
-            <p class="text-muted"><?= Loc::getMessage("OFERTA_MESS1") ?><a href="<?= SITE_DIR ?>about/offer/">
-                <?= Loc::getMessage("OFERTA") ?>
-                </a>
-            </p>
         </div>
         <input type="hidden" name="out_russia">
     </div>
@@ -195,6 +207,29 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         <?
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/summary.php");
         ?>
+        <div class="d-lg-none js-submit-block">
+            <div class="privacy-checkboxes">
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="subscribe-mobile" name="subscribe"
+                            <?= $arResult['SUBSCRIBE_CHECKED'] ? 'checked' : '' ?>
+                               value="Y">
+                        <span><?= Loc::getMessage('CHECKOUT_NEWSLETTER_CONSENT') ?></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="policy-mobile" name="policy" checked value="Y">
+                        <span><?= Loc::getMessage('CHECKOUT_PRIVACY_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-dark btn-block"
+                        onclick="submitForm('Y'); return false;"
+                        type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
+            </div>
+        </div>
     </div>
         <? if ($_POST["is_ajax_post"] !== "Y"): ?>
     <input type="hidden" name="confirmorder" id="confirmorder" value="Y">

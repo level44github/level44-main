@@ -5,6 +5,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 
 use Bitrix\Main\Context;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\UserTable;
 use Bitrix\Sale\Location\LocationTable;
 use Level44\Base;
 use Level44\Product;
@@ -294,3 +295,10 @@ if (!empty($arResult['CURRENT_DELIVERY'])) {
 }
 
 $arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];
+
+$user = UserTable::getList([
+    'filter' => ['=ID' => $arResult['ORDER_DATA']['USER_ID']],
+    'select' => ['ID', 'UF_SUBSCRIBED_TO_NEWSLETTER']
+])->fetch();
+
+$arResult['SUBSCRIBE_CHECKED'] = $user['UF_SUBSCRIBED_TO_NEWSLETTER'] === '1' || $_POST["subscribe"] === 'Y';

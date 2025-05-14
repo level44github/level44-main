@@ -880,4 +880,17 @@ $(function () {
 
 
     BX.saleOrderAjax.setAddressSuggestions();
+
+    $(document).on('change', '[name="subscribe"]', function () {
+        $('[name="subscribe"]').prop('checked', $(this).prop('checked'));
+    });
+
+    $(document).on('change', '[name="policy"]', function () {
+        const submitButton = $(this).closest('.js-submit-block').find('button[type="submit"]')
+        if ($(this).prop('checked')) {
+            submitButton.prop('disabled', false)
+        } else {
+            submitButton.prop('disabled', true)
+        }
+    });
 });

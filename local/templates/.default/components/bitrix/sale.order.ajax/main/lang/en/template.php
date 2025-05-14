@@ -81,4 +81,8 @@ $MESS["TO_CHECKOUT"] = "Proceed to Checkout";
 $MESS["OFERTA_MESS2"] = "By clicking the \"Checkout\" button, you agree to";
 $MESS["OFERTA2"] = "public offer";
 $MESS["CHECKOUT_TITLE"] = "Checkout";
+$MESS["CHECKOUT_NEWSLETTER_CONSENT"] = "I agree to receive an advertising and informational newsletter.";
+$MESS["CHECKOUT_PRIVACY_CONSENT"] = "I agree with <a
+                                    href=\"#SITE_DIR#about/personal/\" target=\"_blank\">the privacy policy</a> and <a
+                                    href=\"#SITE_DIR#about/offer/\" target=\"_blank\">the public offer</a>";
 ?>
