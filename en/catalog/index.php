@@ -5,16 +5,6 @@ $APPLICATION->SetTitle("Catalog");
 
 
 <?
-global $arrFilter;
-
-$arrFilter = [
-    [
-        'LOGIC'                => 'OR',
-        "<=PROPERTY_OLD_PRICE" => 0,
-        'ID'                   => [3480, 3437]
-    ]
-];
-
 $APPLICATION->IncludeComponent(
     "bitrix:catalog",
     "main",
