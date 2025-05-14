@@ -13,22 +13,22 @@
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
-use Level44\Content;
+use Level44\Sort;
 
 $this->setFrameMode(true);
 
 global $searchFilter;
 
-$content = new Content(999999999);
+$sort = new Sort('search');
 
 $elementOrder = array();
 if ($arParams['USE_SEARCH_RESULT_ORDER'] === 'N')
 {
 	$elementOrder = array(
-        "ELEMENT_SORT_FIELD"  => $content->getSortValue('field'),
-        "ELEMENT_SORT_FIELD2" => $content->getSortValue('field2'),
-        "ELEMENT_SORT_ORDER"  => $content->getSortValue('order'),
-        "ELEMENT_SORT_ORDER2" => $content->getSortValue('order2'),
+        "ELEMENT_SORT_FIELD"  => $sort->getValue('field'),
+        "ELEMENT_SORT_FIELD2" => $sort->getValue('field2'),
+        "ELEMENT_SORT_ORDER"  => $sort->getValue('order'),
+        "ELEMENT_SORT_ORDER2" => $sort->getValue('order2'),
 	);
 }
 
@@ -244,7 +244,8 @@ if (!empty($searchFilter) && is_array($searchFilter))
                         "SMART_FILTER_PATH" => $arResult["VARIABLES"]["SMART_FILTER_PATH"],
                         "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
                         "INSTANT_RELOAD" => $arParams["INSTANT_RELOAD"],
-                        'SORT_LIST' => $content->getSortList(),
+                        'SORT_LIST' => $sort->getList(),
+                        'SORT_COOKIE_NAME' => $sort->getCookieName(),
                     ),
                     $component,
                     array('HIDE_ICONS' => 'Y')
