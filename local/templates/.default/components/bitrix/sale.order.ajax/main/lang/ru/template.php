@@ -82,4 +82,8 @@ $MESS["TO_CHECKOUT"] = "Перейти к оформлению заказа";
 $MESS["OFERTA_MESS2"] = "Нажимая кнопку «Оформить заказ», вы соглашаетесь с";
 $MESS["OFERTA2"] = "публичной офертой";
 $MESS["CHECKOUT_TITLE"] = "Оформление заказа";
+$MESS["CHECKOUT_NEWSLETTER_CONSENT"] = "Я согласен(-на) на получение рекламно-информационной рассылки.";
+$MESS["CHECKOUT_PRIVACY_CONSENT"] = "Я согласен(-на) с <a
+                                    href=\"#SITE_DIR#about/personal/\" target=\"_blank\">политикой конфиденциальности</a> и <a
+                                    href=\"#SITE_DIR#about/offer/\" target=\"_blank\">публичной офертой</a>";
 ?>

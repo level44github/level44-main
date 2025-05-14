@@ -33,6 +33,7 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "onSaleDeliveryServiceCalculate");
         static::addEventHandler("sale", "OnSaleComponentOrderOneStepDelivery");
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
+        static::addEventHandler("sale", "OnSaleOrderSaved");
         static::addEventHandler("sale", "OnSaleShipmentSetField");
         static::addEventHandler("sale", "OnSaleStatusOrderChange", CustomKCEClass::class, sort: 50);
         static::removeKCEOrderStatusHandler();
@@ -253,5 +254,22 @@ class CheckoutHandlers extends HandlerBase
                 $eventManager->removeEventHandler('sale', 'OnSaleBeforeStatusOrderChange', $hKey);
             }
         }
+    }
+
+    public static function OnSaleOrderSavedHandler(Event $event)
+    {
+        /** @var Order $order */
+        $order = $event->getParameter("ENTITY");
+        $request = Context::getCurrent()->getRequest();
+        $userId = $order->getUserId();
+
+        if ($request->getPost('confirmorder') && !empty($userId)) {
+            $obUser = new \CUser();
+            $obUser->Update($userId, [
+                'UF_SUBSCRIBED_TO_NEWSLETTER' => $request->getPost('subscribe') === 'Y' ? '1' : '0'
+            ]);
+        }
+
+        return new EventResult(EventResult::SUCCESS, $event->getParameters());
     }
 }

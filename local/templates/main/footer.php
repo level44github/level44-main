@@ -119,6 +119,18 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
 </footer>
 <? $APPLICATION->ShowViewContent("image-modal"); ?>
 </div>
+
+<div class="cookie-modal" id="cookie-modal">
+    <div class="cookie-modal__content">
+        <div class="message"><?= Loc::getMessage('COOKIE_MODAL_DESCRIPTION', ['#SITE_DIR#' => SITE_DIR]) ?></div>
+        <div class="action">
+            <button class="btn btn-dark btn-block js-cookie-accept" id="cookie-accept"
+                    type="button"><?= Loc::getMessage('COOKIE_MODAL_BUTTON_TEXT') ?>
+            </button>
+        </div>
+    </div>
+</div>
+
 <?
 Base::loadScripts();
 ?>
