@@ -185,12 +185,12 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                         <input type="checkbox" id="subscribe" name="subscribe"
                             <?= $arResult['SUBSCRIBE_CHECKED'] ? 'checked' : '' ?>
                                value="Y">
-                        <span><?= Loc::getMessage('CHECKOUT_NEWSLETTER_CONSENT') ?></span>
+                        <span><?= Loc::getMessage('CHECKOUT_NEWSLETTER_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
                     </label>
                 </div>
                 <div class="form-group">
                     <label class="form-checkbox">
-                        <input type="checkbox" id="policy" name="policy" checked value="Y">
+                        <input type="checkbox" id="policy" name="policy" value="Y">
                         <span><?= Loc::getMessage('CHECKOUT_PRIVACY_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
                     </label>
                 </div>
@@ -198,6 +198,8 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             <div class="form-group">
                 <button class="btn btn-dark btn__fix-width"
                         onclick="submitForm('Y'); return false;"
+                    <? //Становится активным, если отметить согласие ?>
+                        disabled
                         type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
             </div>
         </div>
@@ -214,12 +216,12 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                         <input type="checkbox" id="subscribe-mobile" name="subscribe"
                             <?= $arResult['SUBSCRIBE_CHECKED'] ? 'checked' : '' ?>
                                value="Y">
-                        <span><?= Loc::getMessage('CHECKOUT_NEWSLETTER_CONSENT') ?></span>
+                        <span><?= Loc::getMessage('CHECKOUT_NEWSLETTER_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
                     </label>
                 </div>
                 <div class="form-group">
                     <label class="form-checkbox">
-                        <input type="checkbox" id="policy-mobile" name="policy" checked value="Y">
+                        <input type="checkbox" id="policy-mobile" name="policy" value="Y">
                         <span><?= Loc::getMessage('CHECKOUT_PRIVACY_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
                     </label>
                 </div>
@@ -227,6 +229,8 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             <div class="form-group">
                 <button class="btn btn-dark btn-block"
                         onclick="submitForm('Y'); return false;"
+                    <? //Становится активным, если отметить согласие ?>
+                        disabled
                         type="submit"><?= Loc::getMessage("CHECKOUT") ?></button>
             </div>
         </div>
