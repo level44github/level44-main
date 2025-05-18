@@ -83,7 +83,6 @@ class Exchange1cHandlers extends HandlerBase
                 }
             }
 
-            $res = \CIBlockElement::GetElementGroups($arFields["ID"], true, ['ID', 'XML_ID']);
             $product = \CIBlockElement::GetList([], ['ID' => $arFields["ID"]], false, false, [
                 'ID',
                 'NAME',
@@ -93,19 +92,21 @@ class Exchange1cHandlers extends HandlerBase
                 'PROPERTY_ON_MODERATION'
             ])->GetNext();
 
-            $onlyBitrixSections = [];
+            if (is_array($arFields['IBLOCK_SECTION'])) {
+                $res = \CIBlockElement::GetElementGroups($arFields["ID"], true, ['ID', 'XML_ID']);
+                $onlyBitrixSections = [];
 
-            while ($section = $res->GetNext()) {
-                if (empty($section['XML_ID'])) {
-                    $onlyBitrixSections[] = $section['ID'];
+                while ($section = $res->GetNext()) {
+                    if (empty($section['XML_ID'])) {
+                        $onlyBitrixSections[] = $section['ID'];
+                    }
                 }
-            }
 
-            if (!empty($onlyBitrixSections)) {
-                $arFields['IBLOCK_SECTION'] = is_array($arFields['IBLOCK_SECTION']) ? $arFields['IBLOCK_SECTION'] : [];
-                $arFields['IBLOCK_SECTION'] = array_values(
-                    array_unique(array_merge($arFields['IBLOCK_SECTION'], $onlyBitrixSections), SORT_REGULAR)
-                );
+                if (!empty($onlyBitrixSections)) {
+                    $arFields['IBLOCK_SECTION'] = array_values(
+                        array_unique(array_merge($arFields['IBLOCK_SECTION'], $onlyBitrixSections), SORT_REGULAR)
+                    );
+                }
             }
 
             $arFields['NAME'] = $product['~NAME'] ?: $arFields['NAME'];
