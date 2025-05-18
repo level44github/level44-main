@@ -56,5 +56,12 @@ $aMenuLinks = Array(
       Array(),
       "",
     ),
+    Array(
+      "Согласие на получение рассылок",
+      SITE_DIR . "about/consent-to-receive-newsletters/",
+      Array(),
+      Array(),
+      "",
+    ),
 );
 ?>
