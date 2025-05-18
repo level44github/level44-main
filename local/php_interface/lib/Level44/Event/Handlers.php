@@ -6,6 +6,7 @@ namespace Level44\Event;
 use Bitrix\Catalog\Model\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
+use Bitrix\Main\Type\DateTime;
 use Bitrix\Sale\Delivery\CalculationResult;
 use Level44\Base;
 use Level44\PreOrder;
@@ -22,6 +23,8 @@ class Handlers extends HandlerBase
         static::addEventHandler("main", "OnBeforeUserAdd");
 
         static::addEventHandler("iblock", "OnBeforeIBlockElementUpdate");
+        static::addEventHandler("iblock", "OnIBlockElementUpdate");
+        static::addEventHandler("catalog", "OnSuccessCatalogImport1C");
         static::addEventHandler("iblock", "OnBeforeIBlockElementAdd");
         static::addEventHandler("iblock", "OnBeforeIBlockUpdate");
 
@@ -471,5 +474,91 @@ LAYOUT;
         $result->modifyFields($fields);
 
         return $result;
+    }
+
+    public static function OnIBlockElementUpdateHandler($newFields)
+    {
+        $observedProducts = [
+            2736,
+            2751,
+            2754,
+            3110,
+            3167,
+            3367,
+        ];
+
+        if (!in_array($newFields['ID'], $observedProducts)) {
+            return;
+        }
+
+        $product = \CIBlockElement::GetList(
+            [],
+            ['ID' => $newFields['ID']],
+            false,
+            false,
+            [
+                'ID',
+                'IBLOCK_ID',
+                'PROPERTY_OLD_PRICE',
+            ]
+        )->GetNext();
+
+        $properties = static::getProperties(\Level44\Base::CATALOG_IBLOCK_ID);
+        $newOldPrice = static::getPropertyValue($newFields["PROPERTY_VALUES"][$properties["OLD_PRICE"]]);
+
+        $res = \CIBlockElement::GetElementGroups($newFields['ID']);
+
+        $productSections = [];
+        while ($section = $res->fetch()) {
+            $productSections[] = (int)$section['ID'];
+        }
+
+        if (($productOldPrice = (int)$product['PROPERTY_OLD_PRICE_VALUE']) !== $newOldPrice) {
+            static::addToLog("Changes of product [{$newFields["ID"]}]", "OLD_PRICE", $productOldPrice, $newOldPrice);
+        }
+
+        if (!(array_diff($newFields['IBLOCK_SECTION'], $productSections) === [] && array_diff($productSections, $newFields['IBLOCK_SECTION']) === [])) {
+            static::addToLog("Changes of product [{$newFields["ID"]}]", "IBLOCK_SECTION", json_encode($productSections), json_encode($newFields['IBLOCK_SECTION']));
+        }
+    }
+
+    static function addToLog($text, $typeValue, $oldValue, $newValue)
+    {
+        global $USER;
+
+        $dateTime = new DateTime();
+
+        $log = "{$dateTime->format('Y-m-d H:i:s')} - $text\n";
+        $log .= "TYPE: $typeValue\n";
+        $log .= "OLD VALUE: $oldValue\n";
+        $log .= "NEW VALUE: $newValue\n";
+
+        if ($USER) {
+            $log .= "USER: {$USER->GetID()}\n";
+        }
+
+        ob_start();
+        debug_print_backtrace();
+        $trace = ob_get_clean();
+
+        $log .= "TRACE:\n";
+        $log .= "$trace\n\n\n";
+
+        $productsChangesLog = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/products_changes.log');
+        $productsChangesLog .= $log;
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/upload/products_changes.log', $productsChangesLog);
+    }
+
+    public static function OnSuccessCatalogImport1CHandler($arParams, $fileName)
+    {
+        $dateTime = (new \Bitrix\Main\Type\DateTime())->format('Y-m-d_H-i-s');
+
+        if (str_contains($fileName, 'goods_')) {
+            copy($fileName, $_SERVER['DOCUMENT_ROOT'] . "/upload/1c_files/goods_$dateTime.xml");
+        }
+
+        if (str_contains($fileName, 'groups_')) {
+            copy($fileName, $_SERVER['DOCUMENT_ROOT'] . "/upload/1c_files/groups_$dateTime.xml");
+        }
     }
 }
