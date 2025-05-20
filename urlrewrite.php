@@ -1,11 +1,27 @@
 <?php
 $arUrlRewrite=array (
+  3 => 
+  array (
+    'CONDITION' => '#^/catalog/filter/(.+?)/apply/#',
+    'RULE' => 'SMART_FILTER_PATH=$1',
+    'ID' => '',
+    'PATH' => '/catalog/index.php',
+    'SORT' => 99,
+  ),
   0 => 
   array (
     'CONDITION' => '#^\\/?\\/mobileapp/jn\\/(.*)\\/.*#',
     'RULE' => 'componentName=$1',
     'ID' => NULL,
     'PATH' => '/bitrix/services/mobileapp/jn.php',
+    'SORT' => 100,
+  ),
+  7 => 
+  array (
+    'CONDITION' => '#^/search/filter/(.+?)/apply/#',
+    'RULE' => 'SMART_FILTER_PATH=$1',
+    'ID' => '',
+    'PATH' => '/search/index.php',
     'SORT' => 100,
   ),
   2 => 
@@ -16,7 +32,7 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/ymarket/index.php',
     'SORT' => 100,
   ),
-  4 =>
+  4 => 
   array (
     'CONDITION' => '#^catalog/sale/#',
     'RULE' => '',
@@ -24,15 +40,7 @@ $arUrlRewrite=array (
     'PATH' => 'catalog/sale/index.php',
     'SORT' => 100,
   ),
-    3 =>
-        array (
-            'CONDITION' => '#^/catalog/filter/(.+?)/apply/#',
-            'RULE' => 'SMART_FILTER_PATH=$1',
-            'ID' => '',
-            'PATH' => '/catalog/index.php',
-            'SORT' => 99,
-        ),
-  6 =>
+  6 => 
   array (
     'CONDITION' => '#^/catalog/#',
     'RULE' => '',
@@ -40,7 +48,7 @@ $arUrlRewrite=array (
     'PATH' => '/catalog/index.php',
     'SORT' => 100,
   ),
-  5 =>
+  5 => 
   array (
     'CONDITION' => '#^catalog/#',
     'RULE' => '',
@@ -56,5 +64,4 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/rest/index.php',
     'SORT' => 100,
   ),
-
 );
