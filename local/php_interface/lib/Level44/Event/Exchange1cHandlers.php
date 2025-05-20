@@ -178,10 +178,6 @@ class Exchange1cHandlers extends HandlerBase
 
             $product = \CIBlockElement::GetByID($productInfo['ID'])->GetNext();
 
-            if ($product['ACTIVE'] === 'Y' && $totalQuantity <= 0) {
-                (new \CIBlockElement)->Update($productInfo['ID'], ['ACTIVE' => 'N']);
-            }
-
             if ($product['ACTIVE'] === 'N' && $totalQuantity > 0) {
                 (new \CIBlockElement)->Update($productInfo['ID'], ['ACTIVE' => 'Y']);
             }
