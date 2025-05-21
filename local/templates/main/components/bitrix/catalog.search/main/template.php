@@ -243,7 +243,7 @@ if (!empty($searchFilter) && is_array($searchFilter))
                         'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
                         'CURRENCY_ID' => $arParams['CURRENCY_ID'],
                         "SEF_MODE" => 'Y',
-                        "SEF_RULE" =>'/search/filter/#SMART_FILTER_PATH#/apply/?q='.$_REQUEST['q'],
+                        "SEF_RULE" => SITE_DIR . 'search/filter/#SMART_FILTER_PATH#/apply/?q=' . $_REQUEST['q'],
                         "SMART_FILTER_PATH" => $_REQUEST['SMART_FILTER_PATH'],
                         "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
                         "INSTANT_RELOAD" => $arParams["INSTANT_RELOAD"],

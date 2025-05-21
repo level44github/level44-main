@@ -130,7 +130,7 @@ if ($isFilter) {
                 'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
                 'CURRENCY_ID' => $arParams['CURRENCY_ID'],
                 "SEF_MODE" => $arParams["SEF_MODE"],
-                "SEF_RULE" => "/catalog/filter/#SMART_FILTER_PATH#/apply/",
+                "SEF_RULE" => SITE_DIR . "catalog/filter/#SMART_FILTER_PATH#/apply/",
                 "SMART_FILTER_PATH" => $_REQUEST["SMART_FILTER_PATH"],
                 "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
                 "INSTANT_RELOAD" => $arParams["INSTANT_RELOAD"],
