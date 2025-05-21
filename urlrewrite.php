@@ -34,7 +34,15 @@ $arUrlRewrite=array (
       'PATH' => SITE_DIR . 'catalog/sale/index.php',
       'SORT' => 100,
   ),
-  4 =>
+  5 =>
+    array (
+        'CONDITION' => '#^' . SITE_DIR . 'catalog/filter/(.+?)/apply/#',
+        'RULE' => 'SMART_FILTER_PATH=$1',
+        'ID' => '',
+        'PATH' => SITE_DIR . 'catalog/index.php',
+        'SORT' => 99,
+        ),
+  7 =>
   array (
       'CONDITION' => '#^' . SITE_DIR . 'catalog/#',
       'RULE' => '',
@@ -42,14 +50,7 @@ $arUrlRewrite=array (
       'PATH' => SITE_DIR . 'catalog/index.php',
       'SORT' => 100,
   ),
-  5 =>
-  array (
-      'CONDITION' => '#^' . SITE_DIR . 'catalog/filter/(.+?)/apply/#',
-      'RULE' => 'SMART_FILTER_PATH=$1',
-      'ID' => '',
-      'PATH' => SITE_DIR . 'catalog/index.php',
-      'SORT' => 99,
-  ),
+
   6 =>
   array (
       'CONDITION' => '#^' . SITE_DIR . 'search/filter/(.+?)/apply/#',
