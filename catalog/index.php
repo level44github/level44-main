@@ -270,12 +270,13 @@ $APPLICATION->IncludeComponent(
 		"TOP_SLIDER_PROGRESS" => "N",
 		"MESS_NOT_AVAILABLE_SERVICE" => "Недоступно",
 		"SEARCH_USE_SEARCH_RESULT_ORDER" => "N",
+
 		"SEF_URL_TEMPLATES" => array(
 			"sections" => "",
 			"section" => "#SECTION_CODE#/",
 			"element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
 			"compare" => "compare/",
-			"smart_filter" =>  $_REQUEST["SMART_FILTER_PATH"],
+			"smart_filter" => "#SECTION_CODE#/filter/#SMART_FILTER_PATH#/apply/",
 		)
 	),
 	false
