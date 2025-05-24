@@ -28,6 +28,7 @@ class Base
     const BANNER_SLIDES_IBLOCK_ID = 5;
     const CATALOG_VAT_ID = 3;
     const COLOR_HL_TBL_NAME = "eshop_color_reference";
+    const COLOR_GROUP_HL_TBL_NAME = "eshop_color_group_reference";
     const IMAGES_ORIGINAL_HL_TBL_NAME = "images_original";
     const SIZE_HL_TBL_NAME = "size_reference";
 
@@ -502,5 +503,67 @@ class Base
         }
 
         return "\Level44\Base::cancelUnPaidOrders();";
+    }
+
+    /**
+     * @param string $colorValue
+     * @return array|null
+     */
+    public static function getColorGroup(string $colorValue): array|null
+    {
+        $hlBlockRes = HL\HighloadBlockTable::getList([
+            'filter' => [
+                '=TABLE_NAME' => [Base::COLOR_HL_TBL_NAME, Base::COLOR_GROUP_HL_TBL_NAME]
+            ]
+        ]);
+
+        $hlBlocks = [];
+
+        while ($hlBlock = $hlBlockRes->fetch()) {
+            $hlBlocks[$hlBlock['TABLE_NAME']] = $hlBlock;
+        }
+
+        if (empty($hlBlocks[Base::COLOR_HL_TBL_NAME]) || empty($hlBlocks[Base::COLOR_GROUP_HL_TBL_NAME])) {
+            return null;
+        }
+
+        $colorEntity = HL\HighloadBlockTable::compileEntity($hlBlocks[Base::COLOR_HL_TBL_NAME]);
+        $colorEntityClass = $colorEntity->getDataClass();
+
+        $colorRes = $colorEntityClass::getList(
+            [
+                "select" => [
+                    "ID",
+                    "UF_GROUP",
+                ],
+                "filter" => [
+                    "UF_XML_ID" => $colorValue
+                ],
+
+            ]
+        );
+
+        $color = $colorRes->fetch();
+
+        if (empty($color['UF_GROUP'])) {
+            return null;
+        }
+
+        $colorGroupEntity = HL\HighloadBlockTable::compileEntity($hlBlocks[Base::COLOR_GROUP_HL_TBL_NAME]);
+        $colorGroupEntityClass = $colorGroupEntity->getDataClass();
+
+        $colorGroupRes = $colorGroupEntityClass::getList(
+            [
+                "select" => [
+                    "*",
+                ],
+                "filter" => [
+                    "ID" => $color['UF_GROUP']
+                ],
+
+            ]
+        );
+
+        return $colorGroupRes->fetch() ?: null;
     }
 }

@@ -394,6 +394,14 @@ LAYOUT;
             }
         }
 
+        ['UF_XML_ID' => $colorGroupValue] = Base::getColorGroup(
+            static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_REF']])
+        );
+
+        if (!empty($colorGroupValue)) {
+            static::setPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_GROUP_REF']], $colorGroupValue);
+        }
+
         return Base::checkOldPrices($arFields);
     }
 
