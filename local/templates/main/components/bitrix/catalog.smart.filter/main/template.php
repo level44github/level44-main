@@ -96,7 +96,13 @@ $this->setFrameMode(true);
 
                         <div class="dropdown dropdown--left bx-filter-parameters-box" data-dropdown onclick="smartFilter.hideFilterProps(this)">
                             <div class="dropdown__header" role="button"><span
-                                        class="dropdown__title"><?=$arItem["NAME"]?></span><span
+                                        class="dropdown__title">
+                                    <?if ($arItem['CODE']!='COLOR_GROUP_REF'){?>
+                                        <?=$arItem["NAME"]?>
+                                    <?}else{?>
+                                        Цвет
+                                    <?}?></span>
+                                <span
                                         class="dropdown__counter hidden">1</span>
                                 <svg class="icon icon-arrow-down dropdown__icon">
                                     <use xlink:href="#arrow-down"></use>
@@ -109,7 +115,7 @@ $this->setFrameMode(true);
                                     <div class="catalog__filter-group">
                                     <?foreach($arItem["VALUES"] as $val => $ar){
                                         if (!$ar["DISABLED"]){
-                                            if ($arItem['CODE']!='COLOR_REF')
+                                            if ($arItem['CODE']!='COLOR_GROUP_REF')
                                             {
                                             ?>
                                             <label data-role="label_<?=$ar["CONTROL_ID"]?>" class="form-checkbox-desktop js-checkbox-label" for="<? echo $ar["CONTROL_ID"] ?>">
