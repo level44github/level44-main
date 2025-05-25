@@ -278,7 +278,13 @@ $this->setFrameMode(true);
                         <div class="accordion">
                             <button class="btn btn-link accordion__trigger" type="button"
                                     aria-label="Toggle accordion">
-                                <div class="accordion__title"><?=$arItem["NAME"]?></div>
+                                <div class="accordion__title">
+                                    <?if ($arItem['CODE']!='COLOR_GROUP_REF'){?>
+                                    <?=$arItem["NAME"]?>
+                                    <?}else{?>
+                                        Цвет
+                                    <?}?>
+                                </div>
                                 <svg class="icon icon-arrow-down accordion__icon">
                                     <use xlink:href="#arrow-down"></use>
                                 </svg>
@@ -287,7 +293,7 @@ $this->setFrameMode(true);
                                 <div class="catalog__mobile-input-group">
                                     <?foreach($arItem["VALUES"] as $val => $ar){
                                     if (!$ar["DISABLED"]){
-                                        if ($arItem['CODE']!='COLOR_REF')
+                                        if ($arItem['CODE']!='COLOR_GROUP_REF')
                                         {
                                         ?>
 
