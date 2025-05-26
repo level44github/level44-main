@@ -1,15 +1,18 @@
 <?php
 
+use Bitrix\Main\Localization\Loc;
 use Bitrix\Sale\PropertyValueCollectionBase;
 use Level44\Event;
 
 require_once __DIR__ . '/autoload.php';
 
-if (\Level44\Base::isEnLang()) {
-    global $MESS;
+global $MESS;
 
+if (\Level44\Base::isEnLang()) {
     $MESS['IPOLSDEK_DELIV_ERR_NOPVZ'] = "To place an order, please specify an SDEK pick-up point.";
     $MESS['IPOLSDEK_FRNT_CHOOSEPICKUP'] = "Select a pick-up point";
+} else {
+    $MESS['VBCH_CLPAY_MM_DESC'] = Loc::getMessage("VBCH_CLPAY_MM_DESC");
 }
 
 \Level44\Base::customRegistry();
