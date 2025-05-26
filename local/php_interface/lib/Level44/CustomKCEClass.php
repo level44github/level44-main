@@ -85,7 +85,7 @@ class CustomKCEClass
                  <car:Password>'.$password.'</car:Password>
                  <car:Company/>
                  <car:Number/>
-                 <car:ClientNumber>'.$BtrxOrderId.'-'.$rand.'</car:ClientNumber>
+                 <car:ClientNumber>'.$BtrxOrderId.'</car:ClientNumber>
                  <car:OrderData>
                      <car:ClientContact/>';
         if ($DeliveryDate) {
