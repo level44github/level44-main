@@ -231,17 +231,19 @@ function retailCrmBeforeOrderSend($order, $arOrder)
                 null : current(array_map(fn($item) => $item["VALUE"], $items));
         }
 
-        $order['items'] = array_map(function ($item) use ($offersSize) {
-            if (!empty($item["offer"]['externalId']) && $offersSize[$item["offer"]['externalId']]) {
-                $item["properties"][] = [
-                    'code'  => 'size',
-                    'name'  => 'размер',
-                    'value' => $offersSize[$item["offer"]['externalId']]
-                ];
-            }
+        if (is_array($order['items'])) {
+            $order['items'] = array_map(function ($item) use ($offersSize) {
+                if (!empty($item["offer"]['externalId']) && $offersSize[$item["offer"]['externalId']]) {
+                    $item["properties"][] = [
+                        'code'  => 'size',
+                        'name'  => 'размер',
+                        'value' => $offersSize[$item["offer"]['externalId']]
+                    ];
+                }
 
-            return $item;
-        }, $order['items']);
+                return $item;
+            }, $order['items']);
+        }
     } catch (\Exception $exception) {
     }
 
