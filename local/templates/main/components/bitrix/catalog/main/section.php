@@ -15,8 +15,7 @@
 /** @var CBitrixComponent $component */
 
 use Bitrix\Main\Loader;
-use Bitrix\Main\ModuleManager;
-use Level44\Content;
+use Level44\Sort;
 
 $this->setFrameMode(true);
 \Level44\Base::$typePage = "catalog";
@@ -105,7 +104,7 @@ if ($isFilter) {
     </div>
     <div class="catalog__col right">
         <?
-        $content = new Content();
+        $sort = new Sort('catalog');
 
         $APPLICATION->IncludeComponent(
             "bitrix:catalog.smart.filter",
@@ -128,13 +127,15 @@ if ($isFilter) {
                 "TEMPLATE_THEME" => $arParams["TEMPLATE_THEME"],
                 'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
                 'CURRENCY_ID' => $arParams['CURRENCY_ID'],
-                "SEF_MODE" => $arParams["SEF_MODE"],
-                "SEF_RULE" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["smart_filter"],
+                "SEF_MODE" => "Y",
+                "SEF_RULE" =>$arResult['FOLDER'].$arResult['VARIABLES']['SECTION_CODE'].'/'.'filter/#SMART_FILTER_PATH#/apply/',
                 "SMART_FILTER_PATH" => $arResult["VARIABLES"]["SMART_FILTER_PATH"],
                 "PAGER_PARAMS_NAME" => $arParams["PAGER_PARAMS_NAME"],
                 "INSTANT_RELOAD" => $arParams["INSTANT_RELOAD"],
-                'SORT_LIST' => $content->getSortList(),
+                'SORT_LIST' => $sort->getList(),
+                'SORT_COOKIE_NAME' => $sort->getCookieName(),
             ),
+
             $component,
             array('HIDE_ICONS' => 'Y')
         );
@@ -146,10 +147,10 @@ if ($isFilter) {
             array(
                 "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                 "IBLOCK_ID" => $arParams["IBLOCK_ID"],
-                "ELEMENT_SORT_FIELD"  => $content->getSortValue('field'),
-                "ELEMENT_SORT_FIELD2" => $content->getSortValue('field2'),
-                "ELEMENT_SORT_ORDER"  => $content->getSortValue('order'),
-                "ELEMENT_SORT_ORDER2" => $content->getSortValue('order2'),
+                "ELEMENT_SORT_FIELD"  => $sort->getValue('field'),
+                "ELEMENT_SORT_FIELD2" => $sort->getValue('field2'),
+                "ELEMENT_SORT_ORDER"  => $sort->getValue('order'),
+                "ELEMENT_SORT_ORDER2" => $sort->getValue('order2'),
                 "PROPERTY_CODE" => $arParams["LIST_PROPERTY_CODE"],
                 "PROPERTY_CODE_MOBILE" => $arParams["LIST_PROPERTY_CODE_MOBILE"],
                 "META_KEYWORDS" => $arParams["LIST_META_KEYWORDS"],

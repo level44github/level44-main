@@ -205,8 +205,9 @@ $APPLICATION->IncludeComponent(
             "section" => "sale/#SECTION_CODE#/",
             "element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
             "compare" => "compare/",
-            "smart_filter" => "sale/#SECTION_CODE#/#SMART_FILTER_PATH#/",
-        )
+            "smart_filter" => "sale/#SECTION_CODE#/filter/#SMART_FILTER_PATH#/apply/",
+        ),
+        'K_FILTR_URL'=>'catalog/sale/'
 
     )
 ); ?>

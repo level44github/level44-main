@@ -24,9 +24,9 @@ class Content
 {
     private $sortData = [];
 
-    public function __construct()
+    public function __construct($section)
     {
-        $this->initSortData();
+        $this->initSortData($section);
     }
 
     /**
@@ -205,11 +205,11 @@ class Content
     /**
      * @return void
      */
-    private function initSortData(): void
+    private function initSortData($section): void
     {
         $request = Context::getCurrent()->getRequest();
         $sortData =& $this->sortData;
-        $sortData["code"] = $request->get("sort");
+        $sortData["code"] = $request->getCookie("sort".$section);
         $sortData["field2"] = 'sort';
         $sortData["order2"] = 'asc';
 

@@ -15,10 +15,10 @@ $(function () {
     });
 
     $('.form-radio-group [name="sort"]').on('change', function (e) {
-        const location = window.location.href;
-        const url = new URL(location);
-        url.searchParams.set('sort', e.target.value);
-        window.location.href = url.toString()
+        const sortCookieName = $(this).attr('data-sort-cookie-name');
+
+        document.cookie = `${sortCookieName}=${encodeURIComponent(e.target.value)}; path=/`;
+        window.location.reload();
     })
 
     const dropdownItem = $('[data-dropdown] [name="sort"]:checked + span');

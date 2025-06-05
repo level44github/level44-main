@@ -26,7 +26,15 @@ $arUrlRewrite=array (
     'PATH' => '/bitrix/services/rest/index.php',
     'SORT' => 100,
   ),
-  3 =>
+    3 =>
+        array (
+            'CONDITION' => '#^' . SITE_DIR . 'catalog/sale/filter/(.+?)/apply/#',
+            'RULE' => 'SMART_FILTER_PATH=$1',
+            'ID' => '',
+            'PATH' => SITE_DIR . 'catalog/sale/index.php',
+            'SORT' => 99,
+        ),
+  4 =>
   array (
       'CONDITION' => '#^' . SITE_DIR . 'catalog/sale/#',
       'RULE' => '',
@@ -34,12 +42,29 @@ $arUrlRewrite=array (
       'PATH' => SITE_DIR . 'catalog/sale/index.php',
       'SORT' => 100,
   ),
-  4 =>
+  5 =>
+    array (
+        'CONDITION' => '#^' . SITE_DIR . 'catalog/filter/(.+?)/apply/#',
+        'RULE' => 'SMART_FILTER_PATH=$1',
+        'ID' => '',
+        'PATH' => SITE_DIR . 'catalog/index.php',
+        'SORT' => 99,
+        ),
+  7 =>
   array (
       'CONDITION' => '#^' . SITE_DIR . 'catalog/#',
       'RULE' => '',
       'ID' => 'bitrix:catalog',
       'PATH' => SITE_DIR . 'catalog/index.php',
+      'SORT' => 100,
+  ),
+
+  6 =>
+  array (
+      'CONDITION' => '#^' . SITE_DIR . 'search/filter/(.+?)/apply/#',
+      'RULE' => 'SMART_FILTER_PATH=$1',
+      'ID' => '',
+      'PATH' => SITE_DIR . 'search/index.php',
       'SORT' => 100,
   ),
 );

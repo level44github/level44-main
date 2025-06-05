@@ -16,7 +16,7 @@ $APPLICATION->IncludeComponent(
         "ADD_SECTIONS_CHAIN" => "N",
         "AJAX_MODE" => "N",
         "AJAX_OPTION_ADDITIONAL" => "",
-        "AJAX_OPTION_HISTORY" => "N",
+        "AJAX_OPTION_HISTORY" => "Y",
         "AJAX_OPTION_JUMP" => "N",
         "AJAX_OPTION_STYLE" => "Y",
         "BASKET_URL" => SITE_DIR . "cart/",
@@ -81,7 +81,7 @@ $APPLICATION->IncludeComponent(
         "IBLOCK_ID" => "2",
         "IBLOCK_TYPE" => "rest_entity",
         "INCLUDE_SUBSECTIONS" => "Y",
-        "INSTANT_RELOAD" => "N",
+        "INSTANT_RELOAD" => "Y",
         "LAZY_LOAD" => "Y",
         "LINE_ELEMENT_COUNT" => "4",
         "LINK_ELEMENTS_URL" => "link.php?PARENT_ELEMENT_ID=#ELEMENT_ID#",
@@ -199,8 +199,23 @@ $APPLICATION->IncludeComponent(
             "section" => "#SECTION_CODE#/",
             "element" => "#SECTION_CODE#/#ELEMENT_CODE#/",
             "compare" => "compare/",
-            "smart_filter" => "#SECTION_CODE#/#SMART_FILTER_PATH#/",
-        )
+            "smart_filter" => "#SECTION_CODE#/filter/#SMART_FILTER_PATH#/apply/",
+        ),
+        "FILTER_PROPERTY_CODE" => array(
+            0 => "COLOR_REF",
+            1 => "",
+        ),
+        "FILTER_PRICE_CODE" => array(
+            0 => "BASE",
+        ),
+        "FILTER_OFFERS_FIELD_CODE" => array(
+            0 => "",
+            1 => "",
+        ),
+        "FILTER_OFFERS_PROPERTY_CODE" => array(
+            0 => "SIZE_REF",
+            1 => "",
+        ),
 
     )
 ); ?>
