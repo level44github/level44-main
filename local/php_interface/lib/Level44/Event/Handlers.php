@@ -375,31 +375,33 @@ LAYOUT;
 
     public static function OnBeforeIBlockElementUpdateHandler(&$arFields)
     {
-        if (!Exchange1cHandlers::isSource1C()) {
-            $properties = static::getProperties(Base::CATALOG_IBLOCK_ID);
-            $onModeration = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']]);
-            $video = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['VIDEO']]);
-            $previewVideo = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['PREVIEW_VIDEO']]);
+        if ($arFields['IBLOCK_ID'] === Base::CATALOG_IBLOCK_ID) {
+            if (!Exchange1cHandlers::isSource1C()) {
+                $properties = static::getProperties(Base::CATALOG_IBLOCK_ID);
+                $onModeration = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']]);
+                $video = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['VIDEO']]);
+                $previewVideo = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['PREVIEW_VIDEO']]);
 
-            $videoUploaded = !empty($video) && $video['del'] !== 'Y';
-            $previewVideoUploaded = !empty($previewVideo) && $previewVideo['del'] !== 'Y';
+                $videoUploaded = !empty($video) && $video['del'] !== 'Y';
+                $previewVideoUploaded = !empty($previewVideo) && $previewVideo['del'] !== 'Y';
 
-            if ($videoUploaded && !$previewVideoUploaded) {
-                $GLOBALS['APPLICATION']->throwException("Необходимо загрузить превью картинку для видео");
-                return false;
+                if ($videoUploaded && !$previewVideoUploaded) {
+                    $GLOBALS['APPLICATION']->throwException("Необходимо загрузить превью картинку для видео");
+                    return false;
+                }
+
+                if ($arFields['ACTIVE'] === 'Y' && isset($onModeration)) {
+                    $arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']] = '';
+                }
             }
 
-            if ($arFields['ACTIVE'] === 'Y' && isset($onModeration)) {
-                $arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']] = '';
+            ['UF_XML_ID' => $colorGroupValue] = Base::getColorGroup(
+                static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_REF']])
+            );
+
+            if (!empty($colorGroupValue)) {
+                static::setPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_GROUP_REF']], $colorGroupValue);
             }
-        }
-
-        ['UF_XML_ID' => $colorGroupValue] = Base::getColorGroup(
-            static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_REF']])
-        );
-
-        if (!empty($colorGroupValue)) {
-            static::setPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_GROUP_REF']], $colorGroupValue);
         }
 
         return Base::checkOldPrices($arFields);
