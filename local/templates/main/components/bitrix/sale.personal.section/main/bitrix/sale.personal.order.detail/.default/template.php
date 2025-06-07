@@ -12,11 +12,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Page\Asset;
 
-if ($arParams['GUEST_MODE'] !== 'Y')
-{
-	Asset::getInstance()->addJs("/bitrix/components/bitrix/sale.order.payment.change/templates/bootstrap_v4/script.js");
-	Asset::getInstance()->addCss("/bitrix/components/bitrix/sale.order.payment.change/templates/bootstrap_v4/style.css");
-}
 CJSCore::Init(array('clipboard', 'fx'));
 
 $APPLICATION->SetTitle("");
