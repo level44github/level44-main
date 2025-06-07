@@ -381,6 +381,7 @@ LAYOUT;
                 $onModeration = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['ON_MODERATION']]);
                 $video = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['VIDEO']]);
                 $previewVideo = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['PREVIEW_VIDEO']]);
+                $colorRef = static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_REF']]);
 
                 $videoUploaded = !empty($video) && $video['del'] !== 'Y';
                 $previewVideoUploaded = !empty($previewVideo) && $previewVideo['del'] !== 'Y';
@@ -395,12 +396,12 @@ LAYOUT;
                 }
             }
 
-            ['UF_XML_ID' => $colorGroupValue] = Base::getColorGroup(
-                static::getPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_REF']])
-            );
+            if (!empty($colorRef)) {
+                ['UF_XML_ID' => $colorGroupValue] = Base::getColorGroup($colorRef);
 
-            if (!empty($colorGroupValue)) {
-                static::setPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_GROUP_REF']], $colorGroupValue);
+                if (!empty($colorGroupValue)) {
+                    static::setPropertyValue($arFields['PROPERTY_VALUES'][$properties['COLOR_GROUP_REF']], $colorGroupValue);
+                }
             }
         }
 
