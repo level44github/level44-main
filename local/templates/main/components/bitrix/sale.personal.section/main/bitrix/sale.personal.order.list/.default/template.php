@@ -25,21 +25,6 @@ if (!empty($arResult['ERRORS']['FATAL']))
 			ShowError($error);
 	}
 	$component = $this->__component;
-	if ($arParams['AUTH_FORM_IN_TEMPLATE'] && isset($arResult['ERRORS']['FATAL'][$component::E_NOT_AUTHORIZED]))
-	{
-		?>
-		<div class="row">
-			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-				<div class="alert alert-danger"><?=$arResult['ERRORS']['FATAL'][$component::E_NOT_AUTHORIZED]?></div>
-			</div>
-			<? $authListGetParams = array(); ?>
-			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-				<?$APPLICATION->AuthForm('', false, false, 'N', false);?>
-			</div>
-		</div>
-		<?
-	}
-
 }
 else
 {

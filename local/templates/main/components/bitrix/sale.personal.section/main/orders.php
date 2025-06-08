@@ -18,9 +18,8 @@ if ($arParams['SHOW_ORDER_PAGE'] !== 'Y')
 }
 
 global $USER;
-if ($arParams['USE_PRIVATE_PAGE_TO_AUTH'] === 'Y' && !$USER->IsAuthorized())
-{
-	LocalRedirect($arResult['PATH_TO_AUTH_PAGE']);
+if (!$USER->IsAuthorized()) {
+    LocalRedirect($arResult['LINK_TO_LOGIN']);
 }
 
 if ($arParams["MAIN_CHAIN_NAME"] !== '')
@@ -31,7 +30,7 @@ if ($arParams["MAIN_CHAIN_NAME"] !== '')
 $APPLICATION->AddChainItem(Loc::getMessage("SPS_CHAIN_ORDERS"), $arResult['PATH_TO_ORDERS']);
 $APPLICATION->IncludeComponent(
 	"bitrix:sale.personal.order.list",
-	"bootstrap_v4",
+	"",
 	array(
 		"PATH_TO_DETAIL" => $arResult["PATH_TO_ORDER_DETAIL"],
 		"PATH_TO_CANCEL" => $arResult["PATH_TO_ORDER_CANCEL"],

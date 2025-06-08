@@ -1,6 +1,11 @@
 <?
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
+/** @var array $arParams */
+/** @var array $arResult */
+/** @var CBitrixComponent $component */
+/** @global CMain $APPLICATION */
+
 use Bitrix\Main\Localization\Loc;
 
 if ($arParams['SHOW_ORDER_PAGE'] !== 'Y')
@@ -9,9 +14,8 @@ if ($arParams['SHOW_ORDER_PAGE'] !== 'Y')
 }
 
 global $USER;
-if ($arParams['USE_PRIVATE_PAGE_TO_AUTH'] === 'Y' && !$USER->IsAuthorized())
-{
-	LocalRedirect($arResult['PATH_TO_AUTH_PAGE']);
+if (!$USER->IsAuthorized()) {
+    LocalRedirect($arResult['LINK_TO_LOGIN']);
 }
 
 if ($arParams["MAIN_CHAIN_NAME"] <> '')
@@ -49,7 +53,7 @@ foreach($arParams as $key => $val)
 
 $APPLICATION->IncludeComponent(
 	"bitrix:sale.personal.order.detail",
-	"bootstrap_v4",
+	"",
 	$arDetParams,
 	$component
 );

@@ -27,6 +27,10 @@ if ($arParams['SET_TITLE'] == 'Y')
 	$APPLICATION->SetTitle(Loc::getMessage("SPS_TITLE_PRIVATE"));
 }
 
+if (!$USER->IsAuthorized()) {
+    LocalRedirect($arResult['LINK_TO_LOGIN']);
+}
+
 if (!$USER->IsAuthorized() || $arResult['SHOW_LOGIN_FORM'] === 'Y')
 {
 	if ($arParams['USE_PRIVATE_PAGE_TO_AUTH'] !== 'Y')
