@@ -1,5 +1,5 @@
 <?
-$MESS["SPOL_TPL_EMPTY_ORDER_LIST"] = "Текущие заказы не найдены";
+$MESS["SPOL_TPL_EMPTY_ORDER_LIST"] = "Заказы не найдены";
 $MESS["SPOL_TPL_EMPTY_HISTORY_ORDER_LIST"] = "История заказов отсутствует";
 $MESS["SPOL_TPL_EMPTY_CANCELED_ORDER"] = "Отмененных заказов нет";
 $MESS["SPOL_TPL_LINK_TO_CATALOG"] = "Перейти в каталог";
@@ -44,4 +44,6 @@ $MESS["SPOL_CANCEL_PAYMENT"] = "назад";
 $MESS["SPOL_ORDER_SHIPMENT_STATUS"] = "Статус отгрузки";
 $MESS["SPOL_CHECK_TITLE"] = "Список чеков";
 $MESS["SPOL_CHECK_NUM"] = "Чек №#CHECK_NUMBER#";
+$MESS["SPOL_ORDER_NUMBER_TEXT"] = "Заказ №#ORDER_NUMBER#";
+$MESS["SPOL_ORDERS_TITLE"] = "Заказы";
 ?>

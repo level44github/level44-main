@@ -28,6 +28,9 @@ if ($arParams["MAIN_CHAIN_NAME"] !== '')
 }
 
 $APPLICATION->AddChainItem(Loc::getMessage("SPS_CHAIN_ORDERS"), $arResult['PATH_TO_ORDERS']);
+
+$_REQUEST['show_all'] = 'Y';
+
 $APPLICATION->IncludeComponent(
 	"bitrix:sale.personal.order.list",
 	"",
