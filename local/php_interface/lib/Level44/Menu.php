@@ -34,7 +34,7 @@ class Menu
 
         if (!empty($saleChildren)) {
             $saleSection = [
-                "Outlet",
+                "SALE",
                 SITE_DIR . "catalog/sale/",
                 [],
                 [
