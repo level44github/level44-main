@@ -22,7 +22,7 @@ if ($arParams["MAIN_CHAIN_NAME"] <> '')
 {
 	$APPLICATION->AddChainItem(htmlspecialcharsbx($arParams["MAIN_CHAIN_NAME"]), $arResult['SEF_FOLDER']);
 }
-$APPLICATION->AddChainItem(Loc::getMessage("SPS_CHAIN_ORDERS"), $arResult['PATH_TO_ORDERS']);
+$APPLICATION->AddChainItem(Loc::getMessage("SPS_CHAIN_ORDERS"), parse_url($arResult['PATH_TO_ORDERS'], PHP_URL_PATH));
 $APPLICATION->AddChainItem(Loc::getMessage("SPS_CHAIN_ORDER_DETAIL", array("#ID#" => urldecode($arResult["VARIABLES"]["ID"]))));
 $arDetParams = array(
 		"PATH_TO_LIST" => $arResult["PATH_TO_ORDERS"],

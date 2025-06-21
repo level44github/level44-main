@@ -566,4 +566,16 @@ class Base
 
         return $colorGroupRes->fetch() ?: null;
     }
+
+    /**
+     * @param int $num
+     * @param array $titles
+     * @return string|null
+     */
+    public static function declOfNum(int $num, array $titles): string|null
+    {
+        $cases = [2, 0, 1, 1, 1, 2];
+
+        return $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
+    }
 }

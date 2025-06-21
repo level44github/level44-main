@@ -41,7 +41,7 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
                         <a class="order" href="<?= $order["ORDER"]["URL_TO_DETAIL"] ?>">
                             <div class="order-info">
                                 <div>
-                                    <div class="order-status"><?= $arResult['INFO']['STATUS'][$order['ORDER']['STATUS_ID']]['NAME'] ?>
+                                    <div class="order-status"><?= Loc::getMessage("SPOL_ORDERS_{$order['ORDER']['STATUS_ID']}_STATUS") ?>
                                         <?= $order['ORDER']['DATE_INSERT_FORMATED'] ?>
                                     </div>
                                     <div class="order-number">
