@@ -1,8 +1,8 @@
 <?
 $aMenuLinks = Array(
     Array(
-        "Instagram",
-        "https://instagram.com/le4v4el?igshid=688ic3aif5yp",
+        "Telegram",
+        "https://t.me/@LevelShop44",
         Array(),
         Array(),
         ""
