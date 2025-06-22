@@ -31,7 +31,7 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
     ?>
     <div class="profile profile-order">
         <div class="order-header">
-            <a class="order-back" href="#">
+            <a class="order-back" href="<?= $arResult['URL_TO_LIST'] ?>">
                 <svg class="icon icon-arrow-back order-arrow">
                     <use xlink:href="#arrow-back"></use>
                 </svg>
@@ -63,9 +63,11 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
                 <div class="order-info__item">
                     <div class="order-info__item-title"><?= Loc::getMessage('SPOD_ORDER_DELIVERY_METHOD') ?></div>
                     <div class="order-info__item-value">
-                        <div class="order-info__item-value">
-                            <?= Loc::getMessage('SPOD_ORDER_' . Delivery::getType($arResult['DELIVERY']['ID'])?->name . '_DELIVERY_TYPE') ?>
-                        </div>
+                        <? if (!empty($arResult['DELIVERY']['ID'])): ?>
+                            <div class="order-info__item-value">
+                                <?= Loc::getMessage('SPOD_ORDER_' . Delivery::getType($arResult['DELIVERY']['ID'])?->name . '_DELIVERY_TYPE') ?>
+                            </div>
+                        <?endif; ?>
                         <? if (!empty($arResult['PROPERTIES']['ADDRESS']['VALUE'])): ?>
                             <div class="order-info__item-value"><?= $arResult['PROPERTIES']['ADDRESS']['VALUE'] ?></div>
                         <? elseif (!empty($arResult['ADDRESS_SDEK'])): ?>

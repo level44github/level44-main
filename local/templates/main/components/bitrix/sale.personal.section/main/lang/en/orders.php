@@ -1,3 +1,3 @@
 <?
-$MESS["SPS_CHAIN_ORDERS"] = "My orders";
+$MESS["SPS_CHAIN_ORDERS"] = "Orders";
 ?>

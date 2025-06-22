@@ -9,5 +9,5 @@ $MESS["SPS_BASKET_PAGE_NAME"] = "Shopping cart";
 $MESS["SPS_CONTACT_PAGE_NAME"] = "Contacts";
 $MESS["SPS_ERROR_NOT_CHOSEN_ELEMENT"] = "No items selected";
 $MESS["SPS_CHAIN_MAIN"] = "My account";
-$MESS["SPS_TITLE_MAIN"] = "Personal area";
+$MESS["SPS_TITLE_MAIN"] = "Personal";
 ?>

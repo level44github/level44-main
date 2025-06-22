@@ -29,6 +29,9 @@ if ($arParams["MAIN_CHAIN_NAME"] !== '')
 
 $APPLICATION->AddChainItem(Loc::getMessage("SPS_CHAIN_ORDERS"), $arResult['PATH_TO_ORDERS']);
 
+$APPLICATION->AddViewContent("personal.back-link", $arResult['SEF_FOLDER']);
+$APPLICATION->AddViewContent("personal.navigation-title", Loc::getMessage('SPS_CHAIN_ORDERS'));
+
 $_REQUEST['show_all'] = 'Y';
 
 $APPLICATION->IncludeComponent(

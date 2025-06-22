@@ -1,2 +1,2 @@
 <?php
-$MESS["SPS_CHAIN_ORDERS"] = "Мои заказы";
+$MESS["SPS_CHAIN_ORDERS"] = "Заказы";
