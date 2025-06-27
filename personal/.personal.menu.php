@@ -1,7 +1,7 @@
 <?
 $aMenuLinks = Array(
 /*	Array(
-		"Бонусная система", 
+		"Система привилегий",
 		"",
 		Array(), 
 		Array(), 
@@ -20,14 +20,14 @@ $aMenuLinks = Array(
 		Array(),
         array("IS_FAVORITES" => true),
 		""
-	),
+	),*/
 	Array(
 		"Мои данные",
-		"",
+        SITE_DIR . "personal/private/",
 		Array(),
 		Array(),
 		""
-	),*/
+	),
 	Array(
 		"Выйти",
         SITE_DIR . "?logout=yes",

@@ -75,8 +75,8 @@ class Base
         $asset->addJs(self::getAssetsPath() . "/js/jquery.min.js");
         $asset->addJs(self::getAssetsPath() . "/js/main.js");
         $asset->addJs(self::getAssetsPath() . "/js/app.js");
+        $asset->addJs(self::getAssetsPath() . "/js/form.js");
         if (SITE_TEMPLATE_ID === "checkout") {
-            $asset->addJs(self::getAssetsPath() . "/js/form.js");
             $asset->addJs('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js', true);
         }
     }

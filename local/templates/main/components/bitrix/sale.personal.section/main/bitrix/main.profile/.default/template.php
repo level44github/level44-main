@@ -1,157 +1,127 @@
 <?
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
-	die();
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
+    die();
 
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Web\Json;
 
+/** @var array $arResult */
+
+ShowError($arResult["strProfileError"]);
+
+if (($arResult['DATA_SAVED'] ?? 'N') === 'Y') {
+    ShowNote(Loc::getMessage('PROFILE_DATA_SAVED'));
+}
+
+$availableClothesSizes = array_map(fn($item) => $item['ID'], (array)$arResult["CLOTHES_SIZE_REF"]);
+$availableShoesSizes = array_map(fn($item) => $item['ID'], (array)$arResult["SHOES_SIZE_REF"]);
+
+['UF_CLOTHES_SIZE' => $userClothesSize, 'UF_SHOES_SIZE' => $userShoesSize] = $arResult['USER_PROPERTIES']['DATA'];
 ?>
+<div class="profile profile--personal-info">
+    <div class="profile__title"><?= Loc::getMessage('PROFILE_TITLE') ?></div>
+    <form action="<?= POST_FORM_ACTION_URI ?>" method="POST" class="profile-form" action="<?= POST_FORM_ACTION_URI ?>"
+          enctype="multipart/form-data" role="form">
+        <?= $arResult["BX_SESSION_CHECK"] ?>
+        <input type="hidden" name="lang" value="<?= LANG ?>"/>
+        <input type="hidden" name="ID" value="<?= $arResult["ID"] ?>"/>
+        <input type="hidden" name="LOGIN" value="<?= $arResult["arUser"]["LOGIN"] ?>"/>
 
-<div class="bx_profile">
-	<?
-	ShowError($arResult["strProfileError"]);
-
-	if (($arResult['DATA_SAVED'] ?? 'N') === 'Y')
-	{
-		ShowNote(Loc::getMessage('PROFILE_DATA_SAVED'));
-	}
-
-	?>
-	<form method="post" name="form1" action="<?=POST_FORM_ACTION_URI?>" enctype="multipart/form-data" role="form">
-		<?=$arResult["BX_SESSION_CHECK"]?>
-		<input type="hidden" name="lang" value="<?=LANG?>" />
-		<input type="hidden" name="ID" value="<?=$arResult["ID"]?>" />
-		<input type="hidden" name="LOGIN" value="<?=$arResult["arUser"]["LOGIN"]?>" />
-		<div class="main-profile-block-shown" id="user_div_reg">
-			<div class="row main-profile-block-date-info">
-				<?
-				if($arResult["ID"]>0)
-				{
-					if ($arResult["arUser"]["TIMESTAMP_X"] <> '')
-					{
-						?>
-						<div class="col-12">
-							<strong><?=Loc::getMessage('LAST_UPDATE')?></strong>
-							<strong><?=$arResult["arUser"]["TIMESTAMP_X"]?></strong>
-						</div>
-						<?
-					}
-
-					if ($arResult["arUser"]["LAST_LOGIN"] <> '')
-					{
-						?>
-						<div class="col-12">
-							<strong><?=Loc::getMessage('LAST_LOGIN')?></strong>
-							<strong><?=$arResult["arUser"]["LAST_LOGIN"]?></strong>
-						</div>
-						<?
-					}
-				}
-				?>
-			</div>
-
-			<div class="row">
-				<div class="col-12">
-					<?
-					if (!in_array(LANGUAGE_ID,array('ru', 'ua')))
-					{
-						?>
-						<div class="row">
-							<div class="col align-items-center">
-								<div class="form-group">
-									<label class="main-profile-form-label" for="main-profile-title"><?=Loc::getMessage('MAIN_PROFILE_TITLE')?></label>
-									<input class="form-control" type="text" name="TITLE" maxlength="50" id="main-profile-title" value="<?=$arResult["arUser"]["TITLE"]?>" />
-								</div>
-							</div>
-						</div>
-						<?
-					}
-					?>
-					<div class="form-group row">
-						<label class="col-sm-4 col-md-3 col-form-label main-profile-form-label" for="main-profile-name"><?=Loc::getMessage('NAME')?></label>
-						<div class="col-sm-8 col-md-9">
-							<input class="form-control" type="text" name="NAME" maxlength="50" id="main-profile-name" value="<?=$arResult["arUser"]["NAME"]?>" />
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<label class="col-sm-4 col-md-3 col-form-label main-profile-form-label" for="main-profile-last-name"><?=Loc::getMessage('LAST_NAME')?></label>
-						<div class="col-sm-8 col-md-9">
-							<input class="form-control" type="text" name="LAST_NAME" maxlength="50" id="main-profile-last-name" value="<?=$arResult["arUser"]["LAST_NAME"]?>" />
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-md-3 col-form-label main-profile-form-label" for="main-profile-second-name"><?=Loc::getMessage('SECOND_NAME')?></label>
-						<div class="col-sm-8 col-md-9">
-							<input class="form-control" type="text" name="SECOND_NAME" maxlength="50" id="main-profile-second-name" value="<?=$arResult["arUser"]["SECOND_NAME"]?>" />
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-md-3 col-form-label main-profile-form-label" for="main-profile-email"><?=Loc::getMessage('EMAIL')?></label>
-						<div class="col-sm-8 col-md-9">
-							<input class="form-control" type="text" name="EMAIL" maxlength="50" id="main-profile-email" value="<?=$arResult["arUser"]["EMAIL"]?>" />
-						</div>
-					</div>
-					<?
-					if ($arResult['CAN_EDIT_PASSWORD'])
-					{
-						?>
-						<div class="form-group row">
-							<label class="col-sm-4 col-md-3 col-form-label main-profile-form-label" for="main-profile-password"><?=Loc::getMessage('NEW_PASSWORD_REQ')?></label>
-							<div class="col-sm-8 col-md-9">
-								<input class=" form-control bx-auth-input main-profile-password" type="password" name="NEW_PASSWORD" maxlength="50" id="main-profile-password" value="" autocomplete="off"/>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-md-3 col-form-label main-profile-form-label main-profile-password" for="main-profile-password-confirm">
-								<?=Loc::getMessage('NEW_PASSWORD_CONFIRM')?>
-							</label>
-							<div class="col-sm-8 col-md-9">
-								<input class="form-control" type="password" name="NEW_PASSWORD_CONFIRM" maxlength="50" value="" id="main-profile-password-confirm" autocomplete="off" />
-								<small id="emailHelp" class="form-text text-muted"><?echo $arResult["GROUP_POLICY"]["PASSWORD_REQUIREMENTS"];?></small>
-							</div>
-						</div>
-						<?
-					}
-					?>
-				</div>
-			</div>
-
-		</div>
-		<div class="row">
-			<div class="col">
-				<input type="submit" class="btn btn-themes btn-primary btn-md main-profile-submit" name="save" value="<?=(($arResult["ID"]>0) ? Loc::getMessage("MAIN_SAVE") : Loc::getMessage("MAIN_ADD"))?>">
-				<input type="submit" class="btn btn-themes btn-link btn-md"  name="reset" value="<?echo GetMessage("MAIN_RESET")?>">
-			</div>
-		</div>
-
-	</form>
-	<?
-	$disabledSocServices = isset($arParams['DISABLE_SOCSERV_AUTH']) && $arParams['DISABLE_SOCSERV_AUTH'] === 'Y';
-
-	if (!$disabledSocServices)
-	{
-		?>
-		<div class="col-sm-12 main-profile-social-block">
-			<?
-			if ($arResult["SOCSERV_ENABLED"])
-			{
-				$APPLICATION->IncludeComponent(
-					"bitrix:socserv.auth.split",
-					".default",
-					[
-						"SHOW_PROFILES" => "Y",
-						"ALLOW_DELETE" => "Y",
-					],
-					false
-				);
-			}
-			?>
-		</div>
-		<?
-	}
-	?>
-	<div class="clearfix"></div>
-	<script>
-		BX.Sale.PrivateProfileComponent.init();
-	</script>
+        <div class="form-group">
+            <input class="form-control js-form__control" type="text" id="form-firstName" maxlength="50" required
+                   placeholder="<?= Loc::getMessage('NAME') ?>" value="<?= $arResult["arUser"]["NAME"] ?>" name="NAME">
+        </div>
+        <div class="form-group">
+            <input class="form-control js-form__control" type="text" id="form-lastName" name="LAST_NAME" maxlength="50"
+                   required placeholder="<?= Loc::getMessage('LAST_NAME') ?>"
+                   value="<?= $arResult["arUser"]["LAST_NAME"] ?>">
+        </div>
+        <div class="form-group">
+            <input class="form-control js-form__control" type="text" id="form-secondName" name="SECOND_NAME"
+                   maxlength="50"
+                   placeholder="<?= Loc::getMessage('SECOND_NAME') ?>"
+                   value="<?= $arResult["arUser"]["SECOND_NAME"] ?>">
+        </div>
+        <div class="form-group">
+            <input class="form-control js-form__control js-form__birthdate" type="text"
+                   name="PERSONAL_BIRTHDAY" id="form-birthdate"
+                   placeholder="<?= Loc::getMessage('BIRTHDAY') ?>"
+                   data-placeholder="<?= Loc::getMessage('BIRTHDAY_MASK') ?>"
+                   value="<?= $arResult["arUser"]["PERSONAL_BIRTHDAY"] ?>">
+            <div class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <div class="select-wrapper">
+                <select class="form-control js-form__control" required id="form-gender" name="PERSONAL_GENDER">
+                    <option value="" disabled
+                        <? if (!in_array($arResult["arUser"]["PERSONAL_GENDER"], [
+                            'M',
+                            'F'
+                        ])) echo ' selected' ?>><?= Loc::getMessage('GENDER') ?></option>
+                    <option value="M"
+                        <? if ($arResult["arUser"]["PERSONAL_GENDER"] === 'M') echo ' selected' ?>><?= Loc::getMessage('GENDER_M') ?></option>
+                    <option value="F"
+                        <? if ($arResult["arUser"]["PERSONAL_GENDER"] === 'F') echo ' selected' ?>><?= Loc::getMessage('GENDER_F') ?></option>
+                </select>
+                <svg class="icon icon-arrow-down dropdown-arrow">
+                    <use xlink:href="#arrow-down"></use>
+                </svg>
+            </div>
+        </div>
+        <div class="form-group">
+            <input class="form-control js-form__control js-form__phone" type="text" id="form-phone"
+                   placeholder="<?= Loc::getMessage('PHONE') ?>" name="PERSONAL_PHONE"
+                   value="<?= $arResult["arUser"]["PERSONAL_PHONE"] ?>">
+            <div class="invalid-feedback"></div>
+        </div>
+        <div class="form-group">
+            <input class="form-control js-form__control js-form__email" type="email" id="form-email" name="EMAIL"
+                   placeholder="<?= Loc::getMessage('EMAIL') ?>" maxlength="50"
+                   value="<?= $arResult["arUser"]["EMAIL"] ?>">
+            <div class="invalid-feedback"></div>
+        </div>
+        <? if (!empty($arResult["CLOTHES_SIZE_REF"])): ?>
+            <div class="form-group">
+                <div class="select-wrapper">
+                    <select class="form-control js-form__control" id="form-size" name="UF_CLOTHES_SIZE">
+                        <option <? if (!in_array($userClothesSize['VALUE'], $availableClothesSizes)) echo ' selected'; ?>
+                                value="" disabled><?= Loc::getMessage('CLOTHING_SIZE') ?></option>
+                        <? foreach ($arResult["CLOTHES_SIZE_REF"] as $size): ?>
+                            <option
+                                <? if ($userClothesSize['VALUE'] === $size['ID']) echo ' selected'; ?>
+                                    value="<?= $size['ID'] ?>"><?= $size['UF_NAME'] ?></option>
+                        <? endforeach; ?>
+                    </select>
+                    <svg class="icon icon-arrow-down dropdown-arrow">
+                        <use xlink:href="#arrow-down"></use>
+                    </svg>
+                </div>
+            </div>
+        <? endif; ?>
+        <? if (!empty($arResult["SHOES_SIZE_REF"])): ?>
+            <div class="form-group">
+                <div class="select-wrapper">
+                    <select class="form-control js-form__control" id="form-shoe-size" name="UF_SHOES_SIZE">
+                        <option <? if (!in_array($userShoesSize['VALUE'], $availableShoesSizes)) echo ' selected'; ?>
+                                value="" disabled><?= Loc::getMessage('SHOE_SIZE') ?></option>
+                        <? foreach ($arResult["SHOES_SIZE_REF"] as $size): ?>
+                            <option <? if ($userShoesSize['VALUE'] === $size['ID']) echo ' selected'; ?>
+                                    value="<?= $size['ID'] ?>"><?= $size['UF_NAME'] ?></option>
+                        <? endforeach; ?>
+                    </select>
+                    <svg class="icon icon-arrow-down dropdown-arrow">
+                        <use xlink:href="#arrow-down"></use>
+                    </svg>
+                </div>
+            </div>
+        <? endif; ?>
+        <button class="btn btn-dark btn-block" type="submit" name="save"
+                value="Y"><?= Loc::getMessage('SAVE') ?></button>
+        <div class="privacy-text"><?= Loc::getMessage('PRIVACY_TEXT', ['#SITE_DIR#' => SITE_DIR]) ?></div>
+    </form>
 </div>
+
+<script type="text/javascript">
+    var fieldRequiredMes = <?=Json::encode(Loc::getMessage('FIELD_REQUIRED_MESSAGE'))?>;
+    var fieldIncorrectMes = <?=Json::encode(Loc::getMessage('FIELD_INCORRECT_MESSAGE'))?>;
+</script>

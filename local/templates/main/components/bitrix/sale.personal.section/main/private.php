@@ -116,7 +116,11 @@ else
 			"SEND_INFO" => $arParams["SEND_INFO_PRIVATE"],
 			"CHECK_RIGHTS" => $arParams['CHECK_RIGHTS_PRIVATE'],
 			"EDITABLE_EXTERNAL_AUTH_ID" => $arParams['EDITABLE_EXTERNAL_AUTH_ID'],
-			"DISABLE_SOCSERV_AUTH" => $arParams['DISABLE_SOCSERV_AUTH']
+			"DISABLE_SOCSERV_AUTH" => $arParams['DISABLE_SOCSERV_AUTH'],
+            "USER_PROPERTY" => [
+                "UF_CLOTHES_SIZE",
+                "UF_SHOES_SIZE"
+            ]
 		),
 		$component
 	);
