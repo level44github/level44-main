@@ -1,0 +1,42 @@
+.modal-content .bxmaker-authuserphone-simple {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.modal-content .bxmaker-authuserphone-header {
+    display: none;
+}
+
+.modal-content .bxmaker-authuserphone-button__inner {
+    background-color: #212121;
+    border-radius: inherit;
+}
+
+.modal-content .bxmaker-authuserphone-button__inner:hover {
+    opacity: .75;
+    background-color: #212121;
+}
+
+.modal-content .bxmaker-authuserphone-button__title {
+    font-weight: 400;
+}
+
+.bxmaker-authuserphone-input-code:hover .bxmaker-authuserphone-input-code__field,
+.bxmaker-authuserphone-input-code--focus .bxmaker-authuserphone-input-code__field,
+.bxmaker-authuserphone-input-phone:hover .bxmaker-authuserphone-input-phone__field,
+.bxmaker-authuserphone-input-phone--focus .bxmaker-authuserphone-input-phone__field,
+.bxmaker-authuserphone-input-phone--hover .bxmaker-authuserphone-input-phone__field {
+    border-color: rgb(97, 97, 97);
+}
+
+.bxmaker-authuserphone-input-code input[type=text] {
+    font-weight: 400;
+}
+
+a.bxmaker-authuserphone-link, a.bxmaker-authuserphone-link:visited {
+    color: rgb(152, 150, 144);
+}
+
+.bxmaker-authuserphone-input-phone__field, .bxmaker-authuserphone-input-code__field {
+    border: 1px solid #d9dcde;
+}

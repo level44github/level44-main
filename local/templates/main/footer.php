@@ -131,6 +131,29 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
     </div>
 </div>
 
+<div class="modal" id="login-modal" tabindex="-1" aria-hidden="true" data-backurl="<?= SITE_DIR ?>personal/">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="title"><?= Loc::getMessage('LOGIN_MODAL_TITLE') ?></div>
+            <button class="btn btn-link btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                <svg class="icon icon-close-small btn-close__icon">
+                    <use xlink:href="#close-small"></use>
+                </svg>
+            </button>
+            <?
+            $APPLICATION->IncludeComponent(
+                "bxmaker:authuserphone.simple",
+                ".default",
+                array(
+                    //параметры вызова для переопределения поведения
+                ),
+                false
+            );
+            ?>
+        </div>
+    </div>
+</div>
+
 <?
 Base::loadScripts();
 ?>

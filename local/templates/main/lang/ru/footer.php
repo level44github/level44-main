@@ -8,3 +8,4 @@ $MESS['COOKIE_MODAL_DESCRIPTION'] = "Мы используем файлы cookie
             подробные сведения смотрите в нашей <a href=\"#SITE_DIR#about/cookie/\" target=\"_blank\">Политике в
             отношении файлов Cookie</a>";
 $MESS['COOKIE_MODAL_BUTTON_TEXT'] = "Принимаю";
+$MESS['LOGIN_MODAL_TITLE'] = "Вход";

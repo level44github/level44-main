@@ -32,9 +32,9 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
         <?
     }
     ?>
-    <div class="profile profile-orders">
-        <div class="profile__title"><?= Loc::getMessage('SPOL_ORDERS_TITLE') ?></div>
-        <? if (!empty($arResult['ORDERS'])): ?>
+    <? if (!empty($arResult['ORDERS'])): ?>
+        <div class="profile profile-orders">
+            <div class="profile__title"><?= Loc::getMessage('SPOL_ORDERS_TITLE') ?></div>
             <div class="orders-list">
                 <? foreach ($arResult['ORDERS'] as $key => $order): ?>
                     <a class="order" href="<?= $order["ORDER"]["URL_TO_DETAIL"] ?>">
@@ -61,7 +61,7 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
                     </a>
                 <? endforeach; ?>
             </div>
-        <? endif; ?>
-    </div>
+        </div>
+    <? endif; ?>
     <?
 }

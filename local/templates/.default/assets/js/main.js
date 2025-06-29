@@ -25,5 +25,16 @@ $(function () {
     if (dropdownItem?.length) {
         $('[data-dropdown] [name="sort"]').closest('[data-dropdown]').find('.dropdown__title').text(dropdownItem.text());
     }
+
+    BX.Vue.event.$on('BXmakerAuthuserphoneSimpleAjaxResponse', (data) => {
+        const response = data.result?.response;
+        const loginModal = $('#login-modal');
+        const backurl = loginModal.data('backurl')
+
+        if (response?.type === 'AUTH' && backurl) {
+            loginModal.modal('hide');
+            window.location.href = backurl;
+        }
+    });
 })
 
