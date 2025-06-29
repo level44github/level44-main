@@ -23,8 +23,23 @@ use \Bitrix\Main\Localization\Loc;
  * @var string $buttonSizeClass
  * @var CatalogSectionComponent $component
  */
+
+
+Bitrix\Main\Loader::includeModule('awelite.favorite');
+$defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass');
 ?>
 
+<button class="btn btn-link grid__item__favorite js-favorite <?= $defaultClass ?>"
+        onClick="BX.Awelite.changeToFavorite(this);return false;"
+        data-favorite-entity="<?= $item['ID'] ?>"
+        data-iblock-id="<?= $item['IBLOCK_ID'] ?>">
+    <svg class="icon icon-favorites-add grid__item__favorite__icon">
+        <use xlink:href="#favorites-add"></use>
+    </svg>
+    <svg class="icon icon-favorites grid__item__favorite__icon-active">
+        <use xlink:href="#favorites"></use>
+    </svg>
+</button>
 <a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
     <div class="embla" data-mouse-scroll="true">
         <div class="embla__container">

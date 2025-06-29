@@ -14,13 +14,13 @@ $aMenuLinks = Array(
         Array(),
 		"" 
 	),
-/*	Array(
+  	Array(
 		"Избранное",
-		"",
+        SITE_DIR . "personal/favorites/",
 		Array(),
         array("IS_FAVORITES" => true),
 		""
-	),*/
+	),
 	Array(
 		"Мои данные",
         SITE_DIR . "personal/private/",

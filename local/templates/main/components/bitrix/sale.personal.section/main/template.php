@@ -25,6 +25,12 @@ if ($arParams["MAIN_CHAIN_NAME"] !== '')
 $APPLICATION->AddViewContent("personal.back-link", SITE_DIR);
 $APPLICATION->AddViewContent("personal.navigation-title", Loc::getMessage('SPS_TITLE_MAIN'));
 
+$arIds = [];
+if (\Bitrix\Main\Loader::includeModule('awelite.favorite')) {
+    $objFavCookies = new \Awelite\Favorite\Cookies();
+    $arIds = $objFavCookies->getIds();
+}
+
 $APPLICATION->IncludeComponent(
     "bitrix:menu",
     "personal_mobile",
@@ -38,7 +44,8 @@ $APPLICATION->IncludeComponent(
         "MENU_CACHE_TYPE"       => "A",
         "MENU_CACHE_TIME"       => "3600",
         "MENU_CACHE_USE_GROUPS" => "Y",
-        "MENU_CACHE_GET_VARS"   => ""
+        "MENU_CACHE_GET_VARS"   => "",
+        "COUNT" => count($arIds)
     ]
 );
 

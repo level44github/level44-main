@@ -18,7 +18,14 @@ $APPLICATION->SetTitle("Personal area");
 			</div>
 		</a>
 	</div>
-    <? $APPLICATION->IncludeComponent(
+    <?
+    $arIds = [];
+    if (\Bitrix\Main\Loader::includeModule('awelite.favorite')) {
+        $objFavCookies = new \Awelite\Favorite\Cookies();
+        $arIds = $objFavCookies->getIds();
+    }
+
+    $APPLICATION->IncludeComponent(
         "bitrix:menu",
         "personal_desktop",
         Array(
@@ -31,7 +38,8 @@ $APPLICATION->SetTitle("Personal area");
             "MENU_CACHE_TYPE" => "A",
             "MENU_CACHE_TIME" => "3600",
             "MENU_CACHE_USE_GROUPS" => "Y",
-            "MENU_CACHE_GET_VARS" => ""
+            "MENU_CACHE_GET_VARS" => "",
+            "COUNT" => count($arIds)
         )
     ); ?>
 	<div class="col-md-10" id="profile-content">
@@ -69,6 +77,7 @@ $APPLICATION->SetTitle("Personal area");
 					"order_detail"=>"orders/#ID#/",
 					"orders"=>"orders/",
 					"private"=>"private/",
+                    "favorites"=>"favorites/",
 				),
 				"SEND_INFO_PRIVATE" => "N",
 				"SET_TITLE" => "Y",

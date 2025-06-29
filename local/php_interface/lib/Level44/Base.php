@@ -11,6 +11,7 @@ use Bitrix\Main\ObjectPropertyException;
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
 use Bitrix\Main\SystemException;
+use Bitrix\Main\UI\Extension;
 use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Order;
 use Bitrix\Sale\Registry;
@@ -53,6 +54,7 @@ class Base
         $asset->addString('<meta  name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">');
         $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/app.css") . '">');
         $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/main.css") . '">');
+        Extension::load('awelite_favorite.awelite_lib');
         if (SITE_TEMPLATE_ID === "checkout") {
             $asset->addCss('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css');
         }
