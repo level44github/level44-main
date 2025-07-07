@@ -1,7 +1,7 @@
 <? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die(); ?>
 <?php if (!empty($arResult['SLIDES'])): ?>
     <div class="home">
-        <div class="embla" data-mouse-scroll="false">
+        <div class="embla" data-mouse-scroll="false" data-autoplay="true">
             <div class="embla__container">
                 <? foreach ($arResult['SLIDES'] as $slide): ?>
                     <div class="embla__slide">
