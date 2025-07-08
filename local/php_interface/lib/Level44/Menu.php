@@ -25,11 +25,19 @@ class Menu
         }
         unset($section);
 
-        return $tree;
+        return array_map(function ($item) {
+            if ($item[3]['CODE'] === 'novinki') {
+                $item[3]['IS_NEW'] = true;
+            }
+
+            return $item;
+        }, $tree);
     }
 
     static function addSaleSection($menuSections): array
     {
+        $newIndex = array_search(true, array_map(fn($item) => $item[3]["IS_NEW"], $menuSections));
+
         $saleChildren = static::getSaleChildren();
 
         if (!empty($saleChildren)) {
@@ -44,7 +52,7 @@ class Menu
                 ""
             ];
 
-            $menuSections[] = Menu::markIfSelected($saleSection);
+            array_splice($menuSections, $newIndex + 1, 0, [Menu::markIfSelected($saleSection)]);
         }
 
         return $menuSections;
