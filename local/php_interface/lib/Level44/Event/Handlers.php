@@ -489,7 +489,16 @@ LAYOUT;
 
     public static function OnIBlockElementUpdateHandler($newFields)
     {
-        if ($newFields['IBLOCK_ID'] !== Base::CATALOG_IBLOCK_ID) {
+        $observedProducts = [
+            2736,
+            2751,
+            2754,
+            3110,
+            3167,
+            3367,
+        ];
+
+        if (!in_array($newFields['ID'], $observedProducts)) {
             return;
         }
 
