@@ -519,10 +519,8 @@ LAYOUT;
             static::addToLog("Changes of product [{$newFields["ID"]}]", "OLD_PRICE", $productOldPrice, $newOldPrice);
         }
 
-        if (is_array($newFields['IBLOCK_SECTION']) && is_array($productSections)) {
-            if (!(array_diff($newFields['IBLOCK_SECTION'], $productSections) === [] && array_diff($productSections, $newFields['IBLOCK_SECTION']) === [])) {
-                static::addToLog("Changes of product [{$newFields["ID"]}]", "IBLOCK_SECTION", json_encode($productSections), json_encode($newFields['IBLOCK_SECTION']));
-            }
+        if (!(array_diff($newFields['IBLOCK_SECTION'], $productSections) === [] && array_diff($productSections, $newFields['IBLOCK_SECTION']) === [])) {
+            static::addToLog("Changes of product [{$newFields["ID"]}]", "IBLOCK_SECTION", json_encode($productSections), json_encode($newFields['IBLOCK_SECTION']));
         }
     }
 
