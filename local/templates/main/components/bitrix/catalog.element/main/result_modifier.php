@@ -200,7 +200,7 @@ if ($USER->IsAdmin()) {
 
 $arResult["ACTUAL_ITEM"] = $actualItem;
 
-$component->SetResultCacheKeys(["ACTUAL_ITEM"]);
+$component->SetResultCacheKeys(["ACTUAL_ITEM", "IS_SHOES"]);
 
 if (!empty($arResult['SECTION']['PATH']) && is_array($arResult['SECTION']['PATH'])) {
     $sectionIds = array_map(fn($item) => (int)$item['ID'], $arResult['SECTION']['PATH']);
