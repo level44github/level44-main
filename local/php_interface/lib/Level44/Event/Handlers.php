@@ -515,13 +515,8 @@ LAYOUT;
             $productSections[] = (int)$section['ID'];
         }
 
-        if (($productOldPrice = (int)$product['PROPERTY_OLD_PRICE_VALUE']) !== (int)$newOldPrice) {
-            static::addToLog(
-                "Changes of product [{$newFields["ID"]}]",
-                "OLD_PRICE",
-                $productOldPrice,
-                is_null($newOldPrice) ? 'null' : $newOldPrice
-            );
+        if (($productOldPrice = (int)$product['PROPERTY_OLD_PRICE_VALUE']) !== $newOldPrice) {
+            static::addToLog("Changes of product [{$newFields["ID"]}]", "OLD_PRICE", $productOldPrice, $newOldPrice);
         }
 
         if (is_array($newFields['IBLOCK_SECTION']) && is_array($productSections)) {
