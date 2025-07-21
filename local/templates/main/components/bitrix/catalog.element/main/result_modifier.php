@@ -193,11 +193,6 @@ while ($section = $rsSections->GetNext()) {
 
 $arResult["IS_SHOES"] = !empty(array_filter($sections, fn($section) => $section["CODE"] === 'obuv'));
 
-if ($USER->IsAdmin()) {
-    var_dump($sections);
-    var_dump($arResult["IS_SHOES"]);
-}
-
 $arResult["ACTUAL_ITEM"] = $actualItem;
 
 $component->SetResultCacheKeys(["ACTUAL_ITEM", "IS_SHOES"]);
