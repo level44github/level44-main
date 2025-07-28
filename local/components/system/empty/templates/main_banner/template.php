@@ -3,9 +3,21 @@
     <div class="home">
         <div class="embla" data-mouse-scroll="false" data-autoplay="true">
             <div class="embla__container">
-                <? foreach ($arResult['SLIDES'] as $slide): ?>
-                    <div class="embla__slide">
-                        <a class="embla__slide-link"
+                <?
+                $oldtype='50%';
+                $curenttype='50%';
+                foreach ($arResult['SLIDES'] as $i=>$slide){
+
+
+                    if (($i%2 == 0) or ($curenttype=='100%') or ($slide['banner_type']=='100%')){
+                        $oldtype=$curenttype;
+                        $curenttype=$slide['banner_type'];
+
+                        ?>
+                    <div class="embla__slide" style="justify-content: space-between; display: flex">
+                    <?}?>
+
+                        <a class="embla__slide-link" style="width:<?=$slide['banner_type']?>; display:block;"
                             <? if (!empty($slide['link']['address'])): ?>
                                 href="<?= $slide['link']['address'] ?>"
                             <? endif; ?>
@@ -52,8 +64,12 @@
                                 </div>
                             </div>
                         </a>
+                   <? if (($i%2 != 0) or ($slide['banner_type']=='100%') or ($arResult['SLIDES'][$i+1]['banner_type']=='100%')){?>
                     </div>
-                <? endforeach; ?>
+                    <?}?>
+                <? } ?>
+
+
             </div>
             <button class="btn btn-link embla__arrow prev" type="button" aria-label="Arrow prev">
                 <svg class="icon icon-arrow-left embla__arrow__icon">

@@ -395,3 +395,25 @@
         margin-top: 1%;
     }
 }
+
+@media (max-width: 768px) {
+  .embla__slide
+  {
+    display:block !important;
+  }
+
+  .embla__slide-link {
+    width: 100% !important;
+  }
+
+  .home .embla__slide-link  .embla__slide-content
+  {
+    height:70svh;
+  }
+
+  .home .embla__slide-link:nth-child(2n)  .embla__slide-content
+  {
+    height:30svh;
+  }
+}
+

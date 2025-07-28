@@ -28,6 +28,7 @@ $res = \CIBlockElement::GetList(
         "PROPERTY_LINK_ADDRESS",
         "PROPERTY_SPLIT_FILE_1",
         "PROPERTY_SPLIT_FILE_2",
+        "PROPERTY_BANNER_TYPE",
     ]
 );
 
@@ -98,6 +99,7 @@ foreach ($items as $item) {
 
 
     $arResult['SLIDES'][] = [
+        'banner_type'=>$item['PROPERTY_BANNER_TYPE_VALUE'],
         'files' => [
             'mobile'  => $mobileFile,
             'desktop' => $desktopFile,
