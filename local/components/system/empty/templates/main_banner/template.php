@@ -6,13 +6,14 @@
                 <?
                 $oldtype='50%';
                 $curenttype='50%';
+                $countSlides=0;
                 foreach ($arResult['SLIDES'] as $i=>$slide){
 
 
                     if (($i%2 == 0) or ($curenttype=='100%') or ($slide['banner_type']=='100%')){
                         $oldtype=$curenttype;
                         $curenttype=$slide['banner_type'];
-
+                        $countSlides++;
                         ?>
                     <div class="embla__slide" style="justify-content: space-between; display: flex">
                     <?}?>
@@ -22,7 +23,7 @@
                                 href="<?= $slide['link']['address'] ?>"
                             <? endif; ?>
                         >
-                            <div class="embla__slide-content">
+                            <div class="embla__slide-content" <?if ($curenttype=='100%'){?>style="height: 100svh;"<?}?>>
                                 <? if (!empty($desktopSingle = $slide['files']['desktop']['single'])): ?>
                                     <? if ($desktopSingle['isVideo']): ?>
                                         <video class="banner-video desktop" autoplay muted loop playsinline>
@@ -82,11 +83,11 @@
                 </svg>
             </button>
             <div class="embla__dots">
-                <? foreach ($arResult['SLIDES'] as $index => $slide): ?>
-                    <button type="button" data-index="<?= $index ?>">
+                <? for ($j=0; $j<$countSlides;$j++){ ?>
+                    <button type="button" data-index="<?= $j ?>">
                         <div class="button-body"></div>
                     </button>
-                <? endforeach; ?>
+                <? } ?>
             </div>
         </div>
     </div>
