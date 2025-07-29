@@ -23,10 +23,23 @@ use \Bitrix\Main\Localization\Loc;
  * @var string $buttonSizeClass
  * @var CatalogSectionComponent $component
  */
+
+$soldout=true;
+
+foreach ($item['OFFERS'] as $offer) {
+
+    if ($offer['PRODUCT']['AVAILABLE']=='Y')
+    {
+        $soldout=false;
+        break;
+    }
+};
 ?>
 
 <a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+
     <div class="embla" data-mouse-scroll="true">
+        <?if ($soldout){?><div class="k-sold-out">Sold out</div><?}?>
         <div class="embla__container">
             <? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
                 <div class="embla__slide">
