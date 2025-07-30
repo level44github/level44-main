@@ -424,18 +424,24 @@
 .k-sold-out
 {
   background-color: #fff;
-  padding:10px 16px;
+
   border-radius:2px;
   font-size:12px;
   position:absolute;
   right:8px;
   top:8px;
+  width:80px;
+  height:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 @media (max-width: 768px) {
   .k-sold-out
   {
     font-size:8px;
-    padding:6px 14px;
+    width:60px;
+    height:19px;
   }
 }
