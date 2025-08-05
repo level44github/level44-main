@@ -308,10 +308,12 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                                 <div class="dimension__header">
                                     <div class="title"><?= Loc::getMessage('SIZE') ?></div>
                                     <!-- Button modal-->
+                                    <?if (strpos($APPLICATION->GetCurPage(),'obuv')===false){?>
                                     <button class="btn table-btn dimension__table-btn" type="button" data-toggle="modal"
                                             data-target="#dimension__table-modal">
                                         <?= Loc::getMessage('SIZE_TABLE') ?>
                                     </button>
+                                    <?}?>
                                 </div>
                                 <div class="dimension__group btn-group-toggle" data-toggle="buttons"
                                      data-entity="sku-line-block">
