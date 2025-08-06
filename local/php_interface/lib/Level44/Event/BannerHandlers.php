@@ -62,8 +62,8 @@ class BannerHandlers extends HandlerBase
         if (empty($arFields['ID'])) {
             $count = ElementTable::getCount(['IBLOCK_ID' => Base::BANNER_SLIDES_IBLOCK_ID]);
 
-            if ($count >= 5) {
-                $APPLICATION->throwException("Максимальное количество слайдов: 5");
+            if ($count >= 10) {
+                $APPLICATION->throwException("Максимальное количество слайдов: 10");
                 return false;
             }
         }
