@@ -415,6 +415,11 @@
   {
     height:30svh;
   }
+
+  .embla__slide .embla__slide-link:nth-child(2)
+  {
+    border-top:3px solid #fff;
+  }
 }
 .grid__item__link
 {
