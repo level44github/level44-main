@@ -418,7 +418,12 @@
 
   .embla__slide .embla__slide-link:nth-child(2)
   {
-    border-top:12px solid #fff;
+    border-top:30px solid #fff;
+  }
+
+  .home .embla__slide-content .slide-uptitle
+  {
+    display:block !important;
   }
 }
 .grid__item__link
