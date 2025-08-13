@@ -288,10 +288,12 @@ $arResult["ORDER_TOTAL_PRICE_DOLLAR"] = $dollarTotalPrice <= 0 || !Base::isEnLan
 
 $curDelPriceWithDisc=$arResult['CURRENT_DELIVERY']['PRICE'];
 
-if ($arResult['CURRENT_DELIVERY']['DELIVERY_DISCOUNT_PRICE']!=null)
+
+if (isset($arResult['CURRENT_DELIVERY']['DELIVERY_DISCOUNT_PRICE']))
 {
     $curDelPriceWithDisc=$arResult['CURRENT_DELIVERY']['DELIVERY_DISCOUNT_PRICE'];
 }
+
 
 if (!empty($arResult['CURRENT_DELIVERY'])) {
     $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision((
