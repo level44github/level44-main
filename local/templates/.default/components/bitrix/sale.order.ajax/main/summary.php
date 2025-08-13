@@ -89,7 +89,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     </div>
                 </div>
                 <div class="d-flex"><?= Loc::getMessage("DELIVERY") ?>
-                    <?print_r($arResult["CURRENT_DELIVERY"]);?>
+
                     <div class="ml-auto">
 
                         <?if ($arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]!=null){?>
