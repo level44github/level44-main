@@ -286,10 +286,17 @@ $dollarTotalPrice = Base::getDollarPrice($arResult['CURRENT_DELIVERY']['PRICE'],
 $arResult["ORDER_TOTAL_PRICE_DOLLAR"] = $dollarTotalPrice <= 0 || !Base::isEnLang() ? false
     : Base::formatDollar($dollarTotalPrice);
 
+$curDelPriceWithDisc=$arResult['CURRENT_DELIVERY']['PRICE'];
+
+if ($arResult['CURRENT_DELIVERY']['DELIVERY_DISCOUNT_PRICE']!=null)
+{
+    $curDelPriceWithDisc=$arResult['CURRENT_DELIVERY']['DELIVERY_DISCOUNT_PRICE'];
+}
+
 if (!empty($arResult['CURRENT_DELIVERY'])) {
     $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision((
             $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] - $arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"]
-        ) + $arResult['CURRENT_DELIVERY']['PRICE']);
+        ) + $curDelPriceWithDisc);
 
     $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"] = SaleFormatCurrency($arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"], 'RUB');
 }

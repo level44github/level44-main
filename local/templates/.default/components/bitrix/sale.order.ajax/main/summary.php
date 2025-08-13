@@ -89,7 +89,17 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     </div>
                 </div>
                 <div class="d-flex"><?= Loc::getMessage("DELIVERY") ?>
-                    <div class="ml-auto"><span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span>
+                    <?print_r($arResult["CURRENT_DELIVERY"]);?>
+                    <div class="ml-auto">
+
+                        <?if ($arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]!=null){?>
+                        <div class=product__final-price">
+                            <span><?=$arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]?></span>
+                        </div>
+                            <div class="basket-aside__price-crossed"> <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span></div>
+                        <?}else{?>
+                        <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span>
+                        <?}?>
                         <? if ($arResult["CURRENT_DELIVERY"]["DOLLAR_PRICE"]): ?>
                             &middot; <span> <?= $arResult["CURRENT_DELIVERY"]["DOLLAR_PRICE"] ?></span>
                         <? endif; ?>
