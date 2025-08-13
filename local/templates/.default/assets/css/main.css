@@ -413,7 +413,7 @@
 
   .home .embla__slide-link:nth-child(2n)  .embla__slide-content
   {
-    height:30svh;
+    height:calc(30svh - 30px);
   }
 
   .embla__slide .embla__slide-link:nth-child(2)
