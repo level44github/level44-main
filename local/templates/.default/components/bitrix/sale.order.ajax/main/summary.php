@@ -111,7 +111,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     <div class="ml-auto">
 
                         <?if ($arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]!=null){?>
-                            <div class=product__final-price">
+                            <div class="product__final-price">
                                 <span><?=$arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]?></span>
                             </div>
                             <div class="basket-aside__price-crossed"> <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span></div>

@@ -465,3 +465,8 @@
   text-align:right;
 }
 
+.basket-aside__body .product__final-price
+{
+  text-align:left;
+}
+
