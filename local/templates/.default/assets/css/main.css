@@ -460,3 +460,8 @@
   font-weight:bold;
 }
 
+.product__final-price
+{
+  text-align:right;
+}
+

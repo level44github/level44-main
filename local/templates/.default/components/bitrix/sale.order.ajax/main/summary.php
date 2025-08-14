@@ -71,9 +71,13 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <?= $arResult["BASKET_ITEMS_QUANTITY"] ?>
                         <?= Loc::getMessage("PCS") ?>
                     </span>
+
+
                     <div class="ml-auto">
                         <div class="<?= $arResult["SHOW_OLD_SUM_PRICE"] ? "product__final-price" : "" ?>">
-                        <span><?= $arResult["ORDER_PRICE_FORMATED"] ?></span>
+
+                            <span><?= $arResult['JS_DATA']['TOTAL']["PRICE_WITHOUT_DISCOUNT"] ?></span>
+
                             <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
                                 &middot; <span> <?= $arResult["SUM_PRICE_DOLLAR"] ?></span>
                             <? endif; ?>
@@ -88,17 +92,31 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <? endif; ?>
                     </div>
                 </div>
+
+                <div class="d-flex"><?= Loc::getMessage("ADDDISCOUNT") ?>Дополнительная скидка
+
+
+                    <div class="ml-auto">
+                        <?=$arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF'];?>
+
+                    </div>
+                </div>
+
+
+
+
+
                 <div class="d-flex"><?= Loc::getMessage("DELIVERY") ?>
 
                     <div class="ml-auto">
 
                         <?if ($arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]!=null){?>
-                        <div class=product__final-price">
-                            <span><?=$arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]?></span>
-                        </div>
+                            <div class=product__final-price">
+                                <span><?=$arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]?></span>
+                            </div>
                             <div class="basket-aside__price-crossed"> <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span></div>
                         <?}else{?>
-                        <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span>
+                            <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span>
                         <?}?>
                         <? if ($arResult["CURRENT_DELIVERY"]["DOLLAR_PRICE"]): ?>
                             &middot; <span> <?= $arResult["CURRENT_DELIVERY"]["DOLLAR_PRICE"] ?></span>
