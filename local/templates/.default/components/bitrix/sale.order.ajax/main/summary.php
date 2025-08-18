@@ -107,7 +107,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     </div>
                 <?}?>
 
-                <?if ($arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF']!=null){?>
+                <?if ($arResult['JS_DATA']['TOTAL']['DISCOUNT_PRICE']!=0){?>
                     <div class="d-flex"><?= Loc::getMessage("ADDDISCOUNT") ?>Дополнительная скидка
 
 
