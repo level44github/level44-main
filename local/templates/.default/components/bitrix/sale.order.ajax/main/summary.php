@@ -99,7 +99,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                 <?if ($arResult["SHOW_OLD_SUM_PRICE"]!=null){?>
                 <div class="d-flex">Скидка
                     <div class="ml-auto product__final-price">
-                        - (<?=$arResult["SHOW_OLD_SUM_PRICE"]-$arResult['JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT']);?>
+                        - <?=($arResult["SHOW_OLD_SUM_PRICE"]-$arResult['JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT']);?>
                     </div>
                 </div>
                 <?}?>
