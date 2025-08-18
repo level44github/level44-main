@@ -99,7 +99,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                 <?if ($arResult["SHOW_OLD_SUM_PRICE"]!=null){?>
                 <div class="d-flex">Скидка
                     <div class="ml-auto product__final-price">
-                        -<?=$arResult["SHOW_OLD_SUM_PRICE"]-$arResult['JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT'];?>
+                        - (<?=$arResult["SHOW_OLD_SUM_PRICE"]-$arResult['JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT']);?>
                     </div>
                 </div>
                 <?}?>
@@ -126,7 +126,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <div class="product__final-price k-delivery-discount">
                                 <span><?=$arResult["CURRENT_DELIVERY"]["DELIVERY_DISCOUNT_PRICE_FORMATED"]?></span>
                             </div>
-                            <div class="basket-aside__price-crossed"> <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span></div>
+
                         <?}else{?>
                             <span><?= $arResult["CURRENT_DELIVERY"]["PRICE_FORMATED"] ?></span>
                         <?}?>
