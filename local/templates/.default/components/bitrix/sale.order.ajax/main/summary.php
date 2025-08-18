@@ -76,7 +76,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     <div class="ml-auto">
                         <div class="<?= $arResult["SHOW_OLD_SUM_PRICE"] ? "" : "" ?>">
                             <? if ($arResult["SHOW_OLD_SUM_PRICE"]){ ?>
-                                <span><?= $arResult['JS_DATA']['TOTAL']["SHOW_OLD_SUM_PRICE"] ?></span>
+                                <span><?= $arResult['JS_DATA']['TOTAL']["OLD_SUM_PRICE"] ?></span>
                             <? }else{?>
                                 <span><?= $arResult['JS_DATA']['TOTAL']["PRICE_WITHOUT_DISCOUNT"] ?></span>
                             <?} ?>
@@ -86,7 +86,7 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                             <? endif; ?>
                         </div>
                         <? if ($arResult["SHOW_OLD_SUM_PRICE"]): ?>
-                            <div class="basket-aside__price-crossed">
+                            <div class="">
                                 <span><?= $arResult["OLD_SUM_PRICE"] ?></span>
                                 <? if ($arResult["SUM_PRICE_DOLLAR"]): ?>
                                     &middot; <span> <?= $arResult["OLD_SUM_PRICE_DOLLAR"] ?></span>
@@ -96,23 +96,26 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                     </div>
                 </div>
 
+
+
                 <?if ($arResult["SHOW_OLD_SUM_PRICE"]!=null){?>
-                <div class="d-flex">Скидка
-                    <div class="ml-auto product__final-price">
-                        - <? echo $arResult["SHOW_OLD_SUM_PRICE"]-$arResult[ 'JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT'] ;?>
+                    <div class="d-flex">Скидка
+                        <div class="ml-auto product__final-price">
+
+                            - <? echo CCurrencyLang::CurrencyFormat($arResult["OLD_SUM_PRICE_VALUE"]-$arResult[ 'JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT_VALUE'], "RUB") ;?>
+                        </div>
                     </div>
-                </div>
                 <?}?>
 
                 <?if ($arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF']!=null){?>
-                <div class="d-flex"><?= Loc::getMessage("ADDDISCOUNT") ?>Дополнительная скидка
+                    <div class="d-flex"><?= Loc::getMessage("ADDDISCOUNT") ?>Дополнительная скидка
 
 
-                    <div class="ml-auto product__final-price">
-                        -<?=$arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF'];?>
+                        <div class="ml-auto product__final-price">
+                            -<?=$arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF'];?>
 
+                        </div>
                     </div>
-                </div>
                 <?}?>
 
 

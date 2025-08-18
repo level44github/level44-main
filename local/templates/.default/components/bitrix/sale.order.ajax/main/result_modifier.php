@@ -251,6 +251,9 @@ unset($basketItem);
 $arResult["BASKET_ITEMS_QUANTITY"] = $basketItemsQuantity;
 $arResult["SUM_PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar($sumPriceDollar) : false;
 $arResult["OLD_SUM_PRICE"] = CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB");
+
+$arResult["OLD_SUM_PRICE_VALUE"] = $oldSumPrice;
+
 $arResult["OLD_SUM_PRICE_DOLLAR"] = Base::formatDollar($oldSumPriceDollar);
 $arResult["SHOW_OLD_SUM_PRICE"] = !empty($oldSumPrice) && $oldSumPrice !== $arResult["ORDER_PRICE"];
 
