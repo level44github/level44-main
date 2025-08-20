@@ -135,9 +135,22 @@ a.dolyame-text
     {
         font-size:14px;
     }
+
     .dolyame-points div
     {
         font-size:14px;
+        border-top:2px solid #D9D9D9;
+
+        width:55px;
+
+        font-weight:400;
+
+    }
+
+
+    .dolyame-points div:first-child
+    {
+        border-top:2px solid #595959;
     }
 
     #dolyame-modal .modal-body
@@ -156,6 +169,16 @@ a.dolyame-text
         font-size:14px;
         height:25px;
     }
+
+
+
+    #dolyame-modal .modal-dialog
+    {
+        max-width: 341px;
+        margin: 1.75rem auto;
+    }
+
+
 }
 
 
