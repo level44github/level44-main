@@ -18,4 +18,4 @@ jobs:
           username: git
           key: ${{ secrets.SSH_PROD_PRIVATE_KEY }}
           port: 22
-          script: cd /var/www/new.test.level44.net1 && git pull
+          script: cd /var/www/new.test.level44.net1 && git pull master
