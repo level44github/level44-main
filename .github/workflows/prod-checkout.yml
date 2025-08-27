@@ -1,4 +1,4 @@
-name: Prod deploy
+name: Prod checkout master
 
 on:
   workflow_dispatch:
