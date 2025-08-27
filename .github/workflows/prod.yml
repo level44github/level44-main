@@ -1,0 +1,22 @@
+name: Prod deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    name: Remote server trigger
+    needs: "build_and_push"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Connect to server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 94.228.126.122
+          username: git
+          key: ${{ secrets.SSH_PROD_PRIVATE_KEY }}
+          port: 22
+          script: cd /var/www/new.test.level44.net1 && git pull
