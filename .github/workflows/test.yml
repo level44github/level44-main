@@ -1,0 +1,18 @@
+name: Test deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Remote server trigger
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Connect to server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 94.241.142.185
+          username: git
+          key: ${{ secrets.SSH_TEST_PRIVATE_KEY }}
+          port: 22
+          script: cd /var/www/new.test.level44.net && git checkout  ${{ github.ref_name }} -b --force &&  git pull
