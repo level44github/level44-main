@@ -17,3 +17,12 @@
     color: #989690;
 }
 
+.sdek_pvzLair a
+{
+    padding:8px 20px;
+    background-color: rgba(33, 33, 33, .4);
+    border-color: rgba(33, 33, 33, .4);
+    background-clip: padding-box;
+    color: #fff;
+}
+
