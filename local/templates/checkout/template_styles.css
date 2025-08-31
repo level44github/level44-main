@@ -24,5 +24,11 @@
     border-color: rgba(33, 33, 33, .4);
     background-clip: padding-box;
     color: #fff;
+    margin-bottom:10px;
 }
 
+.sdek_pvzAddr
+{
+    display: block;
+    margin-top:10px;
+}

@@ -145,6 +145,8 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
         $labelPositionClass .= isset($positionClassMap[$pos]) ? ' ' . $positionClassMap[$pos] : '';
     }
 }
+
+global $USER;
 ?>
 
 <? if (!empty($actualItem['MORE_PHOTO'])): ?>
@@ -258,11 +260,14 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <? endif; ?>
             </div>
 
+            <?if (in_array(1, $USER->GetUserGroupArray())){?>
             <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
 
             <? if ($price["PRICE_DOLLAR"]): ?>
                 <a class="dolyame-text">4 payments  <?=round($price['PRINT_PRICE']/4)?> ₽ ></a>
             <? endif; ?>
+
+            <?}?>
 
             <? if (!empty($arResult["COLORS"])): ?>
                 <div class="product__color color">
@@ -701,7 +706,7 @@ if ($arParams['DISPLAY_COMPARE']) {
 
         </div>
         <div class="modal-body">
-            <img src="/local/templates/.default/assets/img/dolyame.png" />
+            <img src="/local/templates/.default/assets/img/dolyame.svg" style="width:148px;"/>
 
             <div class="dolyame-plashka">
                 <div class="dolyame-info">25% сейчас, остальное — потом</div>
