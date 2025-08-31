@@ -258,6 +258,12 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 <? endif; ?>
             </div>
 
+            <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
+
+            <? if ($price["PRICE_DOLLAR"]): ?>
+                <a class="dolyame-text">4 payments  <?=round($price['PRINT_PRICE']/4)?> ₽ ></a>
+            <? endif; ?>
+
             <? if (!empty($arResult["COLORS"])): ?>
                 <div class="product__color color">
                     <div class="color__group btn-group-toggle" data-toggle="buttons">
@@ -684,6 +690,40 @@ if ($arParams['DISPLAY_COMPARE']) {
         'COMPARE_PATH' => $arParams['COMPARE_PATH']
     );
 } ?>
+
+
+
+    <div class="modal fade" id="dolyame-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Оплата покупок в рассрочку</h5>
+
+        </div>
+        <div class="modal-body">
+            <img src="/local/templates/.default/assets/img/dolyame.png" />
+
+            <div class="dolyame-plashka">
+                <div class="dolyame-info">25% сейчас, остальное — потом</div>
+
+                <div class="dolyame-points">
+                    <div>Сегодня</div>
+                    <div>Через 2 недели</div>
+                    <div>Через 4 недели</div>
+                    <div>Через 6 недель</div>
+                </div>
+            </div>
+
+            <button class="modal-close dolyame-close">Закрыть</button>
+        </div>
+    </div>
+    </div>
+    </div>
+
+
+
+
+
     <script>
         BX.message({
             ECONOMY_INFO_MESSAGE: '<?=GetMessageJS('CT_BCE_CATALOG_ECONOMY_INFO2')?>',

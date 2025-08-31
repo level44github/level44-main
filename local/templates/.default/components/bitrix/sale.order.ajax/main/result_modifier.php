@@ -276,6 +276,7 @@ if (!empty($currentDelivery)) {
     $arResult["CURRENT_DELIVERY"] = $currentDelivery;
 }
 
+
 if ($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y") {
     $arResult["IS_CASH"] = !empty($arResult["ORDER"]) && !empty($arResult["PAY_SYSTEM"])
         && $arResult["PAY_SYSTEM"]["IS_CASH"] === "Y"
