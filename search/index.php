@@ -24,7 +24,7 @@ $APPLICATION->SetTitle("Поиск");
 		"PRODUCT_PROPS_VARIABLE" => "prop",
 		"SECTION_ID_VARIABLE" => "SECTION_ID",
 		"DISPLAY_COMPARE" => "Y",
-		"PAGE_ELEMENT_COUNT" => "16",
+		"PAGE_ELEMENT_COUNT" => "99999",
 		"LINE_ELEMENT_COUNT" => "4",
 		"PROPERTY_CODE" => array(),
 		"OFFERS_FIELD_CODE" => array(),

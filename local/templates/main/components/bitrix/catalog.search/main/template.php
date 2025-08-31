@@ -18,6 +18,8 @@ use Level44\Sort;
 $this->setFrameMode(true);
 
 global $searchFilter;
+global $searchFilter2;
+
 
 $sort = new Sort('search');
 
@@ -65,6 +67,8 @@ if (Loader::includeModule('search'))
 		$searchFilter = array(
 			"ID" => $arElements,
 		);
+
+
 		if ($arParams['USE_SEARCH_RESULT_ORDER'] === 'Y')
 		{
 			$elementOrder = array(
@@ -229,6 +233,8 @@ if (!empty($searchFilter) && is_array($searchFilter))
                         "IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
                         "IBLOCK_ID" => $arParams["IBLOCK_ID"],
                         "FILTER_NAME" => "searchFilter",
+						"SECTION_ID" => "",
+						"SECTION_CODE" => "",
                         "PRICE_CODE" => $arParams["~PRICE_CODE"],
                         "CACHE_TYPE" => $arParams["CACHE_TYPE"],
                         "CACHE_TIME" => $arParams["CACHE_TIME"],
@@ -253,6 +259,9 @@ if (!empty($searchFilter) && is_array($searchFilter))
                     $component,
                     array('HIDE_ICONS' => 'Y')
                 );
+
+
+				unset($searchFilter['FACET_OPTIONS']);
 
                 $APPLICATION->IncludeComponent(
                     "bitrix:catalog.section",
