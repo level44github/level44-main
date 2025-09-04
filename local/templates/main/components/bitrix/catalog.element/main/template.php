@@ -260,14 +260,14 @@ global $USER;
                 <? endif; ?>
             </div>
 
-            <?if (in_array(1, $USER->GetUserGroupArray())){?>
+            <?//if (in_array(1, $USER->GetUserGroupArray())){?>
             <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
 
             <? if ($price["PRICE_DOLLAR"]): ?>
                 <a class="dolyame-text">4 payments  <?=round($price['PRINT_PRICE']/4)?> ₽ ></a>
             <? endif; ?>
 
-            <?}?>
+            <?//}?>
 
             <? if (!empty($arResult["COLORS"])): ?>
                 <div class="product__color color">
