@@ -264,7 +264,7 @@ global $USER;
             <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
 
             <? if ($price["PRICE_DOLLAR"]): ?>
-                <a class="dolyame-text">4 payments  <?=round($price['PRICE_DOLLAR']/4)?> $ ></a>
+                <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 payments  <?=round($price['PRICE_DOLLAR']/4)?> $ ></a>
             <? endif; ?>
 
             <?//}?>
