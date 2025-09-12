@@ -47,9 +47,15 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
                                     <?= Loc::getMessage('SPOL_ORDER_NUMBER_TEXT', ['#ORDER_NUMBER#' => $order['ORDER']['ACCOUNT_NUMBER']]); ?>
                                 </div>
                             </div>
-                            <svg class="icon icon-arrow-back order-arrow">
-                                <use xlink:href="#arrow-back"></use>
+
+                            <svg   width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 22L20 12L11 2" stroke="#212121" stroke-width="1.2"/>
+                                <path d="M20 12L3 12" stroke="#212121" stroke-width="1.2"/>
                             </svg>
+
+
+
+
                         </div>
                         <div class="product-images">
                             <? foreach ($order['BASKET_ITEMS'] as $basketItem): ?>

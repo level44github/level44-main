@@ -308,3 +308,29 @@ class AcritBonusInOrderOpensourceIntegration
     }
 }
 AcritBonusInOrderOpensourceIntegration::init();
+
+
+
+function getUserOrderSumm($userId)
+{
+    Bitrix\Main\Loader::includeModule('sale');
+
+    if ($userId) {
+        $totalPaid = 0;
+
+        $orders = Bitrix\Sale\Order::getList([
+            'filter' => [
+                'USER_ID' => $userId,
+                'PAYED' => 'Y',
+                'CANCELED' => 'N'
+            ],
+            'select' => ['ID', 'PRICE']
+        ]);
+
+        while ($order = $orders->fetch()) {
+            $totalPaid += $order['PRICE'];
+        }
+
+        return  $totalPaid;
+    }
+}

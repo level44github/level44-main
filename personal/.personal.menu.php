@@ -1,18 +1,18 @@
 <?
 $aMenuLinks = Array(
-/*	Array(
+	Array(
 		"Система привилегий",
-		"",
-		Array(), 
-		Array(), 
-		"" 
-	),*/
+        SITE_DIR ."personal/loyalty/",
+		Array(),
+		Array(),
+		""
+	),
 	Array(
 		"Заказы",
         SITE_DIR . "personal/orders/",
 		Array(),
         Array(),
-		"" 
+		""
 	),
   	Array(
 		"Избранное",
@@ -31,9 +31,9 @@ $aMenuLinks = Array(
 	Array(
 		"Выйти",
         SITE_DIR . "?logout=yes",
-		Array(), 
-		Array(), 
-		"" 
+		Array(),
+		Array(),
+		""
 	)
 );
 ?>

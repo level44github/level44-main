@@ -182,3 +182,229 @@ a.dolyame-text
 }
 
 
+.loyalty-plashka
+{
+    border-radius:10px;
+    box-shadow: 0px 0px 22px 1px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(152, 150, 144, 0.2);
+    padding:20px 45px;
+    margin-top:50px;
+    margin-bottom:50px;
+}
+
+.loyalty-progress-line
+{
+    background: rgba(201, 203, 205, 0.5);
+    width:100%;
+    position:relative;
+    height:1px;
+    margin-bottom:10px;
+}
+
+.loyalty-progress-line-active
+{
+    top:0px;
+    left:0px;
+    height:1px;
+    background: rgba(152, 150, 144, 1);
+}
+
+.loyalty-score-wrap
+{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom:14px;
+
+
+    font-weight: 400;
+
+    font-size: 18px;
+
+    line-height: 100%;
+    letter-spacing: 0;
+
+    color:rgba(33, 33, 33, 1);
+
+}
+
+.loyalty-score-wrap span
+{
+    display:inline-flex;
+    margin-left:10px;
+}
+
+.loyalty-progress-status
+{
+    display:flex;
+    justify-content: space-between;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0;
+    color:#000;
+
+}
+.loyalty-progress-status .info
+{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0;
+    color: rgba(152, 150, 144, 1);
+
+}
+
+.loyalty-text
+{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: rgba(152, 150, 144, 1);
+    padding-bottom:30px;
+
+    border-bottom: 1px solid rgba(152, 150, 144, 1);
+
+}
+
+.loyalty-history
+{
+    margin-top:30px;
+}
+
+.loyalty-history table
+{
+    width:715px;
+    margin-top:30px;
+}
+
+.loyalty-history table thead th {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color:rgba(152, 150, 144, 1);
+    padding-bottom:7px;
+}
+
+.loyalty-history table td {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color:rgba(33, 33, 33, 1);
+    padding-top:7px;
+    padding-bottom:7px;
+}
+
+.loyalty-history .mobile-table
+{
+    display:none;
+}
+
+
+.loyalty-history h3
+{
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+    color:rgba(33, 33, 33, 1);
+}
+
+
+
+@media (max-width: 767.98px) {
+    .loyalty-history table
+    {
+        display:none;
+    }
+
+    .loyalty-history .mobile-table
+    {
+        display:block;
+    }
+
+    .loyalty-history h3
+    {
+        font-weight: 400;
+
+        font-size: 16px;
+        line-height: 120%;
+        letter-spacing: 0;
+        text-align: center;
+        vertical-align: middle;
+
+    }
+
+    .loyalty-text
+    {
+        font-size:14px;
+    }
+
+    .loyalty-score-wrap
+    {
+        font-size:16px;
+    }
+
+    .loyalty-progress-status
+    {
+        font-size:14px;
+    }
+
+    .loyalty-progress-status .info
+    {
+        font-size:14px;
+    }
+}
+
+
+.history-row
+{
+    display:flex;
+    justify-content: space-between;
+
+
+    font-weight: 400;
+
+    font-size: 14px;
+
+    line-height: 120%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color:rgba(33, 33, 33, 1);
+
+    padding-top:10px;
+    padding-bottom:10px;
+    border-bottom:1px solid rgba(33, 33, 33, 0.1);
+
+}
+
+
+.history-row-info-grey
+{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0;
+    text-align: center;
+    vertical-align: middle;
+
+    color:rgba(152, 150, 144, 1);
+
+}
+
+.history-row-right
+{
+    text-align:right;
+}
+
+.history-row-top
+{
+    padding-bottom:10px;
+}
+

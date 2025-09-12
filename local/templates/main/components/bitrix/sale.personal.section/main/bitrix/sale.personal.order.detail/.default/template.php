@@ -32,9 +32,13 @@ if (!empty($arResult['ERRORS']['FATAL'])) {
     <div class="profile profile-order">
         <div class="order-header">
             <a class="order-back" href="<?= $arResult['URL_TO_LIST'] ?>">
-                <svg class="icon icon-arrow-back order-arrow">
-                    <use xlink:href="#arrow-back"></use>
+
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 2L4 12L13 22" stroke="#212121" stroke-width="1.2"/>
+                    <path d="M4 12L21 12" stroke="#212121" stroke-width="1.2"/>
                 </svg>
+
+
                 <span><?= Loc::getMessage('SPOD_ORDER_NUMBER_TEXT', ['#ORDER_NUMBER#' => $arResult["ACCOUNT_NUMBER"]]) ?></span>
                 <div class="order-status">
                     <?= Loc::getMessage("SPOD_ORDER_{$arResult["STATUS"]["ID"]}_STATUS") ?> <?= $arResult["DATE_INSERT_FORMATED"] ?>

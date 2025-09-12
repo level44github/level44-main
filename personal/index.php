@@ -9,10 +9,13 @@ $APPLICATION->SetTitle("Личный кабинет");
 <div class="row">
 	<div class="profile-nav-mobile d-md-none">
 		<a class="btn btn-link profile-nav-mobile__link" href="<?$APPLICATION->ShowViewContent("personal.back-link")?>">
-			<svg class="icon icon-arrow-back profile-nav-mobile__link__icon">
-				<use xlink:href="#arrow-back"></use>
-			</svg>
-			<div class="text-block">
+
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 2L4 12L13 22" stroke="#212121" stroke-width="1.2"/>
+                <path d="M4 12L21 12" stroke="#212121" stroke-width="1.2"/>
+            </svg>
+
+            <div class="text-block">
 				<div><?$APPLICATION->ShowViewContent("personal.navigation-title")?></div>
 				<div><?$APPLICATION->ShowViewContent("personal.navigation-subtitle")?></div>
 			</div>
@@ -78,6 +81,7 @@ $APPLICATION->SetTitle("Личный кабинет");
 					"orders"=>"orders/",
 					"private"=>"private/",
 					"favorites"=>"favorites/",
+                    "loyalty"=>"loyalty/",
 				),
 				"SEND_INFO_PRIVATE" => "N",
 				"SET_TITLE" => "Y",
