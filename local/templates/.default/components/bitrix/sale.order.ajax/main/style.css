@@ -50,3 +50,31 @@ font.errortext {
 .suggestions-promo a[target="_blank"] svg {
     display: none;
 }
+
+.CURRENT_BONUS_BUDGET
+{
+    color:rgba(152, 150, 144, 1);
+    border:1px solid rgba(152, 150, 144, 1);
+    padding:5px 15px;
+}
+
+.bonus-order-wrap
+{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top:25px;
+}
+
+.bonus-line
+{
+    border-bottom:1px solid rgba(152, 150, 144, 1);
+    width:60%;
+}
+
+.bonus-input
+{
+    border:1px solid rgba(152, 150, 144, 1);
+    color:rgba(152, 150, 144, 1);
+    min-width:162px;
+}

@@ -121,6 +121,8 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
 
 
 
+
+
                 <div class="d-flex"><?= Loc::getMessage("DELIVERY") ?>
 
                     <div class="ml-auto">
@@ -138,9 +140,22 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                         <? endif; ?>
                     </div>
                 </div>
+
+                <?if ((int)$arResult['BONUSPAY']['USER_VALUE']!=0){?>
+                    <div class="d-flex">Бонусами
+
+
+                        <div class="ml-auto product__final-price">
+                            -<?=$arResult['BONUSPAY']['USER_VALUE'];?> руб.
+
+                        </div>
+                    </div>
+                <?}?>
+
+
             </div>
             <div class="d-flex">
-                <div class="basket-aside__total"><span><?= $arResult["ORDER_TOTAL_PRICE"] ?></span>
+                <div class="basket-aside__total"><span><?= $arResult["ORDER_TOTAL_PRICE_NEW"] ?></span>
                     <? if ($arResult["ORDER_TOTAL_PRICE_DOLLAR"]): ?>
                         &middot; <span> <?= $arResult["ORDER_TOTAL_PRICE_DOLLAR"] ?></span>
                     <? endif; ?>

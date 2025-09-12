@@ -283,3 +283,28 @@ function retailCrmAfterOrderSave($order)
     } catch (\Exception $e) {
     }
 }
+
+class AcritBonusInOrderOpensourceIntegration
+{
+    public static function init(): void
+    {
+        $eventManager = Bitrix\Main\EventManager::getInstance();
+        $eventManager->addEventHandler('sale', 'OnSaleOrderSaved',
+            static function (Bitrix\Main\Event $event) {
+                /** @var \Bitrix\Sale\Order $order */
+                $order = $event->getParameter("ENTITY");
+                $isNew = $event->getParameter("IS_NEW");
+
+                if (\Bitrix\Main\Loader::includeModule('acrit.bonus') && $isNew) {
+                    $params = [];
+                    // if bonus-fields outside main order form-tag
+                    if ((int)$_SESSION['BONUS_PAY_USER_VALUE'] > 0) {
+                        $params['PAY_BONUS_ACCOUNT'] = 'Y';
+                    }
+                    \Acrit\Bonus\Core::OnSaleComponentOrderOneStepComplete($order->getId(), $order->getFieldValues(), $params);
+                }
+            }
+        );
+    }
+}
+AcritBonusInOrderOpensourceIntegration::init();
