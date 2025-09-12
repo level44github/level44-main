@@ -4,15 +4,15 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 }
 
 global $APPLICATION;
+global $USER;
 
 use Bitrix\Main\Localization\Loc;
 use Level44\Base;
 
 $isMain = $APPLICATION->GetCurPage() === SITE_DIR;
 Base::$typePage = $isMain ? "home" : "";
-$searchQuery = (string) \Bitrix\Main\Context::getCurrent()
-	->getRequest()
-	->getQuery("q");
+$request = \Bitrix\Main\Context::getCurrent()->getRequest();
+$searchQuery = (string)$request->getQuery("q");
 ?>
 <!DOCTYPE html>
 <html lang="ru-RU">
@@ -88,6 +88,32 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                             </form>
                         </div>
                     </li>
+                    <? if ($USER->IsAuthorized()): ?>
+                        <li class="menu__profile">
+                            <a class="btn btn-link menu__link" id="login-modal-trigger" href="<?= SITE_DIR ?>personal/">
+                                <svg class="icon icon-profile menu__icon">
+                                    <use xlink:href="#profile"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    <? else: ?>
+                        <li class="menu__profile">
+                            <button class="btn btn-link menu__link" id="login-modal-trigger" type="button"
+                                    data-toggle="modal" data-target="#login-modal">
+                                <svg class="icon icon-profile menu__icon">
+                                    <use xlink:href="#profile"></use>
+                                </svg>
+                            </button>
+                        </li>
+                    <? if ($request->getQuery('auth-form') === 'Y'): ?>
+                        <script>
+                            $(function () {
+                                $('#login-modal').modal('show');
+                            })
+                        </script>
+                    <? endif; ?>
+                    <? endif; ?>
+
                     <li class="m-basket">
                         <? $APPLICATION->IncludeComponent(
                             "bitrix:sale.basket.basket.line",
@@ -147,8 +173,10 @@ $searchQuery = (string) \Bitrix\Main\Context::getCurrent()
                     ]
                 ); ?>
             </div>
-            <div class="nav-trigger__footer" hidden>
-                <button class="btn btn-dark" type="button">Личный кабинет</button>
+            <div class="nav-trigger__footer">
+                <button class="btn btn-dark" type="button"
+                        onclick="window.location.href = '<?= SITE_DIR ?>personal/';"
+                ><?= Loc::getMessage('TO_PERSONAL') ?></button>
             </div>
         </div>
         <div class="nav-trigger__overlay"></div>

@@ -1,0 +1,20 @@
+<?php
+$MESS['PRIVACY_TEXT'] = "Нажимая кнопку “сохранить изменения”, вы соглашаетесь на обработку своих персональных данных и то, что вы
+            ознакомлены с <a href=\"#SITE_DIR#about/personal/\">политикой конфиденциальности </a>";
+$MESS['NAME'] = "Ваше имя";
+$MESS['LAST_NAME'] = "Ваша фамилия";
+$MESS['SECOND_NAME'] = "Вашe отчество";
+$MESS['BIRTHDAY'] = "Дата рождения";
+$MESS['BIRTHDAY_MASK'] = "ДД.ММ.ГГГГ";
+$MESS['GENDER'] = "Ваш пол";
+$MESS['GENDER_M'] = "Мужской";
+$MESS['GENDER_F'] = "Женский";
+$MESS['PHONE'] = "Номер телефона";
+$MESS['EMAIL'] = "Ваш e-mail";
+$MESS['CLOTHING_SIZE'] = "Размер одежды";
+$MESS['SHOE_SIZE'] = "Размер обуви";
+$MESS['SAVE'] = "Сохранить";
+$MESS['PROFILE_TITLE'] = "Мои данные";
+$MESS['FIELD_REQUIRED_MESSAGE'] = "Поле обязательно для заполнения";
+$MESS['FIELD_INCORRECT_MESSAGE'] = "Поле заполнено некорректно";
+$MESS['PROFILE_DATA_SAVED'] = "Изменения сохранены";

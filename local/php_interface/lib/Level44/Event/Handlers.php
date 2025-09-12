@@ -441,6 +441,7 @@ LAYOUT;
                         "FIRST_NAME",
                         "LAST_NAME",
                         "SECOND_NAME",
+                        "EMAIL",
                     ]
                 ],
             ]
@@ -463,6 +464,9 @@ LAYOUT;
                         break;
                     case 'SECOND_NAME':
                         $arFields['SECOND_NAME'] = trim($item);
+                        break;
+                    case 'EMAIL':
+                        $arFields['EMAIL'] = trim($item);
                         break;
                 }
             }

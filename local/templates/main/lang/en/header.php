@@ -1,4 +1,5 @@
 <?
 $MESS["HEADER_SEARCH_ON_SITE"] = "Search";
 $MESS["HEADER_GO_CATALOG"] = "New";
+$MESS["TO_PERSONAL"] = "Personal";
 ?>

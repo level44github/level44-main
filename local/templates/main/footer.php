@@ -131,6 +131,29 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
     </div>
 </div>
 
+<div class="modal" id="login-modal" tabindex="-1" aria-hidden="true" data-backurl="<?= SITE_DIR ?>personal/">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="title"><?= Loc::getMessage('LOGIN_MODAL_TITLE') ?></div>
+            <button class="btn btn-link btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                <svg class="icon icon-close-small btn-close__icon">
+                    <use xlink:href="#close-small"></use>
+                </svg>
+            </button>
+            <?
+            $APPLICATION->IncludeComponent(
+                "bxmaker:authuserphone.simple",
+                ".default",
+                array(
+                    //параметры вызова для переопределения поведения
+                ),
+                false
+            );
+            ?>
+        </div>
+    </div>
+</div>
+
 <?
 Base::loadScripts();
 ?>
@@ -161,6 +184,13 @@ Base::loadScripts();
         <symbol viewBox="0 0 16 16" id="close-small" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 3l10 10m0-10L3 13" data-stroke="true" fill="none"/>
         </symbol>
+        <symbol viewBox="0 0 24 24" id="favorites" xmlns="http://www.w3.org/2000/svg">
+            <path opacity=".4" d="M4 2.5h16v19l-8-4.75-8 4.75v-19z" data-fill="true"/>
+        </symbol>
+        <symbol viewBox="0 0 24 24" id="favorites-add" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.4 3.1v17.346l-7.093-4.212-.307-.182-.307.182L4.6 20.446V3.1h14.8z" data-stroke="true"
+                  fill="none"/>
+        </symbol>
         <symbol viewBox="0 0 24 24" id="filters" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 6.9l13.5-.002M24 6.9h-4.5M0 16.9l4.5.001m19.5 0H10.5" data-stroke="true" fill="none"/>
             <circle cx="7.5" cy="16.9" r="2.9" data-stroke="true" fill="none"/>
@@ -179,6 +209,11 @@ Base::loadScripts();
             <path d="M6 4.747v14.506a.4.4 0 00.622.332L17.5 12.333a.4.4 0 000-.666L6.62 4.415a.4.4 0 00-.62.332z"
                   data-stroke="true" fill="none"/>
         </symbol>
+        <symbol viewBox="0 0 24 25" id="profile" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="7.5" r="5.4" data-stroke="true" fill="none"/>
+            <path d="M12 15.1c1.087 0 2.164.169 3.184.497l.433.15a9.61 9.61 0 012.719 1.549l.334.286a8.467 8.467 0 011.839 2.349l.184.376c.382.828.609 1.704.68 2.593H2.627c.06-.753.231-1.496.515-2.21l.165-.383a8.335 8.335 0 011.706-2.424l.317-.301a9.474 9.474 0 012.628-1.665l.425-.17a10.343 10.343 0 013.152-.637L12 15.1z"
+                  data-stroke="true" fill="none"/>
+        </symbol>
         <symbol viewBox="0 0 24 24" id="search" xmlns="http://www.w3.org/2000/svg">
             <circle cx="10.636" cy="10.136" r="8.536" data-stroke="true" fill="none"/>
             <path d="M16.368 16.238l6.338 6.337" data-stroke="true" fill="none"/>
@@ -188,14 +223,14 @@ Base::loadScripts();
             <path d="M1.98 11.78l9.334-9.334" data-stroke="true" fill="none"/>
         </symbol>
         <symbol viewBox="0 0 14 14" id="whatsapp" xmlns="http://www.w3.org/2000/svg">
-            <g clip-path="url(#na)" fill="none">
+            <g clip-path="url(#qa)" fill="none">
                 <path d="M.775 13.292l.334-1.222.101-.363c.077-.274.157-.56.226-.84v-.002a.952.952 0 00-.088-.663C.767 9.172.46 8.085.503 6.938c.104-2.68 1.327-4.645 3.73-5.798 3.794-1.819 8.27.416 9.121 4.57.73 3.56-1.61 7.032-5.166 7.677a6.424 6.424 0 01-4.264-.66h-.001a.987.987 0 00-.677-.08 272.999 272.999 0 00-2.472.645z"
                       data-stroke="true" fill="none"/>
                 <path d="M8.8 10.266c1.048-.017 1.656-.548 1.736-1.416.014-.15-.001-.284-.157-.359-.465-.222-.927-.448-1.393-.664-.157-.073-.29-.04-.401.115-.154.214-.331.41-.495.618-.104.132-.23.15-.377.09a4.74 4.74 0 01-2.36-2.026c-.09-.15-.067-.269.046-.4a3.82 3.82 0 00.412-.556.428.428 0 00.014-.325 25.374 25.374 0 00-.539-1.3.585.585 0 00-.222-.254c-.214-.123-.737-.046-.915.124-.528.503-.738 1.117-.615 1.84.1.587.405 1.076.743 1.553.741 1.044 1.6 1.956 2.807 2.467.585.247 1.181.47 1.715.493z"
                       data-fill="true"/>
             </g>
             <defs fill="none">
-                <clipPath id="na" fill="none"/>
+                <clipPath id="qa" fill="none"/>
             </defs>
         </symbol>
     </svg>
