@@ -188,6 +188,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
 
         <div class="card" style="padding:1rem 2rem">
             <div>Баллы:</div>
+            <?if ($arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']!=''){?>
             <div class="bonus-order-wrap">
                 <div class="CURRENT_BONUS_BUDGET">
                     У вас <?=$arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']?>
@@ -198,6 +199,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                 <input type="number" onchange="maxLengthCheck(this)" class="bonus-input" placeholder="Списать"  name="BONUS_CNT" id="BONUS_CNT"  min="0" pattern="\d+(\.\d+)?" max="<?=$arResult['BONUSPAY']['MAXPAY']?>">
                 <!--<input type="button" class="bonus-input" value="Списать"  onclick="AcritBonusPayBonusBtn()">-->
             </div>
+            <?}?>
              <div class="bonus-order-wrap">
                  <div class="CURRENT_BONUS_BUDGET">
                      <?=$arResult['BONUS']['ORDER']['VALUE']?> баллов начислим
