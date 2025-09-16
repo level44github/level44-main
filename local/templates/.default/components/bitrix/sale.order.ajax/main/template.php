@@ -185,7 +185,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
 
         ?>
 
-
+        <?if ($USER->IsAuthorized()){ ?>
         <div class="card" style="padding:1rem 2rem">
             <div>Баллы:</div>
             <?if ($arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']!=''){?>
@@ -212,6 +212,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
 
              </div>
         </div>
+       <?}?>
        <?}?>
         <div class="d-none d-lg-block js-submit-block">
             <div class="privacy-checkboxes">
