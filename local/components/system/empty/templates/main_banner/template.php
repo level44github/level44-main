@@ -10,7 +10,7 @@
                 foreach ($arResult['SLIDES'] as $i=>$slide){
 
 
-                    if (($i%2 == 0) or ($curenttype=='100%') or ($slide['banner_type']=='100%')){
+                    if (($i%2 == 0) or ($oldtype=='100%') or ($slide['banner_type']=='100%')){
                         $oldtype=$curenttype;
                         $curenttype=$slide['banner_type'];
                         $countSlides++;
