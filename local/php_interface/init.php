@@ -19,8 +19,8 @@ if (\Level44\Base::isEnLang()) {
 Event\Handlers::register();
 
 // События которые срабатывают при создании или изменении элемента инфоблока
-AddEventHandler("iblock", "OnAfterIBlockElementAdd", "ResizeUploadedPhoto");
-AddEventHandler("iblock", "OnAfterIBlockElementUpdate", "ResizeUploadedPhoto");
+//AddEventHandler("iblock", "OnAfterIBlockElementAdd", "ResizeUploadedPhoto");
+//AddEventHandler("iblock", "OnAfterIBlockElementUpdate", "ResizeUploadedPhoto");
 
 function ResizeUploadedPhoto($arFields)
 {

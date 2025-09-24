@@ -15,12 +15,12 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
 $component = $this->getComponent();
 $arParams = $component->applyTemplateModifications();
 
-\Level44\Base::setOriginalMorePhoto($arResult["MORE_PHOTO"]);
+//\Level44\Base::setOriginalMorePhoto($arResult["MORE_PHOTO"]);
 
-foreach ($arResult['OFFERS'] as &$offer) {
-   \Level44\Base::setOriginalMorePhoto($offer["MORE_PHOTO"]);
-}
-unset($offer);
+//foreach ($arResult['OFFERS'] as &$offer) {
+   //\Level44\Base::setOriginalMorePhoto($offer["MORE_PHOTO"]);
+//}
+//unset($offer);
 
 $arResult["NAME"] = \Level44\Base::getMultiLang(
     $arResult["NAME"],
