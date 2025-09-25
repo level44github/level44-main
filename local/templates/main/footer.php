@@ -141,14 +141,14 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
                 </svg>
             </button>
             <?
-          /*  $APPLICATION->IncludeComponent(
+           $APPLICATION->IncludeComponent(
                 "bxmaker:authuserphone.simple",
                 ".default",
                 array(
                     //параметры вызова для переопределения поведения
                 ),
                 false
-            );*/
+            );
             ?>
         </div>
     </div>
