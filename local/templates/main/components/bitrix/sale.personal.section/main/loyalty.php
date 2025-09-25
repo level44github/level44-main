@@ -86,7 +86,12 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                 </tr>
             </thead>
             <tbody>
-                <?foreach ($bonusHistory as $history){?>
+                <?foreach ($bonusHistory as $history){
+
+                    $activefrom=explode(' ',$history['ACTIVE_FROM']);
+                    $timestamp=explode(' ',$history['TIMESTAMP_X']);
+                    $activeto=explode(' ',$history['ACTIVE_TO']);
+                    ?>
                 <tr>
                     <td>
                         <?if ($history['TYPE']=='ORDER'){?>+<?=(int)$history['VALUE']?><?}?>
@@ -95,17 +100,17 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                     </td>
                     <td>
                         <?if ($history['TYPE']=='ORDER'){?>
-                            <?=$history['ACTIVE_FROM']?>
+                            <?=$activefrom[0]?>
                         <?}?>
 
                         <?if ($history['TYPE']=='BONUSPAY'){?>
-                            <?=$history['TIMESTAMP_X'];?>
+                            <?=$timestamp[0];?>
                         <?}?>
 
 
                     </td>
                     <td>
-                        <?=$history['ACTIVE_TO']?>
+                        <?=$activeto[0]?>
                     </td>
                     <td>
                         <?if ($history['TYPE']=='ORDER'){?>Заказ № <?=$history['ORDER_ID']?><?}?>
@@ -119,7 +124,11 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
 
 
         <div class="mobile-table">
-            <?foreach ($bonusHistory as $history){?>
+            <?foreach ($bonusHistory as $history){
+                $activefrom=explode(' ',$history['ACTIVE_FROM']);
+                $timestamp=explode(' ',$history['TIMESTAMP_X']);
+                $activeto=explode(' ',$history['ACTIVE_TO']);
+                ?>
                 <div class="history-row">
                     <div>
                         <div class="history-row-top">
@@ -129,8 +138,8 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                             <?if ($history['TYPE']=='ADMIN'){?>Бонус<?}?>
                         </div>
                         <div class="history-row-info-grey">
-                            <?if ($history['TYPE']=='BONUSPAY'){?>Начисление <?=$history['TIMESTAMP_X']?><?}else{?>
-                            Начисление <?=$history['ACTIVE_FROM']?>
+                            <?if ($history['TYPE']=='BONUSPAY'){?>Начисление <?=$timestamp[0]?><?}else{?>
+                            Начисление <?=$activefrom[0]?>
                             <?}?>
                         </div>
                     </div>
@@ -139,8 +148,9 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                             <?if ($history['TYPE']=='ORDER'){?>+<?=(int)$history['VALUE']?><?}?>
                             <?if ($history['TYPE']=='BONUSPAY'){?><?=(int)$history['VALUE']?><?}?>
                             <?if ($history['TYPE']=='ADMIN'){?>+<?=(int)$history['VALUE']?><?}?>
+                            баллов
                         </div>
-                        <div class="history-row-info-grey"><?if ($history['TYPE']=='ORDER'){?>Сгорание <?=(int)$history['ACTIVE_TO']?><?}?></div>
+                        <div class="history-row-info-grey"><?if ($history['TYPE']=='ORDER'){?>Сгорание <?=$activeto[0]?><?}?></div>
                     </div>
 
                 </div>

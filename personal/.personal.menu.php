@@ -1,6 +1,13 @@
 <?
 $aMenuLinks = Array(
 	Array(
+		"Личный кабинет",
+		SITE_DIR ."personal/main/",
+		Array(),
+		Array(),
+		""
+	),
+	Array(
 		"Система привилегий",
         SITE_DIR ."personal/loyalty/",
 		Array(),

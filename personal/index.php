@@ -82,6 +82,7 @@ $APPLICATION->SetTitle("Личный кабинет");
 					"private"=>"private/",
 					"favorites"=>"favorites/",
                     "loyalty"=>"loyalty/",
+                    "main"=>"main/",
 				),
 				"SEND_INFO_PRIVATE" => "N",
 				"SET_TITLE" => "Y",
