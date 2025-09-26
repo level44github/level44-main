@@ -71,7 +71,7 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
         Оплачивайте до 30% заказа баллами<br>
         За покупки начисляем 3% баллами (1 балл = 1 рубль)<br>
         Баллы действуют 1 год и не применяются к товарам со скидкой<br>
-        <a href="#">Подробнее о системе привилегий</a>
+        <a href="/personal/about/">Подробнее о системе привилегий</a>
     </div>
 
     <div class="loyalty-history">

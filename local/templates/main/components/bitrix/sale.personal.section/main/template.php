@@ -31,6 +31,8 @@ if (\Bitrix\Main\Loader::includeModule('awelite.favorite')) {
     $arIds = $objFavCookies->getIds();
 }
 
+LocalRedirect($arResult['PATH_TO_MAIN']);
+
 $APPLICATION->IncludeComponent(
     "bitrix:menu",
     "personal_mobile",

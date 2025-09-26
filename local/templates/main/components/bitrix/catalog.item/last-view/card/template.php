@@ -43,19 +43,11 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
 
 
 
-<a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+<a class=" grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
 
-    <div class="embla" data-mouse-scroll="true">
 
-        <div class="embla__container">
-
-                <div class="embla__slide">
                     <img class="grid__item__image" src="<?=$item['DETAIL_PICTURE']['SRC']?>" alt="<?= $item['NAME'] ?>">
-                </div>
 
-        </div>
-
-    </div>
     <div class="grid__item__title"><?= $item['NAME'] ?></div>
     <div class="grid__item__prices">
         <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>

@@ -89,7 +89,7 @@ $APPLICATION->AddViewContent("personal.navigation-title", Loc::getMessage('SPS_C
 
     <div class="lk-last-view-wrap">
         <h3>Вы недавно смотрели</h3>
-        <div class="lk-last-view-list">
+        <div class="lk-last-view-list product__related ">
         <?$APPLICATION->IncludeComponent(
             "bitrix:catalog.products.viewed",
             "last-view",
@@ -129,7 +129,7 @@ $APPLICATION->AddViewContent("personal.navigation-title", Loc::getMessage('SPS_C
                 "MESS_RELATIVE_QUANTITY_MANY" => "много",
                 "MESS_SHOW_MAX_QUANTITY" => "Наличие",
                 "OFFER_TREE_PROPS_3" => array("COLOR_REF","SIZES_SHOES","SIZES_CLOTHES"),
-                "PAGE_ELEMENT_COUNT" => "5",
+                "PAGE_ELEMENT_COUNT" => "20",
                 "PARTIAL_PRODUCT_PROPERTIES" => "N",
                 "PRICE_CODE" => array("BASE"),
                 "PRICE_VAT_INCLUDE" => "Y",

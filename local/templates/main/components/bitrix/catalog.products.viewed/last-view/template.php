@@ -117,11 +117,14 @@ $containerName = 'catalog-products-viewed-container';
 
 
 <?php
-
+?>
+<div class="slider">
+    <div class="embla" data-mouse-scroll="false" data-loop="false" data-autoplay="false">
+        <div class="embla__container" >
+            <?
 
 foreach ($arResult['ITEMS'] as $item)
 {
-
         $APPLICATION->IncludeComponent(
             'bitrix:catalog.item',
             'last-view',
@@ -143,3 +146,17 @@ foreach ($arResult['ITEMS'] as $item)
 
 }
 ?>
+
+        </div>
+        <button class="btn btn-link embla__arrow prev" type="button" aria-label="Arrow prev">
+            <svg class="icon icon-arrow-left embla__arrow__icon">
+                <use xlink:href="#arrow-left"></use>
+            </svg>
+        </button>
+        <button class="btn btn-link embla__arrow next" type="button" aria-label="Arrow next">
+            <svg class="icon icon-arrow-right embla__arrow__icon">
+                <use xlink:href="#arrow-right"></use>
+            </svg>
+        </button>
+    </div></div>
+

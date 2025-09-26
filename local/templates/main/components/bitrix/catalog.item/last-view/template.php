@@ -114,7 +114,7 @@ if (isset($arResult['ITEM']))
 	?>
 
 
-    <div class="grid__item" id="<?=$areaId?>" data-entity="item">
+    <div class="grid__item  embla__slide" id="<?=$areaId?>" data-entity="item">
 		<?
 		$documentRoot = Main\Application::getDocumentRoot();
 		$templatePath = strtolower($arResult['TYPE']).'/template.php';

@@ -499,6 +499,7 @@ a.dolyame-text
         flex-wrap:wrap;
         justify-content: center;
         gap:10px;
+        margin-left:0px;
     }
 
     .lk-main-icon-one {
@@ -507,6 +508,9 @@ a.dolyame-text
         width: 248px;
 
     }
+
+
+
 }
 
 .new-btn-wrap-fav
@@ -528,3 +532,46 @@ a.dolyame-text
 }
 .grid__item__favoritedetail.is-in-favorites .grid__item__favorite__icon{display:none}
 .grid__item__favoritedetail.is-in-favorites .grid__item__favorite__icon-active{display:block}
+
+
+.about-loyalty-text
+{
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 140%;
+    vertical-align: middle;
+}
+
+.about-loyalty-table
+{
+    width:100%;
+    margin-bottom:50px;
+    margin-top:30px;
+}
+.about-loyalty-table td
+{
+    width:50%;
+    border: 1px solid #000;
+    height:40px;
+    text-align:center;
+
+  font-weight: 300;
+
+    font-size: 16px;
+
+    line-height: 140%;
+
+    vertical-align: middle;
+
+}
+
+
+
+
+.lk-last-view-list  .embla__container {
+    gap:20px !important;
+}
+
+.lk-last-view-list .embla__container .embla__slide {
+    flex: 0 0 calc((100% - 96px) / 7) !important;
+}
