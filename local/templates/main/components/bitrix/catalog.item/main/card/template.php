@@ -36,9 +36,10 @@ foreach ($item['OFFERS'] as $offer) {
 };
 ?>
 
-<a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+<div class="grid__item__wrapper">
     <?if ($soldout){?><div class="k-sold-out">Sold out</div><?}?>
-    <div class="embla" data-mouse-scroll="true">
+    <a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
+        <div class="embla" data-mouse-scroll="true">
 
         <div class="embla__container">
             <? foreach ($item["PREVIEW_IMAGES"] as $previewImage): ?>
@@ -71,4 +72,5 @@ foreach ($item['OFFERS'] as $offer) {
             <? endif; ?>
         </div>
     <? endif; ?>
-</a>
+    </a>
+</div>
