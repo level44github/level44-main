@@ -575,3 +575,8 @@ a.dolyame-text
 .lk-last-view-list .embla__container .embla__slide {
     flex: 0 0 calc((100% - 96px) / 7) !important;
 }
+
+.menu__profile
+{
+    display:block !important;
+}
