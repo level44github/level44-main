@@ -25,5 +25,11 @@ $(function () {
     if (dropdownItem?.length) {
         $('[data-dropdown] [name="sort"]').closest('[data-dropdown]').find('.dropdown__title').text(dropdownItem.text());
     }
+
+    $('.product__info').stickySidebar({
+        topSpacing: 60,
+        bottomSpacing: 60
+    });
+
 })
 
