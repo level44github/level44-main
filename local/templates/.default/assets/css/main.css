@@ -434,7 +434,6 @@
 .k-sold-out
 {
   background-color: #fff;
-
   border-radius:2px;
   font-size:12px;
   position:absolute;
@@ -445,10 +444,16 @@
   display:flex;
   justify-content:center;
   align-items:center;
-  /* Safari fix for flexbox positioning */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  /* Safari-specific fixes */
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
   z-index: 10;
+  /* Force hardware acceleration */
+  will-change: transform;
 }
 
 @media (max-width: 768px) {
@@ -457,12 +462,39 @@
     font-size:8px;
     width:60px;
     height:19px;
-    /* Ensure Safari fix applies on mobile too */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    /* Safari-specific fixes for mobile */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
     z-index: 10;
+    will-change: transform;
   }
 }
+
+/* Safari-specific fixes for sold out badge */
+@supports (-webkit-appearance: none) {
+  .k-sold-out {
+    /* Force new stacking context */
+    isolation: isolate;
+    /* Ensure proper positioning */
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+}
+
+/* Additional Safari fix using webkit-specific properties */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .k-sold-out {
+    position: fixed !important;
+    position: absolute !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+}
+
 .sdek_pvzLair a
 {
   font-weight:bold;
