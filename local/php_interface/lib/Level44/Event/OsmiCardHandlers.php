@@ -18,8 +18,8 @@ class OsmiCardHandlers extends HandlerBase
     public static function register(): void
     {
         // Событие после регистрации пользователя
-        static::addEventHandler("main", "OnAfterUserRegister");
-        
+        static::addEventHandler("main", "OnAfterUserAdd");
+
         // Событие после обновления пользователя (для обновления данных карты)
       //  static::addEventHandler("main", "OnAfterUserUpdate");
     }
@@ -27,11 +27,11 @@ class OsmiCardHandlers extends HandlerBase
     /**
      * Обработчик события регистрации пользователя
      * Создает новую карту лояльности в OSMI Card
-     * 
+     *
      * @param array $arFields Поля пользователя
      * @return bool
      */
-    public static function OnAfterUserRegisterHandler(&$arFields): bool
+    public static function OnAfterUserAddHandler(&$arFields): bool
     {
         try {
             // Проверяем, включена ли интеграция с OSMI Card
@@ -40,7 +40,7 @@ class OsmiCardHandlers extends HandlerBase
             }
 
             $userId = $arFields['ID'] ?? $arFields['USER_ID'] ?? null;
-            
+
             if (!$userId) {
                 self::log('Не удалось получить ID пользователя при регистрации');
                 return true;
@@ -48,7 +48,7 @@ class OsmiCardHandlers extends HandlerBase
 
             // Получаем данные пользователя
             $user = self::getUserData($userId);
-            
+
             if (!$user) {
                 self::log("Не удалось получить данные пользователя ID: {$userId}");
                 return true;
@@ -65,16 +65,16 @@ class OsmiCardHandlers extends HandlerBase
 
             // Инициализируем API
             $api = new Api();
-            
+
             // Регистрируем карту в OSMI
             $result = $api->registerCard($user);
-            
+
             if ($result['success']) {
                 // Сохраняем номер карты (serial_number = телефон) и ID карты в профиле пользователя
                 $cardNumber = $result['data']['serial_number'] ?? $result['data']['cardNumber'] ?? null;
                 $cardId = $result['data']['id'] ?? null;
                 $passUrl = $result['data']['pass_url'] ?? null;
-                
+
                 if (!empty($cardNumber)) {
                     self::saveCardData($userId, $cardNumber, $cardId);
                     $logMessage = "Успешно создана карта лояльности для пользователя ID: {$userId}, номер карты (телефон): {$cardNumber}";
@@ -96,7 +96,7 @@ class OsmiCardHandlers extends HandlerBase
 
     /**
      * Обработчик события обновления пользователя
-     * 
+     *
      * @param array $arFields Поля пользователя
      * @return bool
      */
@@ -109,7 +109,7 @@ class OsmiCardHandlers extends HandlerBase
 
     /**
      * Получает данные пользователя для регистрации карты
-     * 
+     *
      * @param int $userId ID пользователя
      * @return array|null
      */
@@ -135,7 +135,7 @@ class OsmiCardHandlers extends HandlerBase
 
     /**
      * Форматирует номер телефона для отправки в API
-     * 
+     *
      * @param string $phone Телефон пользователя
      * @return string
      */
@@ -143,23 +143,23 @@ class OsmiCardHandlers extends HandlerBase
     {
         // Удаляем все символы кроме цифр
         $phone = preg_replace('/[^0-9]/', '', $phone);
-        
+
         // Если номер начинается с 8, заменяем на 7
         if (strlen($phone) === 11 && $phone[0] === '8') {
             $phone = '7' . substr($phone, 1);
         }
-        
+
         // Если номер не начинается с 7, добавляем 7
         if (strlen($phone) === 10) {
             $phone = '7' . $phone;
         }
-        
+
         return $phone;
     }
 
     /**
      * Сохраняет номер карты и ID карты в профиле пользователя
-     * 
+     *
      * @param int $userId ID пользователя
      * @param string $cardNumber Номер карты
      * @param string|null $cardId ID карты в системе OSMI
@@ -168,23 +168,23 @@ class OsmiCardHandlers extends HandlerBase
     protected static function saveCardData(int $userId, string $cardNumber, ?string $cardId = null): bool
     {
         $user = new \CUser();
-        
+
         $updateData = [
             'UF_OSMI_CARD_NUMBER' => $cardNumber
         ];
-        
+
         if (!empty($cardId)) {
             $updateData['UF_OSMI_CARD_ID'] = $cardId;
         }
-        
+
         $result = $user->Update($userId, $updateData);
 
         return (bool)$result;
     }
-    
+
     /**
      * Получает номер карты пользователя (номер телефона)
-     * 
+     *
      * @param int $userId ID пользователя
      * @return string|null Номер телефона (serial_number карты)
      */
@@ -192,13 +192,13 @@ class OsmiCardHandlers extends HandlerBase
     {
         $rsUser = \CUser::GetByID($userId);
         $user = $rsUser->Fetch();
-        
+
         return $user['UF_OSMI_CARD_NUMBER'] ?? null;
     }
 
     /**
      * Проверяет, включена ли интеграция с OSMI Card
-     * 
+     *
      * @return bool
      */
     protected static function isEnabled(): bool
@@ -208,7 +208,7 @@ class OsmiCardHandlers extends HandlerBase
 
     /**
      * Логирование событий OSMI Card
-     * 
+     *
      * @param string $message Сообщение для лога
      * @return void
      */
