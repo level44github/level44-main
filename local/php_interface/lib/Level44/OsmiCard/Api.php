@@ -59,9 +59,9 @@ class Api
     }
 
     /**
-     * Создание новой карты (pass) через PUT /passes/{serial_number}/{template_id}
+     * Создание новой карты (pass) через POST /passes/{serial_number}/{template_id}
      * Документация: https://apidocs.osmicards.com/
-     * Пример: PUT /passes/79001234567/CreaConcept?withValues=true
+     * Пример: POST /passes/79001234567/CreaConcept?withValues=true
      * 
      * @param array $userData Данные пользователя
      * @return array Результат операции
@@ -86,7 +86,7 @@ class Api
                 ];
             }
 
-            // Правильный endpoint: PUT /passes/{serial_number}/{template_id}?withValues=true
+            // Правильный endpoint: POST /passes/{serial_number}/{template_id}?withValues=true
             $endpoint = '/passes/' . urlencode($serialNumber) . '/' . urlencode($this->templateId);
             
             // Подготавливаем данные согласно документации OSMI Card API
@@ -129,7 +129,7 @@ class Api
                 'signature' => 'NUM ' . $serialNumber,
             ];
             
-            $response = $this->putWithParams($endpoint, $requestData, ['withValues' => 'true']);
+            $response = $this->postWithParams($endpoint, $requestData, ['withValues' => 'true']);
 
             if (isset($response['error']) || isset($response['errors'])) {
                 // Проверяем код ошибки 319 - карта уже существует
@@ -495,6 +495,59 @@ class Api
     }
 
     /**
+     * Выполнение POST запроса к API с query параметрами
+     * 
+     * @param string $endpoint Endpoint API
+     * @param array $data Данные для отправки в body
+     * @param array $queryParams Query параметры (например, withValues=true)
+     * @return array
+     */
+    protected function postWithParams(string $endpoint, array $data = [], array $queryParams = []): array
+    {
+        $url = $this->apiUrl . $endpoint;
+        
+        if (!empty($queryParams)) {
+            $url .= '?' . http_build_query($queryParams);
+        }
+        
+        $jsonData = !empty($data) ? Json::encode($data) : '';
+
+        $this->logDebug("POST Request: {$url}");
+        $this->logDebug("Username: " . (!empty($this->username) ? $this->username : 'NOT SET'));
+        if (!empty($jsonData)) {
+            $this->logDebug("Data: " . substr($jsonData, 0, 500));
+        }
+
+        // Используем cURL для корректной работы с HTTP Digest
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_POST, true);
+        
+        if (!empty($jsonData)) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        }
+        
+        $response = curl_exec($ch);
+        $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        if ($response === false) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \Exception('cURL Error: ' . $error);
+        }
+        
+        curl_close($ch);
+        
+        $this->lastHttpStatus = $httpStatus;
+
+        return $this->parseResponseCurl($response, $httpStatus);
+    }
+
+    /**
      * Выполнение PUT запроса к API с query параметрами
      * 
      * @param string $endpoint Endpoint API
@@ -731,6 +784,16 @@ class Api
     public function isConfigured(): bool
     {
         return !empty($this->username) && !empty($this->password) && !empty($this->templateId);
+    }
+    
+    /**
+     * Получить template ID из настроек
+     * 
+     * @return string
+     */
+    public function getTemplateId(): string
+    {
+        return $this->templateId;
     }
 
     /**
