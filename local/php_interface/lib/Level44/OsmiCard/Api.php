@@ -86,30 +86,13 @@ class Api
                 ];
             }
 
-            // Подготавливаем данные для полей карты (если есть)
-            $fields = [];
-            
-            if (!empty($userData['email'])) {
-                $fields['email'] = $userData['email'];
-            }
-            
-            if (!empty($userData['firstName'])) {
-                $fields['first_name'] = $userData['firstName'];
-            }
-            
-            if (!empty($userData['lastName'])) {
-                $fields['last_name'] = $userData['lastName'];
-            }
-            
-            if (!empty($userData['secondName'])) {
-                $fields['middle_name'] = $userData['secondName'];
-            }
-
             // Правильный endpoint: PUT /passes/{serial_number}/{template_id}?withValues=true
+            // withValues=true копирует значения полей из шаблона
             $endpoint = '/passes/' . urlencode($serialNumber) . '/' . urlencode($this->templateId);
             
-            // Отправляем запрос с полями (если есть)
-            $response = $this->putWithParams($endpoint, $fields, ['withValues' => 'true']);
+            // Отправляем запрос БЕЗ полей - они скопируются из шаблона
+            // Если нужно установить конкретные значения полей - делается через updatePass после создания
+            $response = $this->putWithParams($endpoint, [], ['withValues' => 'true']);
 
             if (isset($response['error']) || isset($response['errors'])) {
                 // Проверяем код ошибки 319 - карта уже существует
@@ -213,21 +196,22 @@ class Api
 
     /**
      * Обновление карты (pass)
-     * PUT /passes/{pass_id}
+     * PUT /passes/{serial_number}
      * 
-     * @param string $passId ID карты
-     * @param array $data Данные для обновления
+     * @param string $serialNumber Serial number карты (номер телефона)
+     * @param array $fields Поля для обновления
      * @return array
      */
-    public function updatePass(string $passId, array $data): array
+    public function updatePass(string $serialNumber, array $fields): array
     {
         try {
-            $response = $this->put('/passes/' . $passId, $data);
+            $endpoint = '/passes/' . urlencode($serialNumber);
+            $response = $this->put($endpoint, $fields);
 
             if (isset($response['error']) || isset($response['errors'])) {
                 return [
                     'success' => false,
-                    'error' => $response['error'] ?? $response['message'] ?? 'Неизвестная ошибка',
+                    'error' => $response['error'] ?? $response['message'] ?? $response['RMESSAGE'] ?? 'Неизвестная ошибка',
                 ];
             }
 
@@ -242,6 +226,43 @@ class Api
                 'error' => $e->getMessage(),
             ];
         }
+    }
+    
+    /**
+     * Обновление полей карты после создания
+     * 
+     * @param string $serialNumber Serial number карты
+     * @param array $userData Данные пользователя
+     * @return array
+     */
+    public function updateCardFields(string $serialNumber, array $userData): array
+    {
+        $fields = [];
+        
+        if (!empty($userData['email'])) {
+            $fields['email'] = $userData['email'];
+        }
+        
+        if (!empty($userData['firstName'])) {
+            $fields['first_name'] = $userData['firstName'];
+        }
+        
+        if (!empty($userData['lastName'])) {
+            $fields['last_name'] = $userData['lastName'];
+        }
+        
+        if (!empty($userData['secondName'])) {
+            $fields['middle_name'] = $userData['secondName'];
+        }
+        
+        if (empty($fields)) {
+            return [
+                'success' => true,
+                'message' => 'Нет полей для обновления',
+            ];
+        }
+        
+        return $this->updatePass($serialNumber, $fields);
     }
 
     /**

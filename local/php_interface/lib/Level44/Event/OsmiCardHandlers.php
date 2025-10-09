@@ -74,7 +74,7 @@ class OsmiCardHandlers extends HandlerBase
                 $cardNumber = $result['data']['serial_number'] ?? $result['data']['cardNumber'] ?? null;
                 $cardId = $result['data']['id'] ?? null;
                 $passUrl = $result['data']['pass_url'] ?? null;
-
+                
                 if (!empty($cardNumber)) {
                     self::saveCardData($userId, $cardNumber, $cardId);
                     $logMessage = "Успешно создана карта лояльности для пользователя ID: {$userId}, номер карты (телефон): {$cardNumber}";
@@ -82,6 +82,17 @@ class OsmiCardHandlers extends HandlerBase
                         $logMessage .= ", URL: {$passUrl}";
                     }
                     self::log($logMessage);
+                    
+                    // Опционально: обновляем поля карты данными пользователя
+                    // Раскомментируйте, если нужно обновлять поля после создания
+                    /*
+                    if (!empty($user['email']) || !empty($user['firstName']) || !empty($user['lastName'])) {
+                        $updateResult = $api->updateCardFields($cardNumber, $user);
+                        if ($updateResult['success']) {
+                            self::log("Поля карты {$cardNumber} обновлены данными пользователя");
+                        }
+                    }
+                    */
                 }
             } else {
                 self::log("Ошибка создания карты для пользователя ID: {$userId}. Ошибка: " . ($result['error'] ?? 'Неизвестная ошибка'));
