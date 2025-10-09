@@ -44,7 +44,7 @@ class Settings
     {
         return [
             'enabled' => self::get('enabled', 'N'),
-            'api_url' => self::get('api_url', 'https://api.osmicards.com/v2'),
+            'api_url' => self::get('api_url', 'https://vm-api.osmicards.com/v2t'),
             'api_username' => self::get('api_username', ''),
             'api_password' => self::get('api_password', ''),
             'project_id' => self::get('project_id', ''),

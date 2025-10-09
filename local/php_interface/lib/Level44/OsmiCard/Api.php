@@ -39,7 +39,7 @@ class Api
     public function __construct()
     {
         // Получаем настройки из опций модуля
-        $this->apiUrl = Option::get('level44.osmicard', 'api_url', 'https://api.osmicards.com/v2');
+        $this->apiUrl = Option::get('level44.osmicard', 'api_url', 'https://vm-api.osmicards.com/v2t');
         $this->username = Option::get('level44.osmicard', 'api_username', '');
         $this->password = Option::get('level44.osmicard', 'api_password', '');
         $this->projectId = (int)Option::get('level44.osmicard', 'project_id', 0);
@@ -59,8 +59,9 @@ class Api
     }
 
     /**
-     * Создание новой карты (pass) через POST /passes
+     * Создание новой карты (pass) через PUT /passes/{serial_number}/{template_id}
      * Документация: https://apidocs.osmicards.com/
+     * Пример: PUT /passes/79001234567/CreaConcept?withValues=true
      * 
      * @param array $userData Данные пользователя
      * @return array Результат операции
@@ -85,22 +86,8 @@ class Api
                 ];
             }
 
-            // Подготавливаем данные для запроса согласно документации OSMI
-            $requestData = [
-                'template_id' => $this->templateId,
-                'serial_number' => (string)$serialNumber,
-                'barcode' => [
-                    'message' => (string)$serialNumber,
-                    'format' => 'QR' // или 'CODE128', 'PDF417' и т.д.
-                ],
-            ];
-
-            // Добавляем пользовательские поля если они есть
+            // Подготавливаем данные для полей карты (если есть)
             $fields = [];
-            
-            if (!empty($userData['phone'])) {
-                $fields['phone'] = $userData['phone'];
-            }
             
             if (!empty($userData['email'])) {
                 $fields['email'] = $userData['email'];
@@ -118,18 +105,26 @@ class Api
                 $fields['middle_name'] = $userData['secondName'];
             }
 
-            if (!empty($fields)) {
-                $requestData['fields'] = $fields;
-            }
-
-            // Отправляем запрос
-            $response = $this->post('/passes', $requestData);
+            // Правильный endpoint: PUT /passes/{serial_number}/{template_id}?withValues=true
+            $endpoint = '/passes/' . urlencode($serialNumber) . '/' . urlencode($this->templateId);
+            
+            // Отправляем запрос с полями (если есть)
+            $response = $this->putWithParams($endpoint, $fields, ['withValues' => 'true']);
 
             if (isset($response['error']) || isset($response['errors'])) {
+                // Проверяем код ошибки 319 - карта уже существует
+                if (isset($response['code']) && $response['code'] == 319) {
+                    return [
+                        'success' => false,
+                        'error' => 'Карта с таким номером уже существует',
+                        'code' => 319,
+                    ];
+                }
+                
                 return [
                     'success' => false,
-                    'error' => $response['error'] ?? $response['message'] ?? 'Неизвестная ошибка',
-                    'code' => $response['code'] ?? null,
+                    'error' => $response['error'] ?? $response['message'] ?? $response['RMESSAGE'] ?? 'Неизвестная ошибка',
+                    'code' => $response['code'] ?? $response['RCODE'] ?? null,
                 ];
             }
 
@@ -137,9 +132,9 @@ class Api
                 'success' => true,
                 'data' => [
                     'id' => $response['id'] ?? null,
-                    'serial_number' => $response['serial_number'] ?? $serialNumber,
-                    'cardNumber' => $response['serial_number'] ?? $serialNumber,
-                    'pass_url' => $response['pass_url'] ?? null,
+                    'serial_number' => $serialNumber,
+                    'cardNumber' => $serialNumber,
+                    'pass_url' => $response['pass_url'] ?? $response['url'] ?? null,
                     'full_response' => $response,
                 ],
             ];
@@ -424,6 +419,59 @@ class Api
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        
+        $response = curl_exec($ch);
+        $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        if ($response === false) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \Exception('cURL Error: ' . $error);
+        }
+        
+        curl_close($ch);
+        
+        $this->lastHttpStatus = $httpStatus;
+
+        return $this->parseResponseCurl($response, $httpStatus);
+    }
+
+    /**
+     * Выполнение PUT запроса к API с query параметрами
+     * 
+     * @param string $endpoint Endpoint API
+     * @param array $data Данные для отправки в body
+     * @param array $queryParams Query параметры (например, withValues=true)
+     * @return array
+     */
+    protected function putWithParams(string $endpoint, array $data = [], array $queryParams = []): array
+    {
+        $url = $this->apiUrl . $endpoint;
+        
+        if (!empty($queryParams)) {
+            $url .= '?' . http_build_query($queryParams);
+        }
+        
+        $jsonData = !empty($data) ? Json::encode($data) : '';
+
+        $this->logDebug("PUT Request: {$url}");
+        $this->logDebug("Username: " . (!empty($this->username) ? $this->username : 'NOT SET'));
+        if (!empty($jsonData)) {
+            $this->logDebug("Data: " . substr($jsonData, 0, 500));
+        }
+
+        // Используем cURL для корректной работы с HTTP Digest
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        
+        if (!empty($jsonData)) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        }
         
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
