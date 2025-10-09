@@ -35,6 +35,8 @@ class Handlers extends HandlerBase
         CheckoutHandlers::register();
 
         BannerHandlers::register();
+
+        OsmiCardHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
