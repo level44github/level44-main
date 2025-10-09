@@ -87,7 +87,7 @@ class Api
             }
 
             // Правильный endpoint: POST /passes/{serial_number}/{template_id}?withValues=true
-            $endpoint = '/passes/' . urlencode($serialNumber) . '/' . urlencode($this->templateId);
+            $endpoint = '/passes/' .$serialNumber . '/' . urlencode($this->templateId);
 
             // Подготавливаем данные согласно документации OSMI Card API
             // Формат: массив values с объектами {label, value}
