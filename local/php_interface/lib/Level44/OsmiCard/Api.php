@@ -87,12 +87,49 @@ class Api
             }
 
             // Правильный endpoint: PUT /passes/{serial_number}/{template_id}?withValues=true
-            // withValues=true копирует значения полей из шаблона
             $endpoint = '/passes/' . urlencode($serialNumber) . '/' . urlencode($this->templateId);
             
-            // Отправляем запрос БЕЗ полей - они скопируются из шаблона
-            // Если нужно установить конкретные значения полей - делается через updatePass после создания
-            $response = $this->putWithParams($endpoint, [], ['withValues' => 'true']);
+            // Подготавливаем данные согласно документации OSMI Card API
+            // Формат: массив values с объектами {label, value}
+            $requestData = [
+                'noSharing' => false,
+                'values' => [],
+            ];
+            
+            // Добавляем данные пользователя в values
+            if (!empty($userData['firstName']) || !empty($userData['lastName'])) {
+                $fullName = trim(($userData['firstName'] ?? '') . ' ' . ($userData['lastName'] ?? ''));
+                if (!empty($fullName)) {
+                    $requestData['values'][] = [
+                        'label' => 'Владелец',
+                        'value' => $fullName,
+                    ];
+                }
+            }
+            
+            if (!empty($userData['email'])) {
+                $requestData['values'][] = [
+                    'label' => 'Email',
+                    'value' => $userData['email'],
+                ];
+            }
+            
+            if (!empty($userData['phone'])) {
+                $requestData['values'][] = [
+                    'label' => 'Телефон',
+                    'value' => $userData['phone'],
+                ];
+            }
+            
+            // Barcode с серийным номером
+            $requestData['barcode'] = [
+                'show' => true,
+                'showSignature' => true,
+                'message' => $serialNumber,
+                'signature' => 'NUM ' . $serialNumber,
+            ];
+            
+            $response = $this->putWithParams($endpoint, $requestData, ['withValues' => 'true']);
 
             if (isset($response['error']) || isset($response['errors'])) {
                 // Проверяем код ошибки 319 - карта уже существует
