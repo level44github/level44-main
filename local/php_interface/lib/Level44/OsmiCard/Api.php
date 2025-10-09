@@ -62,7 +62,7 @@ class Api
      * Создание новой карты (pass) через POST /passes/{serial_number}/{template_id}
      * Документация: https://apidocs.osmicards.com/
      * Пример: POST /passes/79001234567/CreaConcept?withValues=true
-     * 
+     *
      * @param array $userData Данные пользователя
      * @return array Результат операции
      */
@@ -78,7 +78,7 @@ class Api
 
             // Используем номер телефона как серийный номер карты
             $serialNumber = $userData['phone'] ?? null;
-            
+
             if (empty($serialNumber)) {
                 return [
                     'success' => false,
@@ -88,39 +88,39 @@ class Api
 
             // Правильный endpoint: POST /passes/{serial_number}/{template_id}?withValues=true
             $endpoint = '/passes/' . urlencode($serialNumber) . '/' . urlencode($this->templateId);
-            
+
             // Подготавливаем данные согласно документации OSMI Card API
             // Формат: массив values с объектами {label, value}
             $requestData = [
                 'noSharing' => false,
                 'values' => [],
             ];
-            
+
             // Добавляем данные пользователя в values
             if (!empty($userData['firstName']) || !empty($userData['lastName'])) {
                 $fullName = trim(($userData['firstName'] ?? '') . ' ' . ($userData['lastName'] ?? ''));
                 if (!empty($fullName)) {
                     $requestData['values'][] = [
-                        'label' => 'Владелец',
+                        'label' => 'КЛИЕНТ',
                         'value' => $fullName,
                     ];
                 }
             }
-            
-            if (!empty($userData['email'])) {
+
+           /* if (!empty($userData['email'])) {
                 $requestData['values'][] = [
                     'label' => 'Email',
                     'value' => $userData['email'],
                 ];
-            }
-            
-            if (!empty($userData['phone'])) {
+            }*/
+
+            /*if (!empty($userData['phone'])) {
                 $requestData['values'][] = [
                     'label' => 'Телефон',
                     'value' => $userData['phone'],
                 ];
-            }
-            
+            }*/
+
             // Barcode с серийным номером
             $requestData['barcode'] = [
                 'show' => true,
@@ -128,7 +128,7 @@ class Api
                 'message' => $serialNumber,
                 'signature' => 'NUM ' . $serialNumber,
             ];
-            
+
             $response = $this->postWithParams($endpoint, $requestData, ['withValues' => 'true']);
 
             if (isset($response['error']) || isset($response['errors'])) {
@@ -140,7 +140,7 @@ class Api
                         'code' => 319,
                     ];
                 }
-                
+
                 return [
                     'success' => false,
                     'error' => $response['error'] ?? $response['message'] ?? $response['RMESSAGE'] ?? 'Неизвестная ошибка',
@@ -170,7 +170,7 @@ class Api
     /**
      * Получение информации о карте (pass) по ID
      * GET /passes/{pass_id}
-     * 
+     *
      * @param string $passId ID карты
      * @return array
      */
@@ -202,7 +202,7 @@ class Api
     /**
      * Получение списка карт (passes)
      * GET /passes
-     * 
+     *
      * @param array $filters Фильтры (serial_number, template_id и т.д.)
      * @return array
      */
@@ -234,7 +234,7 @@ class Api
     /**
      * Обновление карты (pass)
      * PUT /passes/{serial_number}
-     * 
+     *
      * @param string $serialNumber Serial number карты (номер телефона)
      * @param array $fields Поля для обновления
      * @return array
@@ -264,10 +264,10 @@ class Api
             ];
         }
     }
-    
+
     /**
      * Обновление полей карты после создания
-     * 
+     *
      * @param string $serialNumber Serial number карты
      * @param array $userData Данные пользователя
      * @return array
@@ -275,37 +275,37 @@ class Api
     public function updateCardFields(string $serialNumber, array $userData): array
     {
         $fields = [];
-        
+
         if (!empty($userData['email'])) {
             $fields['email'] = $userData['email'];
         }
-        
+
         if (!empty($userData['firstName'])) {
             $fields['first_name'] = $userData['firstName'];
         }
-        
+
         if (!empty($userData['lastName'])) {
             $fields['last_name'] = $userData['lastName'];
         }
-        
+
         if (!empty($userData['secondName'])) {
             $fields['middle_name'] = $userData['secondName'];
         }
-        
+
         if (empty($fields)) {
             return [
                 'success' => true,
                 'message' => 'Нет полей для обновления',
             ];
         }
-        
+
         return $this->updatePass($serialNumber, $fields);
     }
 
     /**
      * Удаление карты (pass)
      * DELETE /passes/{pass_id}
-     * 
+     *
      * @param string $passId ID карты
      * @return array
      */
@@ -337,7 +337,7 @@ class Api
     /**
      * Отправка push-уведомления на карту
      * POST /passes/{pass_id}/push
-     * 
+     *
      * @param string $passId ID карты
      * @param string $message Текст уведомления
      * @return array
@@ -373,7 +373,7 @@ class Api
 
     /**
      * Выполнение GET запроса к API
-     * 
+     *
      * @param string $endpoint Endpoint API
      * @param array $params Параметры запроса
      * @return array
@@ -396,18 +396,18 @@ class Api
         curl_setopt($ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        
+
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if ($response === false) {
             $error = curl_error($ch);
             curl_close($ch);
             throw new \Exception('cURL Error: ' . $error);
         }
-        
+
         curl_close($ch);
-        
+
         // Создаем mock объект для совместимости с parseResponse
         $this->lastHttpStatus = $httpStatus;
 
@@ -416,7 +416,7 @@ class Api
 
     /**
      * Выполнение POST запроса к API
-     * 
+     *
      * @param string $endpoint Endpoint API
      * @param array $data Данные для отправки
      * @return array
@@ -439,18 +439,18 @@ class Api
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        
+
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if ($response === false) {
             $error = curl_error($ch);
             curl_close($ch);
             throw new \Exception('cURL Error: ' . $error);
         }
-        
+
         curl_close($ch);
-        
+
         $this->lastHttpStatus = $httpStatus;
 
         return $this->parseResponseCurl($response, $httpStatus);
@@ -458,7 +458,7 @@ class Api
 
     /**
      * Выполнение PUT запроса к API
-     * 
+     *
      * @param string $endpoint Endpoint API
      * @param array $data Данные для отправки
      * @return array
@@ -477,18 +477,18 @@ class Api
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        
+
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if ($response === false) {
             $error = curl_error($ch);
             curl_close($ch);
             throw new \Exception('cURL Error: ' . $error);
         }
-        
+
         curl_close($ch);
-        
+
         $this->lastHttpStatus = $httpStatus;
 
         return $this->parseResponseCurl($response, $httpStatus);
@@ -496,7 +496,7 @@ class Api
 
     /**
      * Выполнение POST запроса к API с query параметрами
-     * 
+     *
      * @param string $endpoint Endpoint API
      * @param array $data Данные для отправки в body
      * @param array $queryParams Query параметры (например, withValues=true)
@@ -505,11 +505,11 @@ class Api
     protected function postWithParams(string $endpoint, array $data = [], array $queryParams = []): array
     {
         $url = $this->apiUrl . $endpoint;
-        
+
         if (!empty($queryParams)) {
             $url .= '?' . http_build_query($queryParams);
         }
-        
+
         $jsonData = !empty($data) ? Json::encode($data) : '';
 
         $this->logDebug("POST Request: {$url}");
@@ -525,23 +525,23 @@ class Api
         curl_setopt($ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_POST, true);
-        
+
         if (!empty($jsonData)) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         }
-        
+
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if ($response === false) {
             $error = curl_error($ch);
             curl_close($ch);
             throw new \Exception('cURL Error: ' . $error);
         }
-        
+
         curl_close($ch);
-        
+
         $this->lastHttpStatus = $httpStatus;
 
         return $this->parseResponseCurl($response, $httpStatus);
@@ -549,7 +549,7 @@ class Api
 
     /**
      * Выполнение PUT запроса к API с query параметрами
-     * 
+     *
      * @param string $endpoint Endpoint API
      * @param array $data Данные для отправки в body
      * @param array $queryParams Query параметры (например, withValues=true)
@@ -558,11 +558,11 @@ class Api
     protected function putWithParams(string $endpoint, array $data = [], array $queryParams = []): array
     {
         $url = $this->apiUrl . $endpoint;
-        
+
         if (!empty($queryParams)) {
             $url .= '?' . http_build_query($queryParams);
         }
-        
+
         $jsonData = !empty($data) ? Json::encode($data) : '';
 
         $this->logDebug("PUT Request: {$url}");
@@ -578,23 +578,23 @@ class Api
         curl_setopt($ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-        
+
         if (!empty($jsonData)) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         }
-        
+
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if ($response === false) {
             $error = curl_error($ch);
             curl_close($ch);
             throw new \Exception('cURL Error: ' . $error);
         }
-        
+
         curl_close($ch);
-        
+
         $this->lastHttpStatus = $httpStatus;
 
         return $this->parseResponseCurl($response, $httpStatus);
@@ -602,7 +602,7 @@ class Api
 
     /**
      * Выполнение DELETE запроса к API
-     * 
+     *
      * @param string $endpoint Endpoint API
      * @return array
      */
@@ -618,18 +618,18 @@ class Api
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        
+
         $response = curl_exec($ch);
         $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
+
         if ($response === false) {
             $error = curl_error($ch);
             curl_close($ch);
             throw new \Exception('cURL Error: ' . $error);
         }
-        
+
         curl_close($ch);
-        
+
         $this->lastHttpStatus = $httpStatus;
 
         return $this->parseResponseCurl($response, $httpStatus);
@@ -637,7 +637,7 @@ class Api
 
     /**
      * Парсинг ответа от API
-     * 
+     *
      * @param string|false $response Ответ от API
      * @return array
      */
@@ -651,7 +651,7 @@ class Api
         }
 
         $httpStatus = $this->httpClient->getStatus();
-        
+
         // Логируем для отладки
         $this->logDebug("HTTP Status: {$httpStatus}");
         $this->logDebug("Response length: " . strlen($response));
@@ -670,12 +670,12 @@ class Api
         } catch (\Exception $e) {
             $errorMessage = 'Invalid JSON response (Status: ' . $httpStatus . '). Response: ' . substr($response, 0, 1000);
             $this->logError($errorMessage);
-            
+
             // Если это HTML ошибка - извлекаем текст
             if (strpos($response, '<html') !== false || strpos($response, '<!DOCTYPE') !== false) {
                 $errorMessage = 'API returned HTML instead of JSON. This might be an authentication issue or wrong endpoint.';
             }
-            
+
             throw new \Exception($errorMessage);
         }
 
@@ -696,7 +696,7 @@ class Api
 
     /**
      * Логирование ошибок
-     * 
+     *
      * @param string $message Сообщение
      * @return void
      */
@@ -709,7 +709,7 @@ class Api
 
     /**
      * Логирование для отладки
-     * 
+     *
      * @param string $message Сообщение
      * @return void
      */
@@ -722,7 +722,7 @@ class Api
 
     /**
      * Парсинг ответа от cURL
-     * 
+     *
      * @param string $response Ответ от API
      * @param int $httpStatus HTTP статус
      * @return array
@@ -738,11 +738,11 @@ class Api
         if (empty($response)) {
             $errorMessage = 'Empty response from API (HTTP ' . $httpStatus . ')';
             $this->logError($errorMessage);
-            
+
             if ($httpStatus === 401) {
                 $errorMessage = 'HTTP 401 Unauthorized. Проверьте Username и Password.';
             }
-            
+
             throw new \Exception($errorMessage);
         }
 
@@ -752,12 +752,12 @@ class Api
         } catch (\Exception $e) {
             $errorMessage = 'Invalid JSON response (Status: ' . $httpStatus . '). Response: ' . substr($response, 0, 1000);
             $this->logError($errorMessage);
-            
+
             // Если это HTML ошибка - извлекаем текст
             if (strpos($response, '<html') !== false || strpos($response, '<!DOCTYPE') !== false) {
                 $errorMessage = 'API returned HTML instead of JSON. This might be an authentication issue or wrong endpoint.';
             }
-            
+
             throw new \Exception($errorMessage);
         }
 
@@ -778,17 +778,17 @@ class Api
 
     /**
      * Проверка настроек API
-     * 
+     *
      * @return bool
      */
     public function isConfigured(): bool
     {
         return !empty($this->username) && !empty($this->password) && !empty($this->templateId);
     }
-    
+
     /**
      * Получить template ID из настроек
-     * 
+     *
      * @return string
      */
     public function getTemplateId(): string
@@ -799,7 +799,7 @@ class Api
     /**
      * Получение списка шаблонов
      * GET /templates
-     * 
+     *
      * @return array
      */
     public function getTemplates(): array
