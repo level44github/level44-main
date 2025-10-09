@@ -26,10 +26,41 @@ $(function () {
         $('[data-dropdown] [name="sort"]').closest('[data-dropdown]').find('.dropdown__title').text(dropdownItem.text());
     }
 
-    $('.product__info').stickySidebar({
-        topSpacing: 60,
-        bottomSpacing: 60
-    });
+    // Динамическое применение sticky для product__info
+    const productInfo = $('.product__info');
+
+    if (productInfo.length) {
+        let isSticky = false;
+
+        // Убираем sticky по умолчанию
+        productInfo.css('position', 'relative');
+        productInfo.css('top', '0px');
+        
+        // Сохраняем начальную позицию и высоту блока (до применения sticky)
+        const initialOffset = productInfo.offset().top;
+        const initialHeight = productInfo.outerHeight();
+        const initialBottom = initialOffset + initialHeight;
+
+        $(window).on('scroll', function() {
+            const scrollTop = $(window).scrollTop();
+
+            // Sticky применяется когда нижняя граница блока достигла позиции sticky (top: 60px)
+            if (!isSticky && scrollTop + 60 >= initialBottom) {
+                isSticky = true;
+                productInfo.css({
+                    'position': 'sticky',
+                    'top': '83px'
+                });
+            }
+            // Когда скроллим обратно вверх, убираем sticky с небольшим буфером
+            else if (isSticky && scrollTop + 60 < initialBottom - 100) {
+                isSticky = false;
+                productInfo.css('position', 'relative');
+                productInfo.css('top', '0px');
+            }
+        });
+    }
+
 
 })
 

@@ -179,6 +179,12 @@ a.dolyame-text
 
 }
 
+@media (min-width: 768px) {
+    .product__info {
+    top:0px;
+    }
+}
+
 
 .product__info .inner-wrapper-sticky
 {
