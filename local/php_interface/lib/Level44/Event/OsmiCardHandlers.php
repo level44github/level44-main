@@ -49,6 +49,8 @@ class OsmiCardHandlers extends HandlerBase
             // Получаем данные пользователя
             $user = self::getUserData($userId);
 
+            self::log("user ".json_encode($user));
+
             if (!$user) {
                 self::log("Не удалось получить данные пользователя ID: {$userId}");
                 return true;
