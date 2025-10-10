@@ -136,7 +136,7 @@ class OsmiCardHandlers extends HandlerBase
         }
 
         return [
-            'phone'      => self::formatPhone($user['LOGIN'] ?? ''),
+            'phone'      => $user['LOGIN'],
             'email'      => $user['EMAIL'] ?? '',
             'firstName'  => $user['NAME'] ?? '',
             'lastName'   => $user['LAST_NAME'] ?? '',
@@ -146,29 +146,7 @@ class OsmiCardHandlers extends HandlerBase
         ];
     }
 
-    /**
-     * Форматирует номер телефона для отправки в API
-     *
-     * @param string $phone Телефон пользователя
-     * @return string
-     */
-    protected static function formatPhone(string $phone): string
-    {
-        // Удаляем все символы кроме цифр
-        $phone = preg_replace('/[^0-9]/', '', $phone);
 
-        // Если номер начинается с 8, заменяем на 7
-        if (strlen($phone) === 11 && $phone[0] === '8') {
-            $phone = '7' . substr($phone, 1);
-        }
-
-        // Если номер не начинается с 7, добавляем 7
-        if (strlen($phone) === 10) {
-            $phone = '7' . $phone;
-        }
-
-        return $phone;
-    }
 
     /**
      * Сохраняет номер карты и ID карты в профиле пользователя
