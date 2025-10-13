@@ -35,9 +35,9 @@ $(function () {
         // Убираем sticky по умолчанию
         productInfo.css('position', 'relative');
         productInfo.css('top', '0px');
-        
+
         // Сохраняем начальную позицию и высоту блока (до применения sticky)
-        const initialOffset = productInfo.offset().top;
+        /*const initialOffset = productInfo.offset().top;
         const initialHeight = productInfo.outerHeight();
         const initialBottom = initialOffset + initialHeight;
 
@@ -58,7 +58,7 @@ $(function () {
                 productInfo.css('position', 'relative');
                 productInfo.css('top', '0px');
             }
-        });
+        });*/
     }
 
 
