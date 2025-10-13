@@ -16,4 +16,4 @@ $this->setFrameMode(true);
 
 ?>
 
-<?php echo $arResult['DISPLAY_PROPERTIES']['content']['VALUE']?>
+<?php echo  $arResult['DISPLAY_PROPERTIES']['content']['DISPLAY_VALUE']?>
