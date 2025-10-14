@@ -178,6 +178,42 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/delivery.php");
         include($_SERVER["DOCUMENT_ROOT"] . $templateFolder . "/paysystem.php");
         ?>
+
+       <? if (\Bitrix\Main\Loader::includeModule('acrit.bonus')) {
+        // формирует данные для оплаты, заполняется массив $arResult['BONUSPAY']
+        \Acrit\Bonus\Profile::runPayProfiles($arResult);
+
+        ?>
+
+        <?if ($USER->IsAuthorized()){ ?>
+        <div class="card" style="padding:1rem 2rem">
+            <div>Баллы:</div>
+            <?if ($arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']!=''){?>
+            <div class="bonus-order-wrap">
+                <div class="CURRENT_BONUS_BUDGET">
+                    У вас <?=$arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']?>
+                </div>
+                <div class="bonus-line"></div>
+                <input type="hidden" name="PAY_BONUS_ACCOUNT" value="Y">
+                <input type="hidden" name="save" value="y" class="send_open_source_order_flag">
+                <input type="number" onchange="maxLengthCheck(this)" class="bonus-input" placeholder="Списать"  name="BONUS_CNT" id="BONUS_CNT"  min="0" pattern="\d+(\.\d+)?" max="<?=$arResult['BONUSPAY']['MAXPAY']?>">
+                <!--<input type="button" class="bonus-input" value="Списать"  onclick="AcritBonusPayBonusBtn()">-->
+            </div>
+            <?}?>
+             <div class="bonus-order-wrap">
+                 <div class="CURRENT_BONUS_BUDGET">
+                     <?=$arResult['BONUS']['ORDER']['VALUE']?> баллов начислим
+                 </div>
+                <?if ((int)$arResult['BONUSPAY']['USER_VALUE']!=0){?>
+                 <div class="CURRENT_BONUS_BUDGET">
+                     <?=$arResult['BONUSPAY']['USER_VALUE']?> баллов спишем
+                 </div>
+                <?}?>
+
+             </div>
+        </div>
+       <?}?>
+       <?}?>
         <div class="d-none d-lg-block js-submit-block">
             <div class="privacy-checkboxes">
                 <div class="form-group">
@@ -196,7 +232,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                 </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-dark btn__fix-width"
+                <button class="btn btn-dark btn__fix-width" id="submit-button"
                         onclick="submitForm('Y'); return false;"
                     <? //Становится активным, если отметить согласие ?>
                         disabled
@@ -272,3 +308,20 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
     <? endif;
     ?>
 <?endif;?>
+
+
+<script>
+    function maxLengthCheck(object)
+    {
+        if (parseInt(object.value) > parseInt(object.max)) object.value = object.max
+
+        submitForm();
+    }
+</script>
+
+
+<script>
+    function AcritBonusPayBonusBtn() {
+
+    }
+</script>

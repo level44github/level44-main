@@ -1,0 +1,20 @@
+<?php
+$MESS['PRIVACY_TEXT'] = "By clicking the “save changes” button, you agree to the processing of your personal data and that you have read
+            <a href=\"#SITE_DIR#about/personal/\">the privacy policy</a>";
+$MESS['NAME'] = "Your name";
+$MESS['LAST_NAME'] = "Your last name";
+$MESS['SECOND_NAME'] = "Your patronymic";
+$MESS['BIRTHDAY'] = "Date of birth";
+$MESS['BIRTHDAY_MASK'] = "DD.MM.YYYY";
+$MESS['GENDER'] = "Your gender";
+$MESS['GENDER_M'] = "Male";
+$MESS['GENDER_F'] = "Female";
+$MESS['PHONE'] = "Phone number";
+$MESS['EMAIL'] = "Your e-mail";
+$MESS['CLOTHING_SIZE'] = "Clothing size";
+$MESS['SHOE_SIZE'] = "Shoe size";
+$MESS['SAVE'] = "Save";
+$MESS['PROFILE_TITLE'] = "My information";
+$MESS['FIELD_REQUIRED_MESSAGE'] = "Field is required";
+$MESS['FIELD_INCORRECT_MESSAGE'] = "Field is incorrect";
+$MESS['PROFILE_DATA_SAVED'] = "All changes saved";

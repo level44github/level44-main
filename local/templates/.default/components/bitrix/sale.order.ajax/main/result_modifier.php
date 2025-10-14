@@ -307,7 +307,9 @@ if (!empty($arResult['CURRENT_DELIVERY'])) {
     $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"] = SaleFormatCurrency($arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"], 'RUB');
 }
 
-$arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];
+$arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"];
+
+$arResult["ORDER_TOTAL_PRICE_NEW"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];
 
 $user = UserTable::getList([
     'filter' => ['=ID' => $arResult['ORDER_DATA']['USER_ID']],

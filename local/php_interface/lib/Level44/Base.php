@@ -11,6 +11,7 @@ use Bitrix\Main\ObjectPropertyException;
 use \Bitrix\Main\Page\Asset;
 use Bitrix\Main\Loader;
 use Bitrix\Main\SystemException;
+use Bitrix\Main\UI\Extension;
 use Bitrix\Sale\Location\LocationTable;
 use Bitrix\Sale\Order;
 use Bitrix\Sale\Registry;
@@ -53,6 +54,7 @@ class Base
         $asset->addString('<meta  name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">');
         $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/app.css") . '">');
         $asset->addString('<link rel="stylesheet" href="' . self::cssAutoVersion(self::getAssetsPath() . "/css/main.css") . '">');
+        Extension::load('awelite_favorite.awelite_lib');
         if (SITE_TEMPLATE_ID === "checkout") {
             $asset->addCss('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css');
         }
@@ -75,9 +77,10 @@ class Base
         $asset->addJs(self::getAssetsPath() . "/js/jquery.min.js");
         $asset->addJs(self::getAssetsPath() . "/js/main.js");
         $asset->addJs(self::getAssetsPath() . "/js/app.js");
+        $asset->addJs(self::getAssetsPath() . "/js/form.js");
         $asset->addJs(self::getAssetsPath() . "/js/jquery.sticky-sidebar.min.js");
         if (SITE_TEMPLATE_ID === "checkout") {
-            $asset->addJs(self::getAssetsPath() . "/js/form.js");
+
             $asset->addJs('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js', true);
         }
     }
@@ -475,7 +478,10 @@ class Base
             $courierDeliveries = [];
 
             if (is_array($deliveries)) {
-                $courierDeliveries = array_filter($deliveries, fn($item) => Delivery::getType($item['ID']) === DeliveryType::Courier);
+                $courierDeliveries = array_filter($deliveries, fn($item) => in_array(Delivery::getType($item['ID']), [
+                    DeliveryType::Courier,
+                    DeliveryType::CourierFitting
+                ]));
 
                 $courierDeliveries = array_values(array_map(fn($item) => $item['ID'], $courierDeliveries));
             }
@@ -563,5 +569,17 @@ class Base
         );
 
         return $colorGroupRes->fetch() ?: null;
+    }
+
+    /**
+     * @param int $num
+     * @param array $titles
+     * @return string|null
+     */
+    public static function declOfNum(int $num, array $titles): string|null
+    {
+        $cases = [2, 0, 1, 1, 1, 2];
+
+        return $titles[($num % 100 > 4 && $num % 100 < 20) ? 2 : $cases[min($num % 10, 5)]];
     }
 }

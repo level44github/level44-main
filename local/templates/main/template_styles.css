@@ -171,6 +171,7 @@ a.dolyame-text
     }
 
 
+
     #dolyame-modal .modal-dialog
     {
         max-width: 341px;
@@ -192,4 +193,401 @@ a.dolyame-text
     display: flex;
     flex-direction: column;
     row-gap: 24px;
+}
+
+@media (max-width: 767.98px) {
+    .loyalty-history table
+    {
+        display:none;
+    }
+
+    .loyalty-history .mobile-table
+    {
+        display:block;
+    }
+
+    .loyalty-history h3
+    {
+        font-weight: 400;
+
+        font-size: 16px;
+        line-height: 120%;
+        letter-spacing: 0;
+        text-align: center;
+        vertical-align: middle;
+
+    }
+
+    .loyalty-text
+    {
+        font-size:14px;
+    }
+
+    .loyalty-score-wrap
+    {
+        font-size:16px;
+    }
+
+    .loyalty-progress-status
+    {
+        font-size:14px;
+    }
+
+    .loyalty-progress-status .info
+    {
+        font-size:14px;
+    }
+}
+
+
+.history-row
+{
+    display:flex;
+    justify-content: space-between;
+
+
+    font-weight: 400;
+
+    font-size: 14px;
+
+    line-height: 120%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color:rgba(33, 33, 33, 1);
+
+    padding-top:10px;
+    padding-bottom:10px;
+    border-bottom:1px solid rgba(33, 33, 33, 0.1);
+
+}
+
+
+.history-row-info-grey
+{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 120%;
+    letter-spacing: 0;
+    text-align: center;
+    vertical-align: middle;
+
+    color:rgba(152, 150, 144, 1);
+
+}
+
+.history-row-right
+{
+    text-align:right;
+}
+
+.history-row-top
+{
+    padding-bottom:10px;
+}
+
+
+
+.lk-main-icon-wrap
+{
+    display:flex;
+    margin-left:45px;
+    margin-top:100px;
+    gap:49px;
+    margin-bottom:120px;
+}
+
+.lk-main-icon-one
+{
+    box-shadow: 0px 2px 8.7px 0px rgba(0, 0, 0, 0.22);
+    height:103px;
+    width:179px;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:center;
+    flex-direction: column;
+}
+
+.lk-main-icon-one span
+{
+    color: rgba(33, 33, 33, 1);
+    display:block;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    margin-top:8px;
+}
+
+.lk-go-to-catalog
+{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    vertical-align: middle;
+    color: rgba(33, 33, 33, 1);
+}
+
+.lk-last-view-wrap
+{
+    border-top: 1px solid rgba(152, 150, 144, 1);
+    margin-top:50px;
+    padding-top:50px;
+}
+
+
+.lk-last-view-wrap h3
+{
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 120%;
+    vertical-align: middle;
+    color: rgba(33, 33, 33, 1);
+}
+
+.lk-last-view-list
+{
+    display:flex;
+    gap:15px;
+    margin-top:24px;
+}
+
+.lk-last-view-list .grid__item
+{
+    width:163px;
+    cursor:pointer;
+}
+
+@media (max-width: 767.98px) {
+    .lk-last-view-wrap {
+        display:none;
+    }
+
+    .lk-go-to-catalog
+    {
+        display:none;
+    }
+
+    .lk-main-icon-wrap
+    {
+        display:flex;
+        margin-top:30px;
+        margin-bottom: 30px;
+        flex-wrap:wrap;
+        justify-content: center;
+        gap:10px;
+        margin-left:0px;
+    }
+
+    .lk-main-icon-one {
+
+        height: 100px;
+        width: 248px;
+
+    }
+
+
+
+}
+
+.new-btn-wrap-fav
+{
+    display:flex;
+}
+
+.favorite-detail-wrap
+{
+    border:0.5px solid rgba(33, 33, 33, 1);
+    height: 48px;
+    width:38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:12px;
+    margin-bottom:12px;
+    margin-left:8px;
+}
+.grid__item__favoritedetail.is-in-favorites .grid__item__favorite__icon{display:none}
+.grid__item__favoritedetail.is-in-favorites .grid__item__favorite__icon-active{display:block}
+
+
+.about-loyalty-text
+{
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 140%;
+    vertical-align: middle;
+}
+
+.about-loyalty-table
+{
+    width:100%;
+    margin-bottom:50px;
+    margin-top:30px;
+}
+.about-loyalty-table td
+{
+    width:50%;
+    border: 1px solid #000;
+    height:40px;
+    text-align:center;
+
+  font-weight: 300;
+
+    font-size: 16px;
+
+    line-height: 140%;
+
+    vertical-align: middle;
+
+}
+
+
+
+
+.lk-last-view-list  .embla__container {
+    gap:20px !important;
+}
+
+.lk-last-view-list .embla__container .embla__slide {
+    flex: 0 0 calc((100% - 96px) / 7) !important;
+}
+
+.menu__profile
+{
+    display:block !important;
+}
+
+.loyalty-plashka
+{
+    border-radius:10px;
+    box-shadow: 0px 0px 22px 1px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(152, 150, 144, 0.2);
+    padding:20px 45px;
+    margin-top:50px;
+    margin-bottom:50px;
+}
+
+.loyalty-progress-line
+{
+    background: rgba(201, 203, 205, 0.5);
+    width:100%;
+    position:relative;
+    height:1px;
+    margin-bottom:10px;
+}
+
+.loyalty-progress-line-active
+{
+    top:0px;
+    left:0px;
+    height:1px;
+    background: rgba(152, 150, 144, 1);
+}
+
+.loyalty-score-wrap
+{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom:14px;
+
+
+    font-weight: 400;
+
+    font-size: 18px;
+
+    line-height: 100%;
+    letter-spacing: 0;
+
+    color:rgba(33, 33, 33, 1);
+
+}
+
+.loyalty-score-wrap span
+{
+    display:inline-flex;
+    margin-left:10px;
+}
+
+.loyalty-progress-status
+{
+    display:flex;
+    justify-content: space-between;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0;
+    color:#000;
+
+}
+.loyalty-progress-status .info
+{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0;
+    color: rgba(152, 150, 144, 1);
+
+}
+
+.loyalty-text
+{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: rgba(152, 150, 144, 1);
+    padding-bottom:30px;
+
+    border-bottom: 1px solid rgba(152, 150, 144, 1);
+
+}
+
+.loyalty-history
+{
+    margin-top:30px;
+}
+
+.loyalty-history table
+{
+    width:715px;
+    margin-top:30px;
+}
+
+.loyalty-history table thead th {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color:rgba(152, 150, 144, 1);
+    padding-bottom:7px;
+}
+
+.loyalty-history table td {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color:rgba(33, 33, 33, 1);
+    padding-top:7px;
+    padding-bottom:7px;
+}
+
+.loyalty-history .mobile-table
+{
+    display:none;
+}
+
+
+.loyalty-history h3
+{
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 120%;
+    letter-spacing: 0;
+    color:rgba(33, 33, 33, 1);
 }

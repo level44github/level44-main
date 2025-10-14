@@ -26,6 +26,19 @@ $(function () {
         $('[data-dropdown] [name="sort"]').closest('[data-dropdown]').find('.dropdown__title').text(dropdownItem.text());
     }
 
+    BX.Vue.event.$on('BXmakerAuthuserphoneSimpleAjaxResponse', (data) => {
+        const response = data.result?.response;
+        const loginModal = $('#login-modal');
+        const backurl = loginModal.data('backurl')
+
+        if (response?.type === 'AUTH' && backurl) {
+            loginModal.modal('hide');
+            window.location.href = backurl;
+        }
+    });
+
+
+
     // Динамическое применение sticky для product__info
     const productInfo = $('.product__info');
 
@@ -60,7 +73,5 @@ $(function () {
             }
         });*/
     }
-
-
 })
 

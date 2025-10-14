@@ -147,6 +147,11 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
 }
 
 global $USER;
+
+
+Bitrix\Main\Loader::includeModule('awelite.favorite');
+$defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass');
+
 ?>
 
 <? if (!empty($actualItem['MORE_PHOTO'])): ?>
@@ -346,8 +351,9 @@ global $USER;
                 <? endforeach; ?>
             <? endif; ?>
 
+            <div class="new-btn-wrap-fav">
             <div class="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
-                 style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
+                 style="width:100%;display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
                 <button class="btn btn-dark btn-block js-btn__add-basket product__add-basket-desktop <?= $itemIds['ADD_BASKET_LINK'] ?>"
                         data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>"
                         type="submit">
@@ -363,6 +369,24 @@ global $USER;
             >
                 <?= Loc::getMessage("NOT_AVAILABLE") ?>
             </button>
+
+            <div class="favorite-detail-wrap">
+                <button class="btn btn-link grid__item__favoritedetail js-favorite <?= $defaultClass ?>"
+                        onClick="BX.Awelite.changeToFavorite(this);return false;"
+                        data-favorite-entity="<?= $arResult['ID'] ?>"
+                        data-iblock-id="<?= $arResult['IBLOCK_ID'] ?>">
+                    <svg class="icon icon-favorites-add grid__item__favorite__icon">
+                        <use xlink:href="#favorites-add"></use>
+                    </svg>
+                    <svg class="icon icon-favorites grid__item__favorite__icon-active">
+                        <use xlink:href="#favorites"></use>
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+
+
 
             <div class="js-subscribe-buttons"
                  style="display:<?= !$actualItem["CAN_BUY"] ? "block" : "none" ?>;"

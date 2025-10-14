@@ -283,3 +283,67 @@ function retailCrmAfterOrderSave($order)
     } catch (\Exception $e) {
     }
 }
+
+/**
+ * Хук для обработки после сохранения клиента из RetailCRM
+ * Вызывается модулем RetailCRM после успешной синхронизации клиента
+ *
+ * @param array $customer Данные клиента из RetailCRM
+ * @return void
+ */
+function retailCrmAfterCustomerSave($customer)
+{
+    // Вызываем обработчик синхронизации лояльности
+    \Level44\Event\RetailCrmLoyaltyHandlers::onAfterCustomerSave($customer);
+}
+
+class AcritBonusInOrderOpensourceIntegration
+{
+    public static function init(): void
+    {
+        $eventManager = Bitrix\Main\EventManager::getInstance();
+        $eventManager->addEventHandler('sale', 'OnSaleOrderSaved',
+            static function (Bitrix\Main\Event $event) {
+                /** @var \Bitrix\Sale\Order $order */
+                $order = $event->getParameter("ENTITY");
+                $isNew = $event->getParameter("IS_NEW");
+
+                if (\Bitrix\Main\Loader::includeModule('acrit.bonus') && $isNew) {
+                    $params = [];
+                    // if bonus-fields outside main order form-tag
+                    if ((int)$_SESSION['BONUS_PAY_USER_VALUE'] > 0) {
+                        $params['PAY_BONUS_ACCOUNT'] = 'Y';
+                    }
+                    \Acrit\Bonus\Core::OnSaleComponentOrderOneStepComplete($order->getId(), $order->getFieldValues(), $params);
+                }
+            }
+        );
+    }
+}
+AcritBonusInOrderOpensourceIntegration::init();
+
+
+
+function getUserOrderSumm($userId)
+{
+    Bitrix\Main\Loader::includeModule('sale');
+
+    if ($userId) {
+        $totalPaid = 0;
+
+        $orders = Bitrix\Sale\Order::getList([
+            'filter' => [
+                'USER_ID' => $userId,
+                'PAYED' => 'Y',
+                'CANCELED' => 'N'
+            ],
+            'select' => ['ID', 'PRICE']
+        ]);
+
+        while ($order = $orders->fetch()) {
+            $totalPaid += $order['PRICE'];
+        }
+
+        return  $totalPaid;
+    }
+}
