@@ -192,12 +192,12 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
 
            if ($arUser['UF_LOYALTY_LEVEL_ID_INTARO']==9)
            {
-               $KBONUS_ADD=round($arResult["ORDER_TOTAL_PRICE_NEW"]/100*3);
+               $KBONUS_ADD=round(($arResult["ORDER_TOTAL_PRICE"]/100)*3);
            }
 
            if ($arUser['UF_LOYALTY_LEVEL_ID_INTARO']==13)
            {
-               $KBONUS_ADD=round($arResult["ORDER_TOTAL_PRICE_NEW"]/100*5);
+               $KBONUS_ADD=round(($arResult["ORDER_TOTAL_PRICE"]/100)*5);
            }
 
 
