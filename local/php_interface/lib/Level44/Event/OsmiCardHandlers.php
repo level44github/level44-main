@@ -136,7 +136,7 @@ class OsmiCardHandlers extends HandlerBase
         }
 
         return [
-            'phone'      => self::formatPhone($user['PERSONAL_PHONE']),
+            'phone'      =>  self::formatPhone($user['PERSONAL_PHONE']) ? self::formatPhone($user['PERSONAL_PHONE']): null,
             'email'      => $user['EMAIL'] ?? '',
             'firstName'  => $user['NAME'] ?? '',
             'lastName'   => $user['LAST_NAME'] ?? '',
