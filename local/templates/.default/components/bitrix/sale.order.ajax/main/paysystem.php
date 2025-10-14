@@ -12,7 +12,7 @@ global $USER;
         <div class="checkout__radio" id="payment">
             <? foreach ($arResult["PAY_SYSTEM"] as $paySystem):?>
 
-                <? //if (($paySystem["ID"]!=17) or (in_array(1, $USER->GetUserGroupArray())) ){ ?>
+                <? if (($paySystem["ID"]!=18) ){ ?>
                 <div class="card option">
                     <a class="option__header
                     <?= $paySystem["CHECKED"] ? "" : "collapsed" ?> js-pay_system-link"
@@ -42,7 +42,7 @@ global $USER;
                            onclick="submitForm();"
                     >
                 </div>
-                <?//}?>
+                <?}?>
             <? endforeach; ?>
         </div>
     </fieldset>
