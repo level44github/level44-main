@@ -150,6 +150,17 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
                 false
             );
             ?>
+            <?
+            $APPLICATION->IncludeComponent(
+                'bxmaker:authid.area',
+                '',
+                [
+                    'SHOW_LINE' => 'Y'
+                ]
+            )
+            ?>
+
+
         </div>
     </div>
 </div>
