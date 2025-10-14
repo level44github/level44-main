@@ -183,9 +183,27 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         // формирует данные для оплаты, заполняется массив $arResult['BONUSPAY']
         \Acrit\Bonus\Profile::runPayProfiles($arResult);
 
+
+           $user = new CUser;
+           $rsUser = CUser::GetByID($USER->GetID());
+           $arUser = $rsUser->Fetch();
+
+           $KBONUS_ADD=0;
+
+           if ($arUser['UF_LOYALTY_LEVEL_ID_INTARO']==9)
+           {
+               $KBONUS_ADD=round($arResult["ORDER_TOTAL_PRICE_NEW"]/100*3);
+           }
+
+           if ($arUser['UF_LOYALTY_LEVEL_ID_INTARO']==13)
+           {
+               $KBONUS_ADD=round($arResult["ORDER_TOTAL_PRICE_NEW"]/100*5);
+           }
+
+
         ?>
 
-        <?if ($USER->IsAuthorized()){ ?>
+        <?if (($USER->IsAuthorized()) and ($arUser['UF_LP_ID_INTARO']!='')){ ?>
         <div class="card" style="padding:1rem 2rem">
             <div>Баллы:</div>
             <?if ($arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']!=''){?>
@@ -202,7 +220,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
             <?}?>
              <div class="bonus-order-wrap">
                  <div class="CURRENT_BONUS_BUDGET">
-                     <?=$arResult['BONUS']['ORDER']['VALUE']?> баллов начислим
+                     <?=$KBONUS_ADD?> баллов начислим
                  </div>
                 <?if ((int)$arResult['BONUSPAY']['USER_VALUE']!=0){?>
                  <div class="CURRENT_BONUS_BUDGET">
