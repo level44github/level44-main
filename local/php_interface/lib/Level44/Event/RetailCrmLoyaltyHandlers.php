@@ -21,7 +21,13 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
      * Хранилище старых значений бонусов пользователей (для отслеживания изменений)
      * @var array
      */
-    protected static $oldBonusValues = [];
+    protected static $oldAcritBonusValues = [];
+    
+    /**
+     * Флаг синхронизации из RetailCRM (для предотвращения циклов)
+     * @var bool
+     */
+    protected static $isSyncingFromRetailCrm = false;
 
     /**
      * Регистрация обработчиков событий
@@ -38,12 +44,14 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
         
         $retailCrmAfterCustomerSaveHandlers[] = [static::class, 'onAfterCustomerSave'];
         
-        // Регистрируем события для двусторонней синхронизации бонусов
-        // Используем API методы RetailCRM v5:
-        // - /api/v5/loyalty/account/{id}/bonus/credit (начисление)
-        // - /api/v5/loyalty/account/{id}/bonus/charge (списание)
-        static::addEventHandler("main", "OnBeforeUserUpdate"); // Сохраняем старое значение
-        static::addEventHandler("main", "OnAfterUserUpdate");  // Синхронизируем с RetailCRM
+        // Регистрируем события модуля acrit.bonus для обратной синхронизации
+        // Отслеживаем изменения баланса в acrit.bonus и синхронизируем в RetailCRM
+        $eventManager = \Bitrix\Main\EventManager::getInstance();
+        $eventManager->addEventHandler(
+            'acrit.bonus',
+            'OnAfterUsersAccountUpdate',
+            [static::class, 'onAcritBonusAccountUpdate']
+        );
     }
 
     /**
@@ -92,6 +100,11 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
             
             if ($result) {
                 self::log("SUCCESS: Loyalty data updated for user {$userId}");
+                
+                // Синхронизируем с модулем acrit.bonus
+                if (isset($loyaltyData['UF_BONUS_AMOUNT_INTARO'])) {
+                    self::syncToAcritBonus($userId, (float)$loyaltyData['UF_BONUS_AMOUNT_INTARO']);
+                }
             } else {
                 self::log("ERROR: Failed to update user {$userId}");
             }
@@ -525,6 +538,168 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
             self::log("EXCEPTION in chargeBonuses: " . $e->getMessage());
             self::log("Stack: " . $e->getTraceAsString());
             return false;
+        }
+    }
+
+    /**
+     * Синхронизация бонусов в модуль acrit.bonus
+     * 
+     * @param int $userId ID пользователя
+     * @param float $newAmount Новая сумма бонусов из RetailCRM
+     * @return bool
+     */
+    protected static function syncToAcritBonus(int $userId, float $newAmount): bool
+    {
+        try {
+            // Устанавливаем флаг, что синхронизируем из RetailCRM
+            self::$isSyncingFromRetailCrm = true;
+            
+            // Проверяем, установлен ли модуль acrit.bonus
+            if (!Loader::includeModule('acrit.bonus')) {
+                self::log("Module acrit.bonus not loaded, skipping sync");
+                self::$isSyncingFromRetailCrm = false;
+                return false;
+            }
+
+            self::log("Syncing bonuses to acrit.bonus for user {$userId}, amount: {$newAmount}");
+
+            // Получаем ID счета acrit.bonus (обычно это основной счет)
+            $accountId = \Acrit\Bonus\Core::getAccountId();
+            
+            if (!$accountId) {
+                self::log("ERROR: Could not get acrit.bonus account ID");
+                self::$isSyncingFromRetailCrm = false;
+                return false;
+            }
+
+            // Получаем текущий баланс в acrit.bonus
+            $currentBudget = \Acrit\Bonus\Core::getUserBalance($userId, $accountId);
+            $currentBudget = (float)($currentBudget ?: 0);
+            
+            // Вычисляем разницу
+            $difference = $newAmount - $currentBudget;
+            
+            if ($difference == 0) {
+                self::log("No difference in bonus amount, skipping acrit.bonus sync");
+                self::$isSyncingFromRetailCrm = false;
+                return true;
+            }
+
+            self::log("Current budget in acrit.bonus: {$currentBudget}, new: {$newAmount}, difference: {$difference}");
+
+            // Получаем данные счета
+            $arAccount = \Acrit\Bonus\Tables\AccountsTable::getList([
+                'filter' => ['ID' => $accountId]
+            ])->fetch();
+            
+            if (!$arAccount) {
+                self::log("ERROR: Account {$accountId} not found");
+                self::$isSyncingFromRetailCrm = false;
+                return false;
+            }
+
+            // Формируем поля для транзакции
+            $transactionFields = [
+                'LID' => $arAccount['LID'] ?: SITE_ID,
+                'VALUE' => $difference, // Положительное для начисления, отрицательное для списания
+                'USER_ID' => $userId,
+                'ACCOUNT_ID' => $accountId,
+                'CODE' => 'RETAILCRM_SYNC_' . time(),
+                'TYPE' => 'RETAILCRM',
+                'DESCRIPTION' => 'Синхронизация бонусов из RetailCRM (автоматически)',
+                'ACTIVE' => 'Y',
+            ];
+
+            // Сохраняем транзакцию - это автоматически обновит баланс пользователя
+            $result = \Acrit\Bonus\Core::transactionDBSave($transactionFields);
+            
+            if ($result && $result->isSuccess()) {
+                self::log("SUCCESS: Bonuses synced to acrit.bonus. Transaction ID: " . $result->getId());
+                
+                // Проверяем новый баланс
+                $newBudget = \Acrit\Bonus\Core::getUserBalance($userId, $accountId);
+                self::log("New balance in acrit.bonus: {$newBudget}");
+                
+                self::$isSyncingFromRetailCrm = false;
+                return true;
+            } else {
+                $errors = $result ? implode(', ', $result->getErrorMessages()) : 'Unknown error';
+                self::log("ERROR: Failed to save transaction to acrit.bonus: {$errors}");
+                self::$isSyncingFromRetailCrm = false;
+                return false;
+            }
+
+        } catch (Exception $e) {
+            self::log("EXCEPTION in syncToAcritBonus: " . $e->getMessage());
+            self::log("Stack: " . $e->getTraceAsString());
+            self::$isSyncingFromRetailCrm = false;
+            return false;
+        }
+    }
+
+    /**
+     * Обработчик изменения бонусного счета в acrit.bonus
+     * Синхронизирует изменения в RetailCRM
+     *
+     * @param \Bitrix\Main\Event $event
+     * @return void
+     */
+    public static function onAcritBonusAccountUpdate(\Bitrix\Main\Event $event): void
+    {
+        try {
+            // Пропускаем, если это синхронизация из RetailCRM (избегаем циклов)
+            if (self::$isSyncingFromRetailCrm) {
+                self::log("Skipping acrit.bonus update (syncing from RetailCRM)");
+                return;
+            }
+
+            // Пропускаем, если это синхронизация истории RetailCRM
+            if (isset($GLOBALS['RETAIL_CRM_HISTORY']) && $GLOBALS['RETAIL_CRM_HISTORY'] === true) {
+                return;
+            }
+
+            $fields = $event->getParameter('fields');
+            $id = $event->getParameter('id');
+            
+            if (!$id || !$fields) {
+                return;
+            }
+
+            self::log("=== acrit.bonus Account Update Detected ===");
+            self::log("Account ID: {$id}, Fields: " . json_encode($fields));
+
+            // Получаем данные счета
+            $account = \Acrit\Bonus\Tables\UsersAccountsTable::getById($id)->fetch();
+            
+            if (!$account) {
+                return;
+            }
+
+            $userId = $account['USER_ID'];
+            $newBudget = isset($fields['CURRENT_BUDGET']) ? (float)$fields['CURRENT_BUDGET'] : (float)$account['CURRENT_BUDGET'];
+
+            // Получаем старое значение
+            $oldAccount = \Acrit\Bonus\Tables\UsersAccountsTable::getById($id)->fetch();
+            $oldBudget = (float)($oldAccount['CURRENT_BUDGET'] ?? 0);
+
+            if ($oldBudget === $newBudget) {
+                self::log("No changes in budget, skipping");
+                return;
+            }
+
+            $difference = $newBudget - $oldBudget;
+
+            self::log("User {$userId}: Budget changed from {$oldBudget} to {$newBudget}, difference: {$difference}");
+
+            // Синхронизируем с RetailCRM
+            $result = self::syncBonusesToRetailCrm($userId, $difference);
+            
+            if ($result) {
+                self::log("SUCCESS: Budget change synced to RetailCRM");
+            }
+
+        } catch (Exception $e) {
+            self::log("EXCEPTION in onAcritBonusAccountUpdate: " . $e->getMessage());
         }
     }
 
