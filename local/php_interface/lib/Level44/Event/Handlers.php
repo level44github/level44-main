@@ -37,6 +37,8 @@ class Handlers extends HandlerBase
         BannerHandlers::register();
 
         OsmiCardHandlers::register();
+        
+        RetailCrmLoyaltyHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)

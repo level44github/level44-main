@@ -284,6 +284,19 @@ function retailCrmAfterOrderSave($order)
     }
 }
 
+/**
+ * Хук для обработки после сохранения клиента из RetailCRM
+ * Вызывается модулем RetailCRM после успешной синхронизации клиента
+ * 
+ * @param array $customer Данные клиента из RetailCRM
+ * @return void
+ */
+function retailCrmAfterCustomerSave($customer)
+{
+    // Вызываем обработчик синхронизации лояльности
+    \Level44\Event\RetailCrmLoyaltyHandlers::onAfterCustomerSave($customer);
+}
+
 class AcritBonusInOrderOpensourceIntegration
 {
     public static function init(): void
