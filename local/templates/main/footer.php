@@ -150,6 +150,7 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
                 false
             );
             ?>
+            <div style="padding-left:32px; padding-right:32px;">
             <?
             $APPLICATION->IncludeComponent(
                 'bxmaker:authid.area',
@@ -159,7 +160,7 @@ $APPLICATION->AddViewContent("type-page", Base::$typePage);
                 ]
             )
             ?>
-
+            </div>
 
         </div>
     </div>
