@@ -107,8 +107,11 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
         <div class="qrcode">
 
         </div>
-        <span style="text-decoration:underline;">Сканировать QR</span><br>
-        <span>Покажите QR код на кассе</span>
+        <div class="qrcode-text">
+            <span style="text-decoration:underline;">Сканировать QR</span><br>
+            <span>Покажите QR код на кассе</span>
+        </div>
+
     </div>
     <?}?>
 
@@ -237,6 +240,9 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
         e.preventDefault();
         $(this).hide();
         $('.qrcode').show();
+        $('.qrcode-text').show();
+
+
     });
 </script>
 
