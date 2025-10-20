@@ -83,6 +83,8 @@ class Base
 
             $asset->addJs('https://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js', true);
         }
+        $asset->addJs(self::getAssetsPath() . "/js/jquery.qrcode.min.js");
+
     }
 
     public static function isCheckoutPage()

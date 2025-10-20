@@ -37,6 +37,9 @@ $deltaLine=($orderSum/300000)*100;
 $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
 
 
+$userInfo = CUser::GetByID($USER->GetID())->fetch();
+
+
 ?>
 <div class="profile__title">Система привелегий</div>
 <div class="profile profile-orders">
@@ -67,11 +70,64 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
         </div>
     </div>
 
+
+    <div class="loyalty-card-wrap">
+        <div>
+            <h3>WALLET-КАРТА</h3>
+            <img src="/local/templates/.default/assets/img/walletcard.png">
+        </div>
+        <?if ($userInfo['UF_CARD_NUM_INTARO']==''){?>
+        <div class="card-add">
+            <a href="https://get.osmicards.com/anketa/4851LEV292ELE/get" target="_blank">Добавить карту</a>
+            <span>Чтобы узнавать о новинкаx и события бренда</span>
+        </div>
+        <?}?>
+    </div>
+
+    <div class="loyalty-card-wrap-mobile">
+
+            <img src="/local/templates/.default/assets/img/walletcard-m.png">
+
+            <h3>WALLET-КАРТА</h3>
+
+    </div>
+
+
+<?if ($userInfo['UF_CARD_NUM_INTARO']==''){?>
+    <div class="card-add card-add-mobile">
+        <a href="https://get.osmicards.com/anketa/4851LEV292ELE/get" target="_blank">Добавить карту</a><br>
+        <span>Чтобы узнавать о новинкаx и события бренда</span>
+    </div>
+<?}?>
+
+
+    <?php if ($userInfo['PERSONAL_PHONE']!=''){?>
+    <div class="loyalty-qr-code">
+        <a href='#'>Показать индивидуальный QR код</a>
+        <div class="qrcode">
+
+        </div>
+    </div>
+    <?}?>
+
     <div class="loyalty-text">
         Оплачивайте до 30% заказа баллами<br>
         За покупки начисляем 3% баллами (1 балл = 1 рубль)<br>
         Баллы действуют 1 год и не применяются к товарам со скидкой<br>
-        <a href="/personal/about/">Подробнее о системе привилегий</a>
+
+        <?php if ($userInfo['PERSONAL_PHONE']!=''){?>
+            <div class="loyalty-qr-code loyalty-qr-code-mobile">
+                <div class="qrcode2">
+
+                </div>
+
+                <span style="text-decoration:underline;">Сканировать QR</span><br>
+                <span>Покажите QR код на кассе</span>
+
+            </div>
+        <?}?>
+
+        <a href="/personal/about/" style="text-decoration:underline;">Подробнее о системе привилегий</a>
     </div>
 
     <div class="loyalty-history">
@@ -97,6 +153,9 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                         <?if ($history['TYPE']=='ORDER'){?>+<?=(int)$history['VALUE']?><?}?>
                         <?if ($history['TYPE']=='BONUSPAY'){?><?=(int)$history['VALUE']?><?}?>
                         <?if ($history['TYPE']=='ADMIN'){?>+<?=(int)$history['VALUE']?><?}?>
+
+                        <?if ($history['TYPE']=='RETAILCRM'){?>+<?=(int)$history['VALUE']?><?}?>
+
                     </td>
                     <td>
                         <?if ($history['TYPE']=='ORDER'){?>
@@ -116,6 +175,7 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                         <?if ($history['TYPE']=='ORDER'){?>Заказ № <?=$history['ORDER_ID']?><?}?>
                         <?if ($history['TYPE']=='BONUSPAY'){?>Заказ № <?=$history['ORDER_ID']?><?}?>
                         <?if ($history['TYPE']=='ADMIN'){?>Бонус<?}?>
+                        <?if ($history['TYPE']=='RETAILCRM'){?>Бонус<?}?>
                     </td>
                 </tr>
                 <?}?>
@@ -136,6 +196,9 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                             <?if ($history['TYPE']=='BONUSPAY'){?>Заказ № <?=$history['ORDER_ID']?><?}?>
 
                             <?if ($history['TYPE']=='ADMIN'){?>Бонус<?}?>
+                            <?if ($history['TYPE']=='RETAILCRM'){?>Бонус<?}?>
+
+
                         </div>
                         <div class="history-row-info-grey">
                             <?if ($history['TYPE']=='BONUSPAY'){?>Начисление <?=$timestamp[0]?><?}else{?>
@@ -148,6 +211,7 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
                             <?if ($history['TYPE']=='ORDER'){?>+<?=(int)$history['VALUE']?><?}?>
                             <?if ($history['TYPE']=='BONUSPAY'){?><?=(int)$history['VALUE']?><?}?>
                             <?if ($history['TYPE']=='ADMIN'){?>+<?=(int)$history['VALUE']?><?}?>
+                            <?if ($history['TYPE']=='RETAILCRM'){?>+<?=(int)$history['VALUE']?><?}?>
                             баллов
                         </div>
                         <div class="history-row-info-grey"><?if ($history['TYPE']=='ORDER'){?>Сгорание <?=$activeto[0]?><?}?></div>
@@ -162,3 +226,16 @@ $bonusHistory=\Acrit\Bonus\Core::getUserTransactions($USER->GetID());
 
     </div>
 </div>
+<?php if ($userInfo['PERSONAL_PHONE']!=''){?>
+<script>
+    $('.qrcode').qrcode({width: 93,height: 93,text: "11<?=$userInfo['PERSONAL_PHONE']?>"});
+    $('.qrcode2').qrcode({width: 93,height: 93,text: "11<?=$userInfo['PERSONAL_PHONE']?>"});
+
+    $('.loyalty-qr-code a').on('click', function(e){
+        e.preventDefault();
+        $(this).hide();
+        $('.qrcode').show();
+    });
+</script>
+
+<?php }?>

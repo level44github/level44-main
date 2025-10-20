@@ -482,23 +482,45 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
         </div>
     </div>
     <div class="product__add-basket-mobile">
-        <div class="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
-             style="display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
-            <button class="btn btn-dark btn-block js-btn__add-basket <?= $itemIds['ADD_BASKET_LINK'] ?>"
-                    data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>"
-                    type="submit">
-                <?= Loc::getMessage("ADD_TO_BASKET") ?>
+
+        <div class="new-btn-wrap-fav">
+            <div class="<?= $itemIds['BASKET_ACTIONS_ID'] ?>"
+                 style="width:100%;display: <?= ($actualItem['CAN_BUY'] ? '' : 'none') ?>;">
+                <button class="btn btn-dark btn-block js-btn__add-basket <?= $itemIds['ADD_BASKET_LINK'] ?>"
+                        data-added-text="<?= Loc::getMessage("ADDED_TO_BASKET") ?>"
+                        type="submit">
+                    <?= Loc::getMessage("ADD_TO_BASKET") ?>
+                </button>
+            </div>
+
+            <button class="btn btn-dark btn-block js-btn__add-basket <?= $itemIds['NOT_AVAILABLE_MESS'] ?>"
+                    type="submit"
+                    onclick="return false;"
+                    style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
+                    disabled
+            >
+                <?= Loc::getMessage("NOT_AVAILABLE") ?>
             </button>
+
+            <div class="favorite-detail-wrap" style="margin-top:0px;">
+                <button class="btn btn-link grid__item__favoritedetail js-favorite <?= $defaultClass ?>"
+                        onClick="BX.Awelite.changeToFavorite(this);return false;"
+                        data-favorite-entity="<?= $arResult['ID'] ?>"
+                        data-iblock-id="<?= $arResult['IBLOCK_ID'] ?>">
+                    <svg class="icon icon-favorites-add grid__item__favorite__icon">
+                        <use xlink:href="#favorites-add"></use>
+                    </svg>
+                    <svg class="icon icon-favorites grid__item__favorite__icon-active">
+                        <use xlink:href="#favorites"></use>
+                    </svg>
+                </button>
+
+            </div>
         </div>
 
-        <button class="btn btn-dark btn-block js-btn__add-basket <?= $itemIds['NOT_AVAILABLE_MESS'] ?>"
-                type="submit"
-                onclick="return false;"
-                style="display: <?= (!$actualItem['CAN_BUY'] ? '' : 'none') ?>"
-                disabled
-        >
-            <?= Loc::getMessage("NOT_AVAILABLE") ?>
-        </button>
+
+
+
     </div>
 <?
 if ($haveOffers) {
