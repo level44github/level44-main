@@ -781,4 +781,9 @@ a.dolyame-text
     {
         margin-bottom:10px;
     }
+
+    .loyalty-qr-code .loyalty-qr-code-desktop
+    {
+        display:none;
+    }
 }

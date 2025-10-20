@@ -102,7 +102,7 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
 
 
     <?php if ($userInfo['PERSONAL_PHONE']!=''){?>
-    <div class="loyalty-qr-code">
+    <div class="loyalty-qr-code loyalty-qr-code-desktop">
         <a href='#'>Показать индивидуальный QR код</a>
         <div class="qrcode">
 
