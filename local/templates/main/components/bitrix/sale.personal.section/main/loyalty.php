@@ -107,6 +107,8 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
         <div class="qrcode">
 
         </div>
+        <span style="text-decoration:underline;">Сканировать QR</span><br>
+        <span>Покажите QR код на кассе</span>
     </div>
     <?}?>
 
@@ -228,8 +230,8 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
 </div>
 <?php if ($userInfo['PERSONAL_PHONE']!=''){?>
 <script>
-    $('.qrcode').qrcode({width: 93,height: 93,text: "11<?=$userInfo['PERSONAL_PHONE']?>"});
-    $('.qrcode2').qrcode({width: 93,height: 93,text: "11<?=$userInfo['PERSONAL_PHONE']?>"});
+    $('.qrcode').qrcode({width: 93,height: 93,text: "<?=$userInfo['PERSONAL_PHONE']?>"});
+    $('.qrcode2').qrcode({width: 93,height: 93,text: "<?=$userInfo['PERSONAL_PHONE']?>"});
 
     $('.loyalty-qr-code a').on('click', function(e){
         e.preventDefault();
