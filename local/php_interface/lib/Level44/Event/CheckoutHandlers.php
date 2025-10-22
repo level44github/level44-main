@@ -268,7 +268,8 @@ class CheckoutHandlers extends HandlerBase
         if ($request->getPost('confirmorder') && !empty($userId)) {
             $obUser = new \CUser();
             $obUser->Update($userId, [
-                'UF_SUBSCRIBED_TO_NEWSLETTER' => $request->getPost('subscribe') === 'Y' ? '1' : '0'
+                'UF_SUBSCRIBED_TO_NEWSLETTER' => $request->getPost('subscribe') === 'Y' ? '1' : '0',
+                'UF_SUBSCRIBE_USER_EMAIL' => $request->getPost('subscribe') === 'Y' ? '1' : '0'
             ]);
         }
 
