@@ -34,6 +34,8 @@ class CheckoutHandlers extends HandlerBase
         static::addEventHandler("sale", "OnSaleComponentOrderOneStepDelivery");
         static::addEventHandler("sale", "OnSaleOrderBeforeSaved");
         static::addEventHandler("sale", "OnSaleOrderSaved");
+        static::addEventHandler("sale", "OnSaleOrderSavedHandler");
+
         static::addEventHandler("sale", "OnSaleShipmentSetField");
         static::addEventHandler("sale", "OnSaleStatusOrderChange", CustomKCEClass::class, sort: 50);
         static::removeKCEOrderStatusHandler();

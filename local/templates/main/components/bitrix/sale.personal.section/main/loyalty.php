@@ -26,7 +26,8 @@ $APPLICATION->AddChainItem('Система привелегий');
 $APPLICATION->AddViewContent("personal.back-link", $arResult['SEF_FOLDER']);
 $APPLICATION->AddViewContent("personal.navigation-title", 'Система привелегий');
 
-$score=\Acrit\Bonus\Core::getUserBalanceFormat($USER->GetID(), $accountId = false);
+
+$score=\Acrit\Bonus\Core::getUserBalanceFormat($USER->GetID(), 1);
 
 $orderSum=getUserOrderSumm($USER->GetID());
 
@@ -76,12 +77,12 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
             <h3>WALLET-КАРТА</h3>
             <img src="/local/templates/.default/assets/img/walletcard.png">
         </div>
-        <?if ($userInfo['UF_LP_ID_INTARO']==''){?>
+
         <div class="card-add">
             <a href="https://get.osmicards.com/anketa/4851LEV292ELE/get" target="_blank">Добавить карту</a>
             <span>Чтобы узнавать о новинкаx и события бренда</span>
         </div>
-        <?}?>
+
     </div>
 
     <div class="loyalty-card-wrap-mobile">
@@ -93,12 +94,12 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
     </div>
 
 
-<?if ($userInfo['UF_LP_ID_INTARO']==''){?>
+
     <div class="card-add card-add-mobile">
         <a href="https://get.osmicards.com/anketa/4851LEV292ELE/get" target="_blank">Добавить карту</a><br>
         <span>Чтобы узнавать о новинкаx и события бренда</span>
     </div>
-<?}?>
+
 
 
     <?php if ($userInfo['PERSONAL_PHONE']!=''){?>

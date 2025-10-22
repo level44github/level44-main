@@ -177,15 +177,6 @@ function ResizeUploadedPhoto($arFields)
 }
 
 
-function retailCrmBeforeOrderSave($order)
-{
-    $filename = $_SERVER['DOCUMENT_ROOT'].'/upload/logs/crm-'.date('Y-m-d').'.txt';
-    $f = fopen($filename, 'a');
-    fwrite($f, date('d.m.Y H:i:s')." -  order - ".print_r($order));
-    fclose($f);
-
-}
-
 function retailCrmBeforeOrderSend($order, $arOrder)
 {
     //TODO Refactor

@@ -1,18 +1,26 @@
 <?
 $aMenuLinks = Array(
-/*	Array(
-		"The privilege system",
-		"",
-		Array(), 
-		Array(), 
-		"" 
-	),*/
+
+    Array(
+        "Personal account",
+        SITE_DIR ."personal/main/",
+        Array(),
+        Array(),
+        ""
+    ),
+    Array(
+        "The privilege system",
+        SITE_DIR ."personal/loyalty/",
+        Array(),
+        Array(),
+        ""
+    ),
 	Array(
 		"Orders",
         SITE_DIR . "personal/orders/",
 		Array(),
         Array(),
-		"" 
+		""
 	),
   	Array(
 		"Selected",
@@ -31,9 +39,9 @@ $aMenuLinks = Array(
 	Array(
 		"Log out",
         SITE_DIR . "?logout=yes",
-		Array(), 
-		Array(), 
-		"" 
+		Array(),
+		Array(),
+		""
 	)
 );
 ?>
