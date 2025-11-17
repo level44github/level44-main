@@ -79,7 +79,7 @@ $userInfo = CUser::GetByID($USER->GetID())->fetch();
         </div>
 
         <div class="card-add">
-            <a href="https://get.osmicards.com/anketa/4851LEV292ELE/get" target="_blank">Добавить карту</a>
+            <a href="https://get.osmicards.com/anketa/4851LEV292ELE/get" target="_blank"><span>Добавить карту</span></a>
             <span>Чтобы узнавать о новинкаx и события бренда</span>
         </div>
 

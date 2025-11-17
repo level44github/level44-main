@@ -186,6 +186,9 @@ class Delivery
      */
     public static function getSuitableCourier(array $courierList, array $properties): array
     {
+
+
+
         usort($courierList, fn($a, $b) => $a['PRICE'] <=> $b['PRICE']);
 
         [$service] = $courierList;
@@ -284,6 +287,8 @@ class Delivery
     public static function getSlots(string $serviceCode, array $properties): array|null
     {
         $slots = null;
+
+
 
         try {
             if (empty($properties['LOCATION'])) {
@@ -498,7 +503,7 @@ class Delivery
             ['value' => '20:00 - 21:00',],
         ];
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $deliveryDates[] = [
                 'date'      => $date,
                 'intervals' => $timeIntervals,

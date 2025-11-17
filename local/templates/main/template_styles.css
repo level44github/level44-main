@@ -632,8 +632,9 @@ a.dolyame-text
     line-height: 140%;
     text-align: center;
     vertical-align: middle;
-    text-decoration: underline;
+    text-decoration: none;
     color:#989690;
+    margin-bottom:5px;
 }
 
 .loyalty-card-wrap .card-add span
@@ -644,6 +645,12 @@ a.dolyame-text
     text-align: center;
     vertical-align: middle;
     color:#989690;
+}
+
+.loyalty-card-wrap .card-add a span
+{
+    padding-bottom:1px;
+    border-bottom:1px solid #989690;
 }
 
 .loyalty-qr-code
