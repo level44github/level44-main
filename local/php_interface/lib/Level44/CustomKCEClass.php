@@ -744,7 +744,6 @@ class CustomKCEClass
                 </soap:Envelope>';
         //pr ($XmlData);
         $search_result = cKCE::GetData($XmlData);
-        cKCE::CreateLogFile($XmlData,$search_result,__FUNCTION__);
         $sxe = new SimpleXMLElement($search_result);
         $text = $sxe->children('soap',TRUE);
         $text = $text->children('m',TRUE);
