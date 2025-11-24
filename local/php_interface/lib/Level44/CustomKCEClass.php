@@ -9,8 +9,9 @@ namespace Level44;
     use Exception;
     use KseService;
     use Level44\Enums\DeliveryType;
+    use SimpleXMLElement;
 
-class CustomKCEClass
+    class CustomKCEClass
 {
 
     public static function SetWaybill(
