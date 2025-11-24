@@ -376,6 +376,7 @@ class CustomKCEClass
                     $Items[$i]['QTY'] = $arItem['QUANTITY'];
                     $Items[$i]['ID'] = $arItem['PRODUCT_ID'];
                     $Items[$i]['UNIT'] = $arItem['MEASURE_NAME'];
+                    $Items[$i]['VAT_RATE'] = $VATRate;
                     $i++;
                 }
 
@@ -685,6 +686,11 @@ class CustomKCEClass
                                         <m:Key>FullName</m:Key>
                                         <m:Value>'.$item['NAME'].'</m:Value>
                                         <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>VATRate</m:Key>
+                                        <m:Value>'.$item['VAT_RATE'].'</m:Value>
+                                        <m:ValueType>float</m:ValueType>
                                     </m:Fields>
                                     <m:Fields>
                                         <m:Key>BaseUnit</m:Key>
