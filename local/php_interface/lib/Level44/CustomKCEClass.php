@@ -54,7 +54,7 @@ class CustomKCEClass
         $regionTo = 'postcode-'.$regionTo;
         
         //Обновляем информацию о товарах
-        $arProd = cKCE::UpdateClientProducts($login, $password, $Items);
+        $arProd = static::UpdateClientProducts($login, $password, $Items);
 
         $rand=rand(0,1598458);
         $DeclaredValueRate = $SumNeedPayZakaz - $SumDost;
@@ -632,5 +632,134 @@ class CustomKCEClass
         }
 
         return array_slice($deliveryDates, 0, 5);
+    }
+
+    public static function UpdateClientProducts ($login, $password, $Items){
+
+
+        //Сопоставляем единицы измерения товаров
+        $unit = '601632e2-976d-11dc-986e-0015170f8c09'; //По умолчанию считаем, что товары измеряются в штуках
+
+
+
+        $null='';
+
+        $XmlData = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+                    <soap:Header/>
+                    <soap:Body>
+                        <m:UpdateClientProducts xmlns:m="http://www.cargo3.ru">
+                            <m:Login>'.$login.'</m:Login>
+                            <m:Password>'.$password.'</m:Password>
+                            <m:data>
+                                <m:Key>Products</m:Key>';
+        foreach ($Items as $item){
+
+            switch ($item['UNIT']) {
+                case 'шт': $unit = '601632e2-976d-11dc-986e-0015170f8c09'; break;
+                case 'ч': $unit = '601632e1-976d-11dc-986e-0015170f8c09'; break;
+                case 'упк': $unit = '0232d433-c84d-11dd-927a-0015170f8c09'; break;
+                case 'см': $unit = '37dec53a-e399-11dd-927a-0015170f8c09'; break;
+                case 'м3': $unit = '601632de-976d-11dc-986e-0015170f8c09'; break;
+                case 'кг': $unit = '601632df-976d-11dc-986e-0015170f8c09'; break;
+            }
+
+            if (!$item['UNIT']) $unit = '601632e2-976d-11dc-986e-0015170f8c09';
+
+            if (!$item['SKU']) $item['SKU'] = str_replace('.','',$_SERVER['HTTP_HOST']).$item['ID'];
+
+            //pr ($item);
+
+            $XmlData.='             <m:List>
+                                    <m:Key>'.$item['SKU'].'</m:Key>
+                                    <m:Fields>
+                                        <m:Key>Article</m:Key>
+                                        <m:Value>'.$item['SKU'].'</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>Name</m:Key>
+                                        <m:Value>'.$item['NAME'].'</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>FullName</m:Key>
+                                        <m:Value>'.$item['NAME'].'</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>BaseUnit</m:Key>
+                                        <m:Value>'.$unit.'</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>TypeOfProduct</m:Key>
+                                        <m:Value>0</m:Value>
+                                        <m:ValueType>decimal</m:ValueType>
+                                    </m:Fields>
+                                </m:List>';
+        }
+
+        $XmlData.='             <m:List>
+                                    <m:Key>ДОСТАВКА2</m:Key>
+                                    <m:Fields>
+                                        <m:Key>Article</m:Key>
+                                        <m:Value>ДОСТАВКАКСЭ</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>Name</m:Key>
+                                        <m:Value>Услуга доставки КСЭ</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>FullName</m:Key>
+                                        <m:Value>Услуга доставки КСЭ</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>BaseUnit</m:Key>
+                                        <m:Value>601632e2-976d-11dc-986e-0015170f8c09</m:Value>
+                                        <m:ValueType>string</m:ValueType>
+                                    </m:Fields>
+                                    <m:Fields>
+                                        <m:Key>TypeOfProduct</m:Key>
+                                        <m:Value>0</m:Value>
+                                        <m:ValueType>decimal</m:ValueType>
+                                    </m:Fields>
+                                </m:List>';
+
+        $XmlData.='                               
+                            </m:data>
+                            <m:parameters>
+                                <m:Key>Parameters</m:Key>
+                            </m:parameters>
+                        </m:UpdateClientProducts>
+                    </soap:Body>
+                </soap:Envelope>';
+        //pr ($XmlData);
+        $search_result = cKCE::GetData($XmlData);
+        cKCE::CreateLogFile($XmlData,$search_result,__FUNCTION__);
+        $sxe = new SimpleXMLElement($search_result);
+        $text = $sxe->children('soap',TRUE);
+        $text = $text->children('m',TRUE);
+        $ResultData = json_decode(json_encode($text->UpdateClientProductsResponse->return));
+        $ResultData = $ResultData->List;
+        $i=0;
+        if (count($Items) > 1) {
+            foreach ($ResultData as $Data) {
+                foreach ($Data->Properties as $prop){
+                    if ($prop->Key == 'Article') $arProd[$i]['SKU'] = (string)$prop->Value;
+                    if ($prop->Key == 'GUID') $arProd[$i]['GUID'] = (string)$prop->Value;
+                }
+                $i++;
+            }
+        } else {
+            foreach ($ResultData->Properties as $prop){
+                if ($prop->Key == 'Article') $arProd[$i]['SKU'] = (string)$prop->Value;
+                if ($prop->Key == 'GUID') $arProd[$i]['GUID'] = (string)$prop->Value;
+            }
+        }
+        //pr ($arProd); die();
+        return $arProd;
     }
 }
