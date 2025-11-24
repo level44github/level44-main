@@ -55,9 +55,6 @@ class CustomKCEClass
         
         //Обновляем информацию о товарах
         $arProd = cKCE::UpdateClientProducts($login, $password, $Items);
-        
-        //приводим тип доставки в соответствие с накладными
-        $DeliveryOfCargo = cKCE::GetDeliveryType($DeliveryOfCargo);
 
         $rand=rand(0,1598458);
         $DeclaredValueRate = $SumNeedPayZakaz - $SumDost;
@@ -292,7 +289,7 @@ class CustomKCEClass
                 $SenderEmail = Option::get($moduleId, "SenderContactEmail");
                 $VATRate = Option::get("courierserviceexpress.moduledost", "KCEVat");
                 //Курьер до дверей
-                $DeliveryOfCargo = '0';
+                $DeliveryOfCargo = Option::get("courierserviceexpress.moduledost", "kurierka");
                 $fitting = false;
 
                 $deliveryType = \Level44\Delivery::getType($order->getField('DELIVERY_ID'));
