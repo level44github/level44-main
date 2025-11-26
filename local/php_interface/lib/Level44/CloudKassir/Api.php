@@ -225,21 +225,31 @@ class Api
                 ];
             }
             
-            // Получаем номер документа прихода (PAY_VOUCHER_NUM) для TransactionId
-            // PAY_VOUCHER_NUM хранит номер транзакции/документа прихода от платежной системы
-            $transactionId = $payment->getField('PAY_VOUCHER_NUM');
+            // Получаем номер документа прихода для TransactionId
+            // Сначала пробуем PAY_VOUCHER_NUM (используется в PayPal и других системах)
+            // Если не заполнен, пробуем PS_INVOICE_ID (используется в YandexCheckout)
+            $transactionId = null;
             
-            // Проверяем также через getFieldValues на случай, если getField не работает
-            if (empty($transactionId)) {
+            // Пробуем получить через getField
+            $payVoucherNum = $payment->getField('PAY_VOUCHER_NUM');
+            $psInvoiceId = $payment->getField('PS_INVOICE_ID');
+            
+            // Если getField не работает, пробуем через getFieldValues
+            if (empty($payVoucherNum) && empty($psInvoiceId)) {
                 $paymentFields = $payment->getFieldValues();
-                $transactionId = $paymentFields['PAY_VOUCHER_NUM'] ?? null;
+                $payVoucherNum = $paymentFields['PAY_VOUCHER_NUM'] ?? null;
+                $psInvoiceId = $paymentFields['PS_INVOICE_ID'] ?? null;
+            }
+            
+            // Приоритет у PAY_VOUCHER_NUM, если он заполнен
+            if (!empty($payVoucherNum) && trim($payVoucherNum) !== '' && $payVoucherNum !== '0') {
+                $transactionId = trim((string)$payVoucherNum);
+            } elseif (!empty($psInvoiceId) && trim($psInvoiceId) !== '' && $psInvoiceId !== '0') {
+                $transactionId = trim((string)$psInvoiceId);
             }
             
             // Подготавливаем TransactionId, если он заполнен
-            $transactionIdValue = null;
-            if (!empty($transactionId) && trim($transactionId) !== '' && $transactionId !== '0') {
-                $transactionIdValue = trim((string)$transactionId);
-            }
+            $transactionIdValue = $transactionId;
             
             $requestData = [
                 'Inn' => $inn, // ИНН организации (обязательно, без пробелов)
@@ -257,6 +267,13 @@ class Api
             // Добавляем TransactionId, если он заполнен
             if ($transactionIdValue !== null) {
                 $requestData['TransactionId'] = $transactionIdValue;
+                $this->log("TransactionId установлен для заказа #{$order->getId()}: {$transactionIdValue}");
+            } else {
+                // Временное логирование для отладки
+                $paymentFields = $payment->getFieldValues();
+                $this->log("TransactionId не установлен для заказа #{$order->getId()}. PAY_VOUCHER_NUM: " . 
+                    var_export($paymentFields['PAY_VOUCHER_NUM'] ?? null, true) . 
+                    ", PS_INVOICE_ID: " . var_export($paymentFields['PS_INVOICE_ID'] ?? null, true));
             }
             
             // Удаляем null значения из CustomerReceipt для чистоты запроса
