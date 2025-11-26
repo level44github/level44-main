@@ -213,8 +213,7 @@ class Api
 
             // Формируем данные для запроса в формате API CloudKassir
             // CloudKassir использует API CloudPayments для формирования чеков
-            // Временно для тестирования добавляем префикс "1111-" к ID заказа
-            $invoiceId = '1111-' . $order->getId();
+            $invoiceId = (string)$order->getId();
             
             // Получаем ИНН и убираем пробелы
             $inn = trim($this->getInn());
