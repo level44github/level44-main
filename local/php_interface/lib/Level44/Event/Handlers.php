@@ -39,6 +39,8 @@ class Handlers extends HandlerBase
         OsmiCardHandlers::register();
         
         RetailCrmLoyaltyHandlers::register();
+        
+        CloudKassirHandlers::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
