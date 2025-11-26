@@ -284,6 +284,15 @@ class Api
                 unset($requestData['CustomerReceipt']['phone']);
             }
 
+            // Временное логирование для отладки TransactionId
+            $jsonRequest = Json::encode($requestData);
+            $this->log("Отправка запроса для заказа #{$order->getId()}. JSON: " . $jsonRequest);
+            if (isset($requestData['TransactionId'])) {
+                $this->log("TransactionId присутствует в запросе: " . $requestData['TransactionId']);
+            } else {
+                $this->log("TransactionId ОТСУТСТВУЕТ в запросе для заказа #{$order->getId()}");
+            }
+
             // Отправляем запрос
             $response = $this->post($this->apiUrl, $requestData);
             
