@@ -2,6 +2,7 @@
 
 namespace Level44\Event;
 
+use Bitrix\Main\Config\Option;
 use Bitrix\Main\Event;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Order;
@@ -134,10 +135,20 @@ class CloudKassirHandlers extends HandlerBase
      * @param Order $order Заказ
      * @return float Сумма оплаты без бонусов
      */
+    /**
+     * Получает ID бонусной платежной системы
+     *
+     * @return int ID платежной системы для бонусов
+     */
+    protected static function getBonusPaymentSystemId(): int
+    {
+        return (int)Option::get('level44.cloudkassir', 'bonus_payment_system_id', '18');
+    }
+
     protected static function getRealPaidAmount(Order $order): float
     {
         $paymentCollection = $order->getPaymentCollection();
-        $innerPaySystemId = 18; // ID внутренней платежной системы (бонусы)
+        $innerPaySystemId = self::getBonusPaymentSystemId();
         $paidAmount = 0.0;
 
         /** @var Payment $payment */
@@ -165,7 +176,7 @@ class CloudKassirHandlers extends HandlerBase
     protected static function getExternalPayment(Order $order): ?Payment
     {
         $paymentCollection = $order->getPaymentCollection();
-        $innerPaySystemId = 18; // ID внутренней платежной системы (бонусы)
+        $innerPaySystemId = self::getBonusPaymentSystemId();
 
         /** @var Payment $payment */
         foreach ($paymentCollection as $payment) {

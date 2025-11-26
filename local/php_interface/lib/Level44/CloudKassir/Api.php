@@ -123,20 +123,27 @@ class Api
             $basket = $order->getBasket();
             $items = [];
 
-            // Формируем позиции чека из корзины
+            // Получаем сумму бонусного платежа (ID платежной системы = 18)
+            $bonusPaymentAmount = $this->getBonusPaymentAmount($order);
+            
+            // Сначала собираем все товары и вычисляем общую сумму товаров (без доставки)
+            $productItems = [];
+            $totalProductsAmount = 0.0;
+            
             foreach ($basket->getBasketItems() as $basketItem) {
                 $itemPrice = $basketItem->getPrice();
                 $itemQuantity = $basketItem->getQuantity();
                 $itemAmount = $itemPrice * $itemQuantity;
+                $totalProductsAmount += $itemAmount;
 
                 // Получаем ставку НДС
                 $vatRate = $this->getVatRate($basketItem);
 
                 $item = [
                     'label' => $basketItem->getField('NAME'),
-                    'price' => number_format($itemPrice, 2, '.', ''),
+                    'price' => $itemPrice,
                     'quantity' => $itemQuantity,
-                    'amount' => number_format($itemAmount, 2, '.', ''),
+                    'amount' => $itemAmount,
                     'vat' => $vatRate,
                     'object' => $this->getPaymentObject(), // Предмет расчета
                     'method' => $this->getPaymentMethod(), // Способ расчета
@@ -152,10 +159,39 @@ class Api
                     }
                 }
 
-                $items[] = $item;
+                $productItems[] = $item;
             }
 
-            // Добавляем доставку, если есть
+            // Если есть бонусная оплата, пропорционально уменьшаем суммы товаров
+            if ($bonusPaymentAmount > 0 && $totalProductsAmount > 0) {
+                // Вычисляем коэффициент уменьшения
+                // Ограничиваем бонусную оплату суммой товаров (на случай, если бонусов больше)
+                $effectiveBonusAmount = min($bonusPaymentAmount, $totalProductsAmount);
+                $reductionCoefficient = ($totalProductsAmount - $effectiveBonusAmount) / $totalProductsAmount;
+                
+                // Применяем коэффициент к каждому товару
+                foreach ($productItems as &$item) {
+                    $item['amount'] = $item['amount'] * $reductionCoefficient;
+                    $item['price'] = $item['amount'] / $item['quantity'];
+                }
+                unset($item);
+            }
+
+            // Форматируем суммы товаров для чека
+            foreach ($productItems as $item) {
+                $items[] = [
+                    'label' => $item['label'],
+                    'price' => number_format($item['price'], 2, '.', ''),
+                    'quantity' => $item['quantity'],
+                    'amount' => number_format($item['amount'], 2, '.', ''),
+                    'vat' => $item['vat'],
+                    'object' => $item['object'],
+                    'method' => $item['method'],
+                ] + (isset($item['spic']) ? ['spic' => $item['spic']] : [])
+                  + (isset($item['packageCode']) ? ['packageCode' => $item['packageCode']] : []);
+            }
+
+            // Добавляем доставку, если есть (доставка не уменьшается на бонусную оплату)
             $deliveryPrice = $order->getDeliveryPrice();
             if ($deliveryPrice > 0) {
                 $deliveryVat = $this->getDeliveryVatRate($order, $payment);
@@ -189,6 +225,22 @@ class Api
                 ];
             }
             
+            // Получаем номер документа прихода (PAY_VOUCHER_NUM) для TransactionId
+            // PAY_VOUCHER_NUM хранит номер транзакции/документа прихода от платежной системы
+            $transactionId = $payment->getField('PAY_VOUCHER_NUM');
+            
+            // Проверяем также через getFieldValues на случай, если getField не работает
+            if (empty($transactionId)) {
+                $paymentFields = $payment->getFieldValues();
+                $transactionId = $paymentFields['PAY_VOUCHER_NUM'] ?? null;
+            }
+            
+            // Подготавливаем TransactionId, если он заполнен
+            $transactionIdValue = null;
+            if (!empty($transactionId) && trim($transactionId) !== '' && $transactionId !== '0') {
+                $transactionIdValue = trim((string)$transactionId);
+            }
+            
             $requestData = [
                 'Inn' => $inn, // ИНН организации (обязательно, без пробелов)
                 'Type' => $type, // Тип чека: Income (приход) или IncomeReturn (возврат прихода)
@@ -202,11 +254,9 @@ class Api
                 'AccountId' => (string)$order->getUserId(),
             ];
             
-            // Если у платежа заполнен номер документа прихода (PAY_VOUCHER_NUM), добавляем его в TransactionId
-            // PAY_VOUCHER_NUM хранит номер транзакции/документа прихода от платежной системы
-            $transactionId = $payment->getField('PAY_VOUCHER_NUM');
-            if (!empty($transactionId)) {
-                $requestData['TransactionId'] = (string)$transactionId;
+            // Добавляем TransactionId, если он заполнен
+            if ($transactionIdValue !== null) {
+                $requestData['TransactionId'] = $transactionIdValue;
             }
             
             // Удаляем null значения из CustomerReceipt для чистоты запроса
@@ -340,6 +390,39 @@ class Api
     protected function getPaymentMethod(): int
     {
         return (int)Option::get('level44.cloudkassir', 'payment_method', '1'); // 1 - предоплата 100%
+    }
+
+    /**
+     * Получает ID бонусной платежной системы
+     *
+     * @return int ID платежной системы для бонусов
+     */
+    protected function getBonusPaymentSystemId(): int
+    {
+        return (int)Option::get('level44.cloudkassir', 'bonus_payment_system_id', '18');
+    }
+
+    /**
+     * Получает сумму бонусного платежа из заказа
+     *
+     * @param Order $order Заказ
+     * @return float Сумма бонусного платежа
+     */
+    protected function getBonusPaymentAmount(Order $order): float
+    {
+        $paymentCollection = $order->getPaymentCollection();
+        $innerPaySystemId = $this->getBonusPaymentSystemId();
+        $bonusAmount = 0.0;
+
+        /** @var Payment $payment */
+        foreach ($paymentCollection as $payment) {
+            // Ищем только внутренние платежи (бонусы)
+            if ($payment->getPaymentSystemId() == $innerPaySystemId && $payment->isPaid()) {
+                $bonusAmount += (float)$payment->getSum();
+            }
+        }
+
+        return $bonusAmount;
     }
 
     /**
