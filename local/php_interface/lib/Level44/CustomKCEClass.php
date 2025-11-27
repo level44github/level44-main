@@ -195,7 +195,13 @@ namespace Level44;
 
         $WayBills = json_decode(json_encode($text->SaveWaybillOfficeResponse->return->Items));
         if ($WayBills?->Error === 'true') {
-            return null;
+            $WayBillID = static::GetTrackNumber($login, $password, $BtrxOrderId);
+
+            if (!$WayBillID) {
+                return null;
+            }
+
+            return $WayBillID;
         }
 
         $WayBillID = (string)$WayBills->Value;
@@ -767,5 +773,56 @@ namespace Level44;
         }
         //pr ($arProd); die();
         return $arProd;
+    }
+
+    public static function GetTrackNumber($login, $password, $orderId): string|null
+    {
+
+        $XmlData = '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.cargo3.ru">
+                        <SOAP-ENV:Body>
+                            <ns1:Tracking>
+                                <ns1:login>' . $login . '</ns1:login>
+                                <ns1:password>' . $password . '</ns1:password>
+                                <ns1:documents>
+                                    <ns1:Key>Documents</ns1:Key>
+                                    <ns1:Properties>
+                                        <ns1:Key>DocumentType</ns1:Key>
+                                        <ns1:Value>Waybill</ns1:Value>
+                                        <ns1:ValueType>string</ns1:ValueType>
+                                    </ns1:Properties>
+                                    <ns1:Properties>
+                                        <ns1:Key>NumberType</ns1:Key>
+                                        <ns1:Value>ClientNumber</ns1:Value>
+                                        <ns1:ValueType>string</ns1:ValueType>
+                                    </ns1:Properties>
+                                    <ns1:Properties>
+                                        <ns1:Key>OnlySelectedType</ns1:Key>
+                                        <ns1:Value>true</ns1:Value>
+                                        <ns1:ValueType>boolean</ns1:ValueType>
+                                    </ns1:Properties>
+                                    <ns1:List>
+                                        <ns1:Key>' . $orderId . '</ns1:Key>
+                                    </ns1:List>
+                                </ns1:documents>
+                                <ns1:parameters>
+                                    <ns1:Key>Parameters</ns1:Key>
+                                </ns1:parameters>
+                            </ns1:Tracking>
+                        </SOAP-ENV:Body>
+                    </SOAP-ENV:Envelope>';
+        $result = cKCE::GetData($XmlData);
+
+        $soap_result = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $result);
+        $xml = new SimpleXMLElement($soap_result);
+        $body = $xml->xpath('//soapBody')[0];
+        $array = json_decode(json_encode((array)$body), TRUE);
+        $properties = (array)$array['mTrackingResponse']['mreturn']['mList']['mProperties'];
+        $property = current(array_filter($properties, fn($item) => $item['mKey'] === 'Number'));
+
+        if (!$property['mValue']) {
+            return null;
+        }
+
+        return $property['mValue'];
     }
 }
