@@ -18,6 +18,22 @@ if (\Level44\Base::isEnLang()) {
 \Level44\Base::customRegistry();
 Event\Handlers::register();
 
+// Регистрация ограничения доставки по времени суток
+if (\Bitrix\Main\Loader::includeModule('sale')) {
+    \Bitrix\Main\EventManager::getInstance()->addEventHandler(
+        'sale',
+        'onSaleDeliveryRestrictionsClassNamesBuildList',
+        function() {
+            return new \Bitrix\Main\EventResult(
+                \Bitrix\Main\EventResult::SUCCESS,
+                [
+                    'Sale\Delivery\Restrictions\ByTimeOfDay' => '/local/php_interface/lib/Sale/Delivery/Restrictions/ByTimeOfDay.php',
+                ]
+            );
+        }
+    );
+}
+
 // События которые срабатывают при создании или изменении элемента инфоблока
 //AddEventHandler("iblock", "OnAfterIBlockElementAdd", "ResizeUploadedPhoto");
 //AddEventHandler("iblock", "OnAfterIBlockElementUpdate", "ResizeUploadedPhoto");

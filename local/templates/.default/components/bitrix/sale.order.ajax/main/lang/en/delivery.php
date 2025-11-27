@@ -12,3 +12,5 @@ $MESS["DELIVERY_SHOP_NAME"] = "Pickup from the store";
 $MESS["DELIVERY_SHOP_DESCRIPTION"] = "Only online payment is possible.<br>Pickup point: Moscow, st. Malaya Bronnaya, 24, building 3, in the courtyard, up the stairs, floor 3 and to the left";
 $MESS["DELIVERY_DATE"] = "Date of delivery";
 $MESS["TIME_INTERVAL"] = "Delivery time";
+$MESS["DELIVERY_EXPRESS_NAME"] = "Express-delivery";
+$MESS["DELIVERY_EXPRESS_DESCRIPTION"] = "Deliver your order the same day if you place your order before 5:00 PM";

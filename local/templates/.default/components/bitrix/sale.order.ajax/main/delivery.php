@@ -116,6 +116,15 @@ if (!function_exists("PrintDelivery")) {
                 PrintDelivery($deliveryTypes["PICKUP"], $data);
             }
 
+            if (!empty($deliveryTypes["EXPRESS"])) {
+                $data = [
+                    "NAME"                    => Loc::getMessage("DELIVERY_EXPRESS_NAME"),
+                    "DESCRIPTION"             => Loc::getMessage("DELIVERY_EXPRESS_DESCRIPTION")
+                ];
+
+                PrintDelivery($deliveryTypes["EXPRESS"], $data);
+            }
+
             if (!empty($deliveryTypes["COURIER"])) {
                 $data = [
                     "NAME"        => Loc::getMessage("DELIVERY_COURIER_NAME"),

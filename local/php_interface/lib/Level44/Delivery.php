@@ -56,6 +56,7 @@ class Delivery
             static::$deliveries = $deliveries;
         }
 
+
         return static::$deliveries;
     }
 
@@ -94,7 +95,15 @@ class Delivery
         $paySystems = static::getPaySystems();
         $deliveries = static::getDeliveries();
 
-        $code = $deliveries[$id]["CODE"];
+        if (!isset($deliveries[$id])) {
+            return null;
+        }
+
+        $code = $deliveries[$id]["CODE"] ?? null;
+
+        if (empty($code)) {
+            return null;
+        }
 
         if ($code === 'level44:pickup') {
             return DeliveryType::Shop;
@@ -106,6 +115,10 @@ class Delivery
 
         if ($code === 'sdek:pickup') {
             return DeliveryType::Pickup;
+        }
+
+        if ($code === 'level44:express') {
+            return DeliveryType::Express;
         }
 
         if (in_array($code, ['dalli_service:dalli_courier', 'dalli_service:dalli_cfo', 'kse'])) {
@@ -170,7 +183,16 @@ class Delivery
 
         [$period, $price] = [$delivery["PERIOD_TEXT"], $delivery["PRICE_FORMATED"]];
 
-        $delivery["PRICE_PERIOD_TEXT"] = join(', ', array_filter([trim($period), trim($price)]));
+
+        if (static::getType($delivery['ID']) !== DeliveryType::Express) {
+            $delivery["PRICE_PERIOD_TEXT"] = join(', ', array_filter([trim($period), trim($price)]));
+        }
+        else
+        {
+            $delivery["PRICE_PERIOD_TEXT"] = trim($price);
+        }
+
+
 
         return $delivery;
     }
