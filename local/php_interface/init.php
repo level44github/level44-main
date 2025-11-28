@@ -220,7 +220,7 @@ function retailCrmBeforeOrderSend($order, $arOrder)
         if (!empty($deliveryDate)) {
             // Приводим дату к формату YYYY-MM-DD
             $formattedDate = $deliveryDate;
-            
+
             if (strpos($formattedDate, '.') !== false) {
                 // Формат DD.MM.YYYY -> YYYY-MM-DD
                 $formattedDate = mb_substr($formattedDate, 0, 10);
@@ -260,7 +260,7 @@ function retailCrmBeforeOrderSend($order, $arOrder)
         // Передаем время доставки в Retail CRM
         if (!empty($deliveryTime)) {
             $deliveryTime = trim($deliveryTime);
-            
+
             // Добавляем в customFields (оригинальное значение для совместимости)
             if (!isset($order['customFields'])) {
                 $order['customFields'] = [];
@@ -271,14 +271,14 @@ function retailCrmBeforeOrderSend($order, $arOrder)
             if (!isset($order['delivery'])) {
                 $order['delivery'] = [];
             }
-            
+
             // Парсим время в формате "HH:MM - HH:MM" и преобразуем в объект {from: "HH:MM", to: "HH:MM"}
             if (preg_match('/^(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})$/', $deliveryTime, $matches)) {
                 $timeFrom = trim($matches[1]);
                 $timeTo = trim($matches[2]);
-                
+
                 // Проверяем корректность формата времени (HH:MM, где HH от 00 до 23, MM от 00 до 59)
-                if (preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $timeFrom) && 
+                if (preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $timeFrom) &&
                     preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $timeTo)) {
                     $order['delivery']['time'] = [
                         'from' => $timeFrom,
@@ -296,11 +296,6 @@ function retailCrmBeforeOrderSend($order, $arOrder)
             if ($pickupAddress["VALUE"][0]) {
                 $order["delivery"]["address"]["text"] = $pickupAddress["VALUE"][0];
             }
-        }
-
-        if ($order["delivery"]['service']['code']=='dalli_courier')
-        {
-            $order["delivery"]['service']['code']='bitrix-31';
         }
 
 
