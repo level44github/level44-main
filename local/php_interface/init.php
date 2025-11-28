@@ -212,6 +212,82 @@ function retailCrmBeforeOrderSend($order, $arOrder)
             $order['patronymic'] = $secondName;
         }
 
+        // Получаем дату и время доставки
+        $deliveryDate = $getPropertyValue($propertyCollection, 'DELIVERY_DATE');
+        $deliveryTime = $getPropertyValue($propertyCollection, 'TIME_INTERVAL');
+
+        // Передаем дату доставки в Retail CRM
+        if (!empty($deliveryDate)) {
+            // Приводим дату к формату YYYY-MM-DD
+            $formattedDate = $deliveryDate;
+            
+            if (strpos($formattedDate, '.') !== false) {
+                // Формат DD.MM.YYYY -> YYYY-MM-DD
+                $formattedDate = mb_substr($formattedDate, 0, 10);
+                try {
+                    $dateTime = \Bitrix\Main\Type\DateTime::createFromFormat('d.m.Y', $formattedDate);
+                    if ($dateTime) {
+                        $formattedDate = $dateTime->format('Y-m-d');
+                    }
+                } catch (\Exception $e) {
+                    // Если не удалось преобразовать, пробуем другой способ
+                    $dateParts = explode('.', $formattedDate);
+                    if (count($dateParts) === 3) {
+                        $formattedDate = sprintf('%04d-%02d-%02d', trim($dateParts[2]), trim($dateParts[1]), trim($dateParts[0]));
+                    }
+                }
+            } else {
+                // Убираем время, если оно есть (формат YYYY-MM-DD HH:MM:SS или YYYY-MM-DD)
+                $formattedDate = substr(trim($formattedDate), 0, 10);
+            }
+
+            // Проверяем, что дата в правильном формате
+            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $formattedDate)) {
+                // Передаем в delivery.date
+                if (!isset($order['delivery'])) {
+                    $order['delivery'] = [];
+                }
+                $order['delivery']['date'] = $formattedDate;
+
+                // Также добавляем в customFields для совместимости
+                if (!isset($order['customFields'])) {
+                    $order['customFields'] = [];
+                }
+                $order['customFields']['deliveryDate'] = $formattedDate;
+            }
+        }
+
+        // Передаем время доставки в Retail CRM
+        if (!empty($deliveryTime)) {
+            $deliveryTime = trim($deliveryTime);
+            
+            // Добавляем в customFields (оригинальное значение для совместимости)
+            if (!isset($order['customFields'])) {
+                $order['customFields'] = [];
+            }
+            $order['customFields']['deliveryTime'] = $deliveryTime;
+
+            // Передаем в delivery.time как объект согласно документации Retail CRM API
+            if (!isset($order['delivery'])) {
+                $order['delivery'] = [];
+            }
+            
+            // Парсим время в формате "HH:MM - HH:MM" и преобразуем в объект {from: "HH:MM", to: "HH:MM"}
+            if (preg_match('/^(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})$/', $deliveryTime, $matches)) {
+                $timeFrom = trim($matches[1]);
+                $timeTo = trim($matches[2]);
+                
+                // Проверяем корректность формата времени (HH:MM, где HH от 00 до 23, MM от 00 до 59)
+                if (preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $timeFrom) && 
+                    preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $timeTo)) {
+                    $order['delivery']['time'] = [
+                        'from' => $timeFrom,
+                        'to' => $timeTo
+                    ];
+                }
+            }
+        }
+
         if (in_array($deliveryId, CDeliverySDEK::getDeliveryId('pickup')) && empty($order["delivery"]["address"]["text"])) {
             $pickupAddress = current(
                 array_filter($arOrder["PROPS"]["properties"], fn($item) => $item["CODE"] === 'ADDRESS_SDEK')
