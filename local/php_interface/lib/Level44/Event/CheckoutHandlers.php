@@ -113,12 +113,17 @@ class CheckoutHandlers extends HandlerBase
                 continue;
             }
 
-            switch (Delivery::getType($delivery['ID'])) {
+            $deliveryType = Delivery::getType($delivery['ID']);
+
+            switch ($deliveryType) {
                 case DeliveryType::Shop:
                     $typesDelivery["SHOP"] = $delivery;
                     break;
                 case DeliveryType::Pickup:
                     $typesDelivery["PICKUP"] = $delivery;
+                    break;
+                case DeliveryType::Express:
+                    $typesDelivery["EXPRESS"] = $delivery;
                     break;
                 case DeliveryType::CourierFitting:
                     $delivery["IS_COURIER"] = true;
@@ -127,6 +132,15 @@ class CheckoutHandlers extends HandlerBase
                 case DeliveryType::Courier:
                     $delivery["IS_COURIER"] = true;
                     $courierList[] = $delivery;
+                    break;
+                default:
+                    // Логируем неизвестную доставку для диагностики
+                    $deliveries = Delivery::getDeliveries();
+                    $code = $deliveries[$delivery['ID']]["CODE"] ?? 'не указан';
+                    \AddMessage2Log(
+                        "Неизвестная доставка не отображается в чекауте. ID: {$delivery['ID']}, CODE: {$code}, NAME: {$delivery['NAME']}",
+                        "delivery_unknown"
+                    );
                     break;
             }
         }
@@ -147,6 +161,7 @@ class CheckoutHandlers extends HandlerBase
 
             $typesDelivery['PICKUP'] = $pickup;
         }
+
 
         $arResult["DELIVERY"] = array_map(Delivery::prepareService(...), array_filter($typesDelivery));
     }

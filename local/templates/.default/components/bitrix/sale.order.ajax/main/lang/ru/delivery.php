@@ -12,3 +12,5 @@ $MESS["DELIVERY_SHOP_NAME"] = "Самовывоз из магазина";
 $MESS["DELIVERY_SHOP_DESCRIPTION"] = "Возможна только онлайн оплата.<br>Пункт самовывоза: г. Москва, ул. Малая Бронная, 24, стр. 3, во дворе, по лестнице этаж 3 и налево";
 $MESS["DELIVERY_DATE"] = "Дата доставки";
 $MESS["TIME_INTERVAL"] = "Время доставки";
+$MESS["DELIVERY_EXPRESS_NAME"] = "Экспресс-доставка";
+$MESS["DELIVERY_EXPRESS_DESCRIPTION"] = "Доставим заказ день в день при оформлении заказа до 17:00";
