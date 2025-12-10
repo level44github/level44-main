@@ -8,4 +8,6 @@ enum DeliveryType
     case Pickup;
     case Courier;
     case CourierFitting;
+
+    case Express;
 }
