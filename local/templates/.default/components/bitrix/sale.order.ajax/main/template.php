@@ -206,7 +206,7 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
         <?if (($USER->IsAuthorized()) and ($arUser['UF_LP_ID_INTARO']!='')){ ?>
         <div class="card" style="padding:1rem 2rem">
             <div>Баллы:</div>
-            <?if ($arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']!=''){?>
+            <?if (($arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']!='')and (!isset($arResult['BONUS_PAYMENT_ALLOWED']) || $arResult['BONUS_PAYMENT_ALLOWED'] === true)){?>
             <div class="bonus-order-wrap">
                 <div class="CURRENT_BONUS_BUDGET">
                     У вас <?=$arResult['BONUSPAY']['CURRENT_BONUS_BUDGET_FORMATED']?>

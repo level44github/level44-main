@@ -317,3 +317,70 @@ $user = UserTable::getList([
 ])->fetch();
 
 $arResult['SUBSCRIBE_CHECKED'] = $user['UF_SUBSCRIBED_TO_NEWSLETTER'] === '1' || $_POST["subscribe"] === 'Y';
+
+
+$bonusPaymentPropertyCode = 'BONUS_PAYMENT_ALLOWED'; 
+
+$arResult['BONUS_PAYMENT_ALLOWED'] = true; // По умолчанию разрешено
+
+if (!empty($arResult["BASKET_ITEMS"]) && !empty($bonusPaymentPropertyCode)) {
+    $basketProductIds = [];
+    foreach ($arResult["BASKET_ITEMS"] as $item) {
+        $basketProductIds[] = (int)$item["PRODUCT_ID"];
+    }
+    
+    if (!empty($basketProductIds)) {
+        // Получаем информацию о торговых предложениях (SKU) - определяем родительские товары
+        $productList = CCatalogSKU::getProductList($basketProductIds);
+        $parentProductIds = [];
+        foreach ($productList as $offerId => $product) {
+            $parentProductIds[$offerId] = (int)$product["ID"];
+        }
+        
+        // Формируем список ID товаров для проверки: для SKU берем родительский товар, для обычных - сам товар
+        $productsToCheck = [];
+        foreach ($basketProductIds as $productId) {
+            if (isset($parentProductIds[$productId])) {
+                // Это SKU - проверяем родительский товар
+                $productsToCheck[] = $parentProductIds[$productId];
+            } else {
+                // Это обычный товар - проверяем его
+                $productsToCheck[] = $productId;
+            }
+        }
+        
+        // Убираем дубликаты (если несколько SKU одного товара)
+        $productsToCheck = array_unique($productsToCheck);
+        
+        // Получаем все родительские товары с их свойствами
+        $resProducts = CIBlockElement::GetList(
+            [],
+            [
+                "=ID" => $productsToCheck
+            ],
+            false,
+            false,
+            ["ID", "PROPERTY_{$bonusPaymentPropertyCode}"]
+        );
+        
+        $productsWithProperty = [];
+        while ($product = $resProducts->GetNext()) {
+            $propertyValue = $product["PROPERTY_{$bonusPaymentPropertyCode}_VALUE"] ?? null;
+            // Проверяем, что свойство заполнено и не пустое
+            if (!empty($propertyValue) && $propertyValue !== false) {
+                $productsWithProperty[] = (int)$product["ID"];
+            }
+        }
+        
+        // Проверяем, что все родительские товары имеют свойство
+        $allProductsHaveProperty = true;
+        foreach ($productsToCheck as $productId) {
+            if (!in_array($productId, $productsWithProperty)) {
+                $allProductsHaveProperty = false;
+                break;
+            }
+        }
+        
+        $arResult['BONUS_PAYMENT_ALLOWED'] = $allProductsHaveProperty;
+    }
+}
