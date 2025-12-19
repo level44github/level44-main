@@ -866,7 +866,6 @@ namespace Level44;
                 $Weight = Option::get("courierserviceexpress.moduledost", "massa");
             }
 
-            $order['_ID'] = 42558;
             [$WayBillID, $docDate] = static::GetWayBillId($KCElogin, $KCEpass, $order['_ID']);
 
             if ($WayBillID) {
