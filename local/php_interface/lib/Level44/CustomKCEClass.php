@@ -866,7 +866,7 @@ namespace Level44;
                 $Weight = Option::get("courierserviceexpress.moduledost", "massa");
             }
 
-            [$WayBillID, $docDate] = static::GetWayBillId($KCElogin, $KCEpass, $order['_ID']);
+            [$WayBillID, $docDate] = static::GetWayBillId($KCElogin, $KCEpass, $order['ID']);
 
             if ($WayBillID) {
                 $UpdTrack['TRACKING_NUMBER'] = $WayBillID;
