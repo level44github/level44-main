@@ -857,6 +857,8 @@ namespace Level44;
             ]
         ])->fetchAll();
 
+        $orders = [];
+
         foreach ($orders as $order) {
             $orderObj = Order::load($order['ID']);
             $orderProps = new \KseOrderProperties($orderObj);
