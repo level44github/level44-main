@@ -845,7 +845,7 @@ namespace Level44;
         $kseDelivery = current(array_filter($deliveries, fn($item) => $item['CODE'] === 'kse'));
 
         if ((int)$kseDelivery['ID'] <= 0) {
-            return "CustomKCEClass::updateOrdersTrackNumber();";
+            return "\Level44\CustomKCEClass::updateOrdersTrackNumber();";
         }
 
         $orders = Order::getList([
@@ -856,8 +856,6 @@ namespace Level44;
 
             ]
         ])->fetchAll();
-
-        $orders = [];
 
         foreach ($orders as $order) {
             $orderObj = Order::load($order['ID']);
@@ -913,6 +911,6 @@ namespace Level44;
                 //AddMessage2Log($result);
             }
         }
-        return "CustomKCEClass::updateOrdersTrackNumber();";
+        return "\Level44\CustomKCEClass::updateOrdersTrackNumber();";
     }
 }
