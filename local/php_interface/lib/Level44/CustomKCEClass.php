@@ -6,6 +6,7 @@ namespace Level44;
     use Bitrix\Main\Config\Option;
     use Bitrix\Sale\Order;
     use cKCE;
+    use COption;
     use Exception;
     use KseService;
     use Level44\Enums\DeliveryType;
@@ -195,13 +196,7 @@ namespace Level44;
 
         $WayBills = json_decode(json_encode($text->SaveWaybillOfficeResponse->return->Items));
         if ($WayBills?->Error === 'true') {
-            $WayBillID = static::GetTrackNumber($login, $password, $BtrxOrderId);
-
-            if (!$WayBillID) {
-                return null;
-            }
-
-            return $WayBillID;
+            return null;
         }
 
         $WayBillID = (string)$WayBills->Value;
@@ -775,7 +770,10 @@ namespace Level44;
         return $arProd;
     }
 
-    public static function GetTrackNumber($login, $password, $orderId): string|null
+    /**
+     * @return array<string|null, string|null>
+     */
+    public static function GetWayBillId($login, $password, $orderId): array
     {
 
         $XmlData = '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.cargo3.ru">
@@ -817,12 +815,102 @@ namespace Level44;
         $body = $xml->xpath('//soapBody')[0];
         $array = json_decode(json_encode((array)$body), TRUE);
         $properties = (array)$array['mTrackingResponse']['mreturn']['mList']['mProperties'];
-        $property = current(array_filter($properties, fn($item) => $item['mKey'] === 'Number'));
 
-        if (!$property['mValue']) {
-            return null;
+        $propertyWayBillId = current(
+            array_filter($properties, fn($item) => !empty($item['mKey']) && $item['mKey'] === 'Number')
+        );
+
+        /** @var string|null $wayBillId */
+        $propertyWayBillId = $propertyWayBillId['mValue'] ?: null;
+
+        $propertyDocDate = current(
+            array_filter($properties, fn($item) => !empty($item['mKey']) && $item['mKey'] === 'Date')
+        );
+
+        /** @var string|null $docDate */
+        $propertyDocDate = $propertyDocDate['mValue'] ?: null;
+
+        return [
+            $propertyWayBillId,
+            $propertyDocDate,
+        ];
+    }
+
+    public static function updateOrdersTrackNumber()
+    {
+        $KCElogin = COption::GetOptionString("courierserviceexpress.moduledost", "login");
+        $KCEpass = COption::GetOptionString("courierserviceexpress.moduledost", "pass");
+
+        $deliveries = Delivery::getDeliveries();
+        $kseDelivery = current(array_filter($deliveries, fn($item) => $item['CODE'] === 'kse'));
+
+        if ((int)$kseDelivery['ID'] <= 0) {
+            return "CustomKCEClass::updateOrdersTrackNumber();";
         }
 
-        return $property['mValue'];
+        $orders = Order::getList([
+            "filter" => [
+                "DELIVERY_ID"     => $kseDelivery['ID'],
+                "STATUS_ID"       => ['SD', 'DE'],
+                "TRACKING_NUMBER" => '',
+
+            ]
+        ])->fetchAll();
+
+        foreach ($orders as $order) {
+            $orderObj = Order::load($order['ID']);
+            $orderProps = new \KseOrderProperties($orderObj);
+            $Weight = $orderProps->getTotalWeight();
+            $CargoPackageQty = 1;
+            if (empty($Weight)) {
+                $Weight = Option::get("courierserviceexpress.moduledost", "massa");
+            }
+
+            $order['_ID'] = 42558;
+            [$WayBillID, $docDate] = static::GetWayBillId($KCElogin, $KCEpass, $order['_ID']);
+
+            if ($WayBillID) {
+                $UpdTrack['TRACKING_NUMBER'] = $WayBillID;
+                $UpdTrack['DELIVERY_DOC_NUM'] = $WayBillID;
+
+                if ($docDate) {
+                    $UpdTrack['DELIVERY_DOC_DATE'] = DateTime::createFromTimestamp(strtotime($docDate));
+                }
+
+                \CSaleOrder::Update($order['ID'], $UpdTrack);
+
+                //Записываем накладную в список
+                $hl = \Bitrix\Highloadblock\HighloadBlockTable::getList(['filter' => ['TABLE_NAME' => 'ksewaybills']])->fetch();
+
+                if (!empty($hl['ID'])) {
+                    $hlblock = HL\HighloadBlockTable::getById($hl['ID'])->fetch();
+                    $entity = HL\HighloadBlockTable::compileEntity($hlblock);
+                    $entity_data_class = $entity->getDataClass();
+
+                    //Если такая накладная уже есть в базе, то не пишем её
+                    $rsData = $entity_data_class::getList([
+                        "select" => ["*"],
+                        "order"  => ["ID" => "ASC"],
+                        "filter" => ["UF_WAYBILLID" => $WayBillID]
+                    ]);
+                    $rsData = $rsData->fetch();
+                    //pr ($rsData);
+                    if (!$rsData) {
+                        $HBLdata = [
+                            "UF_WAYBILLID"    => $WayBillID,
+                            "UF_ORDERID"      => $order['ID'],
+                            "UF_WAYBILL_DATE" => $UpdTrack['DELIVERY_DOC_DATE'],
+                            "UF_ADR_OTPR"     => Option::get("courierserviceexpress.moduledost", "AdresZaboraGruza"),
+                            "UF_KSE_WEIGHT"   => $Weight,
+                            "UF_KSE_QTY"      => $CargoPackageQty
+                        ];
+                        $HBLresult = $entity_data_class::add($HBLdata);
+                    }
+                }
+                $result = $WayBillID;
+                //AddMessage2Log($result);
+            }
+        }
+        return "CustomKCEClass::updateOrdersTrackNumber();";
     }
 }
