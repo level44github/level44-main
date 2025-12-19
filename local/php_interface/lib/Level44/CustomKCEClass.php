@@ -812,9 +812,6 @@ namespace Level44;
                     </SOAP-ENV:Envelope>';
         $result = cKCE::GetData($XmlData);
 
-        cKCE::CreateLogFile($XmlData, $result, __FUNCTION__);
-
-
         $soap_result = preg_replace("/(<\/?)(\w+):([^>]*>)/", "$1$2$3", $result);
         $xml = new SimpleXMLElement($soap_result);
         $body = $xml->xpath('//soapBody')[0];
