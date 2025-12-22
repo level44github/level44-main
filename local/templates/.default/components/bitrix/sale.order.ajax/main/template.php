@@ -248,6 +248,12 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                         <span><?= Loc::getMessage('CHECKOUT_PRIVACY_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
                     </label>
                 </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="personal" name="personal" value="Y">
+                        <span><?= Loc::getMessage('CHECKOUT_PERSONAL_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
+                    </label>
+                </div>
             </div>
             <div class="form-group">
                 <button class="btn btn-dark btn__fix-width" id="submit-button"
@@ -277,6 +283,12 @@ if($arResult["USER_VALS"]["CONFIRM_ORDER"] == "Y" || $arResult["NEED_REDIRECT"] 
                     <label class="form-checkbox">
                         <input type="checkbox" id="policy-mobile" name="policy" value="Y">
                         <span><?= Loc::getMessage('CHECKOUT_PRIVACY_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="personal-mobile" name="personal" value="Y">
+                        <span><?= Loc::getMessage('CHECKOUT_PERSONAL_CONSENT', ['#SITE_DIR#' => SITE_DIR]) ?></span>
                     </label>
                 </div>
             </div>

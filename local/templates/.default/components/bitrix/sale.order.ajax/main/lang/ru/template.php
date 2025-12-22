@@ -87,4 +87,6 @@ $MESS["CHECKOUT_NEWSLETTER_CONSENT"] = "Я согласен(-на) на полу
 $MESS["CHECKOUT_PRIVACY_CONSENT"] = "Я согласен(-на) с <a
                                     href=\"#SITE_DIR#about/personal/\" target=\"_blank\">политикой конфиденциальности</a> и <a
                                     href=\"#SITE_DIR#about/offer/\" target=\"_blank\">публичной офертой</a>";
+
+$MESS["CHECKOUT_PERSONAL_CONSENT"] = "Я согласен(-на) на <a href=\"#SITE_DIR#about/personal-data/\" target=\"_blank\">обработку персональных данных</a>";
 ?>

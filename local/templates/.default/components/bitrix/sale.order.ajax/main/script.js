@@ -887,7 +887,16 @@ $(function () {
 
     $(document).on('change', '[name="policy"]', function () {
         const submitButton = $(this).closest('.js-submit-block').find('button[type="submit"]')
-        if ($(this).prop('checked')) {
+        if (($(this).prop('checked')) && ($('[name="personal"]').prop('checked'))) {
+            submitButton.prop('disabled', false)
+        } else {
+            submitButton.prop('disabled', true)
+        }
+    });
+
+    $(document).on('change', '[name="personal"]', function () {
+        const submitButton = $(this).closest('.js-submit-block').find('button[type="submit"]')
+        if (($(this).prop('checked')) && ($('[name="policy"]').prop('checked'))) {
             submitButton.prop('disabled', false)
         } else {
             submitButton.prop('disabled', true)

@@ -86,4 +86,6 @@ $MESS["CHECKOUT_NEWSLETTER_CONSENT"] = "I agree to receive  <a
 $MESS["CHECKOUT_PRIVACY_CONSENT"] = "I agree with <a
                                     href=\"#SITE_DIR#about/personal/\" target=\"_blank\">the privacy policy</a> and <a
                                     href=\"#SITE_DIR#about/offer/\" target=\"_blank\">the public offer</a>";
+
+$MESS["CHECKOUT_PERSONAL_CONSENT"] = "I agree with <a href=\"#SITE_DIR#about/personal-data/\" target=\"_blank\">processing of personal data</a>";
 ?>
