@@ -23,6 +23,8 @@ $this->addExternalJs($templateFolder . '/order_ajax.js');
 use Bitrix\Main\Localization\Loc;
 
 CJSCore::Init(array('fx', 'popup', 'window', 'ajax'));
+
+
 ?>
 
 	<?
