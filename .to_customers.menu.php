@@ -63,5 +63,12 @@ $aMenuLinks = Array(
       Array(),
       "",
     ),
+    Array(
+        "Согласие на обработку персональных данных",
+        SITE_DIR . "about/personal-data/",
+        Array(),
+        Array(),
+        "",
+    ),
 );
 ?>
