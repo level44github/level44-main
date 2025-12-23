@@ -886,6 +886,14 @@ $(function () {
     });
 
     $(document).on('change', '[name="policy"]', function () {
+        $('[name="policy"]').prop('checked', $(this).prop('checked'));
+    });
+
+    $(document).on('change', '[name="personal"]', function () {
+        $('[name="personal"]').prop('checked', $(this).prop('checked'));
+    });
+
+    $(document).on('change', '[name="policy"]', function () {
         const submitButton = $(this).closest('.js-submit-block').find('button[type="submit"]')
         if (($(this).prop('checked')) && ($('[name="personal"]').prop('checked'))) {
             submitButton.prop('disabled', false)
