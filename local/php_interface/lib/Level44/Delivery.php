@@ -518,11 +518,9 @@ class Delivery
         $deliveryDates = [];
         $date = date('Y-m-d', strtotime('+2 day'));
         $timeIntervals = [
-            ['value' => '12:00 - 14:00',],
-            ['value' => '14:00 - 16:00',],
-            ['value' => '16:00 - 18:00',],
-            ['value' => '18:00 - 20:00',],
-            ['value' => '20:00 - 21:00',],
+            ['value' => '10:00 - 14:00',],
+            ['value' => '14:00 - 18:00',],
+            ['value' => '18:00 - 22:00',],
         ];
 
         for ($i = 0; $i < 3; $i++) {
