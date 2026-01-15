@@ -101,6 +101,46 @@ if (!empty($basketProductIds)) {
     }
 }
 
+// Подготавливаем массив товаров для applyDiscounts
+$basketItemsForDiscounts = [];
+foreach ($this->basketItems as $row) {
+    $basketItemsForDiscounts[] = [
+        'ID' => $row['ID'],
+        'PRODUCT_ID' => $row['PRODUCT_ID'],
+        'PRICE' => $row['PRICE'],
+        'BASE_PRICE' => $row['BASE_PRICE'] ?? $row['FULL_PRICE'] ?? $row['PRICE'],
+        'SUM_BASE' => $row['SUM_FULL_PRICE'] ?? ($row['BASE_PRICE'] ?? $row['FULL_PRICE'] ?? $row['PRICE']) * $row['QUANTITY'],
+        'SUM_NUM' => $row['SUM_VALUE'],
+        'QUANTITY' => $row['QUANTITY'],
+        'CURRENCY' => $row['CURRENCY'],
+        'CURRENCY_ID' => $row['CURRENCY'],
+        'oldPrice' => null, // Будет установлено позже из ecommerceData
+        'PRICE_FORMATED' => $row['PRICE_FORMATED'],
+        'SUM' => $row['SUM'],
+    ];
+}
+
+// Применяем дополнительные скидки для товаров категории sale
+if (!empty($basketItemsForDiscounts) && \Bitrix\Main\Loader::includeModule('iblock')) {
+    // Сначала получаем oldPrice для всех товаров
+    foreach ($basketItemsForDiscounts as &$item) {
+        $parentProductId = $productIds[$item['PRODUCT_ID']] ?? null;
+        if ($parentProductId && isset($ecommerceData[$parentProductId]['prices']['oldPrice'])) {
+            $item['oldPrice'] = $ecommerceData[$parentProductId]['prices']['oldPrice'] * $item['QUANTITY'];
+        }
+    }
+    unset($item);
+    
+    // Применяем дополнительные скидки
+    $basketItemsForDiscounts = \Level44\Event\SaleCategoryDiscountHandler::applyDiscounts($basketItemsForDiscounts);
+    
+    // Создаем карту скидок для быстрого поиска
+    $discountMap = [];
+    foreach ($basketItemsForDiscounts as $discItem) {
+        $discountMap[$discItem['ID']] = $discItem;
+    }
+}
+
 foreach ($this->basketItems as $row)
 {
 	$rowData = array(
@@ -146,6 +186,29 @@ foreach ($this->basketItems as $row)
 			? $row[$this->arParams['BRAND_PROPERTY'].'_VALUE']
 			: '',
 	);
+	
+	// Добавляем данные о дополнительных скидках, если они есть
+	if (!empty($discountMap[$row['ID']])) {
+		$discItem = $discountMap[$row['ID']];
+		if (!empty($discItem['SHOW_THREE_PRICES'])) {
+			$rowData['SHOW_THREE_PRICES'] = true;
+			$rowData['ORIGINAL_PRICE_FORMATED'] = $discItem['SUM_ORIGINAL_PRICE_FORMATED'] ?? $rowData['SUM_FULL_PRICE_FORMATED'];
+			$rowData['PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED'] = $discItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED'] ?? $rowData['SUM_PRICE_FORMATED'];
+			$rowData['PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED'] = $discItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED'] ?? $rowData['SUM_PRICE_FORMATED'];
+			
+			// Сохраняем числовые значения для пересчета итоговой суммы
+			if (isset($discItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'])) {
+				$rowData['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = $discItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'];
+			}
+			if (isset($discItem['SUM_ORIGINAL_PRICE'])) {
+				$rowData['SUM_ORIGINAL_PRICE'] = $discItem['SUM_ORIGINAL_PRICE'];
+			}
+			
+			if (!empty($discItem['ADDITIONAL_DISCOUNT_PERCENT'])) {
+				$rowData['ADDITIONAL_DISCOUNT_PERCENT'] = $discItem['ADDITIONAL_DISCOUNT_PERCENT'];
+			}
+		}
+	}
 
 
     $rowData["NAME"] = Base::getMultiLang(
@@ -542,18 +605,91 @@ foreach ($this->basketItems as $row)
 
 	$result['BASKET_ITEM_RENDER_DATA'][] = $rowData;
 }
+// Пересчитываем итоговую сумму с учетом дополнительных скидок
+$totalPriceAfterAdditionalDiscount = 0; // Общая сумма после применения доп скидок
+$totalDiscountAmount = 0; // Общая сумма всех скидок (базовая + дополнительная)
+
+foreach ($result['BASKET_ITEM_RENDER_DATA'] as $item) {
+    if (!empty($item['SHOW_THREE_PRICES'])) {
+        // Используем SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT для товаров с дополнительными скидками
+        if (isset($item['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'])) {
+            $totalPriceAfterAdditionalDiscount += $item['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'];
+        } else {
+            // Если нет в rowData, используем текущую цену
+            $totalPriceAfterAdditionalDiscount += $item['SUM_PRICE'];
+        }
+        
+        // Рассчитываем общую скидку для этого товара
+        $originalSum = 0;
+        if (isset($item['SUM_ORIGINAL_PRICE'])) {
+            $originalSum = $item['SUM_ORIGINAL_PRICE'];
+        } elseif (!empty($item['oldPrice'])) {
+            $originalSum = $item['oldPrice'];
+        } else {
+            $originalSum = $item['SUM_FULL_PRICE'] ?? $item['SUM_PRICE'];
+        }
+        
+        $itemFinalPrice = isset($item['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT']) 
+            ? $item['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] 
+            : $item['SUM_PRICE'];
+        $itemDiscount = $originalSum - $itemFinalPrice;
+        $totalDiscountAmount += $itemDiscount;
+    } else {
+        // Для товаров без доп скидки используем стандартную логику
+        $totalPriceAfterAdditionalDiscount += $item['SUM_PRICE'];
+        
+        // Рассчитываем скидку для этого товара
+        $originalSum = 0;
+        if (empty($item["oldPrice"])) {
+            $originalSum = $item["SUM_PRICE"];
+        } else {
+            $originalSum = $item["oldPrice"];
+        }
+        $itemDiscount = $originalSum - $item['SUM_PRICE'];
+        $totalDiscountAmount += $itemDiscount;
+    }
+}
+
+// Обновляем итоговую цену корзины с учетом дополнительных скидок
+$result['allSum'] = $totalPriceAfterAdditionalDiscount;
+$result['allSum_FORMATED'] = CCurrencyLang::CurrencyFormat($totalPriceAfterAdditionalDiscount, $result['CURRENCY'], true);
+
+// Обновляем PRICE_WITHOUT_DISCOUNT с учетом ORIGINAL_PRICE
+$totalPriceWithoutDiscount = 0;
+foreach ($result['BASKET_ITEM_RENDER_DATA'] as $item) {
+    if (!empty($item['SHOW_THREE_PRICES'])) {
+        if (isset($item['SUM_ORIGINAL_PRICE'])) {
+            $totalPriceWithoutDiscount += $item['SUM_ORIGINAL_PRICE'];
+        } elseif (!empty($item['oldPrice'])) {
+            $totalPriceWithoutDiscount += $item['oldPrice'];
+        } else {
+            $totalPriceWithoutDiscount += $item['SUM_FULL_PRICE'] ?? $item['SUM_PRICE'];
+        }
+    } else {
+        if (empty($item["oldPrice"])) {
+            $totalPriceWithoutDiscount += $item["SUM_PRICE"];
+        } else {
+            $totalPriceWithoutDiscount += $item["oldPrice"];
+        }
+    }
+}
+
+if ($totalPriceWithoutDiscount > 0) {
+    $result['PRICE_WITHOUT_DISCOUNT'] = CCurrencyLang::CurrencyFormat($totalPriceWithoutDiscount, $result['CURRENCY'], true);
+}
+
 $sumPriceDollar = Base::isEnLang() ? Base::formatDollar($sumPriceDollar) : false;
 $result["QUANTITY"] = $totalQuantity;
 $totalData = array(
 	'DISABLE_CHECKOUT' => (int)$result['ORDERABLE_BASKET_ITEMS_COUNT'] === 0,
 	'PRICE' => $result['allSum'],
 	'PRICE_FORMATED' => $result['allSum_FORMATED'],
-	'PRICE_WITHOUT_DISCOUNT_FORMATED' => $result['PRICE_WITHOUT_DISCOUNT'],
+	'PRICE_WITHOUT_DISCOUNT_FORMATED' => $result['PRICE_WITHOUT_DISCOUNT'] ?? '',
 	'CURRENCY' => $result['CURRENCY'],
     'SUM_PRICE_DOLLAR' => $sumPriceDollar,
-    'OLD_SUM_PRICE' => CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB"),
+    'OLD_SUM_PRICE' => CCurrencyLang::CurrencyFormat($totalPriceWithoutDiscount, "RUB"),
     'OLD_SUM_PRICE_DOLLAR' => Base::formatDollar($oldSumPriceDollar),
-    'SHOW_OLD_SUM_PRICE' => !empty($oldSumPrice) && $oldSumPrice !== $result["allSum"],
+    'SHOW_OLD_SUM_PRICE' => !empty($totalPriceWithoutDiscount) && $totalPriceWithoutDiscount !== $result["allSum"],
 );
 
 if ($result['DISCOUNT_PRICE_ALL'] > 0)

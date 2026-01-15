@@ -45,6 +45,24 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <img class="img-fluid" src="{{IMAGE_URL}}" alt="">
         </a>
         <div class="cart__body">
+            {{#SHOW_THREE_PRICES}}
+            <!-- Мобильная версия: 3 цены -->
+            <!-- 1. Зачеркнутая цена (без скидки) -->
+            <div class="font-weight-bold d-lg-none d-dt-none cart__price-crossed">
+                <span style="text-decoration: line-through; color: #999;">{{{ORIGINAL_PRICE_FORMATED}}}</span>
+            </div>
+            {{#ADDITIONAL_DISCOUNT_PERCENT}}
+            <!-- 2. Промежуточная зачеркнутая цена (после первой скидки) -->
+            <div class="font-weight-bold d-lg-none d-dt-none cart__price-crossed">
+                <span style="text-decoration: line-through; color: #999;">{{{PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED}}}</span>
+            </div>
+            {{/ADDITIONAL_DISCOUNT_PERCENT}}
+            <!-- 3. Основная цена (после дополнительной скидки, если есть, или после первой скидки) -->
+            <div class="font-weight-bold d-lg-none d-dt-none product__final-price">
+                <span>{{{PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED}}}</span>
+            </div>
+            {{/SHOW_THREE_PRICES}}
+            {{^SHOW_THREE_PRICES}}
             <div class="font-weight-bold d-lg-none d-dt-none {{#showOldPrice}}product__final-price{{/showOldPrice}}"><span>{{{PRICE_FORMATED}}}</span>
 	            {{#PRICE_DOLLAR}}
 	            &middot; <span>{{PRICE_DOLLAR}}</span>
@@ -57,6 +75,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 {{/PRICE_DOLLAR}}
             </div>
             {{/showOldPrice}}
+            {{/SHOW_THREE_PRICES}}
             <a class="cart__link" href="{{DETAIL_PAGE_URL}}">{{NAME}}</a>
             <a class="cart__remove mt-3 d-none d-lg-block" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>
@@ -81,11 +100,29 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
             <a class="cart__remove d-lg-none" href="#" data-entity="basket-item-delete"><?= Loc::getMessage("DELETE") ?></a>
         </div>
         <div>
-        <div class="d-none d-lg-block cart__price {{#showOldPrice}}product__final-price{{/showOldPrice}}"><span>{{{PRICE_FORMATED}}}</span>
+            {{#SHOW_THREE_PRICES}}
+            <!-- Десктопная версия: 3 цены -->
+            <!-- 1. Зачеркнутая цена (без скидки) -->
+            <div class="d-none d-lg-block cart__price cart__price-crossed">
+                <span style="text-decoration: line-through; color: #999;">{{{ORIGINAL_PRICE_FORMATED}}}</span>
+            </div>
+            {{#ADDITIONAL_DISCOUNT_PERCENT}}
+            <!-- 2. Промежуточная зачеркнутая цена (после первой скидки) -->
+            <div class="d-none d-lg-block cart__price cart__price-crossed">
+                <span style="text-decoration: line-through; color: #999;">{{{PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED}}}</span>
+            </div>
+            {{/ADDITIONAL_DISCOUNT_PERCENT}}
+            <!-- 3. Основная цена (после дополнительной скидки, если есть, или после первой скидки) -->
+            <div class="d-none d-lg-block cart__price product__final-price">
+                <span>{{{PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED}}}</span>
+            </div>
+            {{/SHOW_THREE_PRICES}}
+            {{^SHOW_THREE_PRICES}}
+            <div class="d-none d-lg-block cart__price {{#showOldPrice}}product__final-price{{/showOldPrice}}"><span>{{{PRICE_FORMATED}}}</span>
 	        {{#PRICE_DOLLAR}}
 	        &middot; <span>{{PRICE_DOLLAR}}</span>
 	        {{/PRICE_DOLLAR}}
-        </div>
+            </div>
             {{#showOldPrice}}
             <div class="d-none d-lg-block cart__price cart__price-crossed"><span>{{{oldPriceFormat}}}</span>
                 {{#PRICE_DOLLAR}}
@@ -93,6 +130,7 @@ if (!empty($arParams['LABEL_PROP_POSITION'])) {
                 {{/PRICE_DOLLAR}}
             </div>
             {{/showOldPrice}}
-</div>
+            {{/SHOW_THREE_PRICES}}
+        </div>
     </div>
 </script>
