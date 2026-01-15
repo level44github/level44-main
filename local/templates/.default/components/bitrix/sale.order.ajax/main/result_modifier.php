@@ -248,6 +248,103 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 }
 unset($basketItem);
 
+// Применяем дополнительные скидки для товаров категории sale
+if (!empty($arResult["BASKET_ITEMS"]) && \Bitrix\Main\Loader::includeModule('iblock')) {
+    $arResult["BASKET_ITEMS"] = \Level44\Event\SaleCategoryDiscountHandler::applyDiscounts($arResult["BASKET_ITEMS"]);
+    
+    // Пересчитываем суммы после применения скидок
+    $oldSumPrice = 0;
+    $oldSumPriceDollar = 0;
+    $totalPriceAfterAdditionalDiscount = 0; // Общая сумма после применения доп скидок
+    $totalDiscountAmount = 0; // Общая сумма всех скидок (базовая + дополнительная)
+    
+    foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
+        // Если есть дополнительные скидки, НЕ перезаписываем SUM_NUM и SUM
+        // Они должны оставаться как цена после первой скидки для отображения в чекауте
+        // Дополнительная скидка будет применена только при сохранении заказа
+        if (!empty($basketItem['SHOW_THREE_PRICES'])) {
+            // Используем SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT только для расчета итоговой суммы
+            // но НЕ перезаписываем SUM_NUM и SUM товара
+            if (isset($basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'])) {
+                // Добавляем к общей сумме после доп скидок (для расчета финальной цены заказа)
+                $totalPriceAfterAdditionalDiscount += $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'];
+            } else {
+                $totalPriceAfterAdditionalDiscount += $basketItem['SUM_NUM'];
+            }
+            
+            // Для расчета старой цены используем ORIGINAL_PRICE
+            $originalSum = 0;
+            if (isset($basketItem['SUM_ORIGINAL_PRICE'])) {
+                $originalSum = $basketItem['SUM_ORIGINAL_PRICE'];
+                $oldSumPrice += $originalSum;
+            } else {
+                $originalSum = $basketItem['SUM_BASE'] ?? $basketItem['SUM_NUM'];
+                $oldSumPrice += $originalSum;
+            }
+            
+            // Рассчитываем общую скидку для этого товара (ORIGINAL_PRICE - PRICE_AFTER_ADDITIONAL_DISCOUNT)
+            $itemDiscount = $originalSum - ($basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem['SUM_NUM']);
+            $totalDiscountAmount += $itemDiscount;
+        } else {
+            // Для товаров без доп скидки используем стандартную логику
+            $totalPriceAfterAdditionalDiscount += $basketItem['SUM_NUM'];
+            $originalSum = 0;
+            if (empty($basketItem["oldPrice"])) {
+                $originalSum = $basketItem["SUM_NUM"];
+                $oldSumPrice += $originalSum;
+            } else {
+                $originalSum = $basketItem["oldPrice"];
+                $oldSumPrice += $originalSum;
+            }
+            
+            // Рассчитываем скидку для этого товара
+            $itemDiscount = $originalSum - $basketItem['SUM_NUM'];
+            $totalDiscountAmount += $itemDiscount;
+        }
+    }
+    unset($basketItem);
+    
+    // Обновляем итоговые суммы
+    $arResult["OLD_SUM_PRICE"] = CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB");
+    $arResult["OLD_SUM_PRICE_VALUE"] = $oldSumPrice;
+    $arResult["OLD_SUM_PRICE_DOLLAR"] = Base::formatDollar($oldSumPriceDollar);
+    $arResult["SHOW_OLD_SUM_PRICE"] = !empty($oldSumPrice) && $oldSumPrice !== $totalPriceAfterAdditionalDiscount;
+    
+    // Сохраняем общую сумму скидок для отображения
+    $arResult["TOTAL_DISCOUNT_AMOUNT"] = $totalDiscountAmount;
+    $arResult["TOTAL_DISCOUNT_AMOUNT_FORMATED"] = CCurrencyLang::CurrencyFormat($totalDiscountAmount, "RUB");
+    
+    // Обновляем финальную цену заказа с учетом дополнительных скидок
+    if (isset($arResult["JS_DATA"]["TOTAL"]["ORDER_PRICE"])) {
+        // Пересчитываем ORDER_PRICE на основе сумм после доп скидок
+        $arResult["JS_DATA"]["TOTAL"]["ORDER_PRICE"] = $totalPriceAfterAdditionalDiscount;
+        $arResult["JS_DATA"]["TOTAL"]["ORDER_PRICE_FORMATED"] = SaleFormatCurrency($totalPriceAfterAdditionalDiscount, 'RUB');
+        
+        // Обновляем PRICE_WITHOUT_DISCOUNT_VALUE для корректного отображения скидки
+        $arResult["JS_DATA"]["TOTAL"]["PRICE_WITHOUT_DISCOUNT_VALUE"] = $oldSumPrice;
+        $arResult["JS_DATA"]["TOTAL"]["PRICE_WITHOUT_DISCOUNT"] = CCurrencyLang::CurrencyFormat($oldSumPrice, 'RUB');
+        
+        // Обновляем общую сумму скидок в JS_DATA
+        $arResult["JS_DATA"]["TOTAL"]["DISCOUNT_PRICE_ALL"] = $totalDiscountAmount;
+        $arResult["JS_DATA"]["TOTAL"]["DISCOUNT_PRICE_ALL_FORMATED"] = CCurrencyLang::CurrencyFormat($totalDiscountAmount, 'RUB');
+        
+        // Обновляем ORDER_TOTAL_PRICE (цена заказа + доставка)
+        $deliveryPrice = $arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"] ?? 0;
+        $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision(
+            $totalPriceAfterAdditionalDiscount + $deliveryPrice
+        );
+        $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"] = SaleFormatCurrency(
+            $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"],
+            'RUB'
+        );
+        
+        // Обновляем основные поля заказа
+        $arResult["ORDER_TOTAL_PRICE"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"];
+        $arResult["ORDER_TOTAL_PRICE_NEW"] = $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"];
+        $arResult["ORDER_PRICE"] = $totalPriceAfterAdditionalDiscount;
+    }
+}
+
 $arResult["BASKET_ITEMS_QUANTITY"] = $basketItemsQuantity;
 $arResult["SUM_PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar($sumPriceDollar) : false;
 $arResult["OLD_SUM_PRICE"] = CCurrencyLang::CurrencyFormat($oldSumPrice, "RUB");
@@ -300,9 +397,13 @@ if (isset($arResult['CURRENT_DELIVERY']['DELIVERY_DISCOUNT_PRICE']))
 
 
 if (!empty($arResult['CURRENT_DELIVERY'])) {
-    $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision((
-            $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] - $arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"]
-        ) + $curDelPriceWithDisc);
+    // Если ORDER_PRICE был обновлен после применения доп скидок, используем его
+    $basketPrice = isset($arResult["ORDER_PRICE"]) ? $arResult["ORDER_PRICE"] : 
+        ($arResult["JS_DATA"]["TOTAL"]["ORDER_PRICE"] - $arResult["JS_DATA"]["TOTAL"]["DELIVERY_PRICE"]);
+    
+    $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"] = \Bitrix\Sale\PriceMaths::roundPrecision(
+        $basketPrice + $curDelPriceWithDisc
+    );
 
     $arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE_FORMATED"] = SaleFormatCurrency($arResult["JS_DATA"]["TOTAL"]["ORDER_TOTAL_PRICE"], 'RUB');
 }
