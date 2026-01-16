@@ -12,7 +12,7 @@ use Level44\Base;
 
 /**
  * Обработчик кастомных скидок для товаров категории sale
- * 
+ *
  * Правила:
  * - 1 товар: нет доп скидки
  * - 2 товара: на товар наименьшей стоимости - 10% скидка
@@ -23,7 +23,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
 {
     /**
      * Применить дополнительные скидки к товарам корзины категории sale
-     * 
+     *
      * @param array $basketItems Массив товаров корзины
      * @return array Модифицированный массив товаров с дополнительными полями цен
      */
@@ -35,22 +35,22 @@ class SaleCategoryDiscountHandler extends HandlerBase
 
         // Получаем товары категории sale
         $saleItems = self::getSaleItems($basketItems);
-        
+
         if (empty($saleItems)) {
             return $basketItems;
         }
 
         $saleItemsCount = count($saleItems);
-        
+
         // Рассчитываем скидки
         $discounts = self::calculateDiscounts($saleItems, $saleItemsCount);
-        
+
         // Создаем мапу товаров категории sale для быстрого поиска
         $saleItemIds = [];
         foreach ($saleItems as $saleItem) {
             $saleItemIds[] = $saleItem['item_id'];
         }
-        
+
         foreach ($basketItems as $key => &$basketItem) {
             // Пробуем разные варианты идентификаторов
             // В чекауте может использоваться ID (числовой) или BASKET_CODE (строка)
@@ -62,17 +62,17 @@ class SaleCategoryDiscountHandler extends HandlerBase
             } elseif (isset($basketItem['BASKET_CODE'])) {
                 $itemId = $basketItem['BASKET_CODE'];
             }
-            
+
             // Проверяем, относится ли товар к категории sale
             // Сравниваем как строки, так как ID может быть числом или строкой
             if (!$itemId || !in_array($itemId, $saleItemIds, true)) {
                 continue;
             }
-            
+
             // Сохраняем исходную цену БЕЗ всех скидок (BASE_PRICE) для зачеркнутой цены
             $currency = $basketItem['CURRENCY'] ?? $basketItem['CURRENCY_ID'] ?? 'RUB';
             $quantity = $basketItem['QUANTITY'] ?? 1;
-            
+
             // ORIGINAL_PRICE - это базовая цена БЕЗ всех скидок
             // В чекауте может использоваться oldPrice из result_modifier.php, который берется из свойства OLD_PRICE товара
             // Если oldPrice установлен, используем его, иначе используем BASE_PRICE
@@ -86,7 +86,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
             } else {
                 $originalPrice = $basketItem['PRICE'] ?? 0;
             }
-            
+
             $basketItem['ORIGINAL_PRICE'] = PriceMaths::roundPrecision($originalPrice);
             $basketItem['ORIGINAL_PRICE_FORMATED'] = \CCurrencyLang::CurrencyFormat(
                 $basketItem['ORIGINAL_PRICE'],
@@ -99,7 +99,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             if (!isset($discounts[$itemId])) {
                 // Товар категории sale, но без доп скидки (например, 1 товар или 3-й товар при 3 товарах)
                 // Цена до и после доп скидки одинаковые
@@ -107,22 +107,22 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE'];
                 $basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED'] = $basketItem['PRICE_FORMATED'];
                 $basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED'] = $basketItem['PRICE_FORMATED'];
-                
+
                 $basketItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE'] * $quantity;
                 $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE'] * $quantity;
                 $basketItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED'] = $basketItem['SUM'];
                 $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED'] = $basketItem['SUM'];
-                
+
                 // Флаг для отображения 3 цен
                 $basketItem['SHOW_THREE_PRICES'] = true;
                 continue;
             }
-            
+
             // Сохраняем исходную цену БЕЗ всех скидок (BASE_PRICE) для зачеркнутой цены
             // Это нужно сделать ДО применения дополнительной скидки
             $currency = $basketItem['CURRENCY'] ?? $basketItem['CURRENCY_ID'] ?? 'RUB';
             $quantity = $basketItem['QUANTITY'] ?? 1;
-            
+
             // ORIGINAL_PRICE - это базовая цена БЕЗ всех скидок
             // В чекауте может использоваться oldPrice из result_modifier.php, который берется из свойства OLD_PRICE товара
             // Если oldPrice установлен, используем его, иначе используем BASE_PRICE
@@ -136,7 +136,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
             } else {
                 $originalPrice = $basketItem['PRICE'] ?? 0;
             }
-            
+
             $basketItem['ORIGINAL_PRICE'] = PriceMaths::roundPrecision($originalPrice);
             $basketItem['ORIGINAL_PRICE_FORMATED'] = \CCurrencyLang::CurrencyFormat(
                 $basketItem['ORIGINAL_PRICE'],
@@ -149,16 +149,16 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // Применяем дополнительную скидку
             $discountPercent = $discounts[$itemId];
-            
+
             // Важно: PRICE может уже содержать дополнительную скидку (если она была применена ранее)
             // Поэтому используем BASE_PRICE как цену после первой скидки (до дополнительной)
             // Если PRICE >= BASE_PRICE, значит дополнительная скидка еще не применялась, используем PRICE
             $currentPrice = $basketItem['PRICE'] ?? 0;
             $basePrice = $basketItem['BASE_PRICE'] ?? $currentPrice;
-            
+
             // Если PRICE меньше BASE_PRICE, значит дополнительная скидка уже была применена
             // В этом случае используем BASE_PRICE как цену до дополнительной скидки
             if ($currentPrice < $basePrice) {
@@ -167,17 +167,17 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 // Если PRICE >= BASE_PRICE, используем PRICE (цена после первой скидки, но до дополнительной)
                 $priceBeforeAdditionalDiscount = $currentPrice;
             }
-            
+
             $discountAmount = $priceBeforeAdditionalDiscount * $discountPercent / 100;
             $priceAfterAdditionalDiscount = $priceBeforeAdditionalDiscount - $discountAmount;
-            
+
             // Сохраняем информацию о дополнительной скидке
             // Округляем скидочную цену до целого числа
             $basketItem['ADDITIONAL_DISCOUNT_PERCENT'] = $discountPercent;
             $basketItem['ADDITIONAL_DISCOUNT_AMOUNT'] = round($discountAmount);
             $basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT'] = PriceMaths::roundPrecision($priceBeforeAdditionalDiscount);
             $basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] = round($priceAfterAdditionalDiscount);
-            
+
             // Форматированные значения
             // В чекауте валюта может быть в разных полях
             $currency = $basketItem['CURRENCY'] ?? $basketItem['CURRENCY_ID'] ?? 'RUB';
@@ -191,11 +191,11 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // НЕ обновляем основную PRICE - она должна оставаться как цена после первой скидки
             // Дополнительные цены будут использоваться только для отображения трех цен в шаблоне
             // Обновление PRICE на PRICE_AFTER_ADDITIONAL_DISCOUNT будет происходить только при сохранении заказа
-            
+
             // Обновляем сумму после применения доп скидки (округляем до целого)
             $quantity = $basketItem['QUANTITY'] ?? 1;
             $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = round($basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] * $quantity);
@@ -204,10 +204,10 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // НЕ перезаписываем SUM_VALUE, SUM_NUM, SUM - они должны оставаться как цена после первой скидки
             // Это нужно для того, чтобы в чекауте отображалась цена после первой скидки, а не после дополнительной
-            
+
             // Суммы для отображения 3 цен (ORIGINAL_PRICE уже установлен выше)
             $basketItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT'] * $quantity;
             $basketItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED'] = \CCurrencyLang::CurrencyFormat(
@@ -215,7 +215,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // Флаг для отображения 3 цен
             $basketItem['SHOW_THREE_PRICES'] = true;
         }
@@ -226,7 +226,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
 
     /**
      * Добавить поля для отображения 3 цен
-     * 
+     *
      * @param array $basketItem Товар корзины
      * @return array Товар с дополнительными полями
      */
@@ -235,7 +235,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
         // В чекауте валюта может быть в разных полях
         $currency = $basketItem['CURRENCY'] ?? $basketItem['CURRENCY_ID'] ?? 'RUB';
         $quantity = $basketItem['QUANTITY'] ?? 1;
-        
+
         // Цена без скидки (зачеркнутая) - используем BASE_PRICE как исходную цену БЕЗ всех скидок
         // Это должно быть установлено ДО вызова этого метода, но на всякий случай проверяем
         if (!isset($basketItem['ORIGINAL_PRICE'])) {
@@ -247,7 +247,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // Сумма без скидки
             if (!isset($basketItem['SUM_ORIGINAL_PRICE'])) {
                 $basketItem['SUM_ORIGINAL_PRICE'] = $basketItem['ORIGINAL_PRICE'] * $quantity;
@@ -258,7 +258,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 );
             }
         }
-        
+
         // Цена до применения доп скидки (если есть)
         if (!isset($basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT'])) {
             $priceBeforeAdditionalDiscount = $basketItem['PRICE'] ?? $basketItem['BASE_PRICE'] ?? 0;
@@ -268,7 +268,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // Сумма до применения доп скидки
             $basketItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT'] * $quantity;
             $basketItem['SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED'] = \CCurrencyLang::CurrencyFormat(
@@ -277,7 +277,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 true
             );
         }
-        
+
         // Цена после применения доп скидки (текущая цена)
         if (!isset($basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'])) {
             $priceAfterAdditionalDiscount = $basketItem['PRICE'] ?? $basketItem['BASE_PRICE'] ?? 0;
@@ -287,7 +287,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $currency,
                 true
             );
-            
+
             // Сумма после применения доп скидки
             $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] * $quantity;
             $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED'] = \CCurrencyLang::CurrencyFormat(
@@ -296,27 +296,27 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 true
             );
         }
-        
+
         // Флаг для отображения 3 цен
         $basketItem['SHOW_THREE_PRICES'] = true;
-        
+
         return $basketItem;
     }
 
     /**
      * Получить товары категории sale из массива товаров корзины
-     * 
+     *
      * @param array $basketItems Массив товаров корзины
      * @return array Массив товаров категории sale с информацией о цене и ID
      */
     protected static function getSaleItems(array $basketItems)
     {
         $saleItems = [];
-        
+
         // Получаем ID всех товаров в корзине
         $productIds = [];
         $itemIdMap = [];
-        
+
         foreach ($basketItems as $basketItem) {
             $productId = $basketItem['PRODUCT_ID'] ?? null;
             // Пробуем разные варианты идентификаторов
@@ -328,11 +328,11 @@ class SaleCategoryDiscountHandler extends HandlerBase
             } elseif (isset($basketItem['BASKET_CODE'])) {
                 $itemId = $basketItem['BASKET_CODE'];
             }
-            
+
             if (!$productId || !$itemId) {
                 continue;
             }
-            
+
             $productIds[] = $productId;
             $itemIdMap[$productId][] = [
                 'item_id' => $itemId,
@@ -347,7 +347,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
         // Получаем информацию о товарах (через офферы)
         $offersResult = \CCatalogSKU::getProductList($productIds);
         $parentProductIds = [];
-        
+
         foreach ($offersResult as $offerId => $product) {
             $parentProductIds[$offerId] = $product['ID'];
         }
@@ -359,11 +359,11 @@ class SaleCategoryDiscountHandler extends HandlerBase
         // Получаем значения OLD_PRICE для родительских товаров
         // Используем метод Product::getEcommerceData() как в других местах кода
         $parentIds = array_unique(array_values($parentProductIds));
-        
+
         // Используем Product::getEcommerceData() для получения oldPrice
         $product = new \Level44\Product();
         $ecommerceData = $product->getEcommerceData($parentIds);
-        
+
         $saleProductIds = [];
         foreach ($ecommerceData as $productId => $data) {
             if (!empty($data['prices']['oldPrice']) && (float)$data['prices']['oldPrice'] > 0) {
@@ -383,7 +383,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
             } elseif (isset($basketItem['BASKET_CODE'])) {
                 $itemId = $basketItem['BASKET_CODE'];
             }
-            
+
             if (!$productId || !$itemId) {
                 continue;
             }
@@ -407,7 +407,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
 
     /**
      * Рассчитать скидки для товаров категории sale
-     * 
+     *
      * @param array $saleItems Массив товаров категории sale
      * @param int $count Количество товаров
      * @return array Массив скидок [item_id => discount_percent]
@@ -435,16 +435,36 @@ class SaleCategoryDiscountHandler extends HandlerBase
             $discounts[$saleItems[1]['item_id']] = 10;
             // Третий товар без доп скидки
         } else {
-            // 4+ товара: скидка 20% на 4-й товар и далее (первые 3 товара без доп скидки)
-            // Индексы: 0, 1, 2 - без скидки, 3, 4, 5... - 20% скидка
-            for ($i = 3; $i < $count; $i++) {
+            // 4+ товара: скидки распределяются от дорогих к дешевым
+            // Самый дорогой (последний) - 0%, предпоследний - 10%, третий с конца - 15%, остальные (более дешевые) - 20%
+            // Пример для 5 товаров: 0%, 10%, 15%, 20%, 20% (от дорогого к дешевому)
+            // Пример для 6 товаров: 0%, 10%, 15%, 20%, 20%, 20% (от дорогого к дешевому)
+            
+            $lastIndex = $count - 1;
+            
+            // Самый дорогой товар (последний) - без скидки (0%)
+            // Не добавляем в $discounts, так как 0% означает отсутствие дополнительной скидки
+            
+            // Предпоследний товар - 10%
+            if ($count >= 2) {
+                $discounts[$saleItems[$lastIndex - 1]['item_id']] = 10;
+            }
+            
+            // Третий с конца - 15%
+            if ($count >= 3) {
+                $discounts[$saleItems[$lastIndex - 2]['item_id']] = 15;
+            }
+            
+            // Все остальные товары (более дешевые) - 20%
+            // Это товары с индексами от 0 до (count - 4) включительно
+            for ($i = 0; $i <= $lastIndex - 3; $i++) {
                 $discounts[$saleItems[$i]['item_id']] = 20;
             }
         }
 
         return $discounts;
     }
-    
+
     /**
      * Регистрация обработчиков событий
      */
@@ -454,10 +474,10 @@ class SaleCategoryDiscountHandler extends HandlerBase
         static::addEventHandler('sale', 'OnSaleOrderBeforeSaved');
         static::addEventHandler('sale', 'OnSaleOrderSaved');
     }
-    
+
     /**
      * Обработчик события создания заказа - применяет дополнительные скидки к товарам корзины
-     * 
+     *
      * @param Order $order Объект заказа
      * @param array $arUserResult Данные пользователя
      * @param \Bitrix\Main\HttpRequest $request Запрос
@@ -478,12 +498,12 @@ class SaleCategoryDiscountHandler extends HandlerBase
         if (!Loader::includeModule('sale') || !Loader::includeModule('iblock')) {
             return;
         }
-        
+
         $basket = $order->getBasket();
         if (!$basket || $basket->isEmpty()) {
             return;
         }
-        
+
         // Получаем товары корзины в виде массива для обработки
         $basketItemsArray = [];
         /** @var \Bitrix\Sale\BasketItem $basketItem */
@@ -498,48 +518,48 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 'CURRENCY_ID' => $basketItem->getCurrency(),
             ];
         }
-        
+
         // Применяем дополнительные скидки
         $basketItemsArray = self::applyDiscounts($basketItemsArray);
-        
+
         // Применяем скидки к товарам корзины в заказе
         $itemsUpdated = 0;
         foreach ($basketItemsArray as $itemData) {
             if (empty($itemData['ADDITIONAL_DISCOUNT_PERCENT']) || $itemData['ADDITIONAL_DISCOUNT_PERCENT'] <= 0) {
                 continue;
             }
-            
+
             /** @var \Bitrix\Sale\BasketItem $basketItem */
             $basketItem = $basket->getItemByBasketCode($itemData['ID']);
             if (!$basketItem) {
                 continue;
             }
-            
+
             // Применяем дополнительную скидку к цене товара
             $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem->getPrice();
             $newPrice = round($newPrice);
-            
+
             // Устанавливаем кастомную цену, чтобы система не пересчитывала её
             $basketItem->setFieldNoDemand('CUSTOM_PRICE', 'Y');
             $basketItem->setFieldNoDemand('PRICE', $newPrice);
-            
+
             // Пересчитываем DISCOUNT_PRICE
             $basePrice = $basketItem->getBasePrice();
             $discountPrice = $basePrice - $newPrice;
             if ($discountPrice > 0) {
                 $basketItem->setFieldNoDemand('DISCOUNT_PRICE', $discountPrice);
             }
-            
+
             $itemsUpdated++;
         }
-        
+
         // Пересчитываем заказ после применения скидок
         $order->doFinalAction(true);
     }
-    
+
     /**
      * Обработчик события перед сохранением заказа - применяет дополнительные скидки
-     * 
+     *
      * @param \Bitrix\Main\Event $event Событие
      * @return \Bitrix\Main\EventResult
      */
@@ -547,20 +567,20 @@ class SaleCategoryDiscountHandler extends HandlerBase
     {
         /** @var Order $order */
         $order = $event->getParameter('ENTITY');
-        
+
         if (!$order || !($order instanceof Order)) {
             return new \Bitrix\Main\EventResult(\Bitrix\Main\EventResult::SUCCESS);
         }
-        
+
         if (!Loader::includeModule('sale') || !Loader::includeModule('iblock')) {
             return;
         }
-        
+
         $basket = $order->getBasket();
         if (!$basket || $basket->isEmpty()) {
             return;
         }
-        
+
         // Получаем товары корзины в виде массива для обработки
         $basketItemsArray = [];
         /** @var \Bitrix\Sale\BasketItem $basketItem */
@@ -577,26 +597,26 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 'CURRENCY_ID' => $basketItem->getCurrency(),
             ];
         }
-        
+
         // Применяем дополнительные скидки
         $basketItemsArray = self::applyDiscounts($basketItemsArray);
-        
+
         // Применяем скидки к товарам корзины в заказе
         $itemsUpdated = 0;
         foreach ($basketItemsArray as $itemData) {
             if (empty($itemData['ADDITIONAL_DISCOUNT_PERCENT']) || $itemData['ADDITIONAL_DISCOUNT_PERCENT'] <= 0) {
                 continue;
             }
-            
+
             // Пробуем найти товар по разным идентификаторам
             $basketCode = $itemData['BASKET_CODE'] ?? $itemData['ID'] ?? null;
             /** @var \Bitrix\Sale\BasketItem $basketItem */
             $basketItem = null;
-            
+
             if ($basketCode) {
                 $basketItem = $basket->getItemByBasketCode($basketCode);
             }
-            
+
             if (!$basketItem) {
                 // Пробуем найти по PRODUCT_ID
                 foreach ($basket as $item) {
@@ -606,40 +626,40 @@ class SaleCategoryDiscountHandler extends HandlerBase
                     }
                 }
             }
-            
+
             if (!$basketItem) {
                 continue;
             }
-            
+
             // Применяем дополнительную скидку к цене товара
             $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem->getPrice();
             $newPrice = round($newPrice);
-            
+
             // Устанавливаем кастомную цену, чтобы система не пересчитывала её
             $basketItem->setFieldNoDemand('CUSTOM_PRICE', 'Y');
             $basketItem->setFieldNoDemand('PRICE', $newPrice);
-            
+
             // Пересчитываем DISCOUNT_PRICE
             $basePrice = $basketItem->getBasePrice();
             $discountPrice = $basePrice - $newPrice;
             if ($discountPrice > 0) {
                 $basketItem->setFieldNoDemand('DISCOUNT_PRICE', $discountPrice);
             }
-            
+
             $itemsUpdated++;
         }
-        
+
         // Возвращаем результат события
         $parameters = [
             "ENTITY" => $order,
         ];
-        
+
         return new \Bitrix\Main\EventResult(\Bitrix\Main\EventResult::SUCCESS, $parameters);
     }
-    
+
     /**
      * Обработчик события после сохранения заказа - обновляет цены через SQL
-     * 
+     *
      * @param \Bitrix\Main\Event $event Событие
      * @return \Bitrix\Main\EventResult
      */
@@ -648,22 +668,22 @@ class SaleCategoryDiscountHandler extends HandlerBase
         /** @var Order $order */
         $order = $event->getParameter('ENTITY');
         $isNew = $event->getParameter('IS_NEW');
-        
+
         if (!$order || !($order instanceof Order) || !$isNew) {
             return new \Bitrix\Main\EventResult(\Bitrix\Main\EventResult::SUCCESS);
         }
-        
+
         if (!Loader::includeModule('sale') || !Loader::includeModule('iblock')) {
             return new \Bitrix\Main\EventResult(\Bitrix\Main\EventResult::SUCCESS);
         }
-        
+
         $basket = $order->getBasket();
         if (!$basket || $basket->isEmpty()) {
             return new \Bitrix\Main\EventResult(\Bitrix\Main\EventResult::SUCCESS);
         }
-        
+
         $orderId = $order->getId();
-        
+
         // Получаем товары корзины в виде массива для обработки
         $basketItemsArray = [];
         $basketItemIds = []; // Сохраняем ID товаров корзины для SQL обновления
@@ -673,7 +693,7 @@ class SaleCategoryDiscountHandler extends HandlerBase
             $basketItemId = $basketItem->getId(); // ID товара корзины в БД
             $currentPrice = $basketItem->getPrice();
             $basePrice = $basketItem->getBasePrice();
-            
+
             $basketItemsArray[] = [
                 'ID' => $basketCode,
                 'BASKET_CODE' => $basketCode,
@@ -685,42 +705,42 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 'CURRENCY' => $basketItem->getCurrency(),
             ];
         }
-        
+
         // Применяем дополнительные скидки
         $basketItemsArray = self::applyDiscounts($basketItemsArray);
-        
+
         // Обновляем цены через прямой SQL запрос
         $itemsUpdated = 0;
         foreach ($basketItemsArray as $itemData) {
             if (empty($itemData['ADDITIONAL_DISCOUNT_PERCENT']) || $itemData['ADDITIONAL_DISCOUNT_PERCENT'] <= 0) {
                 continue;
             }
-            
+
             // Используем PRICE_AFTER_ADDITIONAL_DISCOUNT из applyDiscounts
             $newPrice = round($itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? 0);
             if ($newPrice <= 0) {
                 continue;
             }
-            
+
             $basketItemId = $itemData['BASKET_ITEM_ID'] ?? null;
             $productId = $itemData['PRODUCT_ID'] ?? null;
             $basePrice = $itemData['BASE_PRICE'] ?? $newPrice;
-            
+
             if (!$basketItemId && !$productId) {
                 continue;
             }
-            
+
             // Обновляем цену через SQL
             $connection = \Bitrix\Main\Application::getConnection();
             $sqlHelper = $connection->getSqlHelper();
-            
+
             // DISCOUNT_PRICE = BASE_PRICE - newPrice (общая скидка от базовой цены)
             $discountPrice = max(0, $basePrice - $newPrice);
-            
+
             $newPriceEscaped = $sqlHelper->forSql($newPrice);
             $discountPriceEscaped = $sqlHelper->forSql($discountPrice);
             $orderIdEscaped = $sqlHelper->forSql($orderId);
-            
+
             // Обновляем цену товара в корзине заказа
             // Используем ID товара корзины (поле ID в таблице b_sale_basket)
             if ($basketItemId) {
@@ -741,17 +761,17 @@ class SaleCategoryDiscountHandler extends HandlerBase
                         WHERE PRODUCT_ID = {$productIdEscaped} 
                         AND ORDER_ID = {$orderIdEscaped}";
             }
-            
+
             $connection->queryExecute($sql);
-            
+
             if ($connection->getAffectedRowsCount() > 0) {
                 $itemsUpdated++;
             }
         }
-        
+
         // НЕ пересчитываем заказ через doFinalAction, так как это перезапишет наши кастомные цены
         // Цены уже установлены через SQL с CUSTOM_PRICE='Y', что должно предотвратить пересчет
-        
+
         return new \Bitrix\Main\EventResult(\Bitrix\Main\EventResult::SUCCESS);
     }
 }
