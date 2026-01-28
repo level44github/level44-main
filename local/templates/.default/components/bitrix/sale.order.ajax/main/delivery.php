@@ -88,6 +88,7 @@ if (!function_exists("PrintDelivery")) {
                         </div>
                     <? endif; ?>
 
+
                     <span><?= $data["DESCRIPTION"] ?></span>
                 </div>
             </div>
@@ -119,7 +120,7 @@ if (!function_exists("PrintDelivery")) {
             if (!empty($deliveryTypes["EXPRESS"])) {
                 $data = [
                     "NAME"                    => Loc::getMessage("DELIVERY_EXPRESS_NAME"),
-                    "DESCRIPTION"             => Loc::getMessage("DELIVERY_EXPRESS_DESCRIPTION")
+                    "DESCRIPTION"             => Loc::getMessage("DELIVERY_EXPRESS_DESCRIPTION"),
                 ];
 
                 PrintDelivery($deliveryTypes["EXPRESS"], $data);

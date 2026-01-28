@@ -123,6 +123,7 @@ class CheckoutHandlers extends HandlerBase
                     $typesDelivery["PICKUP"] = $delivery;
                     break;
                 case DeliveryType::Express:
+                    $delivery["IS_COURIER"] = true;
                     $typesDelivery["EXPRESS"] = $delivery;
                     break;
                 case DeliveryType::CourierFitting:
