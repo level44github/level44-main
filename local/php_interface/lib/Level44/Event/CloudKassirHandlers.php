@@ -112,6 +112,12 @@ class CloudKassirHandlers extends HandlerBase
                 return;
             }
 
+            // Не отбиваем чек повторно, если свойство CHECK уже заполнено
+            if (self::getOrderPropertyValue($order, 'CHECK')) {
+                self::log("Чек для заказа #{$orderId} уже был создан (CHECK заполнен), пропуск");
+                return;
+            }
+
             // Инициализируем API
             $api = new Api();
 
@@ -119,6 +125,7 @@ class CloudKassirHandlers extends HandlerBase
             $result = $api->createReceipt($order, $externalPayment, $paidAmount);
 
             if ($result['success']) {
+                self::setOrderPropertyValue($order, 'CHECK', 'Y');
                 self::log("Чек успешно создан для заказа #{$orderId}, сумма: {$paidAmount}");
             } else {
                 self::log("Ошибка создания чека для заказа #{$orderId}: " . ($result['error'] ?? 'Неизвестная ошибка'), 'ERROR');
@@ -249,6 +256,12 @@ class CloudKassirHandlers extends HandlerBase
                 return;
             }
 
+            // Не отбиваем чек возврата повторно, если свойство CHECK_REFUND уже заполнено
+            if (self::getOrderPropertyValue($order, 'CHECK_REFUND')) {
+                self::log("Чек возврата для заказа #{$orderId} уже был создан (CHECK_REFUND заполнен), пропуск");
+                return;
+            }
+
             // Инициализируем API
             $api = new Api();
 
@@ -256,6 +269,7 @@ class CloudKassirHandlers extends HandlerBase
             $result = $api->createReturnReceipt($order, $externalPayment, $refundAmount);
 
             if ($result['success']) {
+                self::setOrderPropertyValue($order, 'CHECK_REFUND', 'Y');
                 self::log("Чек возврата успешно создан для заказа #{$orderId}, сумма: {$refundAmount}");
             } else {
                 self::log("Ошибка создания чека возврата для заказа #{$orderId}: " . ($result['error'] ?? 'Неизвестная ошибка'), 'ERROR');
@@ -304,6 +318,40 @@ class CloudKassirHandlers extends HandlerBase
         
         // Проверяем, есть ли ID платежной системы в списке разрешенных
         return in_array($paymentSystemId, $allowedIds, true);
+    }
+
+    /**
+     * Получает значение свойства заказа по коду
+     *
+     * @param Order $order Заказ
+     * @param string $code Код свойства (например, CHECK)
+     * @return string|null Значение свойства или null
+     */
+    protected static function getOrderPropertyValue(Order $order, string $code): ?string
+    {
+        $property = $order->getPropertyCollection()->getItemByOrderPropertyCode($code);
+        if (!$property) {
+            return null;
+        }
+        $value = trim((string)$property->getValue());
+        return $value !== '' ? $value : null;
+    }
+
+    /**
+     * Устанавливает значение свойства заказа и сохраняет заказ
+     *
+     * @param Order $order Заказ
+     * @param string $code Код свойства (например, CHECK)
+     * @param string $value Значение
+     * @return void
+     */
+    protected static function setOrderPropertyValue(Order $order, string $code, string $value): void
+    {
+        $property = $order->getPropertyCollection()->getItemByOrderPropertyCode($code);
+        if ($property) {
+            $property->setValue($value);
+            $order->save();
+        }
     }
 
     /**
