@@ -752,7 +752,12 @@ if ($arParams['DISPLAY_COMPARE']) {
 
         </div>
         <div class="modal-body">
-            <img src="/local/templates/.default/assets/img/dolyame.svg" style="width:148px;"/>
+            <div class="dolyame-podeli-wrap">
+                <img src="/local/templates/.default/assets/img/dolyame.svg" />
+
+                <img src="/local/templates/.default/assets/img/podeli.svg" />
+            </div>
+
 
             <div class="dolyame-plashka">
                 <div class="dolyame-info">25% сейчас, остальное — потом</div>

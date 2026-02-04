@@ -54,6 +54,8 @@ a.dolyame-text
 #dolyame-modal .modal-body img
 {
     margin-bottom:30px;
+
+    width:148px;
 }
 
 .dolyame-points
@@ -161,7 +163,7 @@ a.dolyame-text
 
     #dolyame-modal .modal-body img
     {
-        width:96px;
+        width:96px !important;
     }
 
     .dolyame-close
@@ -692,6 +694,12 @@ a.dolyame-text
 .qrcode-text
 {
     display:none;
+}
+
+.dolyame-podeli-wrap
+{
+    display:flex;
+    justify-content: space-between;
 }
 
 @media (max-width: 767.98px) {

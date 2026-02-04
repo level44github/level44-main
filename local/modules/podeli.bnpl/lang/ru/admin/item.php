@@ -1,0 +1,9 @@
+<?php
+
+global $MESS;
+$MESS['PODELI.PAYMENT_ORDER_NOT_FOUND'] = "Заявка не найдена";
+$MESS['PODELI.PAYMENT_SELECT_REFUND_POSITION'] = "Выберите позиции для возврата";
+$MESS['PODELI.PAYMENT_REFUND_POSITION_NAME'] = "Наименование";
+$MESS['PODELI.PAYMENT_REFUND_POSITION_QUANTITY'] = "Количество";
+$MESS['PODELI.PAYMENT_REFUND_POSITION_PRICE'] = "Стоимость";
+$MESS['PODELI.PAYMENT_REFUND_SUM'] = "Сумма возврата";

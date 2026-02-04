@@ -10,16 +10,22 @@ global $USER;
     <fieldset class="fieldset">
         <legend><?= Loc::getMessage("PAYMENT") ?></legend>
         <div class="checkout__radio" id="payment">
-            <? foreach ($arResult["PAY_SYSTEM"] as $paySystem):?>
+            <? foreach ($arResult["PAY_SYSTEM"] as $paySystem):
+                $checked=false;
+                if (($paySystem["CHECKED"]) and ($paySystem["CHECKED"]!='N'))
+                {
+                    $checked=true;
+                }
+                ?>
 
                 <? if (($paySystem["ID"]!=18) ){ ?>
                 <div class="card option">
                     <a class="option__header
-                    <?= $paySystem["CHECKED"] ? "" : "collapsed" ?> js-pay_system-link"
+                    <?= $checked ? "" : "collapsed" ?> js-pay_system-link"
                        data-toggle="collapse"
                        href="#payment<?= $paySystem["ID"] ?>"
                        role="button"
-                       aria-expanded="<?= $paySystem["CHECKED"] ? "true" : "false" ?>"
+                       aria-expanded="<?= $checked ? "true" : "false" ?>"
                        aria-controls="payment<?= $paySystem["ID"] ?>"
                        data-target-label="pay_system<?= $paySystem["ID"] ?>label"
                     >
@@ -38,7 +44,7 @@ global $USER;
                            type="radio"
                            style="display: none;"
                            value="<?= $paySystem["ID"] ?>"
-                        <?= ($paySystem["CHECKED"]) ? " checked" : "" ?>
+                        <?= ($checked) ? " checked" : "" ?>
                            onclick="submitForm();"
                     >
                 </div>
