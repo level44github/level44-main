@@ -1,6 +1,6 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
-$APPLICATION->SetTitle("ПСистема привилегий");
+$APPLICATION->SetTitle("Система привилегий");
 ?>
 	<div class="row">
 		<div class="col-lg-3 d-none d-lg-block">
