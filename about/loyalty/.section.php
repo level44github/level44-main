@@ -1,0 +1,6 @@
+<?
+$sSectionName = "Система привилегий";
+$arDirProperties = [
+
+];
+?>

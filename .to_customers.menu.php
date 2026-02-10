@@ -70,5 +70,13 @@ $aMenuLinks = Array(
         Array(),
         "",
     ),
+
+    Array(
+        "Система привилегий",
+        SITE_DIR . "about/loyalty/",
+        Array(),
+        Array(),
+        "",
+    ),
 );
 ?>
