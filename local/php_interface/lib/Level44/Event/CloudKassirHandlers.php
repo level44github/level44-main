@@ -22,7 +22,7 @@ class CloudKassirHandlers extends HandlerBase
         // Событие оплаты заказа
         // Используем compatible режим для поддержки старого формата (ID, VALUE)
         static::addEventHandler("sale", "OnSaleOrderPaid", null, null, 100, true);
-        
+
         // Событие изменения статуса заказа (для обработки возвратов)
         static::addEventHandler("sale", "OnSaleStatusOrderChange");
     }
@@ -40,7 +40,7 @@ class CloudKassirHandlers extends HandlerBase
         try {
             $orderId = null;
             $order = null;
-            
+
             // Определяем формат переданных данных
             if ($eventOrOrder instanceof Event) {
                 $orderId = $eventOrOrder->getParameter('ID');
@@ -64,12 +64,12 @@ class CloudKassirHandlers extends HandlerBase
                     return;
                 }
             }
-            
+
             // Проверяем, что заказ оплачен (для формата с Event)
             if ($value !== null && $value !== "Y") {
                 return;
             }
-            
+
             // Если заказ не был передан, загружаем его
             if (!$order && $orderId) {
                 if (!Loader::includeModule('sale')) {
@@ -77,11 +77,11 @@ class CloudKassirHandlers extends HandlerBase
                 }
                 $order = Order::load($orderId);
             }
-            
+
             if (!$order) {
                 return;
             }
-            
+
             $orderId = $order->getId();
 
             // Проверяем, включена ли интеграция с CloudKassir
@@ -134,6 +134,57 @@ class CloudKassirHandlers extends HandlerBase
         } catch (\Exception $e) {
             self::log("Исключение при обработке оплаты заказа #{$orderId}: " . $e->getMessage(), 'ERROR');
         }
+    }
+
+    /**
+     * Пакетная генерация чека прихода по ID заказа (для скриптов/админки).
+     * Проверяет те же условия, что и OnSaleOrderPaidHandler.
+     *
+     * @param int $orderId ID заказа
+     * @param bool $force Создать чек даже если свойство CHECK уже установлено
+     * @return array ['success' => bool, 'message' => string, 'error' => string|null]
+     */
+    public static function createReceiptForOrder(int $orderId, bool $force = false): array
+    {
+        if (!Loader::includeModule('sale') || !self::isEnabled()) {
+            return ['success' => false, 'message' => 'Модуль sale не подключен или CloudKassir отключен.', 'error' => null];
+        }
+
+        $order = Order::load($orderId);
+        if (!$order) {
+            return ['success' => false, 'message' => 'Заказ не найден', 'error' => null];
+        }
+
+        if (self::getOrderPropertyValue($order, 'CHECK') && !$force) {
+            return ['success' => false, 'message' => 'Чек уже создан (CHECK заполнен). Используйте force=true для повторной отправки.', 'error' => null];
+        }
+
+        $paidAmount = self::getRealPaidAmount($order);
+        if ($paidAmount <= 0) {
+            return ['success' => false, 'message' => 'Нет оплаченной суммы (без бонусов)', 'error' => null];
+        }
+
+        $externalPayment = self::getExternalPayment($order);
+        if (!$externalPayment || !$externalPayment->isPaid()) {
+            return ['success' => false, 'message' => 'Нет оплаченного внешнего платежа', 'error' => null];
+        }
+
+        if (!self::isPaymentSystemAllowed($externalPayment->getPaymentSystemId())) {
+            return ['success' => false, 'message' => 'Платежная система не в списке разрешённых для чеков', 'error' => null];
+        }
+
+        $api = new Api();
+        $result = $api->createReceipt($order, $externalPayment, $paidAmount);
+
+        if ($result['success']) {
+            self::setOrderPropertyValue($order, 'CHECK', 'Y');
+            self::log("Чек успешно создан для заказа #{$orderId} (пакетный вызов), сумма: {$paidAmount}");
+            return ['success' => true, 'message' => "Чек создан, сумма: {$paidAmount}", 'error' => null];
+        }
+
+        $error = $result['error'] ?? 'Неизвестная ошибка';
+        self::log("Ошибка создания чека для заказа #{$orderId} (пакетный вызов): {$error}", 'ERROR');
+        return ['success' => false, 'message' => $error, 'error' => $error];
     }
 
     /**
@@ -300,22 +351,22 @@ class CloudKassirHandlers extends HandlerBase
     protected static function isPaymentSystemAllowed(int $paymentSystemId): bool
     {
         // Получаем список разрешенных платежных систем из настроек
-        $allowedSystems = \Bitrix\Main\Config\Option::get('level44.cloudkassir', 'allowed_payment_systems', '14,17');
-        
+        $allowedSystems = \Bitrix\Main\Config\Option::get('level44.cloudkassir', 'allowed_payment_systems', '14,17,20');
+
         // Если настройка пустая, разрешаем все платежные системы (для обратной совместимости)
         if (empty($allowedSystems)) {
             return true;
         }
-        
+
         // Преобразуем строку в массив ID
         $allowedIds = array_map('intval', explode(',', $allowedSystems));
         $allowedIds = array_filter($allowedIds); // Убираем пустые значения
-        
+
         // Если список пуст, разрешаем все (для обратной совместимости)
         if (empty($allowedIds)) {
             return true;
         }
-        
+
         // Проверяем, есть ли ID платежной системы в списке разрешенных
         return in_array($paymentSystemId, $allowedIds, true);
     }
