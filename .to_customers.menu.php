@@ -50,7 +50,7 @@ $aMenuLinks = Array(
       "",
     ),
     Array(
-      "Политика использования файлов Cookie",
+      "Политика использования сессионных файлов",
       SITE_DIR . "about/cookie/",
       Array(),
       Array(),

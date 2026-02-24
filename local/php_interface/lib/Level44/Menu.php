@@ -40,9 +40,18 @@ class Menu
 
         $saleChildren = static::getSaleChildren();
 
+        if (SITE_ID=='s1')
+        {
+            $saleText='Распродажа';
+        }
+        else
+        {
+            $saleText='SALE';
+        }
+
         if (!empty($saleChildren)) {
             $saleSection = [
-                "SALE",
+                $saleText,
                 SITE_DIR . "catalog/sale/",
                 [],
                 [

@@ -41,7 +41,7 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
 ?>
 
 <div class="grid__item__wrapper">
-    <?if ($soldout){?><div class="k-sold-out">Sold out</div><?}?>
+    <?php if ($soldout){?><div class="k-sold-out"><?= Loc::getMessage('K_SOLD_OUT')?></div><?php }?>
 
   <!--  <button class="btn btn-link grid__item__favorite js-favorite <?= $defaultClass ?>"
             onClick="BX.Awelite.changeToFavorite(this);return false;"
