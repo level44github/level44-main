@@ -175,6 +175,14 @@ class Delivery
 
         $delivery["CHECKED"] = $delivery["CHECKED"] === "Y";
 
+        // Учёт правил корзины Битрикса: используем цену доставки после применения скидок
+        if (isset($delivery['DELIVERY_DISCOUNT_PRICE']) && (float)$delivery['DELIVERY_DISCOUNT_PRICE'] >= 0) {
+            $delivery['PRICE'] = $delivery['DELIVERY_DISCOUNT_PRICE'];
+            if (!empty($delivery['DELIVERY_DISCOUNT_PRICE_FORMATED'])) {
+                $delivery['PRICE_FORMATED'] = $delivery['DELIVERY_DISCOUNT_PRICE_FORMATED'];
+            }
+        }
+
         $delivery["DOLLAR_PRICE"] = Base::getDollarPrice($delivery["PRICE"]);
         if (empty($delivery["PRICE_FORMATED"]) || (int)$delivery["PRICE"] <= 0) {
             $delivery["PRICE_FORMATED"] = Loc::getMessage("FREE");

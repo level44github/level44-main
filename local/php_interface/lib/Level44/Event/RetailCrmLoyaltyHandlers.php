@@ -48,6 +48,19 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
         // Событие OnAfterBonusAdd срабатывает при любом начислении/списании бонусов
         // Мы будем фильтровать только транзакции типа BONUSPAY (оплата заказа)
         AddEventHandler('acrit.bonus', 'OnAfterBonusAdd', [static::class, 'onAcritBonusAdd']);
+        
+        // Запрос к CRM за актуальными баллами при авторизации пользователя
+        \Bitrix\Main\EventManager::getInstance()->addEventHandler(
+            'main',
+            'OnAfterUserLogin',
+            [static::class, 'onAfterUserLogin']
+        );
+        // Запрос к CRM при переходе в личный кабинет (с ограничением по частоте)
+        \Bitrix\Main\EventManager::getInstance()->addEventHandler(
+            'main',
+            'OnProlog',
+            [static::class, 'onPrologLoyaltySync']
+        );
     }
 
     /**
@@ -108,6 +121,88 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
         } catch (Exception $e) {
             self::log("EXCEPTION: " . $e->getMessage());
             self::log("Stack trace: " . $e->getTraceAsString());
+        }
+    }
+
+    /**
+     * Запрашивает актуальные данные лояльности из CRM и обновляет пользователя.
+     * Вызывается при авторизации и при переходе в ЛК.
+     *
+     * @param int $userId ID пользователя
+     * @return void
+     */
+    public static function syncLoyaltyFromCrmForUser(int $userId): void
+    {
+        try {
+            if ($userId <= 0) {
+                return;
+            }
+            if (!self::isLoyaltyEnabled()) {
+                return;
+            }
+            $loyaltyData = self::getLoyaltyData($userId);
+            if (empty($loyaltyData)) {
+                return;
+            }
+            $result = self::updateUserLoyaltyFields($userId, $loyaltyData);
+            if ($result && isset($loyaltyData['UF_BONUS_AMOUNT_INTARO'])) {
+                self::syncToAcritBonus($userId, $loyaltyData);
+            }
+        } catch (Exception $e) {
+            self::log("syncLoyaltyFromCrmForUser EXCEPTION: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Обработчик события main:OnAfterUserLogin — синхронизация баллов из CRM после входа.
+     * Параметры зависят от версии Битрикс: может быть (int $userId) или (array $arParams).
+     *
+     * @param array|int $arParams ID пользователя или массив с ключом USER_ID/id
+     * @return void
+     */
+    public static function onAfterUserLogin($arParams): void
+    {
+        $userId = null;
+        if (is_numeric($arParams)) {
+            $userId = (int)$arParams;
+        } elseif (is_array($arParams) && !empty($arParams['USER_ID'])) {
+            $userId = (int)$arParams['USER_ID'];
+        } elseif (is_array($arParams) && isset($arParams['id'])) {
+            $userId = (int)$arParams['id'];
+        }
+        if (!$userId && isset($GLOBALS['USER']) && $GLOBALS['USER'] instanceof CUser && $GLOBALS['USER']->IsAuthorized()) {
+            $userId = (int)$GLOBALS['USER']->GetID();
+        }
+        if ($userId) {
+            self::log("OnAfterUserLogin: syncing loyalty for user {$userId}");
+            self::syncLoyaltyFromCrmForUser($userId);
+        }
+    }
+
+    /**
+     * Обработчик main:OnProlog — синхронизация баллов при переходе в личный кабинет (не чаще раза в 5 минут).
+     *
+     * @return void
+     */
+    public static function onPrologLoyaltySync(): void
+    {
+        if (!isset($GLOBALS['USER']) || !$GLOBALS['USER']->IsAuthorized()) {
+            return;
+        }
+        $requestUri = (string)($_SERVER['REQUEST_URI'] ?? '');
+        if (strpos($requestUri, '/personal') === false && strpos($requestUri, 'personal/') === false) {
+            return;
+        }
+        $throttleKey = 'LOYALTY_CRM_LAST_SYNC';
+        $throttleSec = 300;
+        if (!empty($_SESSION[$throttleKey]) && (time() - (int)$_SESSION[$throttleKey]) < $throttleSec) {
+            return;
+        }
+        $userId = (int)$GLOBALS['USER']->GetID();
+        if ($userId) {
+            $_SESSION[$throttleKey] = time();
+            self::log("OnProlog (personal): syncing loyalty for user {$userId}");
+            self::syncLoyaltyFromCrmForUser($userId);
         }
     }
 
@@ -343,12 +438,19 @@ class RetailCrmLoyaltyHandlers extends HandlerBase
      */
     protected static function updateUserLoyaltyFields(int $userId, array $loyaltyData): bool
     {
-        if (empty($loyaltyData)) {
+        $fields = array_filter(
+            $loyaltyData,
+            function ($key) {
+                return is_string($key) && strpos($key, 'UF_') === 0;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        if (empty($fields)) {
             return false;
         }
 
         $user = new CUser();
-        $result = $user->Update($userId, $loyaltyData);
+        $result = $user->Update($userId, $fields);
 
         if (!$result) {
             self::log("Error updating user {$userId}: " . $user->LAST_ERROR);
