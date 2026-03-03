@@ -1,8 +1,8 @@
 <?php if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-$isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
+$isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fixed';
 ?>
 <?php if (!empty($arResult['ITEMS'])): ?>
-    <div class="promo-stripe<?= $isFixed ? ' promo-stripe_fixed' : '' ?>">
+    <div class="promo-stripe<?= $isOnMain ? ' promo-stripe_on-main' : '' ?>">
         <div class="promo-stripe__slider">
             <?php foreach ($arResult['ITEMS'] as $i => $item):
             $hasLink = $item['link_url'] !== '';
@@ -28,6 +28,11 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
     </div>
     </div>
     <style>
+        /* Плашка над шапкой: выше по слою и не перекрывается шапкой */
+        .promo-stripe-outer {
+            position: relative;
+            z-index: 100;
+        }
         .promo-stripe {
             width: 100%;
             height: 48px;
@@ -35,34 +40,44 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
             margin-top:24px;
             margin-bottom:24px;
         }
-        .promo-stripe_fixed {
-            margin: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+        .promo-stripe-outer .promo-stripe {
+            margin-top: 0;
         }
-        /* Отступ: плашка + высота шапки, чтобы контент не заходил под фиксированную шапку */
-        .layout__wrapper_promo-stripe-top {
-            padding-top: 108px; /* 48px плашка + ~60px шапка */
+        /* На главной — без отступов сверху и снизу */
+        .promo-stripe_on-main {
+            margin-top: 0;
+            margin-bottom: 0;
         }
-        /* Шапка под плашкой, не перекрывается при фиксации */
+        /* Шапка под плашкой у верхнего края страницы */
         .layout__wrapper_promo-stripe-top .header {
             top: 48px;
         }
+        /* После прокрутки — шапка без отступа */
+        .layout__wrapper_promo-stripe-top.promo-stripe-scrolled .header {
+            top: 0;
+        }
+        /* Контент не заходит под фиксированную шапку */
+        .layout__wrapper_promo-stripe-top {
+            padding-top: 108px;
+        }
+        .layout__wrapper_promo-stripe-top.promo-stripe-scrolled {
+            padding-top: 60px;
+        }
         @media (max-width: 767px) {
             .promo-stripe {
-                height: 21px;
-            }
-            .promo-stripe_fixed {
-                margin: 0;
-            }
-            .layout__wrapper_promo-stripe-top {
-                padding-top: 71px; /* 21px плашка + ~50px шапка */
+                height: 32px;
             }
             .layout__wrapper_promo-stripe-top .header {
-                top: 21px;
+                top: 32px;
+            }
+            .layout__wrapper_promo-stripe-top.promo-stripe-scrolled .header {
+                top: 0;
+            }
+            .layout__wrapper_promo-stripe-top {
+                padding-top: 71px;
+            }
+            .layout__wrapper_promo-stripe-top.promo-stripe-scrolled {
+                padding-top: 50px;
             }
         }
         .promo-stripe__slider {
@@ -95,7 +110,7 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
             flex-wrap: wrap;
             gap: 0.15em;
             padding: 0 12px;
-            font-size: 16px;
+            font-size: 18px;
             line-height: 1.2;
             text-align: center;
         }
@@ -134,4 +149,17 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
             })();
         </script>
     <?php endif; ?>
+    <script>
+        (function() {
+            var wrapper = document.querySelector('.layout__wrapper_promo-stripe-top');
+            if (!wrapper) return;
+            var stripeOuter = document.querySelector('.promo-stripe-outer');
+            function updateScrolled() {
+                var h = stripeOuter ? stripeOuter.offsetHeight : (window.innerWidth <= 767 ? 21 : 48);
+                wrapper.classList.toggle('promo-stripe-scrolled', window.pageYOffset >= h);
+            }
+            updateScrolled();
+            window.addEventListener('scroll', updateScrolled, { passive: true });
+        })();
+    </script>
 <?php endif; ?>
