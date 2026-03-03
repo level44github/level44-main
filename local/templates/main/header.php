@@ -40,7 +40,12 @@ $searchQuery = (string)$request->getQuery("q");
                   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <? $APPLICATION->ShowPanel(); ?>
-<div class="layout__wrapper <?= $isMain ? 'no-header-offset' : '' ?>">
+<?php if (!$isMain): ?>
+<div class="promo-stripe-outer promo-stripe-outer_fixed">
+    <?php $APPLICATION->IncludeComponent("system:empty", "promo_stripe", ["PLACEMENT" => "top_fixed"], false); ?>
+</div>
+<?php endif; ?>
+<div class="layout__wrapper <?= $isMain ? 'no-header-offset' : '' ?><?= !$isMain ? ' layout__wrapper_promo-stripe-top' : '' ?>">
     <header class="header <? $APPLICATION->ShowViewContent("header-class") ?>">
         <nav class="header__container">
             <div class="header__column">
@@ -183,4 +188,9 @@ $searchQuery = (string)$request->getQuery("q");
     </div>
 
     <?php $APPLICATION->ShowViewContent("main_banner"); ?>
+
+    <?php if ($isMain): ?>
+    <?php $APPLICATION->IncludeComponent("system:empty", "promo_stripe", [], false); ?>
+    <?php endif; ?>
+
     <div class="container <? $APPLICATION->ShowViewContent("type-page"); ?>__container">
