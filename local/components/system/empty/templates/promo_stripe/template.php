@@ -15,15 +15,11 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
             <div class="promo-stripe__inner">
                 <?php if ($item['text'] !== ''): ?>
                     <span class="promo-stripe__text"><?= htmlspecialchars($item['text']) ?></span>
-                    <?php if ($item['link_text'] !== '' || $item['link_url'] !== ''): ?>
+                    <?php if ($item['link_text'] !== ''): ?>
                         <span class="promo-stripe__sep">. </span>
                     <?php endif; ?>
                 <?php endif; ?>
-                <?php if ($item['link_url'] !== ''): ?>
-                    <span class="promo-stripe__link">
-                        <?= $item['link_text'] !== '' ? htmlspecialchars($item['link_text']) : htmlspecialchars($item['link_url']) ?>
-                    </span>
-                <?php elseif ($item['link_text'] !== ''): ?>
+                <?php if ($item['link_text'] !== ''): ?>
                     <span class="promo-stripe__text"><?= htmlspecialchars($item['link_text']) ?></span>
                 <?php endif; ?>
             </div>
