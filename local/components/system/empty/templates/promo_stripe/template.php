@@ -4,10 +4,14 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
 <?php if (!empty($arResult['ITEMS'])): ?>
 <div class="promo-stripe<?= $isFixed ? ' promo-stripe_fixed' : '' ?>">
     <div class="promo-stripe__slider">
-        <?php foreach ($arResult['ITEMS'] as $i => $item): ?>
-        <div class="promo-stripe__slide<?= $i === 0 ? ' promo-stripe__slide_active' : '' ?>"
+        <?php foreach ($arResult['ITEMS'] as $i => $item):
+            $hasLink = $item['link_url'] !== '';
+            $tag = $hasLink ? 'a' : 'div';
+            $hrefAttr = $hasLink ? ' href="' . htmlspecialchars($item['link_url']) . '"' : '';
+        ?>
+        <<?= $tag ?> class="promo-stripe__slide<?= $i === 0 ? ' promo-stripe__slide_active' : '' ?><?= $hasLink ? ' promo-stripe__slide_clickable' : '' ?>"
              style="background-color:#<?= htmlspecialchars($item['color_fon']) ?>; color:#<?= htmlspecialchars($item['color_text']) ?>;"
-             data-index="<?= $i ?>">
+             data-index="<?= $i ?>"<?= $hrefAttr ?>>
             <div class="promo-stripe__inner">
                 <?php if ($item['text'] !== ''): ?>
                     <span class="promo-stripe__text"><?= htmlspecialchars($item['text']) ?></span>
@@ -16,14 +20,14 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
                     <?php endif; ?>
                 <?php endif; ?>
                 <?php if ($item['link_url'] !== ''): ?>
-                    <a href="<?= htmlspecialchars($item['link_url']) ?>" class="promo-stripe__link" style="color:inherit;">
+                    <span class="promo-stripe__link">
                         <?= $item['link_text'] !== '' ? htmlspecialchars($item['link_text']) : htmlspecialchars($item['link_url']) ?>
-                    </a>
+                    </span>
                 <?php elseif ($item['link_text'] !== ''): ?>
                     <span class="promo-stripe__text"><?= htmlspecialchars($item['link_text']) ?></span>
                 <?php endif; ?>
             </div>
-        </div>
+        </<?= $tag ?>>
         <?php endforeach; ?>
     </div>
 </div>
@@ -101,17 +105,22 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
 }
 @media (max-width: 767px) {
     .promo-stripe__inner {
-        font-size: 7px;
+        font-size: 11px;
         padding: 0 8px;
     }
 }
 .promo-stripe__sep {
     flex-shrink: 0;
 }
-.promo-stripe__link {
+.promo-stripe__slide_clickable {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+.promo-stripe__slide_clickable .promo-stripe__link {
     text-decoration: underline;
 }
-.promo-stripe__link:hover {
+.promo-stripe__slide_clickable:hover .promo-stripe__link {
     text-decoration: none;
 }
 </style>
