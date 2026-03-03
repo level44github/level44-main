@@ -105,7 +105,7 @@ $isFixed = ($arParams['PLACEMENT'] ?? '') === 'top_fixed';
 }
 @media (max-width: 767px) {
     .promo-stripe__inner {
-        font-size: 11px;
+        font-size: 12px;
         padding: 0 8px;
     }
 }
