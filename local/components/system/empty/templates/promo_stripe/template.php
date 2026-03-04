@@ -28,6 +28,10 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
     </div>
     </div>
     <style>
+        /* Safari: при overscroll оставлять прозрачный фон (не серый после переключения body.main-promo-stuck) */
+        html {
+            background-color: transparent;
+        }
         /* Плашка над шапкой: выше по слою и не перекрывается шапкой */
         .promo-stripe-outer {
             position: relative;
