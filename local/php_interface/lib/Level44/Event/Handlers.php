@@ -34,6 +34,8 @@ class Handlers extends HandlerBase
 
         CheckoutHandlers::register();
 
+        GiftOver40kHandlers::register();
+
         BannerHandlers::register();
 
         OsmiCardHandlers::register();

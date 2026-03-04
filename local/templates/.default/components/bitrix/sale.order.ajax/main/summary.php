@@ -56,6 +56,9 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                         <? endforeach; ?>
                                     </ul>
                                 <? endif; ?>
+                                <? if (!empty($basketItem["IS_GIFT"])): ?>
+                                    <div class="mt-1"><a href="<?= $APPLICATION->GetCurPageParam('remove_gift=' . (int) $basketItem['ID'], array('remove_gift', 'bxajaxid', 'ajax_action')) ?>" class="text-muted small">Удалить</a></div>
+                                <? endif; ?>
                             </div>
                         </div>
                         <div class="basket-aside--error-container js-unavailable-error" style="display: none">
