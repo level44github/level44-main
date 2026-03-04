@@ -51,7 +51,7 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
             top: 0;
             z-index: 100;
         }
-        /* Когда плашка прилипла на главной — шапка сдвигается вниз, без анимации (класс на wrapper, не на body — Safari) */
+        /* Когда плашка прилипла — шапка сдвигается вниз */
         .layout__wrapper.main-promo-stuck .header {
             top: 48px;
             transition: none;
@@ -59,6 +59,12 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
         @media (max-width: 767px) {
             .layout__wrapper.main-promo-stuck .header {
                 top: 32px;
+            }
+        }
+        /* iOS Safari: убрать серую заливку при overscroll, не отключая прилипание */
+        @supports (-webkit-touch-callout: none) {
+            html {
+                overscroll-behavior-y: none;
             }
         }
         /* Шапка под плашкой у верхнего края страницы */
