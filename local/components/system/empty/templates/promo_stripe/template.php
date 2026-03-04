@@ -2,6 +2,7 @@
 $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fixed';
 ?>
 <?php if (!empty($arResult['ITEMS'])): ?>
+    <?php if ($isOnMain): ?><div class="promo-stripe-on-main-wrap"><?php endif; ?>
     <div class="promo-stripe<?= $isOnMain ? ' promo-stripe_on-main' : '' ?>">
         <div class="promo-stripe__slider">
             <?php foreach ($arResult['ITEMS'] as $i => $item):
@@ -27,6 +28,8 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
         <?php endforeach; ?>
     </div>
     </div>
+    <?php if ($isOnMain): ?></div><?php endif; ?>
+    <script>(function(){ if(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)) document.documentElement.classList.add('ios'); })();</script>
     <style>
         /* Плашка над шапкой: выше по слою и не перекрывается шапкой */
         .promo-stripe-outer {
@@ -61,10 +64,23 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
                 top: 32px;
             }
         }
-        /* iOS Safari: убрать серую заливку при overscroll, не отключая прилипание */
-        @supports (-webkit-touch-callout: none) {
-            html {
-                overscroll-behavior-y: none;
+        /* iOS: прилипание через fixed вместо sticky (избегаем серой заливки Safari) */
+        .ios .promo-stripe_on-main {
+            position: relative;
+        }
+        .ios .layout__wrapper.main-promo-stuck .promo-stripe_on-main {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        .ios .layout__wrapper.main-promo-stuck .promo-stripe-on-main-wrap {
+            min-height: 48px;
+        }
+        @media (max-width: 767px) {
+            .ios .layout__wrapper.main-promo-stuck .promo-stripe-on-main-wrap {
+                min-height: 32px;
             }
         }
         /* Шапка под плашкой у верхнего края страницы */
