@@ -43,10 +43,23 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
         .promo-stripe-outer .promo-stripe {
             margin-top: 0;
         }
-        /* На главной — без отступов сверху и снизу */
+        /* На главной — без отступов, фиксация при прокрутке над шапкой */
         .promo-stripe_on-main {
             margin-top: 0;
             margin-bottom: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        /* Когда плашка прилипла на главной — шапка сдвигается вниз, без анимации */
+        body.main-promo-stuck .header {
+            top: 48px;
+            transition: none;
+        }
+        @media (max-width: 767px) {
+            body.main-promo-stuck .header {
+                top: 32px;
+            }
         }
         /* Шапка под плашкой у верхнего края страницы */
         .layout__wrapper_promo-stripe-top .header {
@@ -160,6 +173,38 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
             }
             updateScrolled();
             window.addEventListener('scroll', updateScrolled, { passive: true });
+        })();
+    </script>
+    <script>
+        (function() {
+            var stripe = document.querySelector('.promo-stripe_on-main');
+            if (!stripe) return;
+            var stripeStickPoint = null;
+            var rafId = null;
+            var stripeHeight = window.innerWidth <= 767 ? 32 : 48;
+            function updateStuck() {
+                var rect = stripe.getBoundingClientRect();
+                var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                if (stripeStickPoint === null && rect.top > 0) {
+                    stripeStickPoint = rect.top + scrollY;
+                }
+                if (stripeStickPoint === null) return;
+                var isStuck = scrollY >= stripeStickPoint - stripeHeight;
+                if (!isStuck && rect.top > 0) {
+                    stripeStickPoint = rect.top + scrollY;
+                }
+                document.body.classList.toggle('main-promo-stuck', isStuck);
+            }
+            function onScroll() {
+                if (rafId) return;
+                rafId = requestAnimationFrame(function() {
+                    updateStuck();
+                    rafId = null;
+                });
+            }
+            updateStuck();
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', updateStuck);
         })();
     </script>
 <?php endif; ?>
