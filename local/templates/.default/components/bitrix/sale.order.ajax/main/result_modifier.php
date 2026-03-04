@@ -21,6 +21,7 @@ if (class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
             if ((int) $item->getId() === $removeGiftId && \Level44\Event\GiftOver40kHandlers::isGiftProductOrOffer((int) $item->getProductId())) {
                 $item->delete();
                 $basket->save();
+                \Level44\Event\GiftOver40kHandlers::setGiftRejectedByUser();
                 break;
             }
         }

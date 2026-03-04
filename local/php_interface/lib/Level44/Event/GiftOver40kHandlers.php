@@ -14,16 +14,28 @@ use Bitrix\Currency\CurrencyManager;
  * Подарок в корзину при сумме заказа от 40 000 ₽.
  * Товары-подарки по приоритету: 3274, 3270, 3272 (первый с остатком).
  * Подарок не добавляется повторно, если уже есть в корзине.
+ * Если пользователь удалил подарок в чекауте — не добавляем обратно до конца сессии (или до оформления заказа).
  * В шаблоне корзины подарочные товары (по ID и цене 0) скрываются от отображения.
  */
 class GiftOver40kHandlers extends HandlerBase
 {
     public const THRESHOLD_SUM = 40000;
     public const GIFT_PRODUCT_IDS = [3274, 3270, 3272];
+    private const SESSION_KEY_REJECTED = 'LEVEL44_GIFT_40K_REJECTED';
 
     public static function register(): void
     {
         static::addEventHandler('sale', 'OnSaleBasketBeforeSaved', sort: 50);
+        static::addEventHandler('sale', 'OnSaleOrderSaved', sort: 5);
+    }
+
+    /**
+     * После оформления заказа сбрасываем «отказ от подарка», чтобы в следующем заказе подарок снова предлагался.
+     */
+    public static function OnSaleOrderSavedHandler(Event $event): ?EventResult
+    {
+        self::clearGiftRejectedByUser();
+        return null;
     }
 
     public static function OnSaleBasketBeforeSavedHandler(Event $event): ?EventResult
@@ -51,8 +63,12 @@ class GiftOver40kHandlers extends HandlerBase
         }
 
         if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
-            // Добавляем подарок только если его ещё нет в корзине
-            if ($giftItem === null) {
+            // Не добавляем подарок, если пользователь явно удалил его в чекауте
+            if (self::isGiftRejectedByUser()) {
+                if ($giftItem !== null) {
+                    $giftItem->delete();
+                }
+            } elseif ($giftItem === null) {
                 $giftProductId = self::getFirstAvailableGiftProductId();
                 if ($giftProductId !== null) {
                     self::addGiftToBasket($basket, $giftProductId);
@@ -132,6 +148,30 @@ class GiftOver40kHandlers extends HandlerBase
     }
 
     /**
+     * Пользователь явно удалил подарок в чекауте — не добавлять обратно до конца сессии.
+     */
+    public static function isGiftRejectedByUser(): bool
+    {
+        return !empty($_SESSION[self::SESSION_KEY_REJECTED]);
+    }
+
+    public static function setGiftRejectedByUser(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+        $_SESSION[self::SESSION_KEY_REJECTED] = true;
+    }
+
+    /**
+     * Сбросить отказ (вызывать после успешного оформления заказа).
+     */
+    public static function clearGiftRejectedByUser(): void
+    {
+        unset($_SESSION[self::SESSION_KEY_REJECTED]);
+    }
+
+    /**
      * Проверка: является ли позиция подарком (по ID и нулевой цене).
      */
     public static function isGiftItem(int $productId, float $price): bool
@@ -177,8 +217,12 @@ class GiftOver40kHandlers extends HandlerBase
             }
         }
         if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
-            // Добавляем подарок только если его ещё нет в корзине
-            if ($giftItem === null) {
+            if (self::isGiftRejectedByUser()) {
+                if ($giftItem !== null) {
+                    $giftItem->delete();
+                    $basket->save();
+                }
+            } elseif ($giftItem === null) {
                 $giftProductId = self::getFirstAvailableGiftProductId();
                 if ($giftProductId !== null && self::addGiftByApi($giftProductId, $siteId)) {
                     return true;
