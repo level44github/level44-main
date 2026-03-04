@@ -64,6 +64,10 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
                 top: 32px;
             }
         }
+        /* Обёртка не участвует в потоке на десктопе — иначе ломается sticky */
+        .promo-stripe-on-main-wrap {
+            display: contents;
+        }
         /* iOS: прилипание через fixed вместо sticky (избегаем серой заливки Safari) */
         .ios .promo-stripe_on-main {
             position: relative;
@@ -76,6 +80,7 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
             z-index: 100;
         }
         .ios .layout__wrapper.main-promo-stuck .promo-stripe-on-main-wrap {
+            display: block;
             min-height: 48px;
         }
         @media (max-width: 767px) {
