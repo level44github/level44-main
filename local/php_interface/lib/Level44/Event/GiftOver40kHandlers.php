@@ -12,70 +12,18 @@ use Bitrix\Currency\CurrencyManager;
 
 /**
  * Подарок в корзину при сумме заказа от 40 000 ₽.
- * Товары-подарки по приоритету: 3275, 3273, 3272 (первый с остатком).
+ * Товары-подарки по приоритету: 3274, 3270, 3272 (первый с остатком).
+ * Подарок не добавляется повторно, если уже есть в корзине.
  * В шаблоне корзины подарочные товары (по ID и цене 0) скрываются от отображения.
  */
 class GiftOver40kHandlers extends HandlerBase
 {
     public const THRESHOLD_SUM = 40000;
-    public const GIFT_PRODUCT_IDS = [3275, 3273, 3272];
+    public const GIFT_PRODUCT_IDS = [3274, 3270, 3272];
 
     public static function register(): void
     {
-        static::addEventHandler('main', 'OnProlog', sort: 10);
         static::addEventHandler('sale', 'OnSaleBasketBeforeSaved', sort: 50);
-    }
-
-    /**
-     * Синхронизация подарка при загрузке страниц корзины и оформления заказа
-     * (OnSaleBasketBeforeSaved может не вызываться при работе с корзиной в их конфигурации).
-     */
-    public static function OnPrologHandler(): void
-    {
-        $request = Context::getCurrent()->getRequest();
-        $uri = (string) $request->getRequestUri();
-        $path = parse_url($uri, PHP_URL_PATH);
-        if ($path === null || $path === '') {
-            return;
-        }
-        // Только на страницах /cart и /checkout (с учётом подпапок, например /en/cart/)
-        if (!preg_match('#/(?:cart|checkout)(?:/|$)#', $path)) {
-            return;
-        }
-
-        if (!Loader::includeModule('sale') || !Loader::includeModule('catalog')) {
-            return;
-        }
-
-        $siteId = Context::getCurrent()->getSite();
-        if (!$siteId) {
-            return;
-        }
-
-        $basket = Basket::loadItemsForFUser(Fuser::getId(), $siteId);
-        $sumWithoutGifts = 0;
-        $giftItem = null;
-
-        foreach ($basket->getBasketItems() as $item) {
-            $productId = (int) $item->getProductId();
-            if (self::isGiftProductOrOffer($productId)) {
-                $giftItem = $item;
-            } else {
-                $sumWithoutGifts += $item->getPrice() * $item->getQuantity();
-            }
-        }
-
-        if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
-            if ($giftItem === null) {
-                $giftProductId = self::getFirstAvailableGiftProductId();
-                if ($giftProductId !== null) {
-                    self::addGiftByApi($giftProductId, $siteId);
-                }
-            }
-        } elseif ($giftItem !== null) {
-            $giftItem->delete();
-            $basket->save();
-        }
     }
 
     public static function OnSaleBasketBeforeSavedHandler(Event $event): ?EventResult
@@ -103,6 +51,7 @@ class GiftOver40kHandlers extends HandlerBase
         }
 
         if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
+            // Добавляем подарок только если его ещё нет в корзине
             if ($giftItem === null) {
                 $giftProductId = self::getFirstAvailableGiftProductId();
                 if ($giftProductId !== null) {
@@ -117,10 +66,9 @@ class GiftOver40kHandlers extends HandlerBase
     }
 
     /**
-     * Возвращает ID товара/оффера для добавления в корзину (первый с остатком).
-     * Поддерживаются и ID товара, и ID торгового предложения.
+     * Возвращает ID товара/оффера для добавления в корзину (первый с остатком > 0).
      */
-    public static function getFirstAvailableGiftProductId(): ?int
+    private static function getFirstAvailableGiftProductId(): ?int
     {
         foreach (self::GIFT_PRODUCT_IDS as $id) {
             $product = \CCatalogProduct::GetByID($id);
@@ -130,7 +78,6 @@ class GiftOver40kHandlers extends HandlerBase
                     return $id;
                 }
             }
-            // Возможно, это ID товара — ищем первый оффер с остатком
             $offers = \CCatalogSKU::getOffersList($id);
             $offerList = isset($offers[$id]) && is_array($offers[$id]) ? $offers[$id] : [];
             if (empty($offerList)) {
@@ -164,7 +111,7 @@ class GiftOver40kHandlers extends HandlerBase
     }
 
     /**
-     * Добавление подарка через API корзины (для OnProlog, когда корзина загружается отдельно).
+     * Добавление подарка через API корзины (вызов из result_modifier корзины/checkout).
      * Возвращает true при успехе.
      */
     private static function addGiftByApi(int $productId, string $siteId): bool
@@ -193,7 +140,7 @@ class GiftOver40kHandlers extends HandlerBase
     }
 
     /**
-     * Является ли ID одним из подарков или оффером подарка (3275, 3273, 3272).
+     * Является ли ID одним из подарков или оффером подарка (3274, 3270, 3272).
      */
     public static function isGiftProductOrOffer(int $productId): bool
     {
@@ -230,6 +177,7 @@ class GiftOver40kHandlers extends HandlerBase
             }
         }
         if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
+            // Добавляем подарок только если его ещё нет в корзине
             if ($giftItem === null) {
                 $giftProductId = self::getFirstAvailableGiftProductId();
                 if ($giftProductId !== null && self::addGiftByApi($giftProductId, $siteId)) {

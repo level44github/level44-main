@@ -10,12 +10,28 @@ use Bitrix\Sale\Location\LocationTable;
 use Level44\Base;
 use Level44\Product;
 
+$request = Context::getCurrent()->getRequest();
+
+/** Удаление подарка по ссылке "Удалить" в чекауте */
+if (class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
+    $removeGiftId = (int) $request->get('remove_gift');
+    if ($removeGiftId > 0 && \Bitrix\Main\Loader::includeModule('sale')) {
+        $basket = \Bitrix\Sale\Basket::loadItemsForFUser(\Bitrix\Sale\Fuser::getId(), \Bitrix\Main\Context::getCurrent()->getSite());
+        foreach ($basket->getBasketItems() as $item) {
+            if ((int) $item->getId() === $removeGiftId && \Level44\Event\GiftOver40kHandlers::isGiftProductOrOffer((int) $item->getProductId())) {
+                $item->delete();
+                $basket->save();
+                break;
+            }
+        }
+        LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('remove_gift', 'bxajaxid', 'ajax_action')));
+    }
+}
+
 /** Синхронизация подарка при сумме от 40 000 ₽ */
 if (class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::syncGiftForCurrentBasket()) {
     LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('bxajaxid', 'ajax_action')));
 }
-
-$request = Context::getCurrent()->getRequest();
 
 $columns = [];
 $fulls = [];
@@ -194,6 +210,7 @@ $products = array_map(function ($productId) {
 Base::setColorOffers($products);
 
 foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
+    $basketItem["IS_GIFT"] = class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::isGiftItem((int) $basketItem["PRODUCT_ID"], (float) ($basketItem["PRICE"] ?? 0));
     $basketItem["COLOR"] = $products[$basketItem["PRODUCT_ID"]];
     $basketItemsQuantity += $basketItem["QUANTITY"];
     if (!empty($basketItem["PREVIEW_PICTURE_SRC"])) {
@@ -217,9 +234,24 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $itemPriceDollar = $basketItem["PRICE_DOLLAR"];
     }
 
-    $basketItem = array_merge($basketItem, $productsData[$basketItem["PRODUCT_ID"]]["prices"]);
-    $basketItem["oldPrice"] = $basketItem["oldPrice"] * $basketItem["QUANTITY"];
-    $basketItem["oldPriceDollar"] = $basketItem["oldPriceDollar"] * $basketItem["QUANTITY"];
+    $basketItem = array_merge($basketItem, $productsData[$basketItem["PRODUCT_ID"]]["prices"] ?? []);
+    $basketItem["oldPrice"] = ($basketItem["oldPrice"] ?? 0) * $basketItem["QUANTITY"];
+    $basketItem["oldPriceDollar"] = ($basketItem["oldPriceDollar"] ?? 0) * $basketItem["QUANTITY"];
+    if (!empty($basketItem["IS_GIFT"])) {
+        if (empty($basketItem["oldPrice"]) && \Bitrix\Main\Loader::includeModule('catalog')) {
+            $priceRow = \Bitrix\Catalog\PriceTable::getList([
+                'filter' => ['PRODUCT_ID' => $basketItem["PRODUCT_ID"], 'CATALOG_GROUP_ID' => 1],
+                'select' => ['PRICE', 'CURRENCY'],
+                'limit'  => 1,
+            ])->fetch();
+            if ($priceRow) {
+                $basketItem["oldPrice"] = (float) $priceRow["PRICE"] * $basketItem["QUANTITY"];
+                $basketItem["oldPriceDollar"] = Base::getDollarPrice($basketItem["oldPrice"], null, true);
+            }
+        }
+        $basketItem["SUM"] = CCurrencyLang::CurrencyFormat(0, $basketItem["CURRENCY"] ?? "RUB");
+        $basketItem["PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar(0) : false;
+    }
     $basketItem["oldPriceFormat"] = CCurrencyLang::CurrencyFormat($basketItem["oldPrice"], "RUB");
     $basketItem["oldPriceDollarFormat"] = Base::formatDollar($basketItem["oldPriceDollar"]);
 

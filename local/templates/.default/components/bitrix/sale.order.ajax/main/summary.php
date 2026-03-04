@@ -44,6 +44,9 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                 <? endif; ?>
                                 <div><?= $basketItem["NAME"] ?></div>
                                 <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
+                                <? if (!empty($basketItem["IS_GIFT"])): ?>
+                                    <div class="mt-1"><a href="<?= $APPLICATION->GetCurPageParam('remove_gift=' . (int) $basketItem['ID'], array('remove_gift', 'bxajaxid', 'ajax_action')) ?>" class="text-muted small">Удалить</a></div>
+                                <? endif; ?>
                                 <? if (!empty($basketItem["PROPS"])): ?>
                                     <ul class="basket-aside__list">
                                         <? foreach ($basketItem["PROPS"] as $prop): ?>
