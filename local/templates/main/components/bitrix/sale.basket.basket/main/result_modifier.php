@@ -5,6 +5,11 @@
 /** @var array $arParams */
 /** @var array $arResult */
 
+/** Синхронизация подарка при сумме от 40 000 ₽ — добавляем в корзину и перезагружаем страницу */
+if (class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::syncGiftForCurrentBasket()) {
+    LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('bxajaxid', 'ajax_action')));
+}
+
 if (!isset($arParams['DISPLAY_MODE']) || !in_array($arParams['DISPLAY_MODE'], array('extended', 'compact'))) {
     $arParams['DISPLAY_MODE'] = 'extended';
 }

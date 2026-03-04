@@ -2,10 +2,12 @@
 
 namespace Level44\Event;
 
+use Bitrix\Main\Context;
 use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Basket;
+use Bitrix\Sale\Fuser;
 use Bitrix\Currency\CurrencyManager;
 
 /**
@@ -20,7 +22,60 @@ class GiftOver40kHandlers extends HandlerBase
 
     public static function register(): void
     {
+        static::addEventHandler('main', 'OnProlog', sort: 10);
         static::addEventHandler('sale', 'OnSaleBasketBeforeSaved', sort: 50);
+    }
+
+    /**
+     * Синхронизация подарка при загрузке страниц корзины и оформления заказа
+     * (OnSaleBasketBeforeSaved может не вызываться при работе с корзиной в их конфигурации).
+     */
+    public static function OnPrologHandler(): void
+    {
+        $request = Context::getCurrent()->getRequest();
+        $uri = (string) $request->getRequestUri();
+        $path = parse_url($uri, PHP_URL_PATH);
+        if ($path === null || $path === '') {
+            return;
+        }
+        // Только на страницах /cart и /checkout (с учётом подпапок, например /en/cart/)
+        if (!preg_match('#/(?:cart|checkout)(?:/|$)#', $path)) {
+            return;
+        }
+
+        if (!Loader::includeModule('sale') || !Loader::includeModule('catalog')) {
+            return;
+        }
+
+        $siteId = Context::getCurrent()->getSite();
+        if (!$siteId) {
+            return;
+        }
+
+        $basket = Basket::loadItemsForFUser(Fuser::getId(), $siteId);
+        $sumWithoutGifts = 0;
+        $giftItem = null;
+
+        foreach ($basket->getBasketItems() as $item) {
+            $productId = (int) $item->getProductId();
+            if (in_array($productId, self::GIFT_PRODUCT_IDS, true)) {
+                $giftItem = $item;
+            } else {
+                $sumWithoutGifts += $item->getPrice() * $item->getQuantity();
+            }
+        }
+
+        if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
+            if ($giftItem === null) {
+                $giftProductId = self::getFirstAvailableGiftProductId();
+                if ($giftProductId !== null) {
+                    self::addGiftByApi($giftProductId, $siteId);
+                }
+            }
+        } elseif ($giftItem !== null) {
+            $giftItem->delete();
+            $basket->save();
+        }
     }
 
     public static function OnSaleBasketBeforeSavedHandler(Event $event): ?EventResult
@@ -61,16 +116,34 @@ class GiftOver40kHandlers extends HandlerBase
         return new EventResult(EventResult::SUCCESS);
     }
 
+    /**
+     * Возвращает ID товара/оффера для добавления в корзину (первый с остатком).
+     * Поддерживаются и ID товара, и ID торгового предложения.
+     */
     private static function getFirstAvailableGiftProductId(): ?int
     {
-        foreach (self::GIFT_PRODUCT_IDS as $productId) {
-            $product = \CCatalogProduct::GetByID($productId);
-            if (!is_array($product)) {
+        foreach (self::GIFT_PRODUCT_IDS as $id) {
+            $product = \CCatalogProduct::GetByID($id);
+            if (is_array($product)) {
+                $quantity = (float) ($product['QUANTITY'] ?? 0);
+                if ($quantity > 0) {
+                    return $id;
+                }
+            }
+            // Возможно, это ID товара — ищем первый оффер с остатком
+            $offers = \CCatalogSKU::getOffersList($id);
+            $offerList = isset($offers[$id]) && is_array($offers[$id]) ? $offers[$id] : [];
+            if (empty($offerList)) {
                 continue;
             }
-            $quantity = (float) ($product['QUANTITY'] ?? 0);
-            if ($quantity > 0) {
-                return $productId;
+            foreach (array_keys($offerList) as $offerId) {
+                $offerProduct = \CCatalogProduct::GetByID($offerId);
+                if (is_array($offerProduct)) {
+                    $quantity = (float) ($offerProduct['QUANTITY'] ?? 0);
+                    if ($quantity > 0) {
+                        return (int) $offerId;
+                    }
+                }
             }
         }
         return null;
@@ -91,10 +164,69 @@ class GiftOver40kHandlers extends HandlerBase
     }
 
     /**
+     * Добавление подарка через API корзины (для OnProlog, когда корзина загружается отдельно).
+     */
+    private static function addGiftByApi(int $productId, string $siteId): void
+    {
+        $currency = CurrencyManager::getBaseCurrency() ?: 'RUB';
+        $product = [
+            'PRODUCT_ID' => $productId,
+            'QUANTITY' => 1,
+        ];
+        $basketFields = [
+            'PRICE' => 0,
+            'CURRENCY' => $currency,
+            'LID' => $siteId,
+            'CUSTOM_PRICE' => 'Y',
+        ];
+        \Bitrix\Catalog\Product\Basket::addProduct($product, $basketFields);
+    }
+
+    /**
      * Проверка: является ли позиция подарком (по ID и нулевой цене).
      */
     public static function isGiftItem(int $productId, float $price): bool
     {
         return in_array($productId, self::GIFT_PRODUCT_IDS, true) && $price == 0;
+    }
+
+    /**
+     * Синхронизация подарка для текущей корзины пользователя.
+     * Вызывать из result_modifier корзины или при загрузке checkout.
+     * Возвращает true, если был добавлен подарок (нужен редирект для перезагрузки корзины).
+     */
+    public static function syncGiftForCurrentBasket(): bool
+    {
+        if (!Loader::includeModule('sale') || !Loader::includeModule('catalog')) {
+            return false;
+        }
+        $siteId = Context::getCurrent()->getSite();
+        if (!$siteId) {
+            return false;
+        }
+        $basket = Basket::loadItemsForFUser(Fuser::getId(), $siteId);
+        $sumWithoutGifts = 0;
+        $giftItem = null;
+        foreach ($basket->getBasketItems() as $item) {
+            $productId = (int) $item->getProductId();
+            if (in_array($productId, self::GIFT_PRODUCT_IDS, true)) {
+                $giftItem = $item;
+            } else {
+                $sumWithoutGifts += $item->getPrice() * $item->getQuantity();
+            }
+        }
+        if ($sumWithoutGifts >= self::THRESHOLD_SUM) {
+            if ($giftItem === null) {
+                $giftProductId = self::getFirstAvailableGiftProductId();
+                if ($giftProductId !== null) {
+                    self::addGiftByApi($giftProductId, $siteId);
+                    return true;
+                }
+            }
+        } elseif ($giftItem !== null) {
+            $giftItem->delete();
+            $basket->save();
+        }
+        return false;
     }
 }

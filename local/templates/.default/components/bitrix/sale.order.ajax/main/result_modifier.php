@@ -10,6 +10,11 @@ use Bitrix\Sale\Location\LocationTable;
 use Level44\Base;
 use Level44\Product;
 
+/** Синхронизация подарка при сумме от 40 000 ₽ */
+if (class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::syncGiftForCurrentBasket()) {
+    LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('bxajaxid', 'ajax_action')));
+}
+
 $request = Context::getCurrent()->getRequest();
 
 $columns = [];
