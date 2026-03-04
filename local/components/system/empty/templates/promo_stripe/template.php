@@ -28,10 +28,6 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
     </div>
     </div>
     <style>
-        /* Safari: при overscroll оставлять прозрачный фон (не серый после переключения body.main-promo-stuck) */
-        html {
-            background-color: transparent;
-        }
         /* Плашка над шапкой: выше по слою и не перекрывается шапкой */
         .promo-stripe-outer {
             position: relative;
@@ -55,13 +51,13 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
             top: 0;
             z-index: 100;
         }
-        /* Когда плашка прилипла на главной — шапка сдвигается вниз, без анимации */
-        body.main-promo-stuck .header {
+        /* Когда плашка прилипла на главной — шапка сдвигается вниз, без анимации (класс на wrapper, не на body — Safari) */
+        .layout__wrapper.main-promo-stuck .header {
             top: 48px;
             transition: none;
         }
         @media (max-width: 767px) {
-            body.main-promo-stuck .header {
+            .layout__wrapper.main-promo-stuck .header {
                 top: 32px;
             }
         }
@@ -183,6 +179,8 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
         (function() {
             var stripe = document.querySelector('.promo-stripe_on-main');
             if (!stripe) return;
+            var wrapper = document.querySelector('.layout__wrapper');
+            if (!wrapper) return;
             var stripeStickPoint = null;
             var rafId = null;
             var stripeHeight = window.innerWidth <= 767 ? 32 : 48;
@@ -197,7 +195,7 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
                 if (!isStuck && rect.top > 0) {
                     stripeStickPoint = rect.top + scrollY;
                 }
-                document.body.classList.toggle('main-promo-stuck', isStuck);
+                wrapper.classList.toggle('main-promo-stuck', isStuck);
             }
             function onScroll() {
                 if (rafId) return;
