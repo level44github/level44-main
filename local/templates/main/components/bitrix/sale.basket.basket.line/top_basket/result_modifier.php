@@ -7,6 +7,26 @@ use Level44\Product;
 
 \Bitrix\Main\Loader::includeModule("highloadblock");
 
+/** Скрытие подарочных товаров (по ID и цене 0) в мини-корзине */
+if (!empty($arResult["CATEGORIES"]) && class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
+    $giftIds = \Level44\Event\GiftOver40kHandlers::GIFT_PRODUCT_IDS;
+    foreach ($arResult["CATEGORIES"] as $catKey => &$category) {
+        if (!is_array($category)) {
+            continue;
+        }
+        foreach ($category as $itemKey => $item) {
+            $productId = (int)($item["PRODUCT_ID"] ?? 0);
+            $price = (float)($item["PRICE"] ?? 0);
+            if (in_array($productId, $giftIds, true) && $price == 0) {
+                unset($arResult["CATEGORIES"][$catKey][$itemKey]);
+            }
+        }
+        if (is_array($arResult["CATEGORIES"][$catKey])) {
+            $arResult["CATEGORIES"][$catKey] = array_values($arResult["CATEGORIES"][$catKey]);
+        }
+    }
+    unset($category);
+}
 
 $totalQuantity = 0;
 $productIds = [];

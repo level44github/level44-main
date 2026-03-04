@@ -6,40 +6,31 @@ use Bitrix\Main\Event;
 use Bitrix\Main\EventResult;
 use Bitrix\Main\Loader;
 use Bitrix\Sale\Basket;
-use Bitrix\Sale\Order;
 use Bitrix\Currency\CurrencyManager;
 
 /**
- * Подарок при сумме заказа от 40 000 ₽.
- * Добавляется только в заказ при переходе в checkout, в корзине не отображается.
+ * Подарок в корзину при сумме заказа от 40 000 ₽.
  * Товары-подарки по приоритету: 3275, 3273, 3272 (первый с остатком).
+ * В шаблоне корзины подарочные товары (по ID и цене 0) скрываются от отображения.
  */
 class GiftOver40kHandlers extends HandlerBase
 {
-    private const THRESHOLD_SUM = 40000;
-    private const GIFT_PRODUCT_IDS = [3275, 3273, 3272];
+    public const THRESHOLD_SUM = 40000;
+    public const GIFT_PRODUCT_IDS = [3275, 3273, 3272];
 
     public static function register(): void
     {
-        static::addEventHandler('sale', 'OnSaleOrderBeforeSaved', sort: 5);
+        static::addEventHandler('sale', 'OnSaleBasketBeforeSaved', sort: 50);
     }
 
-    /**
-     * Добавление подарка в корзину заказа только при сохранении заказа (checkout).
-     */
-    public static function OnSaleOrderBeforeSavedHandler(Event $event): ?EventResult
+    public static function OnSaleBasketBeforeSavedHandler(Event $event): ?EventResult
     {
         if (!Loader::includeModule('sale') || !Loader::includeModule('catalog')) {
             return null;
         }
 
-        /** @var Order $order */
-        $order = $event->getParameter('ENTITY');
-        if (!$order instanceof Order) {
-            return null;
-        }
-
-        $basket = $order->getBasket();
+        /** @var Basket $basket */
+        $basket = $event->getParameter('ENTITY');
         if (!$basket instanceof Basket) {
             return null;
         }
@@ -95,6 +86,15 @@ class GiftOver40kHandlers extends HandlerBase
             'LID' => $basket->getSiteId(),
             'PRICE' => 0,
             'CUSTOM_PRICE' => 'Y',
+            'PRODUCT_PROVIDER_CLASS' => \Bitrix\Catalog\Product\CatalogProvider::class,
         ]);
+    }
+
+    /**
+     * Проверка: является ли позиция подарком (по ID и нулевой цене).
+     */
+    public static function isGiftItem(int $productId, float $price): bool
+    {
+        return in_array($productId, self::GIFT_PRODUCT_IDS, true) && $price == 0;
     }
 }

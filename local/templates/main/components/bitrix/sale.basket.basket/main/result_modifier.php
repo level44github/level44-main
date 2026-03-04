@@ -31,3 +31,25 @@ $arParams['EMPTY_BASKET_HINT_PATH'] = isset($arParams['EMPTY_BASKET_HINT_PATH'])
 $arParams['USE_ENHANCED_ECOMMERCE'] = isset($arParams['USE_ENHANCED_ECOMMERCE']) && $arParams['USE_ENHANCED_ECOMMERCE'] === 'Y' ? 'Y' : 'N';
 $arParams['DATA_LAYER_NAME'] = isset($arParams['DATA_LAYER_NAME']) ? trim($arParams['DATA_LAYER_NAME']) : 'dataLayer';
 $arParams['BRAND_PROPERTY'] = isset($arParams['BRAND_PROPERTY']) ? trim($arParams['BRAND_PROPERTY']) : '';
+
+/** Скрытие подарочных товаров (по ID и цене 0) в корзине — отображаются только в checkout */
+if (!empty($arResult['GRID']['ROWS']) && is_array($arResult['GRID']['ROWS']) && class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
+    $giftIds = \Level44\Event\GiftOver40kHandlers::GIFT_PRODUCT_IDS;
+    foreach ($arResult['GRID']['ROWS'] as $id => $row) {
+        $productId = (int)($row['PRODUCT_ID'] ?? $row['ID'] ?? 0);
+        $price = (float)($row['PRICE'] ?? 0);
+        if (in_array($productId, $giftIds, true) && $price == 0) {
+            unset($arResult['GRID']['ROWS'][$id]);
+        }
+    }
+}
+if (!empty($arResult['BASKET_ITEM_RENDER_DATA']) && is_array($arResult['BASKET_ITEM_RENDER_DATA']) && class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
+    $giftIds = \Level44\Event\GiftOver40kHandlers::GIFT_PRODUCT_IDS;
+    foreach ($arResult['BASKET_ITEM_RENDER_DATA'] as $id => $row) {
+        $productId = (int)($row['PRODUCT_ID'] ?? $row['ID'] ?? 0);
+        $price = (float)($row['PRICE'] ?? 0);
+        if (in_array($productId, $giftIds, true) && $price == 0) {
+            unset($arResult['BASKET_ITEM_RENDER_DATA'][$id]);
+        }
+    }
+}
