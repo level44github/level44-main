@@ -168,7 +168,7 @@ $isOnMain = empty($arParams['PLACEMENT']) || $arParams['PLACEMENT'] !== 'top_fix
             if (!wrapper) return;
             var stripeOuter = document.querySelector('.promo-stripe-outer');
             function updateScrolled() {
-                var h = stripeOuter ? stripeOuter.offsetHeight : (window.innerWidth <= 767 ? 21 : 48);
+                var h = stripeOuter ? stripeOuter.offsetHeight : (window.innerWidth <= 767 ? 32 : 48);
                 wrapper.classList.toggle('promo-stripe-scrolled', window.pageYOffset >= h);
             }
             updateScrolled();
