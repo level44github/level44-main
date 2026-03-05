@@ -24,6 +24,10 @@ $res = \CIBlockElement::GetList(
 
 $arResult['ITEMS'] = [];
 while ($item = $res->GetNext()) {
+    $linkUrl = (string)($item['PROPERTY_LINK_VALUE'] ?? '');
+    if ($linkUrl !== '' && $isEn) {
+        $linkUrl = '/en/' . ltrim($linkUrl, '/');
+    }
     $arResult['ITEMS'][] = [
         'text'       => $isEn
             ? (string)($item['PROPERTY_TEXT_ENG_VALUE'] ?? $item['NAME'] ?? '')
@@ -31,7 +35,7 @@ while ($item = $res->GetNext()) {
         'link_text'  => $isEn
             ? (string)($item['PROPERTY_LINK_TEXT_ENG_VALUE'] ?? $item['PROPERTY_LINK_TEXT_VALUE'] ?? '')
             : (string)($item['PROPERTY_LINK_TEXT_VALUE'] ?? ''),
-        'link_url'   => (string)($item['PROPERTY_LINK_VALUE'] ?? ''),
+        'link_url'   => $linkUrl,
         'color_fon'  => (string)($item['PROPERTY_COLOR_FON_VALUE'] ?? '#f5f5f5'),
         'color_text' => (string)($item['PROPERTY_COLOR_TEXT_VALUE'] ?? '#333333'),
     ];
