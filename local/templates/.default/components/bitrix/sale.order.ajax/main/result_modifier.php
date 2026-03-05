@@ -12,6 +12,14 @@ use Level44\Product;
 
 $request = Context::getCurrent()->getRequest();
 
+/** При заходе на checkout с другой страницы (не после редиректа «Удалить») — сбрасываем отказ от подарка, чтобы подарок снова добавился */
+if (class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
+    $referer = $request->getServer()->get('HTTP_REFERER') ?? '';
+    if ($referer === '' || stripos($referer, 'checkout') === false) {
+        \Level44\Event\GiftOver40kHandlers::clearGiftRejectedByUser();
+    }
+}
+
 /** Удаление подарка по ссылке "Удалить" в чекауте */
 if (class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
     $removeGiftId = (int) $request->get('remove_gift');
