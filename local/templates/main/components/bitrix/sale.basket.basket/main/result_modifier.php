@@ -5,11 +5,6 @@
 /** @var array $arParams */
 /** @var array $arResult */
 
-/** Синхронизация подарка при сумме от 40 000 ₽ — добавляем в корзину и перезагружаем страницу */
-if (class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::syncGiftForCurrentBasket()) {
-    LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('bxajaxid', 'ajax_action')));
-}
-
 if (!isset($arParams['DISPLAY_MODE']) || !in_array($arParams['DISPLAY_MODE'], array('extended', 'compact'))) {
     $arParams['DISPLAY_MODE'] = 'extended';
 }
@@ -36,23 +31,3 @@ $arParams['EMPTY_BASKET_HINT_PATH'] = isset($arParams['EMPTY_BASKET_HINT_PATH'])
 $arParams['USE_ENHANCED_ECOMMERCE'] = isset($arParams['USE_ENHANCED_ECOMMERCE']) && $arParams['USE_ENHANCED_ECOMMERCE'] === 'Y' ? 'Y' : 'N';
 $arParams['DATA_LAYER_NAME'] = isset($arParams['DATA_LAYER_NAME']) ? trim($arParams['DATA_LAYER_NAME']) : 'dataLayer';
 $arParams['BRAND_PROPERTY'] = isset($arParams['BRAND_PROPERTY']) ? trim($arParams['BRAND_PROPERTY']) : '';
-
-/** Скрытие подарочных товаров (по ID/офферу и цене 0) в корзине — отображаются только в checkout */
-if (!empty($arResult['GRID']['ROWS']) && is_array($arResult['GRID']['ROWS']) && class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
-    foreach ($arResult['GRID']['ROWS'] as $id => $row) {
-        $productId = (int)($row['PRODUCT_ID'] ?? $row['ID'] ?? 0);
-        $price = (float)($row['PRICE'] ?? 0);
-        if (\Level44\Event\GiftOver40kHandlers::isGiftItem($productId, $price)) {
-            unset($arResult['GRID']['ROWS'][$id]);
-        }
-    }
-}
-if (!empty($arResult['BASKET_ITEM_RENDER_DATA']) && is_array($arResult['BASKET_ITEM_RENDER_DATA']) && class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
-    foreach ($arResult['BASKET_ITEM_RENDER_DATA'] as $id => $row) {
-        $productId = (int)($row['PRODUCT_ID'] ?? $row['ID'] ?? 0);
-        $price = (float)($row['PRICE'] ?? 0);
-        if (\Level44\Event\GiftOver40kHandlers::isGiftItem($productId, $price)) {
-            unset($arResult['BASKET_ITEM_RENDER_DATA'][$id]);
-        }
-    }
-}

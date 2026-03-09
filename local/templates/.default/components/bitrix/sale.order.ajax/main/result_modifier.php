@@ -12,36 +12,6 @@ use Level44\Product;
 
 $request = Context::getCurrent()->getRequest();
 
-/** При заходе на checkout с другой страницы (не после редиректа «Удалить») — сбрасываем отказ от подарка, чтобы подарок снова добавился */
-if (class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
-    $referer = $request->getServer()->get('HTTP_REFERER') ?? '';
-    if ($referer === '' || stripos($referer, 'checkout') === false) {
-        \Level44\Event\GiftOver40kHandlers::clearGiftRejectedByUser();
-    }
-}
-
-/** Удаление подарка по ссылке "Удалить" в чекауте */
-if (class_exists(\Level44\Event\GiftOver40kHandlers::class)) {
-    $removeGiftId = (int) $request->get('remove_gift');
-    if ($removeGiftId > 0 && \Bitrix\Main\Loader::includeModule('sale')) {
-        $basket = \Bitrix\Sale\Basket::loadItemsForFUser(\Bitrix\Sale\Fuser::getId(), \Bitrix\Main\Context::getCurrent()->getSite());
-        foreach ($basket->getBasketItems() as $item) {
-            if ((int) $item->getId() === $removeGiftId && \Level44\Event\GiftOver40kHandlers::isGiftProductOrOffer((int) $item->getProductId())) {
-                $item->delete();
-                $basket->save();
-                \Level44\Event\GiftOver40kHandlers::setGiftRejectedByUser();
-                break;
-            }
-        }
-        LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('remove_gift', 'bxajaxid', 'ajax_action')));
-    }
-}
-
-/** Синхронизация подарка при сумме от 40 000 ₽ */
-if (class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::syncGiftForCurrentBasket()) {
-    LocalRedirect($GLOBALS['APPLICATION']->GetCurPageParam('', array('bxajaxid', 'ajax_action')));
-}
-
 $columns = [];
 $fulls = [];
 
@@ -219,7 +189,6 @@ $products = array_map(function ($productId) {
 Base::setColorOffers($products);
 
 foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
-    $basketItem["IS_GIFT"] = class_exists(\Level44\Event\GiftOver40kHandlers::class) && \Level44\Event\GiftOver40kHandlers::isGiftItem((int) $basketItem["PRODUCT_ID"], (float) ($basketItem["PRICE"] ?? 0));
     $basketItem["COLOR"] = $products[$basketItem["PRODUCT_ID"]];
     $basketItemsQuantity += $basketItem["QUANTITY"];
     if (!empty($basketItem["PREVIEW_PICTURE_SRC"])) {
@@ -243,24 +212,9 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
         $itemPriceDollar = $basketItem["PRICE_DOLLAR"];
     }
 
-    $basketItem = array_merge($basketItem, $productsData[$basketItem["PRODUCT_ID"]]["prices"] ?? []);
-    $basketItem["oldPrice"] = ($basketItem["oldPrice"] ?? 0) * $basketItem["QUANTITY"];
-    $basketItem["oldPriceDollar"] = ($basketItem["oldPriceDollar"] ?? 0) * $basketItem["QUANTITY"];
-    if (!empty($basketItem["IS_GIFT"])) {
-        if (empty($basketItem["oldPrice"]) && \Bitrix\Main\Loader::includeModule('catalog')) {
-            $priceRow = \Bitrix\Catalog\PriceTable::getList([
-                'filter' => ['PRODUCT_ID' => $basketItem["PRODUCT_ID"], 'CATALOG_GROUP_ID' => 1],
-                'select' => ['PRICE', 'CURRENCY'],
-                'limit'  => 1,
-            ])->fetch();
-            if ($priceRow) {
-                $basketItem["oldPrice"] = (float) $priceRow["PRICE"] * $basketItem["QUANTITY"];
-                $basketItem["oldPriceDollar"] = Base::getDollarPrice($basketItem["oldPrice"], null, true);
-            }
-        }
-        $basketItem["SUM"] = CCurrencyLang::CurrencyFormat(0, $basketItem["CURRENCY"] ?? "RUB");
-        $basketItem["PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar(0) : false;
-    }
+    $basketItem = array_merge($basketItem, $productsData[$basketItem["PRODUCT_ID"]]["prices"]);
+    $basketItem["oldPrice"] = $basketItem["oldPrice"] * $basketItem["QUANTITY"];
+    $basketItem["oldPriceDollar"] = $basketItem["oldPriceDollar"] * $basketItem["QUANTITY"];
     $basketItem["oldPriceFormat"] = CCurrencyLang::CurrencyFormat($basketItem["oldPrice"], "RUB");
     $basketItem["oldPriceDollarFormat"] = Base::formatDollar($basketItem["oldPriceDollar"]);
 
@@ -268,14 +222,12 @@ foreach ($arResult["BASKET_ITEMS"] as &$basketItem) {
 
     $sumPriceDollar += $itemPriceDollar;
 
-    if (empty($basketItem["IS_GIFT"])) {
-        if (empty($basketItem["oldPrice"])) {
-            $oldSumPrice += $basketItem["SUM_NUM"];
-            $oldSumPriceDollar += $itemPriceDollar;
-        } else {
-            $oldSumPrice += $basketItem["oldPrice"];
-            $oldSumPriceDollar += $basketItem["oldPriceDollar"];
-        }
+    if (empty($basketItem["oldPrice"])) {
+        $oldSumPrice += $basketItem["SUM_NUM"];
+        $oldSumPriceDollar += $itemPriceDollar;
+    } else {
+        $oldSumPrice += $basketItem["oldPrice"];
+        $oldSumPriceDollar += $basketItem["oldPriceDollar"];
     }
 
     $basketItem["PRICE_DOLLAR"] = Base::isEnLang() ? Base::formatDollar($itemPriceDollar) : false;
@@ -304,31 +256,6 @@ $arResult["OLD_SUM_PRICE_VALUE"] = $oldSumPrice;
 
 $arResult["OLD_SUM_PRICE_DOLLAR"] = Base::formatDollar($oldSumPriceDollar);
 $arResult["SHOW_OLD_SUM_PRICE"] = !empty($oldSumPrice) && $oldSumPrice !== $arResult["ORDER_PRICE"];
-
-/** Подарок не участвует в полях «Скидка» и «Дополнительная скидка» */
-$giftDiscountSum = 0;
-foreach ($arResult["BASKET_ITEMS"] as $item) {
-    if (!empty($item["IS_GIFT"]) && !empty($item["oldPrice"])) {
-        $giftDiscountSum += (float) $item["oldPrice"];
-    }
-}
-if ($giftDiscountSum > 0 && !empty($arResult["JS_DATA"]["TOTAL"])) {
-    $total = &$arResult["JS_DATA"]["TOTAL"];
-    if (isset($total["PRICE_WITHOUT_DISCOUNT_VALUE"])) {
-        $total["PRICE_WITHOUT_DISCOUNT_VALUE"] = max(0, (float) $total["PRICE_WITHOUT_DISCOUNT_VALUE"] - $giftDiscountSum);
-        $total["PRICE_WITHOUT_DISCOUNT"] = CCurrencyLang::CurrencyFormat($total["PRICE_WITHOUT_DISCOUNT_VALUE"], $total["CURRENCY"] ?? "RUB");
-    }
-    if (isset($total["DISCOUNT_PRICE"])) {
-        $total["DISCOUNT_PRICE"] = max(0, (float) $total["DISCOUNT_PRICE"] - $giftDiscountSum);
-        if (isset($total["DISCOUNT_PRICE_FORMATED"])) {
-            $total["DISCOUNT_PRICE_FORMATED"] = CCurrencyLang::CurrencyFormat($total["DISCOUNT_PRICE"], $total["CURRENCY"] ?? "RUB");
-        }
-    }
-    $basketDiffValue = isset($total["BASKET_PRICE_DISCOUNT_DIFF_VALUE"]) ? (float) $total["BASKET_PRICE_DISCOUNT_DIFF_VALUE"] : (isset($total["DISCOUNT_PRICE"]) ? (float) $total["DISCOUNT_PRICE"] : 0);
-    $total["BASKET_PRICE_DISCOUNT_DIFF_VALUE"] = max(0, $basketDiffValue - $giftDiscountSum);
-    $total["BASKET_PRICE_DISCOUNT_DIFF"] = CCurrencyLang::CurrencyFormat($total["BASKET_PRICE_DISCOUNT_DIFF_VALUE"], $total["CURRENCY"] ?? "RUB");
-    unset($total);
-}
 
 //if (count($columns) & 1) {
 //    array_unshift($fulls, array_pop($columns));
