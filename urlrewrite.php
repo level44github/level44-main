@@ -74,4 +74,12 @@ $arUrlRewrite=array (
     'PATH' => SITE_DIR . 'personal/index.php',
     'SORT' => 100,
   ),
+  9 =>
+  array (
+    'CONDITION' => '#^' . SITE_DIR . 'campaign/([^/]+)/?#',
+    'RULE' => 'CAMPAIGN_CODE=$1',
+    'ID' => NULL,
+    'PATH' => SITE_DIR . 'campaign/index.php',
+    'SORT' => 100,
+  ),
 );
