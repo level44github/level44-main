@@ -9,7 +9,7 @@ if (!\Bitrix\Main\Loader::includeModule("iblock")) {
     return;
 }
 
-const CAMPAIGN_IBLOCK_ID = 10;
+const CAMPAIGN_IBLOCK_ID = 8;
 
 /**
  * @param mixed $value
@@ -171,7 +171,7 @@ if ($campaignCode === "") {
                     <?php endif; ?>
                 >
                     <span class="campaign-card__gradient" aria-hidden="true"></span>
-                   
+
                     <h2 class="campaign-card__title"><?= htmlspecialcharsbx($campaign["NAME"]) ?></h2>
                 </div>
                 <?php if ($campaign["DESCRIPTION"] !== ""): ?>
