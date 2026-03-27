@@ -958,7 +958,7 @@ body.campaign-look-open {
 
 .campaign .block3__img-wrap {
     position: relative;
-    width: 25%;
+    min-width: 0;
     box-sizing: border-box;
 }
 
@@ -1139,7 +1139,9 @@ body.campaign-look-open {
     }
 
     .campaign-look__label {
-        padding-left: 40px;
+        padding: 40px;
+        margin: 0px;
+        padding-bottom: 0px;
     }
 
     .campaign-look__panel {
@@ -1181,7 +1183,7 @@ body.campaign-look-open {
 
 .campaign .block2 .img-small
 {
-    width:50%;
+    width:100%;
     height:100vh;
     background-position:bottom center;
     background-repeat: no-repeat;
@@ -1191,15 +1193,23 @@ body.campaign-look-open {
 
 .campaign .block3
 {
-    display:flex;
-    gap:10px;
-    align-items:center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: stretch;
 }
 
-.campaign .block3__img-wrap
+.campaign .block3__gallery
 {
-    width:25%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
     box-sizing: border-box;
+}
+
+.campaign .block3__gallery .block3__img-wrap {
+    width: 100%;
 }
 
 .campaign .block3 .img-small
@@ -1214,9 +1224,12 @@ body.campaign-look-open {
 
 .campaign .block3 .block-text
 {
-    padding-right:60px;
-    width:50%;
-    padding-left:180px;
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
 }
 
 .campaign .block4
@@ -1245,6 +1258,13 @@ body.campaign-look-open {
     flex-wrap: wrap;
 }
 
+
+.campaign .block7__img-wrap img {
+    aspect-ratio: 1 / 1.25;
+    object-fit: cover;
+}
+
+
 .campaign  .block8
 {
     gap:20px;
@@ -1268,6 +1288,12 @@ body.campaign-look-open {
         background-position: center center;
     }
 
+    .campaign .block1__look-btn {
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 8px 16px;
+    }
+
     .campaign .block2 .img-big {
         height: auto;
         aspect-ratio: 4 / 5;
@@ -1277,7 +1303,10 @@ body.campaign-look-open {
     }
 
     .campaign .block2__img-small-wrap {
-        width: 100%;
+        width: 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+        box-sizing: border-box;
     }
 
     .campaign .block2__img-small-wrap .img-small {
@@ -1290,23 +1319,16 @@ body.campaign-look-open {
     }
 
     .campaign .block3 {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
+        gap: 1rem;
+    }
+
+    .campaign .block3__gallery {
         gap: 8px;
     }
 
-    .campaign .block3__img-wrap {
-        width: 25%;
-        flex: 0 0 25%;
-        max-width: 25%;
-        box-sizing: border-box;
-    }
-
     .campaign .block3 .block-text {
-        width: 50%;
-        flex: 0 0 calc(50% - 8px);
-        max-width: calc(50% - 8px);
+        width: 100%;
+        max-width: none;
         padding-left: 12px;
         padding-right: 12px;
         box-sizing: border-box;
@@ -1325,8 +1347,8 @@ body.campaign-look-open {
     }
 
     .campaign .block4 img {
-        width: 50%;
-        max-width: 50%;
+        width: 80%;
+        max-width: 80%;
     }
 
     .campaign .block5 .block-text {
@@ -1339,8 +1361,18 @@ body.campaign-look-open {
     .campaign .block6 {
         width: 100%;
         max-width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: visible;
+    }
+
+    .campaign .block6 .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px 8px;
+        justify-content: normal;
+    }
+
+    .campaign .block6 .grid__item {
+        min-width: 0;
     }
 
     .campaign  .block7 {
@@ -1349,9 +1381,9 @@ body.campaign-look-open {
     }
 
     .campaign  .block7__img-wrap {
-        width: calc(25% - 6px);
-        flex: 0 0 calc(25% - 6px);
-        max-width: calc(25% - 6px);
+        width: calc(50% - 4px);
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
         min-width: 0;
         box-sizing: border-box;
     }
@@ -1367,9 +1399,9 @@ body.campaign-look-open {
     }
 
     .campaign  .block8__img-wrap {
-        width: calc(50% - 10px);
-        flex: 0 0 calc(50% - 10px);
-        max-width: calc(50% - 10px);
+        width: calc(50% - 4px);
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
         min-width: 0;
         box-sizing: border-box;
     }

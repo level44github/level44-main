@@ -443,35 +443,39 @@ $campaignLookDrawers = [];
 
         <?php elseif ($type === 3): ?>
             <div class="block3">
-                <?php
-                $imgIndex = 0;
-                foreach ($imgList as $imgId):
-                    $imgIndex++;
-                    $imgSrc = (string)CFile::GetPath((int)$imgId);
-                    if ($imgSrc === "") {
-                        continue;
-                    }
-                    $slotNum = min($imgIndex, 4);
-                    $lookOpenId = $imgIndex <= 4
-                        ? campaignRegisterLookDrawer(
-                            $blockNumber,
-                            (string)$slotNum,
-                            campaignGetItemsForSlot($block, $slotNum),
-                            $campaignLookDrawers
-                        )
-                        : "";
-                    ?>
-                    <div class="block3__img-wrap<?= $lookOpenId !== '' ? ' block3__img-wrap--look' : '' ?>">
-                        <img src="<?= htmlspecialcharsbx($imgSrc) ?>" alt="">
-                        <?php if ($lookOpenId !== ""): ?>
-                            <button type="button" class="block1__look-btn"
-                                    data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
-                                    aria-haspopup="dialog">
-                                Смотреть образ
-                            </button>
-                        <?php endif; ?>
+                <?php if (!empty($imgList)): ?>
+                    <div class="block3__gallery">
+                        <?php
+                        $imgIndex = 0;
+                        foreach ($imgList as $imgId):
+                            $imgIndex++;
+                            $imgSrc = (string)CFile::GetPath((int)$imgId);
+                            if ($imgSrc === "") {
+                                continue;
+                            }
+                            $slotNum = min($imgIndex, 4);
+                            $lookOpenId = $imgIndex <= 4
+                                ? campaignRegisterLookDrawer(
+                                    $blockNumber,
+                                    (string)$slotNum,
+                                    campaignGetItemsForSlot($block, $slotNum),
+                                    $campaignLookDrawers
+                                )
+                                : "";
+                            ?>
+                            <div class="block3__img-wrap<?= $lookOpenId !== '' ? ' block3__img-wrap--look' : '' ?>">
+                                <img src="<?= htmlspecialcharsbx($imgSrc) ?>" alt="">
+                                <?php if ($lookOpenId !== ""): ?>
+                                    <button type="button" class="block1__look-btn"
+                                            data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
+                                            aria-haspopup="dialog">
+                                        Смотреть образ
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                <?php endif; ?>
                 <?php if ($text !== ""): ?>
                     <div class="block-text"><?= $text ?></div>
                 <?php endif; ?>
