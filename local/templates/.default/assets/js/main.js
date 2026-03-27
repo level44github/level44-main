@@ -37,6 +37,36 @@ $(function () {
         }
     });
 
+    function closeCampaignLook() {
+        $('.campaign-look.is-open').removeClass('is-open').attr('aria-hidden', 'true');
+        $('body').removeClass('campaign-look-open');
+    }
+
+    $(document).on('click', '[data-campaign-look-open]', function (e) {
+        e.preventDefault();
+        const id = $(this).attr('data-campaign-look-open');
+        if (!id) {
+            return;
+        }
+        const $root = $('#' + id);
+        if (!$root.length) {
+            return;
+        }
+        closeCampaignLook();
+        $root.addClass('is-open').attr('aria-hidden', 'false');
+        $('body').addClass('campaign-look-open');
+    });
+
+    $(document).on('click', '[data-campaign-look-close]', function (e) {
+        e.preventDefault();
+        closeCampaignLook();
+    });
+
+    $(document).on('keydown', function (e) {
+        if (e.key === 'Escape' && $('.campaign-look.is-open').length) {
+            closeCampaignLook();
+        }
+    });
 
 
     // Динамическое применение sticky для product__info

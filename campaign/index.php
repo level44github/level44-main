@@ -119,6 +119,61 @@ function campaignResolveBlockTypeFromFields(array $fields)
     ];
 }
 
+/**
+ * Товары для слота 1..4 (свойства ITEMS1 … ITEMS4 в инфоблоке кампейна).
+ *
+ * @param array $block
+ * @param int $slot от 1 до 4
+ * @return int[]
+ */
+function campaignGetItemsForSlot(array $block, $slot)
+{
+    $slot = (int)$slot;
+    if ($slot < 1 || $slot > 4) {
+        return [];
+    }
+    $key = "ITEMS" . $slot;
+    if (!isset($block[$key]) || !is_array($block[$key])) {
+        return [];
+    }
+
+    return array_values(array_filter(array_map("intval", $block[$key])));
+}
+
+/**
+ * Регистрирует выезжающее окно «образ», возвращает id для data-campaign-look-open.
+ *
+ * @param int $blockNumber
+ * @param string|null $slot null — одно окно на блок (как block1 с ITEMS), иначе «1»..«4» для ITEMS1..4
+ * @param int[] $itemIds
+ * @param array $campaignLookDrawers
+ * @return string
+ */
+function campaignRegisterLookDrawer($blockNumber, $slot, array $itemIds, array &$campaignLookDrawers)
+{
+    $itemIds = array_values(array_filter(array_map("intval", $itemIds)));
+    if (empty($itemIds)) {
+        return "";
+    }
+    $blockNumber = (int)$blockNumber;
+    if ($slot === null || $slot === "") {
+        $id = "campaign-look-" . $blockNumber;
+        $filterName = "campaignLookFilter" . $blockNumber;
+    } else {
+        $slot = (string)$slot;
+        $id = "campaign-look-" . $blockNumber . "-" . $slot;
+        $safe = preg_replace("/[^a-zA-Z0-9_]/", "_", $slot);
+        $filterName = "campaignLookFilter" . $blockNumber . "_" . $safe;
+    }
+    $campaignLookDrawers[] = [
+        "id" => $id,
+        "filterName" => $filterName,
+        "itemIds" => $itemIds,
+    ];
+
+    return $id;
+}
+
 $campaignCode = trim((string)($_REQUEST["CAMPAIGN_CODE"] ?? ""));
 
 if ($campaignCode === "") {
@@ -278,11 +333,25 @@ $elementRes = CIBlockElement::GetList(
     ],
     false,
     false,
-    ["ID", "NAME", "PREVIEW_TEXT", "DETAIL_TEXT", "PROPERTY_TYPE", "PROPERTY_IMG", "PROPERTY_IMG_BIG", "PROPERTY_ITEMS"]
+    [
+        "ID",
+        "NAME",
+        "PREVIEW_TEXT",
+        "DETAIL_TEXT",
+        "PROPERTY_TYPE",
+        "PROPERTY_IMG",
+        "PROPERTY_IMG_BIG",
+        "PROPERTY_ITEMS",
+        "PROPERTY_ITEMS1",
+        "PROPERTY_ITEMS2",
+        "PROPERTY_ITEMS3",
+        "PROPERTY_ITEMS4",
+    ]
 );
 
 while ($fields = $elementRes->GetNext()) {
     $typeResolved = campaignResolveBlockTypeFromFields($fields);
+
 
     $blocks[] = [
         "TYPE" => (int)$typeResolved["type_num"],
@@ -291,8 +360,16 @@ while ($fields = $elementRes->GetNext()) {
         "IMG" => campaignNormalizePropertyValue($fields["PROPERTY_IMG_VALUE"] ?? []),
         "IMG_BIG" => campaignNormalizePropertyValue($fields["PROPERTY_IMG_BIG_VALUE"] ?? []),
         "ITEMS" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS_VALUE"] ?? [])),
+        "ITEMS1" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS1_VALUE"] ?? [])),
+        "ITEMS2" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS2_VALUE"] ?? [])),
+        "ITEMS3" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS3_VALUE"] ?? [])),
+        "ITEMS4" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS4_VALUE"] ?? [])),
     ];
 }
+
+
+
+$campaignLookDrawers = [];
 ?>
 
 <div class="campaign campaign-detail">
@@ -306,10 +383,24 @@ while ($fields = $elementRes->GetNext()) {
         ?>
 
         <?php if ($type === 1): ?>
-            <?php $imgSrc = isset($imgBigList[0]) ? (string)CFile::GetPath((int)$imgBigList[0]) : ""; ?>
+            <?php
+            $imgSrc = isset($imgBigList[0]) ? (string)CFile::GetPath((int)$imgBigList[0]) : "";
+            $lookItemIds = array_values(array_filter($block["ITEMS"]));
+            if (empty($lookItemIds)) {
+                $lookItemIds = campaignGetItemsForSlot($block, 1);
+            }
+            $lookOpenId = campaignRegisterLookDrawer($blockNumber, null, $lookItemIds, $campaignLookDrawers);
+            ?>
             <?php if ($imgSrc !== ""): ?>
-                <div class="block1">
+                <div class="block1<?= $lookOpenId !== '' ? ' block1--look' : '' ?>">
                     <div class="img" style="background-image: url('<?= htmlspecialcharsbx($imgSrc) ?>')"></div>
+                    <?php if ($lookOpenId !== ""): ?>
+                        <button type="button" class="block1__look-btn"
+                                data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
+                                aria-haspopup="dialog">
+                            Смотреть образ
+                        </button>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -319,21 +410,67 @@ while ($fields = $elementRes->GetNext()) {
                 <?php if ($imgBigSrc !== ""): ?>
                     <div class="img-big" style="background-image: url('<?= htmlspecialcharsbx($imgBigSrc) ?>')"></div>
                 <?php endif; ?>
-                <?php foreach ($imgList as $imgId): ?>
-                    <?php $imgSrc = (string)CFile::GetPath((int)$imgId); ?>
-                    <?php if ($imgSrc !== ""): ?>
+                <?php
+                $smallIndex = 0;
+                foreach ($imgList as $imgId):
+                    $smallIndex++;
+                    $imgSrc = (string)CFile::GetPath((int)$imgId);
+                    if ($imgSrc === "") {
+                        continue;
+                    }
+                    $slotNum = min($smallIndex, 4);
+                    $lookOpenId = $smallIndex <= 4
+                        ? campaignRegisterLookDrawer(
+                            $blockNumber,
+                            (string)$slotNum,
+                            campaignGetItemsForSlot($block, $slotNum),
+                            $campaignLookDrawers
+                        )
+                        : "";
+                    ?>
+                    <div class="block2__img-small-wrap<?= $lookOpenId !== '' ? ' block2__img-small-wrap--look' : '' ?>">
                         <div class="img-small" style="background-image: url('<?= htmlspecialcharsbx($imgSrc) ?>')"></div>
-                    <?php endif; ?>
+                        <?php if ($lookOpenId !== ""): ?>
+                            <button type="button" class="block1__look-btn"
+                                    data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
+                                    aria-haspopup="dialog">
+                                Смотреть образ
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
             </div>
 
         <?php elseif ($type === 3): ?>
             <div class="block3">
-                <?php foreach ($imgList as $imgId): ?>
-                    <?php $imgSrc = (string)CFile::GetPath((int)$imgId); ?>
-                    <?php if ($imgSrc !== ""): ?>
+                <?php
+                $imgIndex = 0;
+                foreach ($imgList as $imgId):
+                    $imgIndex++;
+                    $imgSrc = (string)CFile::GetPath((int)$imgId);
+                    if ($imgSrc === "") {
+                        continue;
+                    }
+                    $slotNum = min($imgIndex, 4);
+                    $lookOpenId = $imgIndex <= 4
+                        ? campaignRegisterLookDrawer(
+                            $blockNumber,
+                            (string)$slotNum,
+                            campaignGetItemsForSlot($block, $slotNum),
+                            $campaignLookDrawers
+                        )
+                        : "";
+                    ?>
+                    <div class="block3__img-wrap<?= $lookOpenId !== '' ? ' block3__img-wrap--look' : '' ?>">
                         <img src="<?= htmlspecialcharsbx($imgSrc) ?>" alt="">
-                    <?php endif; ?>
+                        <?php if ($lookOpenId !== ""): ?>
+                            <button type="button" class="block1__look-btn"
+                                    data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
+                                    aria-haspopup="dialog">
+                                Смотреть образ
+                            </button>
+                        <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
                 <?php if ($text !== ""): ?>
                     <div class="block-text"><?= $text ?></div>
@@ -346,8 +483,23 @@ while ($fields = $elementRes->GetNext()) {
             $imgSrcBlock4 = $imgIdBlock4 > 0 ? (string)CFile::GetPath($imgIdBlock4) : "";
             ?>
             <?php if ($imgSrcBlock4 !== ""): ?>
-                <div class="block4">
+                <?php
+                $lookOpenId4 = campaignRegisterLookDrawer(
+                    $blockNumber,
+                    "1",
+                    campaignGetItemsForSlot($block, 1),
+                    $campaignLookDrawers
+                );
+                ?>
+                <div class="block4<?= $lookOpenId4 !== '' ? ' block4--look' : '' ?>">
                     <img src="<?= htmlspecialcharsbx($imgSrcBlock4) ?>" alt="">
+                    <?php if ($lookOpenId4 !== ""): ?>
+                        <button type="button" class="block1__look-btn"
+                                data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId4) ?>"
+                                aria-haspopup="dialog">
+                            Смотреть образ
+                        </button>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
 
@@ -435,11 +587,34 @@ while ($fields = $elementRes->GetNext()) {
         <?php elseif ($type === 7): ?>
             <?php if (!empty($imgList)): ?>
                 <div class="block7">
-                    <?php foreach ($imgList as $imgId): ?>
-                        <?php $imgSrc = (string)CFile::GetPath((int)$imgId); ?>
-                        <?php if ($imgSrc !== ""): ?>
+                    <?php
+                    $imgIndex7 = 0;
+                    foreach ($imgList as $imgId):
+                        $imgIndex7++;
+                        $imgSrc = (string)CFile::GetPath((int)$imgId);
+                        if ($imgSrc === "") {
+                            continue;
+                        }
+                        $slotNum = min($imgIndex7, 4);
+                        $lookOpenId = $imgIndex7 <= 4
+                            ? campaignRegisterLookDrawer(
+                                $blockNumber,
+                                (string)$slotNum,
+                                campaignGetItemsForSlot($block, $slotNum),
+                                $campaignLookDrawers
+                            )
+                            : "";
+                        ?>
+                        <div class="block7__img-wrap<?= $lookOpenId !== '' ? ' block7__img-wrap--look' : '' ?>">
                             <img src="<?= htmlspecialcharsbx($imgSrc) ?>" alt="">
-                        <?php endif; ?>
+                            <?php if ($lookOpenId !== ""): ?>
+                                <button type="button" class="block1__look-btn"
+                                        data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
+                                        aria-haspopup="dialog">
+                                    Смотреть образ
+                                </button>
+                            <?php endif; ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
@@ -447,11 +622,34 @@ while ($fields = $elementRes->GetNext()) {
         <?php elseif ($type === 8): ?>
             <?php if (!empty($imgList)): ?>
                 <div class="block8">
-                    <?php foreach ($imgList as $imgId): ?>
-                        <?php $imgSrc = (string)CFile::GetPath((int)$imgId); ?>
-                        <?php if ($imgSrc !== ""): ?>
+                    <?php
+                    $imgIndex8 = 0;
+                    foreach ($imgList as $imgId):
+                        $imgIndex8++;
+                        $imgSrc = (string)CFile::GetPath((int)$imgId);
+                        if ($imgSrc === "") {
+                            continue;
+                        }
+                        $slotNum = min($imgIndex8, 4);
+                        $lookOpenId = $imgIndex8 <= 4
+                            ? campaignRegisterLookDrawer(
+                                $blockNumber,
+                                (string)$slotNum,
+                                campaignGetItemsForSlot($block, $slotNum),
+                                $campaignLookDrawers
+                            )
+                            : "";
+                        ?>
+                        <div class="block8__img-wrap<?= $lookOpenId !== '' ? ' block8__img-wrap--look' : '' ?>">
                             <img src="<?= htmlspecialcharsbx($imgSrc) ?>" alt="">
-                        <?php endif; ?>
+                            <?php if ($lookOpenId !== ""): ?>
+                                <button type="button" class="block1__look-btn"
+                                        data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
+                                        aria-haspopup="dialog">
+                                    Смотреть образ
+                                </button>
+                            <?php endif; ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
@@ -460,5 +658,94 @@ while ($fields = $elementRes->GetNext()) {
         <br><br>
     <?php endforeach; ?>
 </div>
+
+<?php
+if (!empty($campaignLookDrawers) && \Bitrix\Main\Loader::includeModule("catalog")) {
+    foreach ($campaignLookDrawers as $drawer) {
+
+        $filterName = $drawer["filterName"];
+        $GLOBALS[$filterName] = ["ID" => $drawer["itemIds"]];
+        $drawerId = htmlspecialcharsbx($drawer["id"]);
+        ?>
+        <div class="campaign-look" id="<?= $drawerId ?>" aria-hidden="true" role="dialog" aria-modal="true"
+             aria-labelledby="<?= $drawerId ?>-title">
+            <div class="campaign-look__backdrop" data-campaign-look-close tabindex="-1"></div>
+            <div class="campaign-look__panel">
+                <button type="button" class="campaign-look__close" data-campaign-look-close
+                        aria-label="Закрыть">&times;</button>
+                <p class="campaign-look__label" id="<?= $drawerId ?>-title">ОБРАЗ</p>
+                <div class="campaign-look__body">
+                    <?php
+                    $APPLICATION->IncludeComponent(
+                        "bitrix:catalog.section",
+                        "look_drawer",
+                        [
+                            "IBLOCK_TYPE" => "catalog",
+                            "IBLOCK_ID" => "2",
+                            "FILTER_NAME" => $filterName,
+                            "SHOW_ALL_WO_SECTION" => "Y",
+                            "INCLUDE_SUBSECTIONS" => "Y",
+                            "ELEMENT_SORT_FIELD" => "sort",
+                            "ELEMENT_SORT_ORDER" => "asc",
+                            "ELEMENT_SORT_FIELD2" => "id",
+                            "ELEMENT_SORT_ORDER2" => "asc",
+                            "PAGE_ELEMENT_COUNT" => "24",
+                            "LINE_ELEMENT_COUNT" => "2",
+                            "PRICE_CODE" => ["BASE"],
+                            "ADD_PROPERTIES_TO_BASKET" => "Y",
+                            "PARTIAL_PRODUCT_PROPERTIES" => "N",
+                            "DISPLAY_TOP_PAGER" => "N",
+                            "DISPLAY_BOTTOM_PAGER" => "N",
+                            "SET_TITLE" => "N",
+                            "SET_BROWSER_TITLE" => "N",
+                            "SET_META_KEYWORDS" => "N",
+                            "SET_META_DESCRIPTION" => "N",
+                            "SET_STATUS_404" => "N",
+                            "SHOW_404" => "N",
+                            "CACHE_TYPE" => "A",
+                            "CACHE_TIME" => "36000000",
+                            "CACHE_GROUPS" => "Y",
+                            "CACHE_FILTER" => "N",
+                            "USE_MAIN_ELEMENT_SECTION" => "Y",
+                            "CONVERT_CURRENCY" => "Y",
+                            "CURRENCY_ID" => "RUB",
+                            "SHOW_PRICE_COUNT" => "1",
+                            "PRODUCT_ROW_VARIANTS" => "",
+                            "PRODUCT_DISPLAY_MODE" => "Y",
+                            "USE_PRODUCT_QUANTITY" => "N",
+                            "ENLARGE_PRODUCT" => "PROP",
+                            "ENLARGE_PROP" => "NEWPRODUCT",
+                            "ADD_PICT_PROP" => "MORE_PHOTO",
+                            "OFFER_ADD_PICT_PROP" => "MORE_PHOTO",
+                            "OFFER_TREE_PROPS" => ["COLOR_REF", "SIZES_SHOES", "SIZES_CLOTHES"],
+                            "OFFERS_CART_PROPERTIES" => ["ARTNUMBER", "COLOR_REF", "SIZES_SHOES", "SIZES_CLOTHES"],
+                            "OFFERS_FIELD_CODE" => ["", ""],
+                            "OFFERS_PROPERTY_CODE" => ["COLOR_REF", "SIZES_SHOES", "SIZES_CLOTHES", ""],
+                            "OFFERS_SORT_FIELD" => "sort",
+                            "OFFERS_SORT_ORDER" => "asc",
+                            "OFFERS_SORT_FIELD2" => "id",
+                            "OFFERS_SORT_ORDER2" => "desc",
+                            "OFFERS_LIMIT" => "5",
+                            "PRODUCT_BLOCKS_ORDER" => "price,props,sku,quantityLimit,quantity,buttons,compare",
+                            "LABEL_PROP" => ["NEWPRODUCT"],
+                            "PROPERTY_CODE" => ["NAME_EN", "MORE_PHOTO"],
+                            "LAZY_LOAD" => "N",
+                            "LOAD_ON_SCROLL" => "N",
+                            "SHOW_DISCOUNT_PERCENT" => "N",
+                            "SHOW_OLD_PRICE" => "Y",
+                            "SHOW_SLIDER" => "N",
+                            "SLIDER_INTERVAL" => "3000",
+                            "SLIDER_PROGRESS" => "N",
+                            "IS_PRODUCTS_ON_MAIN" => "N",
+                        ]
+                    );
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+}
+?>
 
 <?php require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/footer.php"); ?>
