@@ -6,6 +6,8 @@ use Level44\Event;
 
 require_once __DIR__ . '/autoload.php';
 
+//\Bitrix\Main\Loader::includeModule('ipol.sdek');
+
 global $MESS;
 
 if (\Level44\Base::isEnLang()) {
@@ -28,6 +30,7 @@ if (\Bitrix\Main\Loader::includeModule('sale')) {
                 \Bitrix\Main\EventResult::SUCCESS,
                 [
                     'Sale\Delivery\Restrictions\ByTimeOfDay' => '/local/php_interface/lib/Sale/Delivery/Restrictions/ByTimeOfDay.php',
+                    'Sale\Delivery\Restrictions\ExcludeIfBasketProductProperty' => '/local/php_interface/lib/Sale/Delivery/Restrictions/ExcludeIfBasketProductProperty.php',
                 ]
             );
         }
