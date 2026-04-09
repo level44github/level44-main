@@ -29,18 +29,80 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                                 <img class="img-fluid" src="<?= $basketItem["PICTURE"] ?>" alt="">
                             </div>
                             <div class="basket-aside__body">
-                                <div class="font-weight-bold <?= $basketItem["oldPrice"] ? "product__final-price" : "" ?>">
-                                    <span><?= $basketItem["SUM"] ?></span>
-                                    <? if ($basketItem["PRICE_DOLLAR"]): ?>
-                                        &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
+                                <? if (!empty($basketItem["SHOW_THREE_PRICES"])): ?>
+                                    <!-- Отображение 3 цен для товаров категории sale -->
+                                    <? 
+                                    // Определяем значения для отображения
+                                    // 1. Оригинальная цена (без скидки)
+                                    $originalPriceFormated = $basketItem["SUM_ORIGINAL_PRICE_FORMATED"] ?? $basketItem["SUM_BASE_FORMATED"] ?? '';
+                                    
+                                    // 2. Цена после первой скидки (промежуточная, до доп скидки)
+                                    // Используем SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED (рассчитанная в applyDiscounts)
+                                    // или SUM_BASE (цена после первой скидки из корзины)
+                                    $intermediatePriceSum = null;
+                                    if (!empty($basketItem["SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED"])) {
+                                        $intermediatePriceSum = $basketItem["SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED"];
+                                    } elseif (isset($basketItem["SUM_BASE"]) && $basketItem["SUM_BASE"] > 0) {
+                                        // Используем SUM_BASE (цена после первой скидки)
+                                        $intermediatePriceSum = CCurrencyLang::CurrencyFormat($basketItem["SUM_BASE"], "RUB");
+                                    } elseif (isset($basketItem["PRICE_BEFORE_ADDITIONAL_DISCOUNT"]) && $basketItem["PRICE_BEFORE_ADDITIONAL_DISCOUNT"] > 0) {
+                                        // Рассчитываем из PRICE_BEFORE_ADDITIONAL_DISCOUNT
+                                        $qty = $basketItem["QUANTITY"] ?? 1;
+                                        $intermediatePriceSum = CCurrencyLang::CurrencyFormat($basketItem["PRICE_BEFORE_ADDITIONAL_DISCOUNT"] * $qty, "RUB");
+                                    }
+                                    
+                                    // 3. Основная цена (после дополнительной скидки) - используем SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED
+                                    // если есть дополнительная скидка, иначе используем цену после первой скидки
+                                    $mainPriceFormated = null;
+                                    if (!empty($basketItem["ADDITIONAL_DISCOUNT_PERCENT"]) && !empty($basketItem["SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED"])) {
+                                        // Если есть дополнительная скидка, показываем цену после неё
+                                        $mainPriceFormated = $basketItem["SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED"];
+                                    } elseif (!empty($basketItem["SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED"])) {
+                                        // Если нет дополнительной скидки, показываем цену после первой скидки
+                                        $mainPriceFormated = $basketItem["SUM_PRICE_BEFORE_ADDITIONAL_DISCOUNT_FORMATED"];
+                                    } elseif (isset($basketItem["SUM_BASE"]) && $basketItem["SUM_BASE"] > 0) {
+                                        // Используем SUM_BASE (цена после первой скидки)
+                                        $mainPriceFormated = CCurrencyLang::CurrencyFormat($basketItem["SUM_BASE"], "RUB");
+                                    } elseif (isset($basketItem["SUM"])) {
+                                        $mainPriceFormated = $basketItem["SUM"];
+                                    }
+                                    ?>
+                                    <!-- 1. Зачеркнутая цена (без скидки) -->
+                                    <? if (!empty($originalPriceFormated)): ?>
+                                        <div class="basket-aside__price-crossed">
+                                            <span style="text-decoration: line-through; color: #999;"><?= $originalPriceFormated ?></span>
+                                        </div>
                                     <? endif; ?>
-                                </div>
-                                <? if (!empty($basketItem["oldPrice"])): ?>
-                                    <div class="basket-aside__price-crossed"><span><?= $basketItem["oldPriceFormat"] ?></span>
+                                    <!-- 2. Цена после первой скидки (зачеркнутая, промежуточная) - показываем только если есть дополнительная скидка -->
+                                    <? if (!empty($basketItem["ADDITIONAL_DISCOUNT_PERCENT"]) && $basketItem["ADDITIONAL_DISCOUNT_PERCENT"] > 0 && !empty($intermediatePriceSum)): ?>
+                                        <div class="basket-aside__price-intermediate">
+                                            <span style="text-decoration: line-through; color: #999;"><?= $intermediatePriceSum ?></span>
+                                        </div>
+                                    <? endif; ?>
+                                    <!-- 3. Основная цена в чекауте - всегда цена после первой скидки, дополнительная скидка применяется только при сохранении заказа -->
+                                    <? if (!empty($mainPriceFormated)): ?>
+                                        <div class="font-weight-bold product__final-price">
+                                            <span><?= $mainPriceFormated ?></span>
+                                            <? if ($basketItem["PRICE_DOLLAR"]): ?>
+                                                &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
+                                            <? endif; ?>
+                                        </div>
+                                    <? endif; ?>
+                                <? else: ?>
+                                    <!-- Стандартное отображение для обычных товаров -->
+                                    <div class="font-weight-bold <?= $basketItem["oldPrice"] ? "product__final-price" : "" ?>">
+                                        <span><?= $basketItem["SUM"] ?></span>
                                         <? if ($basketItem["PRICE_DOLLAR"]): ?>
-                                            &middot; <span><?= $basketItem["oldPriceDollarFormat"] ?></span>
+                                            &middot; <span><?= $basketItem["PRICE_DOLLAR"] ?></span>
                                         <? endif; ?>
                                     </div>
+                                    <? if (!empty($basketItem["oldPrice"])): ?>
+                                        <div class="basket-aside__price-crossed"><span><?= $basketItem["oldPriceFormat"] ?></span>
+                                            <? if ($basketItem["PRICE_DOLLAR"]): ?>
+                                                &middot; <span><?= $basketItem["oldPriceDollarFormat"] ?></span>
+                                            <? endif; ?>
+                                        </div>
+                                    <? endif; ?>
                                 <? endif; ?>
                                 <div><?= $basketItem["NAME"] ?></div>
                                 <div><?= Loc::getMessage("QUANTITY") ?><?= $basketItem["QUANTITY"] ?></div>
@@ -101,21 +163,37 @@ $colspan = ($bDefaultColumns) ? count($arResult["GRID"]["HEADERS"]) : count($arR
                 <?if ($arResult["SHOW_OLD_SUM_PRICE"]!=null){?>
                     <div class="d-flex">Скидка
                         <div class="ml-auto product__final-price">
-
-                            - <? echo CCurrencyLang::CurrencyFormat($arResult["OLD_SUM_PRICE_VALUE"]-$arResult[ 'JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT_VALUE'], "RUB") ;?>
+                            <? if (isset($arResult["TOTAL_DISCOUNT_AMOUNT"]) && $arResult["TOTAL_DISCOUNT_AMOUNT"] > 0): ?>
+                                - <?= $arResult["TOTAL_DISCOUNT_AMOUNT_FORMATED"] ?>
+                            <? else: ?>
+                                - <? echo CCurrencyLang::CurrencyFormat($arResult["OLD_SUM_PRICE_VALUE"]-$arResult[ 'JS_DATA']['TOTAL']['PRICE_WITHOUT_DISCOUNT_VALUE'], "RUB") ;?>
+                            <? endif; ?>
                         </div>
                     </div>
                 <?}?>
 
                 <?if ($arResult['JS_DATA']['TOTAL']['DISCOUNT_PRICE']!=0){?>
-                    <div class="d-flex"><?= Loc::getMessage("ADDDISCOUNT") ?>Дополнительная скидка
+                    <? 
+                    // Проверяем, есть ли товары с дополнительной скидкой категории sale
+                    // Если есть, не показываем поле "Дополнительная скидка", так как скидка уже учтена в ценах
+                    $hasSaleItemsWithAdditionalDiscount = false;
+                    foreach ($arResult["BASKET_ITEMS"] as $item) {
+                        if (!empty($item['SHOW_THREE_PRICES']) && !empty($item['ADDITIONAL_DISCOUNT_PERCENT'])) {
+                            $hasSaleItemsWithAdditionalDiscount = true;
+                            break;
+                        }
+                    }
+                    ?>
+                    <?if (!$hasSaleItemsWithAdditionalDiscount):?>
+                        <div class="d-flex"><?= Loc::getMessage("ADDDISCOUNT") ?>Дополнительная скидка
 
 
-                        <div class="ml-auto product__final-price">
-                            -<?=$arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF'];?>
+                            <div class="ml-auto product__final-price">
+                                -<?=$arResult['JS_DATA']['TOTAL']['BASKET_PRICE_DISCOUNT_DIFF'];?>
 
+                            </div>
                         </div>
-                    </div>
+                    <?endif;?>
                 <?}?>
 
 

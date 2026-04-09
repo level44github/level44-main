@@ -41,6 +41,8 @@ class Handlers extends HandlerBase
         RetailCrmLoyaltyHandlers::register();
         
         CloudKassirHandlers::register();
+        
+        SaleCategoryDiscountHandler::register();
     }
 
     public static function OnBeforeEventSendHandler(&$arFields, &$templateData, $context)
