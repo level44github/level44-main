@@ -45,6 +45,25 @@ class SaleCategoryDiscountHandler extends HandlerBase
         // Рассчитываем скидки
         $discounts = self::calculateDiscounts($saleItems, $saleItemsCount);
 
+        // Группируем скидки по item_id для товаров с QUANTITY > 1
+        // Структура: [item_id => [0 => discount, 1 => discount, ...]]
+        $discountsByItem = [];
+        foreach ($discounts as $itemKey => $discountPercent) {
+            // Если itemKey содержит индекс единицы (формат: "item_id_index"), разбираем его
+            // Иначе это старый формат, где itemKey = item_id
+            if (strpos($itemKey, '_qty_') !== false) {
+                list($itemId, $qtyIndex) = explode('_qty_', $itemKey, 2);
+                $qtyIndex = (int)$qtyIndex;
+                if (!isset($discountsByItem[$itemId])) {
+                    $discountsByItem[$itemId] = [];
+                }
+                $discountsByItem[$itemId][$qtyIndex] = $discountPercent;
+            } else {
+                // Старый формат - одна запись для всего товара
+                $discountsByItem[$itemKey] = [0 => $discountPercent];
+            }
+        }
+        
         // Создаем мапу товаров категории sale для быстрого поиска
         $saleItemIds = [];
         foreach ($saleItems as $saleItem) {
@@ -100,7 +119,10 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 true
             );
 
-            if (!isset($discounts[$itemId])) {
+            // Получаем скидки для этого товара (может быть массив для каждой единицы или одно значение)
+            $itemDiscounts = $discountsByItem[$itemId] ?? null;
+            
+            if (empty($itemDiscounts)) {
                 // Товар категории sale, но без доп скидки (например, 1 товар или 3-й товар при 3 товарах)
                 // Цена до и после доп скидки одинаковые
                 $basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT'] = $basketItem['PRICE'];
@@ -150,9 +172,6 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 true
             );
 
-            // Применяем дополнительную скидку
-            $discountPercent = $discounts[$itemId];
-
             // Важно: PRICE может уже содержать дополнительную скидку (если она была применена ранее)
             // Поэтому используем BASE_PRICE как цену после первой скидки (до дополнительной)
             // Если PRICE >= BASE_PRICE, значит дополнительная скидка еще не применялась, используем PRICE
@@ -168,13 +187,66 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 $priceBeforeAdditionalDiscount = $currentPrice;
             }
 
-            $discountAmount = $priceBeforeAdditionalDiscount * $discountPercent / 100;
-            $priceAfterAdditionalDiscount = $priceBeforeAdditionalDiscount - $discountAmount;
+            // Получаем скидки для этого товара (может быть массив для каждой единицы или одно значение)
+            $itemDiscounts = $discountsByItem[$itemId] ?? null;
+            
+            // Если товар в количестве > 1, применяем скидку к каждой единице отдельно и усредняем
+            if ($quantity > 1 && !empty($itemDiscounts)) {
+                // Рассчитываем общую сумму со скидками для всех единиц
+                // Каждая единица получает свою скидку (если указана) или 0%
+                $totalPriceAfterDiscount = 0;
+                $hasDiscount = false;
+                
+                // Сохраняем информацию о скидках для каждой единицы
+                $unitPricesAfterDiscount = [];
+                
+                for ($i = 0; $i < $quantity; $i++) {
+                    $unitDiscountPercent = $itemDiscounts[$i] ?? 0;
+                    if ($unitDiscountPercent > 0) {
+                        $hasDiscount = true;
+                        $unitDiscountAmount = $priceBeforeAdditionalDiscount * $unitDiscountPercent / 100;
+                        $unitPriceAfterDiscount = $priceBeforeAdditionalDiscount - $unitDiscountAmount;
+                        $unitPricesAfterDiscount[$i] = round($unitPriceAfterDiscount);
+                        $totalPriceAfterDiscount += $unitPricesAfterDiscount[$i];
+                    } else {
+                        $unitPricesAfterDiscount[$i] = $priceBeforeAdditionalDiscount;
+                        $totalPriceAfterDiscount += $priceBeforeAdditionalDiscount;
+                    }
+                }
+                
+                // Цена за единицу рассчитывается так, чтобы PRICE * QUANTITY = общая сумма со скидками
+                // Это обеспечит правильную сумму при сохранении заказа
+                // Используем точное деление, чтобы избежать ошибок округления
+                $priceAfterAdditionalDiscount = $totalPriceAfterDiscount / $quantity;
+                
+                // Общая скидка в процентах (средневзвешенная) для отображения
+                $totalOriginalPrice = $priceBeforeAdditionalDiscount * $quantity;
+                $totalDiscountAmount = $totalOriginalPrice - $totalPriceAfterDiscount;
+                $discountPercent = round(($totalDiscountAmount / $totalOriginalPrice) * 100, 2);
+                
+                if ($hasDiscount) {
+                    $basketItem['ADDITIONAL_DISCOUNT_PERCENT'] = $discountPercent;
+                    $basketItem['ADDITIONAL_DISCOUNT_AMOUNT'] = $totalDiscountAmount / $quantity;
+                    // Сохраняем информацию о скидках для каждой единицы
+                    $basketItem['UNIT_PRICES_AFTER_DISCOUNT'] = $unitPricesAfterDiscount;
+                }
+            } else {
+                // Одна единица - используем первый элемент
+                $discountPercent = !empty($itemDiscounts) ? (reset($itemDiscounts) ?: 0) : 0;
+                
+                if ($discountPercent > 0) {
+                    $discountAmount = $priceBeforeAdditionalDiscount * $discountPercent / 100;
+                    $priceAfterAdditionalDiscount = $priceBeforeAdditionalDiscount - $discountAmount;
+                    
+                    $basketItem['ADDITIONAL_DISCOUNT_PERCENT'] = $discountPercent;
+                    $basketItem['ADDITIONAL_DISCOUNT_AMOUNT'] = round($discountAmount);
+                } else {
+                    $priceAfterAdditionalDiscount = $priceBeforeAdditionalDiscount;
+                }
+            }
 
             // Сохраняем информацию о дополнительной скидке
             // Округляем скидочную цену до целого числа
-            $basketItem['ADDITIONAL_DISCOUNT_PERCENT'] = $discountPercent;
-            $basketItem['ADDITIONAL_DISCOUNT_AMOUNT'] = round($discountAmount);
             $basketItem['PRICE_BEFORE_ADDITIONAL_DISCOUNT'] = PriceMaths::roundPrecision($priceBeforeAdditionalDiscount);
             $basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] = round($priceAfterAdditionalDiscount);
 
@@ -196,9 +268,21 @@ class SaleCategoryDiscountHandler extends HandlerBase
             // Дополнительные цены будут использоваться только для отображения трех цен в шаблоне
             // Обновление PRICE на PRICE_AFTER_ADDITIONAL_DISCOUNT будет происходить только при сохранении заказа
 
-            // Обновляем сумму после применения доп скидки (округляем до целого)
+            // Обновляем сумму после применения доп скидки
+            // Для товаров с количеством > 1 и разными скидками на единицы
+            // SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT должна быть точной суммой всех единиц со своими скидками
             $quantity = $basketItem['QUANTITY'] ?? 1;
-            $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = round($basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] * $quantity);
+            
+            // Если есть UNIT_PRICES_AFTER_DISCOUNT (товар с количеством > 1 и разными скидками)
+            // используем точную сумму, иначе рассчитываем как PRICE * QUANTITY
+            if (!empty($basketItem['UNIT_PRICES_AFTER_DISCOUNT']) && is_array($basketItem['UNIT_PRICES_AFTER_DISCOUNT'])) {
+                // Точная сумма всех единиц со своими скидками
+                $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = array_sum($basketItem['UNIT_PRICES_AFTER_DISCOUNT']);
+            } else {
+                // Для товаров с одной скидкой на все единицы
+                $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'] = round($basketItem['PRICE_AFTER_ADDITIONAL_DISCOUNT'] * $quantity);
+            }
+            
             $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT_FORMATED'] = \CCurrencyLang::CurrencyFormat(
                 $basketItem['SUM_PRICE_AFTER_ADDITIONAL_DISCOUNT'],
                 $currency,
@@ -394,11 +478,18 @@ class SaleCategoryDiscountHandler extends HandlerBase
                 // Используем BASE_PRICE для расчета скидок (цена до применения базовых скидок)
                 // Это важно, так как дополнительные скидки применяются к цене после базовых скидок
                 $price = $basketItem['BASE_PRICE'] ?? $basketItem['PRICE'] ?? 0;
-                $saleItems[] = [
-                    'item_id' => $itemId,
-                    'product_id' => $productId,
-                    'price' => $price,
-                ];
+                $quantity = $basketItem['QUANTITY'] ?? 1;
+                
+                // Если товар в количестве > 1, добавляем каждую единицу отдельно для расчета скидок
+                // Это позволяет применять скидки к каждой единице по правилам (0%, 10%, 15%, 20%, 20%...)
+                for ($i = 0; $i < $quantity; $i++) {
+                    $saleItems[] = [
+                        'item_id' => $itemId,
+                        'product_id' => $productId,
+                        'price' => $price,
+                        'quantity_index' => $i, // Индекс единицы (0, 1, 2, ...)
+                    ];
+                }
             }
         }
 
@@ -428,11 +519,18 @@ class SaleCategoryDiscountHandler extends HandlerBase
 
         if ($count === 2) {
             // 2 товара: на товар наименьшей стоимости - 10% скидка
-            $discounts[$saleItems[0]['item_id']] = 10;
+            $itemId = $saleItems[0]['item_id'];
+            $qtyIndex = $saleItems[0]['quantity_index'] ?? 0;
+            $discounts[$itemId . '_qty_' . $qtyIndex] = 10;
         } elseif ($count === 3) {
             // 3 товара: 1 товар (наименьший) - 15%, 2 товар - 10%, 3 товар - нет доп скидки
-            $discounts[$saleItems[0]['item_id']] = 15;
-            $discounts[$saleItems[1]['item_id']] = 10;
+            $itemId1 = $saleItems[0]['item_id'];
+            $qtyIndex1 = $saleItems[0]['quantity_index'] ?? 0;
+            $discounts[$itemId1 . '_qty_' . $qtyIndex1] = 15;
+            
+            $itemId2 = $saleItems[1]['item_id'];
+            $qtyIndex2 = $saleItems[1]['quantity_index'] ?? 0;
+            $discounts[$itemId2 . '_qty_' . $qtyIndex2] = 10;
             // Третий товар без доп скидки
         } else {
             // 4+ товара: скидки распределяются от дорогих к дешевым
@@ -447,18 +545,24 @@ class SaleCategoryDiscountHandler extends HandlerBase
             
             // Предпоследний товар - 10%
             if ($count >= 2) {
-                $discounts[$saleItems[$lastIndex - 1]['item_id']] = 10;
+                $itemId = $saleItems[$lastIndex - 1]['item_id'];
+                $qtyIndex = $saleItems[$lastIndex - 1]['quantity_index'] ?? 0;
+                $discounts[$itemId . '_qty_' . $qtyIndex] = 10;
             }
             
             // Третий с конца - 15%
             if ($count >= 3) {
-                $discounts[$saleItems[$lastIndex - 2]['item_id']] = 15;
+                $itemId = $saleItems[$lastIndex - 2]['item_id'];
+                $qtyIndex = $saleItems[$lastIndex - 2]['quantity_index'] ?? 0;
+                $discounts[$itemId . '_qty_' . $qtyIndex] = 15;
             }
             
             // Все остальные товары (более дешевые) - 20%
             // Это товары с индексами от 0 до (count - 4) включительно
             for ($i = 0; $i <= $lastIndex - 3; $i++) {
-                $discounts[$saleItems[$i]['item_id']] = 20;
+                $itemId = $saleItems[$i]['item_id'];
+                $qtyIndex = $saleItems[$i]['quantity_index'] ?? 0;
+                $discounts[$itemId . '_qty_' . $qtyIndex] = 20;
             }
         }
 
@@ -536,8 +640,19 @@ class SaleCategoryDiscountHandler extends HandlerBase
             }
 
             // Применяем дополнительную скидку к цене товара
-            $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem->getPrice();
-            $newPrice = round($newPrice);
+            // Для товаров с количеством > 1 и разными скидками на единицы
+            // используем цену за единицу, которая при умножении на количество даст точную сумму всех единиц
+            $quantity = $basketItem->getQuantity();
+            
+            if (!empty($itemData['UNIT_PRICES_AFTER_DISCOUNT']) && is_array($itemData['UNIT_PRICES_AFTER_DISCOUNT']) && $quantity > 1) {
+                // Точная сумма всех единиц со своими скидками
+                $totalPriceAfterDiscount = array_sum($itemData['UNIT_PRICES_AFTER_DISCOUNT']);
+                // Цена за единицу, которая даст правильную сумму при умножении на количество
+                $newPrice = $totalPriceAfterDiscount / $quantity;
+            } else {
+                $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem->getPrice();
+                $newPrice = round($newPrice);
+            }
 
             // Устанавливаем кастомную цену, чтобы система не пересчитывала её
             $basketItem->setFieldNoDemand('CUSTOM_PRICE', 'Y');
@@ -632,8 +747,19 @@ class SaleCategoryDiscountHandler extends HandlerBase
             }
 
             // Применяем дополнительную скидку к цене товара
-            $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem->getPrice();
-            $newPrice = round($newPrice);
+            // Для товаров с количеством > 1 и разными скидками на единицы
+            // используем цену за единицу, которая при умножении на количество даст точную сумму всех единиц
+            $quantity = $basketItem->getQuantity();
+            
+            if (!empty($itemData['UNIT_PRICES_AFTER_DISCOUNT']) && is_array($itemData['UNIT_PRICES_AFTER_DISCOUNT']) && $quantity > 1) {
+                // Точная сумма всех единиц со своими скидками
+                $totalPriceAfterDiscount = array_sum($itemData['UNIT_PRICES_AFTER_DISCOUNT']);
+                // Цена за единицу, которая даст правильную сумму при умножении на количество
+                $newPrice = $totalPriceAfterDiscount / $quantity;
+            } else {
+                $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? $basketItem->getPrice();
+                $newPrice = round($newPrice);
+            }
 
             // Устанавливаем кастомную цену, чтобы система не пересчитывала её
             $basketItem->setFieldNoDemand('CUSTOM_PRICE', 'Y');
@@ -717,7 +843,20 @@ class SaleCategoryDiscountHandler extends HandlerBase
             }
 
             // Используем PRICE_AFTER_ADDITIONAL_DISCOUNT из applyDiscounts
-            $newPrice = round($itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? 0);
+            // Для товаров с количеством > 1 и разными скидками на единицы
+            // используем цену за единицу, которая при умножении на количество даст точную сумму всех единиц
+            $quantity = $itemData['QUANTITY'] ?? 1;
+            
+            if (!empty($itemData['UNIT_PRICES_AFTER_DISCOUNT']) && is_array($itemData['UNIT_PRICES_AFTER_DISCOUNT']) && $quantity > 1) {
+                // Точная сумма всех единиц со своими скидками
+                $totalPriceAfterDiscount = array_sum($itemData['UNIT_PRICES_AFTER_DISCOUNT']);
+                // Цена за единицу, которая даст правильную сумму при умножении на количество
+                $newPrice = $totalPriceAfterDiscount / $quantity;
+            } else {
+                $newPrice = $itemData['PRICE_AFTER_ADDITIONAL_DISCOUNT'] ?? 0;
+                $newPrice = round($newPrice);
+            }
+            
             if ($newPrice <= 0) {
                 continue;
             }
