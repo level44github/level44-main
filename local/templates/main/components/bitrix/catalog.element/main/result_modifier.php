@@ -138,7 +138,7 @@ if (!empty($sizes)) {
     foreach ($availability as $storeId => $sizes) {
         if (!empty($store = $stores[$storeId])) {
             $arResult['STORES'][] = [
-                'TITLE'   => Base::getMultiLang($store['TITLE'], $store['UF_TITLE_EN']),
+                'TITLE'   => Base::getMultiLang($store['UF_NAME'], $store['UF_TITLE_EN']),
                 'ADDRESS' => Base::getMultiLang($store['ADDRESS'], $store['UF_ADDRESS_EN']),
                 'SIZES'   => $sizes
             ];
