@@ -114,11 +114,19 @@ $entityClass = $entity->getDataClass();
                         <div class="dropdown dropdown--left bx-filter-parameters-box" data-dropdown onclick="smartFilter.hideFilterProps(this)">
                             <div class="dropdown__header" role="button"><span
                                         class="dropdown__title">
-                                    <?if ($arItem['CODE']!='COLOR_GROUP_REF'){?>
-                                        <?=$arItem["NAME"]?>
-                                    <?}else{?>
+
+                                   <?if ($arItem['CODE']=='SIZE_REF'){?>
+                                        <?=GetMessage("FILTER_SIZE")?>
+                                    <?}?>
+
+                                    <?else if ($arItem['CODE']=='COLOR_GROUP_REF'){?>
                                         <?=GetMessage("FILTER_COLOR")?>
-                                    <?}?></span>
+                                    <?}?>
+
+                                    <?else {?>
+                                    <?=$arItem["NAME"]?>
+                                    <?}?>
+                                </span>
                                 <span
                                         class="dropdown__counter hidden">1</span>
                                 <svg class="icon icon-arrow-down dropdown__icon">
@@ -318,10 +326,18 @@ $entityClass = $entity->getDataClass();
                             <button class="btn btn-link accordion__trigger" type="button"
                                     aria-label="Toggle accordion">
                                 <div class="accordion__title">
-                                    <?if ($arItem['CODE']!='COLOR_GROUP_REF'){?>
-                                    <?=$arItem["NAME"]?>
-                                    <?}else{?>
+
+
+                                    <?if ($arItem['CODE']=='SIZE_REF'){?>
+                                        <?=GetMessage("FILTER_SIZE")?>
+                                    <?}?>
+
+                                    <?else if ($arItem['CODE']=='COLOR_GROUP_REF'){?>
                                         <?=GetMessage("FILTER_COLOR")?>
+                                    <?}?>
+
+                                    <?else {?>
+                                    <?=$arItem["NAME"]?>
                                     <?}?>
                                 </div>
                                 <svg class="icon icon-arrow-down accordion__icon">
@@ -345,6 +361,20 @@ $entityClass = $entity->getDataClass();
                                         </label>
                                         <?}else{
 
+
+                                            $result = $entityClass::getList([
+                                                'select' => ['UF_NAME', 'UF_NAME_EN'], // Указываем поле, значение которого нужно получить
+                                                'filter' => ['=ID' =>  $ar['URL_ID']],
+                                                'limit' => 1
+                                            ]);
+
+                                            $valcolor=$ar["VALUE"];
+
+                                            // 7. Получаем результат
+                                            if ($item = $result->fetch()) {
+                                                $valcolor=Base::getMultiLang($item['UF_NAME'], $item['UF_NAME_EN']);
+                                            }
+
                                             ?>
                                         <label class="form-color">
                                             <input type="checkbox" value="<? echo $ar["HTML_VALUE"] ?>"
@@ -354,7 +384,7 @@ $entityClass = $entity->getDataClass();
                                                    onchange="smartFilter.click(this)"
                                             ><span
                                                     class="swatch" style="background:URL('/upload/<?=$ar['FILE']['SUBDIR']?>/<?=$ar['FILE']['FILE_NAME']?>')"></span><span
-                                                    class="label-text"><?=$ar["VALUE"];?></span>
+                                                    class="label-text"><?= $valcolor;?></span>
                                             <svg class="icon icon-close-small form-color__icon">
                                                 <use xlink:href="#close-small"></use>
                                             </svg>

@@ -15,5 +15,6 @@ $MESS ['FILTER_PRICE'] = "Price";
 $MESS ['FILTER_PRICE_FROM'] = "From";
 $MESS ['FILTER_PRICE_TO'] = "To";
 $MESS ['FILTER_SORT'] = "Sort";
+$MESS ['FILTER_SIZE'] = "Size";
 $MESS ['FILTER_SORT_TEXT'] = "Please select a value";
 ?>
