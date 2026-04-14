@@ -269,7 +269,7 @@ $entityClass = $entity->getDataClass();
     <div class="bottom-sheet__overlay"></div>
     <div class="bottom-sheet__container">
         <div class="bottom-sheet__header">
-            <h2>Фильтры</h2>
+            <h2><?=GetMessage("FILTER_TITLE")?></h2>
             <button class="btn btn-text bottom-sheet__close" type="button" aria-label="Close">
                 <svg class="icon icon-close bottom-sheet__close-icon">
                     <use xlink:href="#close"></use>

@@ -17,4 +17,6 @@ $MESS ['FILTER_PRICE_TO'] = "To";
 $MESS ['FILTER_SORT'] = "Sort";
 $MESS ['FILTER_SIZE'] = "Size";
 $MESS ['FILTER_SORT_TEXT'] = "Please select a value";
+
+$MESS ['FILTER_TITLE'] = "FILTER";
 ?>

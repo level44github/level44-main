@@ -16,4 +16,5 @@ $MESS ['FILTER_PRICE_TO'] = "До";
 $MESS ['FILTER_SORT'] = "Сортировать";
 $MESS ['FILTER_SORT_TEXT'] = "Пожалуйста, выберите значение";
 $MESS ['FILTER_SIZE'] = "Размер";
+$MESS ['FILTER_TITLE'] = "Фильтры";
 ?>
