@@ -117,13 +117,9 @@ $entityClass = $entity->getDataClass();
 
                                    <?if ($arItem['CODE']=='SIZE_REF'){?>
                                         <?=GetMessage("FILTER_SIZE")?>
-                                    <?}?>
-
-                                    <?else if ($arItem['CODE']=='COLOR_GROUP_REF'){?>
+                                    <?} else if ($arItem['CODE']=='COLOR_GROUP_REF'){?>
                                         <?=GetMessage("FILTER_COLOR")?>
-                                    <?}?>
-
-                                    <?else {?>
+                                    <?} else {?>
                                     <?=$arItem["NAME"]?>
                                     <?}?>
                                 </span>
@@ -326,18 +322,12 @@ $entityClass = $entity->getDataClass();
                             <button class="btn btn-link accordion__trigger" type="button"
                                     aria-label="Toggle accordion">
                                 <div class="accordion__title">
-
-
                                     <?if ($arItem['CODE']=='SIZE_REF'){?>
                                         <?=GetMessage("FILTER_SIZE")?>
-                                    <?}?>
-
-                                    <?else if ($arItem['CODE']=='COLOR_GROUP_REF'){?>
+                                    <?} else if ($arItem['CODE']=='COLOR_GROUP_REF'){?>
                                         <?=GetMessage("FILTER_COLOR")?>
-                                    <?}?>
-
-                                    <?else {?>
-                                    <?=$arItem["NAME"]?>
+                                    <?} else {?>
+                                        <?=$arItem["NAME"]?>
                                     <?}?>
                                 </div>
                                 <svg class="icon icon-arrow-down accordion__icon">
