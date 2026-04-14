@@ -37,7 +37,7 @@ $this->setFrameMode(true);
 
                         <div class="dropdown dropdown--left bx-filter-parameters-box" data-dropdown>
                             <span class="bx-filter-container-modef" style="display: none"></span>
-                            <div class="dropdown__header" role="button"><span class="dropdown__title">Цена</span><span
+                            <div class="dropdown__header" role="button"><span class="dropdown__title"><?=GetMessage("FILTER_PRICE")?></span><span
                                         class="dropdown__counter hidden">1</span>
                                 <svg class="icon icon-arrow-down dropdown__icon">
                                     <use xlink:href="#arrow-down"></use>
@@ -53,7 +53,7 @@ $this->setFrameMode(true);
                                                id="<?echo $arItem["VALUES"]["MIN"]["CONTROL_ID"]?>"
                                                value="<?echo $arItem["VALUES"]["MIN"]["HTML_VALUE"]?>"
                                                onkeyup="smartFilter.keyup(this)"
-                                               placeholder="От" />
+                                               placeholder="<?=GetMessage("FILTER_PRICE_FROM")?>" />
                                     </div>
                                     <div class="separator"></div>
                                     <div class="form-group">
@@ -63,11 +63,11 @@ $this->setFrameMode(true);
                                                id="<?echo $arItem["VALUES"]["MAX"]["CONTROL_ID"]?>"
                                                value="<?echo $arItem["VALUES"]["MAX"]["HTML_VALUE"]?>"
                                                onkeyup="smartFilter.keyup(this)"
-                                               placeholder="До" />
+                                               placeholder="<?=GetMessage("FILTER_PRICE_TO")?>" />
                                     </div>
                                 </div>
                                 <button class="btn btn-dark catalog__price-change-button" type="button" id="set_filter"
-                                        name="set_filter">Применить</button>
+                                        name="set_filter"><?=GetMessage("FILTER_APPLY")?></button>
                             </div>
                         </div>
 
@@ -100,7 +100,7 @@ $this->setFrameMode(true);
                                     <?if ($arItem['CODE']!='COLOR_GROUP_REF'){?>
                                         <?=$arItem["NAME"]?>
                                     <?}else{?>
-                                        Цвет
+                                        <?=GetMessage("FILTER_COLOR")?>
                                     <?}?></span>
                                 <span
                                         class="dropdown__counter hidden">1</span>
@@ -201,7 +201,7 @@ $this->setFrameMode(true);
                         <div class="dropdown__content">
                             <div class="catalog__filter-group">
                                 <div class="form-group">
-                                    <label class="radio-label" for="form-sort">Сортировать</label>
+                                    <label class="radio-label" for="form-sort"><?=GetMessage("FILTER_SORT")?></label>
                                     <div class="form-radio-group catalog__mobile-radio-group">
                                         <? foreach ($arParams["SORT_LIST"] as $sortItem): ?>
                                             <label class="form-radio">
@@ -216,7 +216,7 @@ $this->setFrameMode(true);
                                             </label>
                                         <? endforeach; ?>
                                     </div>
-                                    <div class="invalid-feedback">Пожалуйста, выберите значение</div>
+                                    <div class="invalid-feedback"><?=GetMessage("FILTER_SORT_TEXT")?></div>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +246,7 @@ $this->setFrameMode(true);
                     <input type="hidden" name="<?echo $arItem["CONTROL_NAME"]?>" id="<?echo $arItem["CONTROL_ID"]?>" value="<?echo $arItem["HTML_VALUE"]?>" />
                 <?endforeach;?>
                 <div class="form-group">
-                    <label class="radio-label" for="form-sort">Сортировать</label>
+                    <label class="radio-label" for="form-sort"><?=GetMessage("FILTER_SORT")?></label>
                     <div class="form-radio-group catalog__mobile-radio-group">
                         <? foreach ($arParams["SORT_LIST"] as $sortItem): ?>
                             <label class="form-radio">
@@ -262,7 +262,7 @@ $this->setFrameMode(true);
                             </label>
                         <? endforeach; ?>
                     </div>
-                    <div class="invalid-feedback">Пожалуйста, выберите значение</div>
+                    <div class="invalid-feedback"><?=GetMessage("FILTER_SORT_TEXT")?></div>
                 </div>
             </form>
                 <div class="catalog__mobile-filters">
@@ -289,7 +289,7 @@ $this->setFrameMode(true);
                                     <?if ($arItem['CODE']!='COLOR_GROUP_REF'){?>
                                     <?=$arItem["NAME"]?>
                                     <?}else{?>
-                                        Цвет
+                                        <?=GetMessage("FILTER_COLOR")?>
                                     <?}?>
                                 </div>
                                 <svg class="icon icon-arrow-down accordion__icon">
@@ -349,7 +349,7 @@ $this->setFrameMode(true);
                                 <span class="bx-filter-container-modef" style="display: none"></span>
                                 <button class="btn btn-link accordion__trigger" type="button"
                                         aria-label="Toggle accordion">
-                                    <div class="accordion__title">Цена</div>
+                                    <div class="accordion__title"><?=GetMessage("FILTER_PRICE")?></div>
                                     <svg class="icon icon-arrow-down accordion__icon">
                                         <use xlink:href="#arrow-down"></use>
                                     </svg>
@@ -364,7 +364,7 @@ $this->setFrameMode(true);
                                                    id="<?echo $arItem["VALUES"]["MIN"]["CONTROL_ID"]?>"
                                                    value="<?echo $arItem["VALUES"]["MIN"]["HTML_VALUE"]?>"
                                                    onkeyup="smartFilter.keyup(this)"
-                                                   placeholder="От" />
+                                                   placeholder="<?=GetMessage("FILTER_PRICE_FROM")?>" />
                                         </div>
                                         <div class="separator"></div>
                                         <div class="form-group">
@@ -374,7 +374,7 @@ $this->setFrameMode(true);
                                                    id="<?echo $arItem["VALUES"]["MAX"]["CONTROL_ID"]?>"
                                                    value="<?echo $arItem["VALUES"]["MAX"]["HTML_VALUE"]?>"
                                                    onkeyup="smartFilter.keyup(this)"
-                                                   placeholder="До" />
+                                                   placeholder="<?=GetMessage("FILTER_PRICE_TO")?>" />
                                         </div>
                                     </div>
                                 </div>
@@ -395,11 +395,11 @@ $this->setFrameMode(true);
                     <button class="btn btn-light" type="submit"
                             id="del_filter"
                             name="del_filter"
-                            value="<?=GetMessage("CT_BCSF_DEL_FILTER")?>">Сбросить</button>
+                            value="<?=GetMessage("CT_BCSF_DEL_FILTER")?>"><?=GetMessage("CT_BCSF_DEL_FILTER")?></button>
                     <button class="btn btn-dark" type="submit" disabled
                             id="set_filter2"
                             name="set_filter"
-                            value="<?=GetMessage("CT_BCSF_SET_FILTER")?>">Показать</button>
+                            value="<?=GetMessage("CT_BCSF_SET_FILTER")?>"><?=GetMessage("CT_BCSF_SET_FILTER")?></button>
                 </div>
 
 

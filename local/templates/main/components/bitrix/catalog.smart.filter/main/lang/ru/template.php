@@ -7,4 +7,13 @@ $MESS ['CT_BCSF_DEL_FILTER'] = "Сбросить";
 $MESS ['CT_BCSF_FILTER_COUNT'] = "Выбрано: #ELEMENT_COUNT#";
 $MESS ['CT_BCSF_FILTER_SHOW'] = "Показать";
 $MESS ['CT_BCSF_FILTER_ALL'] = "Все";
+
+$MESS ['FILTER_COLOR'] = "Цвет";
+$MESS ['FILTER_APPLY'] = "Применить";
+$MESS ['FILTER_PRICE'] = "Цена";
+$MESS ['FILTER_PRICE_FROM'] = "От";
+$MESS ['FILTER_PRICE_TO'] = "До";
+$MESS ['FILTER_SORT'] = "Сортировать";
+$MESS ['FILTER_SORT_TEXT'] = "Пожалуйста, выберите значение";
+
 ?>
