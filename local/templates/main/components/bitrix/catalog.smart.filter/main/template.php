@@ -12,7 +12,7 @@
 /** @var CBitrixComponent $component */
 
 use Bitrix\Iblock\SectionPropertyTable;
-
+use Level44\Base;
 $this->setFrameMode(true);
 
 if (!\Bitrix\Main\Loader::includeModule('highloadblock')) {
