@@ -15,6 +15,23 @@ use Bitrix\Iblock\SectionPropertyTable;
 
 $this->setFrameMode(true);
 
+if (!\Bitrix\Main\Loader::includeModule('highloadblock')) {
+    die('Модуль highloadblock не установлен');
+}
+
+// 2. ID вашего Highload-блока
+$hlblockId = 12;
+
+// 3. Получаем данные о Highload-блоке
+$hlblock = \Bitrix\Highloadblock\HighloadBlockTable::getById($hlblockId)->fetch();
+if (!$hlblock) {
+    die('Highload-блок не найден');
+}
+
+// 4. Создаём (компилируем) класс для работы с элементами этого блока
+$entity = \Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock);
+$entityClass = $entity->getDataClass();
+
 
 ?>
 
@@ -131,7 +148,22 @@ $this->setFrameMode(true);
                                                     <use xlink:href="#close-small"></use>
                                                 </svg>
                                             </label>
-                                            <?}else{?>
+                                            <?}else{
+
+                                                    $result = $entityClass::getList([
+                                                        'select' => ['UF_NAME', 'UF_NAME_EN'], // Указываем поле, значение которого нужно получить
+                                                        'filter' => ['=ID' =>  $ar['URL_ID']],
+                                                        'limit' => 1
+                                                    ]);
+
+                                                    $valcolor=$ar["VALUE"];
+
+                                                    // 7. Получаем результат
+                                                    if ($item = $result->fetch()) {
+                                                        $valcolor=Base::getMultiLang($item['UF_NAME'], $item['UF_NAME_EN']);
+                                                    }
+
+                                                ?>
                                                 <label class="form-color">
                                                     <input type="checkbox" value="<? echo $ar["HTML_VALUE"] ?>"
                                                            name="<? echo $ar["CONTROL_NAME"] ?>"
@@ -140,7 +172,7 @@ $this->setFrameMode(true);
                                                            onchange="smartFilter.click(this)"
                                                     ><span
                                                             class="swatch" style="background:URL('/upload/<?=$ar['FILE']['SUBDIR']?>/<?=$ar['FILE']['FILE_NAME']?>')"></span><span
-                                                            class="label-text"><?=$ar["VALUE"];?></span>
+                                                            class="label-text"><?=$valcolor;?></span>
                                                     <svg class="icon icon-close-small form-color__icon">
                                                         <use xlink:href="#close-small"></use>
                                                     </svg>
@@ -311,7 +343,9 @@ $this->setFrameMode(true);
                                                 <? echo $ar["CHECKED"]? 'checked="checked"': '' ?>
                                                    onclick="smartFilter.click(this)"><span><?=$ar["VALUE"];?></span>
                                         </label>
-                                        <?}else{?>
+                                        <?}else{
+
+                                            ?>
                                         <label class="form-color">
                                             <input type="checkbox" value="<? echo $ar["HTML_VALUE"] ?>"
                                                    name="<? echo $ar["CONTROL_NAME"] ?>"
