@@ -61,9 +61,9 @@ class Menu
                 ""
             ];
 
-            array_splice($menuSections, $newIndex + 1, 0, [Menu::markIfSelected($saleSection)]);
+           // array_splice($menuSections, $newIndex + 1, 0, [Menu::markIfSelected($saleSection)]);
 
-            //$menuSections[count($menuSections)]=Menu::markIfSelected($saleSection);
+            $menuSections[count($menuSections)]=Menu::markIfSelected($saleSection);
         }
 
         return $menuSections;
