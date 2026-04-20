@@ -441,7 +441,8 @@ $campaignLookDrawers = [];
                         : "";
                     ?>
                     <div class="block2__img-small-wrap<?= $lookOpenId !== '' ? ' block2__img-small-wrap--look' : '' ?>">
-                        <div class="img-small" style="background-image: url('<?= htmlspecialcharsbx($imgSrc) ?>')"></div>
+
+                        <img class="img-small" src="<?= htmlspecialcharsbx($imgSrc) ?>" />
                         <?php if ($lookOpenId !== ""): ?>
                             <button type="button" class="block1__look-btn"
                                     data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
