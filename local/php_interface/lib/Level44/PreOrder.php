@@ -236,7 +236,10 @@ class PreOrder
         $this->userId = $USER->GetID();
 
         if (!$this->userId) {
-            $this->userId = \CSaleUser::GetAnonymousUserID();
+            $this->userId = \Level44\Sale\AnonymousUser::createNewUserId($this->siteId ?: SITE_ID);
+            if (!$this->userId) {
+                $this->userId = \CSaleUser::GetAnonymousUserID();
+            }
             $this->isAnonUser = true;
         }
     }
