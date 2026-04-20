@@ -341,6 +341,7 @@ $elementRes = CIBlockElement::GetList(
         "PROPERTY_TYPE",
         "PROPERTY_IMG",
         "PROPERTY_IMG_BIG",
+        "PROPERTY_IMG_BIG_M",
         "PROPERTY_ITEMS",
         "PROPERTY_ITEMS1",
         "PROPERTY_ITEMS2",
@@ -359,6 +360,7 @@ while ($fields = $elementRes->GetNext()) {
         "TEXT" => (string)($fields["PREVIEW_TEXT"] ?: $fields["DETAIL_TEXT"] ?: $fields["NAME"]),
         "IMG" => campaignNormalizePropertyValue($fields["PROPERTY_IMG_VALUE"] ?? []),
         "IMG_BIG" => campaignNormalizePropertyValue($fields["PROPERTY_IMG_BIG_VALUE"] ?? []),
+        "IMG_BIG_M" => campaignNormalizePropertyValue($fields["PROPERTY_IMG_BIG_M_VALUE"] ?? []),
         "ITEMS" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS_VALUE"] ?? [])),
         "ITEMS1" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS1_VALUE"] ?? [])),
         "ITEMS2" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS2_VALUE"] ?? [])),
@@ -378,6 +380,7 @@ $campaignLookDrawers = [];
         $type = (int)$block["TYPE"];
         $imgList = $block["IMG"];
         $imgBigList = $block["IMG_BIG"];
+        $imgBigMList = $block["IMG_BIG_M"];
         $text = $block["TEXT"];
         $blockNumber = $index + 1;
         ?>
@@ -385,6 +388,9 @@ $campaignLookDrawers = [];
         <?php if ($type === 1): ?>
             <?php
             $imgSrc = isset($imgBigList[0]) ? (string)CFile::GetPath((int)$imgBigList[0]) : "";
+
+            $imgSrcM = isset($imgBigMList[0]) ? (string)CFile::GetPath((int)$imgBigMList[0]) : "";
+
             $lookItemIds = array_values(array_filter($block["ITEMS"]));
             if (empty($lookItemIds)) {
                 $lookItemIds = campaignGetItemsForSlot($block, 1);
@@ -393,7 +399,10 @@ $campaignLookDrawers = [];
             ?>
             <?php if ($imgSrc !== ""): ?>
                 <div class="block1<?= $lookOpenId !== '' ? ' block1--look' : '' ?>">
-                    <div class="img" style="background-image: url('<?= htmlspecialcharsbx($imgSrc) ?>')"></div>
+                    <img class="img img-desktop" src="<?= $imgSrc?>" />
+
+                    <img class="img img-mobile" src="<?= $imgSrcM?>" />
+
                     <?php if ($lookOpenId !== ""): ?>
                         <button type="button" class="block1__look-btn"
                                 data-campaign-look-open="<?= htmlspecialcharsbx($lookOpenId) ?>"
@@ -406,9 +415,12 @@ $campaignLookDrawers = [];
 
         <?php elseif ($type === 2): ?>
             <?php $imgBigSrc = isset($imgBigList[0]) ? (string)CFile::GetPath((int)$imgBigList[0]) : ""; ?>
+            <?php $imgBigMSrc = isset($imgBigMList[0]) ? (string)CFile::GetPath((int)$imgBigMList[0]) : "";?>
             <div class="block2">
                 <?php if ($imgBigSrc !== ""): ?>
-                    <div class="img-big" style="background-image: url('<?= htmlspecialcharsbx($imgBigSrc) ?>')"></div>
+
+                    <img class="img-big img-desktop" src="<?= $imgBigSrc?>" />
+                    <img class="img-big img-mobile" src="<?= $imgBigMSrc?>" />
                 <?php endif; ?>
                 <?php
                 $smallIndex = 0;
