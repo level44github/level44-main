@@ -236,10 +236,7 @@ class PreOrder
         $this->userId = $USER->GetID();
 
         if (!$this->userId) {
-            $this->userId = \Level44\Sale\AnonymousUser::createNewUserId($this->siteId ?: SITE_ID);
-            if (!$this->userId) {
-                $this->userId = \CSaleUser::GetAnonymousUserID();
-            }
+            $this->userId = \CSaleUser::GetAnonymousUserID();
             $this->isAnonUser = true;
         }
     }
@@ -387,8 +384,17 @@ BUTTONS;
             return;
         }
 
+        if ($this->isAnonUser) {
+            $newUserId = \Level44\Sale\AnonymousUser::createNewUserId($this->siteId ?: SITE_ID);
+            if ($newUserId > 0) {
+                $this->userId = $newUserId;
+                $this->isAnonUser = false;
+            }
+        }
+
         if ($this->check()) {
             $this->success = true;
+            return;
         }
 
         $order = Order::create($this->siteId, $this->userId);
