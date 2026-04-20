@@ -1398,10 +1398,7 @@ body.campaign-look-open {
         box-sizing: border-box;
     }
 
-    .campaign  .block7__img-wrap img {
-        aspect-ratio: 1 / 1.25;
-        object-fit: cover;
-    }
+
 
     .campaign  .block8 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
