@@ -802,3 +802,618 @@ a.dolyame-text
         display:none;
     }
 }
+
+
+
+
+/* Список кампейнов / закрытая кампания (не трогаем исходные .block1–.block8) */
+.campaign-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0.5rem 0 2rem;
+}
+
+.campaign-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.campaign-card:hover {
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.92;
+}
+
+/* Баннер: название белым по центру снизу на фото + градиент */
+.campaign-card__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding-top: 52%;
+    background-color: #c4c4c4;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.campaign-card__media_no-photo {
+    background-color: #a8a8a8;
+    background-image: none;
+}
+
+.campaign-card__gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 35%;
+    pointer-events: none;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.65) 0%,
+        rgba(0, 0, 0, 0.25) 45%,
+        transparent 100%
+    );
+}
+
+.campaign-card__title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 1.75rem 1.25rem 3.25rem;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    z-index: 1;
+
+}
+
+.campaign-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    padding: 0.2rem 0.45rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+}
+
+/* Описание только для скринридеров / SEO */
+.campaign-card__description.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.campaign-closed-message {
+    padding: 2rem 1rem;
+    text-align: center;
+    max-width: 36rem;
+    margin: 0 auto;
+}
+
+/* Кампейн block1: кнопка «Смотреть образ» + панель справа с товарами */
+body.campaign-look-open {
+    overflow: hidden;
+}
+
+.campaign .block1--look {
+    position: relative;
+}
+
+.campaign .block1__look-btn {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 2;
+    margin: 0;
+    padding: 0.55rem 1.1rem;
+    font-size: 16px;
+    text-transform: none;
+    color: #1a1a1a;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.campaign .block1__look-btn:hover {
+    opacity: 0.9;
+}
+
+.campaign .block2__img-small-wrap {
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.campaign .block2__img-small-wrap .img-small {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.campaign .block3__img-wrap {
+    position: relative;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.campaign .block3__img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.campaign .block4--look {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.campaign .block7__img-wrap {
+    position: relative;
+    width: 24%;
+    box-sizing: border-box;
+}
+
+.campaign .block7__img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.campaign .block8__img-wrap {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.campaign .block8__img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.campaign-look {
+    position: fixed;
+    inset: 0;
+    --campaign-look-offset: 84px;
+    z-index: 1060;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.campaign-look.is-open {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.campaign-look__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.campaign-look.is-open .campaign-look__backdrop {
+    opacity: 1;
+}
+
+.campaign-look__panel {
+    position: absolute;
+    top: var(--campaign-look-offset);
+    right: 0;
+    bottom: auto;
+    width: 50vw;
+    max-width: 100%;
+    max-height: calc(100dvh - var(--campaign-look-offset) - 12px);
+    background: #fff;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
+    overflow: hidden;
+}
+
+.campaign-look.is-open .campaign-look__panel {
+    transform: translateX(0);
+}
+
+.campaign-look__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: 1.875rem;
+    line-height: 1;
+    color: #1a1a1a;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.campaign-look__close:hover {
+    opacity: 1;
+}
+
+.campaign-look__label {
+    margin: 0;
+    padding: 1.75rem 3rem 1rem 134px;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 70px;
+    margin-top: 70px;
+}
+
+.campaign-look__body {
+    overflow-y: auto;
+    padding: 0 74px 108px 134px;
+    max-height: calc(100dvh - var(--campaign-look-offset) - 74px);
+    -webkit-overflow-scrolling: touch;
+}
+
+.campaign-look__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 0.75rem;
+}
+
+.campaign-look-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.campaign-look-card:hover {
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.88;
+}
+
+.campaign-look-card__img-wrap {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f0f0f0;
+    margin-bottom: 0.65rem;
+}
+
+.campaign-look-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.campaign-look-card__name {
+    margin-bottom: 0.35rem;
+}
+
+.campaign-look-card__prices {
+    gap: 0.35rem 0.5rem;
+}
+
+.campaign-look-card__price_old {
+    margin-right: 0.35rem;
+}
+
+.campaign-look-card__price {
+    display: inline-block;
+}
+
+@media (max-width: 767.98px) {
+    .campaign-look {
+        --campaign-look-offset: 64px;
+    }
+
+    .campaign-look__label {
+        padding: 40px;
+        margin: 0px;
+        padding-bottom: 0px;
+    }
+
+    .campaign-look__panel {
+        width: 66vw;
+        max-height: calc(100dvh - var(--campaign-look-offset));
+    }
+
+    .campaign-look__body {
+        padding: 40px;
+        max-height: calc(100dvh - var(--campaign-look-offset) - 74px);
+    }
+}
+
+.campaign .block1 .img
+{
+    width:100%;
+    height:auto;
+}
+
+.campaign .block2
+{
+    display:flex;
+    flex-wrap:wrap;
+}
+
+
+.campaign .block2 .img-big
+{
+    width:100%;
+    height:auto;
+}
+
+
+.campaign .block2 .img-small
+{
+    width:100%;
+
+}
+
+
+.campaign .block3
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.campaign .block3__gallery
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.campaign .block3__gallery .block3__img-wrap {
+    width: 100%;
+}
+
+.campaign .block3 .img-small
+{
+    width:50%;
+    height:100vh;
+    background-position:bottom center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.campaign .block3 .block-text
+{
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+}
+
+.campaign .block4
+{
+    text-align:center;
+}
+
+
+.campaign .block4 img
+{
+    width:50%;
+}
+
+
+.campaign .block5 .block-text
+{
+    padding-top:100px;
+    padding-bottom:100px;
+}
+
+.campaign  .block7
+{
+    gap:20px;
+
+    displaY:flex;
+    flex-wrap: wrap;
+}
+
+
+.campaign .block7__img-wrap img {
+
+}
+
+
+.campaign  .block8
+{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-items: center;
+    align-items: stretch;
+    box-sizing: border-box;
+}
+
+.campaign  .block8__img-wrap
+{
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.campaign  .block8__img-wrap img
+{
+    width: 100%;
+    height: auto;
+
+    display: block;
+}
+
+.img-mobile
+{
+    display:none;
+}
+
+
+@media (max-width: 767.98px) {
+
+    .img-mobile
+    {
+        display:block;
+    }
+
+    .img-desktop
+    {
+        display:none;
+    }
+
+    .campaign {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+
+
+    .campaign .block1__look-btn {
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 8px 16px;
+    }
+
+
+
+    .campaign .block2__img-small-wrap {
+        width: 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+        box-sizing: border-box;
+    }
+
+    .campaign .block2__img-small-wrap .img-small {
+        width: 100%;
+        height: auto;
+
+        background-position: center center;
+    }
+
+    .campaign .block3 {
+        gap: 1rem;
+    }
+
+    .campaign .block3__gallery {
+        gap: 8px;
+    }
+
+    .campaign .block3 .block-text {
+        width: 100%;
+        max-width: none;
+        padding-left: 12px;
+        padding-right: 12px;
+        box-sizing: border-box;
+    }
+
+    .campaign .block3 .img-small {
+        width: 50%;
+        flex: 0 0 calc(50% - 4px);
+
+        height: auto;
+
+        background-position: center center;
+        box-sizing: border-box;
+    }
+
+    .campaign .block4 img {
+        width: 80%;
+        max-width: 80%;
+    }
+
+    .campaign .block5 .block-text {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .campaign .block6 {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: visible;
+    }
+
+    .campaign .block6 .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px 8px;
+        justify-content: normal;
+    }
+
+    .campaign .block6 .grid__item {
+        min-width: 0;
+    }
+
+    .campaign  .block7 {
+        gap: 8px;
+        justify-content: flex-start;
+    }
+
+    .campaign  .block7__img-wrap {
+        width: calc(50% - 4px);
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+
+
+    .campaign  .block8 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        max-width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .campaign  .block8__img-wrap {
+        height: auto;
+
+    }
+
+    .campaign  .block8__img-wrap img {
+        object-fit: cover;
+    }
+}
