@@ -49,12 +49,16 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
                     <img class="grid__item__image" src="<?=$item['DETAIL_PICTURE']['SRC']?>" alt="<?= $item['NAME'] ?>">
 
     <div class="grid__item__title"><?= $item['NAME'] ?></div>
-    <div class="grid__item__prices">
-        <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
-        <? if (!empty($price["oldPrice"])): ?>
-            <div class="grid__item__discount"><?= $price['oldPriceFormat'] ?></div>
-        <? endif; ?>
-    </div>
+    <? $isEnglish = defined('LANGUAGE_ID') && LANGUAGE_ID === 'en'; ?>
+
+    <? if (!$isEnglish): ?>
+        <div class="grid__item__prices">
+            <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
+            <? if (!empty($price["oldPrice"])): ?>
+                <div class="grid__item__discount"><?= $price['oldPriceFormat'] ?></div>
+            <? endif; ?>
+        </div>
+    <? endif; ?>
 
     <? if ($price["PRICE_DOLLAR"]): ?>
         <div class="grid__item__prices">

@@ -29,12 +29,16 @@ use \Bitrix\Main\Localization\Loc;
     <a class="grid__item__link" href="<?= $item['DETAIL_PAGE_URL'] ?>">
         <img class="grid__item__image" src="<?= $item['PREVIEW_PICTURE']['SRC'] ?>" alt="<?= $item['NAME'] ?>">
         <div class="grid__item__title"><?= $item['NAME'] ?></div>
-        <div class="grid__item__prices">
-            <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
-            <? if (!empty($price['oldPrice'])): ?>
-                <div class="grid__item__discount"><?= $price['oldPriceFormat'] ?></div>
-            <? endif; ?>
-        </div>
+        <? $isEnglish = defined('LANGUAGE_ID') && LANGUAGE_ID === 'en'; ?>
+
+        <? if (!$isEnglish): ?>
+            <div class="grid__item__prices">
+                <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
+                <? if (!empty($price['oldPrice'])): ?>
+                    <div class="grid__item__discount"><?= $price['oldPriceFormat'] ?></div>
+                <? endif; ?>
+            </div>
+        <? endif; ?>
 
         <? if ($item["PRICE_DOLLAR"]): ?>
             <div class="grid__item__prices">

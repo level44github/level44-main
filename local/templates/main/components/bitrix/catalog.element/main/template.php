@@ -244,14 +244,19 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
         <div class="product__info">
             <div>
                 <h1 class="product__title"><?= $name ?></h1>
-                <div class="product__price-wrapper">
-                    <div class="product__price" id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_PRICE'] ?></div>
-                    <? if (!empty($price["oldPrice"])): ?>
-                        <div class="product__price discount" id="<?= $itemIds['PRICE_ID'] ?>">
-                            <?= $price["oldPriceFormat"] ?>
-                        </div>
-                    <? endif; ?>
-                </div>
+                <? $isEnglish = defined('LANGUAGE_ID') && LANGUAGE_ID === 'en'; ?>
+
+                <? if (!$isEnglish): ?>
+                    <div class="product__price-wrapper">
+                        <div class="product__price" id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_PRICE'] ?></div>
+                        <? if (!empty($price["oldPrice"])): ?>
+                            <div class="product__price discount" id="<?= $itemIds['PRICE_ID'] ?>">
+                                <?= $price["oldPriceFormat"] ?>
+                            </div>
+                        <? endif; ?>
+                    </div>
+                <? endif; ?>
+
                 <? if ($price["PRICE_DOLLAR"]): ?>
                     <div class="product__price-wrapper">
                         <div class="product__price"
@@ -266,7 +271,9 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
             </div>
 
             <?//if (in_array(1, $USER->GetUserGroupArray())){?>
-            <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
+            <? if (!$isEnglish): ?>
+                <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
+            <? endif; ?>
 
             <? if ($price["PRICE_DOLLAR"]): ?>
                 <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 payments  <?=round($price['PRICE_DOLLAR']/4)?> $ ></a>

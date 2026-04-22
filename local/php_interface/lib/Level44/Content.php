@@ -252,7 +252,7 @@ class Content
             ],
             [
                 "code" => "popularity",
-                "name" => Base::getMultiLang("По популярности", "Popularity"),
+                "name" => Base::getMultiLang("По популярности", "Popular items"),
             ],
             [
                 "code" => "new",
