@@ -74,9 +74,9 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
         </div>
     </div>
     <div class="grid__item__title"><?= $item['NAME'] ?></div>
-    <? $isEnglish = defined('LANGUAGE_ID') && LANGUAGE_ID === 'en'; ?>
+    <? $hasDollarPrice = !empty($price["PRICE_DOLLAR"]); ?>
 
-    <? if (!$isEnglish): ?>
+    <? if (!$hasDollarPrice): ?>
         <div class="grid__item__prices">
             <div class="grid__item__price"><?= $price['PRINT_PRICE'] ?></div>
             <? if (!empty($price["oldPrice"])): ?>

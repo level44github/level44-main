@@ -244,9 +244,9 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
         <div class="product__info">
             <div>
                 <h1 class="product__title"><?= $name ?></h1>
-                <? $isEnglish = defined('LANGUAGE_ID') && LANGUAGE_ID === 'en'; ?>
+                <? $hasDollarPrice = !empty($price["PRICE_DOLLAR"]); ?>
 
-                <? if (!$isEnglish): ?>
+                <? if (!$hasDollarPrice): ?>
                     <div class="product__price-wrapper">
                         <div class="product__price" id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_PRICE'] ?></div>
                         <? if (!empty($price["oldPrice"])): ?>
@@ -271,7 +271,7 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
             </div>
 
             <?//if (in_array(1, $USER->GetUserGroupArray())){?>
-            <? if (!$isEnglish): ?>
+            <? if (!$hasDollarPrice): ?>
                 <a class="dolyame-text" href="#" data-toggle="modal" data-target="#dolyame-modal">4 платежа по <?=round($price['RATIO_PRICE']/4)?> ₽   ></a>
             <? endif; ?>
 
