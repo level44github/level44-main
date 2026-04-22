@@ -1237,11 +1237,31 @@ body.campaign-look-open {
     width:50%;
 }
 
-
-.campaign .block5 .block-text
-{
-
+.campaign .block6 {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: visible;
+    display: flex;
+    justify-content: center;
 }
+
+.campaign .block6 .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+.campaign .block6 .grid__item {
+    min-width: 0;
+}
+
 
 .campaign  .block7
 {
@@ -1249,11 +1269,6 @@ body.campaign-look-open {
 
     displaY:flex;
     flex-wrap: wrap;
-}
-
-
-.campaign .block7__img-wrap img {
-
 }
 
 
