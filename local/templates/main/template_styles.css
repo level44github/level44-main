@@ -1240,8 +1240,7 @@ body.campaign-look-open {
 
 .campaign .block5 .block-text
 {
-    padding-top:100px;
-    padding-bottom:100px;
+
 }
 
 .campaign  .block7
@@ -1376,6 +1375,8 @@ body.campaign-look-open {
         width: 100%;
         max-width: 100%;
         overflow-x: visible;
+        display: flex;
+        justify-content: center;
     }
 
     .campaign .block6 .grid {
@@ -1383,6 +1384,12 @@ body.campaign-look-open {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px 8px;
         justify-content: normal;
+        width: 100%;
+        max-width: 1240px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
     .campaign .block6 .grid__item {

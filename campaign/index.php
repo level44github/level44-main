@@ -347,6 +347,8 @@ $elementRes = CIBlockElement::GetList(
         "PROPERTY_ITEMS2",
         "PROPERTY_ITEMS3",
         "PROPERTY_ITEMS4",
+        "PROPERTY_PADDING_TOP",
+        "PROPERTY_PADDING_BOTTOM"
     ]
 );
 
@@ -366,6 +368,8 @@ while ($fields = $elementRes->GetNext()) {
         "ITEMS2" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS2_VALUE"] ?? [])),
         "ITEMS3" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS3_VALUE"] ?? [])),
         "ITEMS4" => array_map("intval", campaignNormalizePropertyValue($fields["PROPERTY_ITEMS4_VALUE"] ?? [])),
+        "PADDING_TOP"=>(int)$fields["PROPERTY_PADDING_TOP_VALUE"],
+        "PADDING_BOTTOM"=>(int)$fields["PROPERTY_PADDING_BOTTOM_VALUE"]
     ];
 }
 
@@ -384,7 +388,7 @@ $campaignLookDrawers = [];
         $text = $block["TEXT"];
         $blockNumber = $index + 1;
         ?>
-
+        <div style="padding-top:<?=$block["PADDING_TOP"]?>px; padding-bottom:<?=$block["PADDING_BOTTOM"]?>px; ">
         <?php if ($type === 1): ?>
             <?php
             $imgSrc = isset($imgBigList[0]) ? (string)CFile::GetPath((int)$imgBigList[0]) : "";
@@ -672,7 +676,7 @@ $campaignLookDrawers = [];
             <?php endif; ?>
         <?php endif; ?>
 
-
+        </div>
     <?php endforeach; ?>
 </div>
 
