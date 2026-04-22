@@ -532,9 +532,11 @@ $campaignLookDrawers = [];
             <?php endif; ?>
 
         <?php elseif ($type === 6): ?>
-            <div class="block6">
+
+        <?  $itemIds = array_values(array_filter($block["ITEMS"]));?>
+            <div class="block6 <?if (count($itemIds)==1) {?>k-count1<?}?><?if (count($itemIds)==1) {?>k-count2<?}?><?if (count($itemIds)==1) {?>k-count3<?}?>">
                 <?php
-                $itemIds = array_values(array_filter($block["ITEMS"]));
+
                 if (!empty($itemIds)) {
                     $filterName = "campaignItemsFilter" . $blockNumber;
                     $GLOBALS[$filterName] = ["ID" => $itemIds];
