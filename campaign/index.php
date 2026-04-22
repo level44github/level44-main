@@ -672,7 +672,7 @@ $campaignLookDrawers = [];
             <?php endif; ?>
         <?php endif; ?>
 
-        <br><br>
+
     <?php endforeach; ?>
 </div>
 

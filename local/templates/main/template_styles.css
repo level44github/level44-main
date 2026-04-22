@@ -1085,6 +1085,7 @@ body.campaign-look-open {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem 0.75rem;
+    padding-bottom:134px;
 }
 
 .campaign-look-card {
@@ -1151,6 +1152,9 @@ body.campaign-look-open {
     .campaign-look__body {
         padding: 40px;
         max-height: calc(100dvh - var(--campaign-look-offset) - 74px);
+    }
+    .campaign-look__grid {
+        padding-bottom: 40px;
     }
 }
 
