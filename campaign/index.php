@@ -534,7 +534,7 @@ $campaignLookDrawers = [];
         <?php elseif ($type === 6): ?>
 
         <?  $itemIds = array_values(array_filter($block["ITEMS"]));?>
-            <div class="block6 <?if (count($itemIds)==1) {?>k-count1<?}?><?if (count($itemIds)==1) {?>k-count2<?}?><?if (count($itemIds)==1) {?>k-count3<?}?>">
+            <div class="block6 <?if (count($itemIds)==1) {?>k-count1<?}?><?if (count($itemIds)==2) {?>k-count2<?}?><?if (count($itemIds)==3) {?>k-count3<?}?>">
                 <?php
 
                 if (!empty($itemIds)) {
