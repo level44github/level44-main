@@ -246,11 +246,22 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
                 <h1 class="product__title"><?= $name ?></h1>
                 <? $hasDollarPrice = !empty($price["PRICE_DOLLAR"]); ?>
 
+                <? if ($hasDollarPrice): ?>
+                    <div class="product__price-wrapper" style="display:none">
+                        <div class="product__price" id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_PRICE'] ?></div>
+                        <? if (!empty($price["oldPrice"])): ?>
+                            <div class="product__price discount">
+                                <?= $price["oldPriceFormat"] ?>
+                            </div>
+                        <? endif; ?>
+                    </div>
+                <? endif; ?>
+
                 <? if (!$hasDollarPrice): ?>
                     <div class="product__price-wrapper">
                         <div class="product__price" id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRINT_PRICE'] ?></div>
                         <? if (!empty($price["oldPrice"])): ?>
-                            <div class="product__price discount" id="<?= $itemIds['PRICE_ID'] ?>">
+                            <div class="product__price discount">
                                 <?= $price["oldPriceFormat"] ?>
                             </div>
                         <? endif; ?>
@@ -259,10 +270,9 @@ $defaultClass = \Bitrix\Main\Config\Option::get('awelite.favorite', 'removeClass
 
                 <? if ($price["PRICE_DOLLAR"]): ?>
                     <div class="product__price-wrapper">
-                        <div class="product__price"
-                             id="<?= $itemIds['PRICE_ID'] ?>"><?= $price['PRICE_DOLLAR_FORMATTED'] ?></div>
+                        <div class="product__price"><?= $price['PRICE_DOLLAR_FORMATTED'] ?></div>
                         <? if (!empty($price["oldPriceDollar"])): ?>
-                            <div class="product__price discount" id="<?= $itemIds['PRICE_ID'] ?>">
+                            <div class="product__price discount">
                                 <?= $price["oldPriceDollarFormat"] ?>
                             </div>
                         <? endif; ?>
