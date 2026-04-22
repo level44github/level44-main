@@ -1253,6 +1253,7 @@ body.campaign-look-open {
     justify-content: center;
 }
 
+
 .campaign .block6 .grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1262,6 +1263,28 @@ body.campaign-look-open {
     padding-right: 20px;
     box-sizing: border-box;
 }
+
+.campaign .block6.k-count1 .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    width: 30%;
+}
+
+.campaign .block6.k-count2 .grid {
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 60%;
+}
+
+
+.campaign .block6.k-count3 .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 90%;
+}
+
+
+
+
+
 
 .campaign  .block7
 {
